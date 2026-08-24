@@ -1,3 +1,6 @@
+[简体中文](consent-levels.zh-CN.md) | **English**
+<!-- language: en; mirror: consent-levels.zh-CN.md; translation-status: synchronized -->
+
 # Consent Modes for Community Contributions
 
 These labels describe what may happen to one contribution. They are **not** a ladder of commitment, status, trust, or research value. A contributor may choose different modes for different artifacts and may decline any route.

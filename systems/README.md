@@ -1,3 +1,6 @@
+[简体中文](README.zh-CN.md) | **English**
+<!-- language: en; mirror: README.zh-CN.md; translation-status: synchronized -->
+
 # Relata System Census
 
 The System Census maps how actual memory and companion systems sustain continuity before Relata chooses a system-under-study boundary.

@@ -1,3 +1,6 @@
+[简体中文](architecture-clinic-guide.zh-CN.md) | **English**
+<!-- language: en; mirror: architecture-clinic-guide.zh-CN.md; translation-status: synchronized -->
+
 # Architecture Clinic Guide
 
 ## Purpose

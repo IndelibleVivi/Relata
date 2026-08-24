@@ -1,3 +1,6 @@
+[简体中文](terminology.zh-CN.md) | **English**
+<!-- language: en; mirror: terminology.zh-CN.md; translation-status: synchronized -->
+
 # Relata Working Terminology
 
 These terms govern current research materials. Draft 0.1 retains its original vocabulary as historical evidence.

@@ -1,3 +1,6 @@
+[简体中文](system-card-template.zh-CN.md) | **English**
+<!-- language: en; mirror: system-card-template.zh-CN.md; translation-status: synchronized -->
+
 # System Card: <System name>
 
 **Card ID:** SC-000  
@@ -9,6 +12,14 @@
 **Exact version or observation date:**
 
 > This is not a product scorecard. Describe the system in its own terms before translating anything into Relata’s proposed boundaries.
+
+## 中文摘要
+
+用简洁中文说明这个 system 是什么、当前 card 绑定的 version / boundary、哪些关键 findings 有 evidence、哪些仍 opaque / unknown，以及它对 Relata 哪个 research question 施加 pressure。
+
+## English summary
+
+Summarize the system, the version and boundary represented by this card, the key evidence-backed findings, what remains opaque or unknown, and which Relata research question it pressure-tests.
 
 ## 1. System identity and scope
 

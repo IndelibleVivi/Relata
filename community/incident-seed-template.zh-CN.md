@@ -1,3 +1,6 @@
+**简体中文** | [English](incident-seed-template.md)
+<!-- language: zh-CN; mirror: incident-seed-template.md; translation-status: synchronized -->
+
 # Incident Seed：<工作标题>
 
 **Seed ID：** IS-000  

@@ -6,6 +6,7 @@ from __future__ import annotations
 from collections import defaultdict
 from pathlib import Path
 import re
+import subprocess
 import sys
 from urllib.parse import unquote, urlsplit
 
@@ -15,14 +16,23 @@ REQUIRED = [
     ".gitignore",
     "AGENTS.md",
     "README.md",
+    "README.zh-CN.md",
     "START_HERE.md",
     "START_HERE.zh-CN.md",
     "STATUS.md",
+    "STATUS.zh-CN.md",
     "CHARTER.md",
+    "CHARTER.zh-CN.md",
     "RESEARCH_QUESTIONS.md",
+    "RESEARCH_QUESTIONS.zh-CN.md",
     "ASSUMPTION_REGISTER.md",
+    "ASSUMPTION_REGISTER.zh-CN.md",
     "CONTRIBUTING.md",
+    "CONTRIBUTING.zh-CN.md",
     "docs/terminology.md",
+    "docs/terminology.zh-CN.md",
+    "docs/language-policy.md",
+    "docs/language-policy.zh-CN.md",
     "docs/vision/README.md",
     "docs/vision/relata-target-architecture-draft-0.1.md",
     "docs/reviews/target-architecture-draft-0.1-adversarial-review.md",
@@ -36,15 +46,24 @@ REQUIRED = [
     "community/consent-levels.md",
     "community/consent-levels.zh-CN.md",
     "community/contribution-consent-record-template.md",
+    "community/contribution-consent-record-template.zh-CN.md",
+    "community/founding-circle-invitation.md",
+    "community/founding-circle-invitation.zh-CN.md",
     "community/incident-seed-template.md",
     "community/incident-seed-template.zh-CN.md",
     "systems/README.md",
+    "systems/README.zh-CN.md",
     "systems/system-card-template.md",
     "systems/system-card-template.zh-CN.md",
     "systems/architecture-pressure-map-template.md",
     "case-lab/README.md",
+    "case-lab/README.zh-CN.md",
     "case-lab/case-card-template.md",
+    "case-lab/case-card-template.zh-CN.md",
     "case-lab/case-review-checklist.md",
+    "case-lab/case-review-checklist.zh-CN.md",
+    "case-lab/distinction-atlas.md",
+    "case-lab/distinction-atlas.zh-CN.md",
     "case-lab/cases/pilot-001-current-state-without-erasure.md",
     "experiments/README.md",
     "experiments/pilot-record-template.md",
@@ -53,9 +72,56 @@ REQUIRED = [
     "governance/attribution-and-withdrawal.md",
     "governance/licensing-decision.md",
     "decisions/ADR-0001-research-first-bootstrap.md",
+    "decisions/ADR-0001-research-first-bootstrap.zh-CN.md",
     "decisions/ADR-0002-vision-doc-is-non-normative.md",
+    "decisions/ADR-0002-vision-doc-is-non-normative.zh-CN.md",
+    "decisions/ADR-0003-mixed-domain-memory-ecology.md",
+    "decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md",
+    "decisions/ADR-0004-r0-bilingual-documentation.md",
+    "decisions/ADR-0004-r0-bilingual-documentation.zh-CN.md",
     "tools/check_repo.py",
 ]
+
+BILINGUAL_PAIRS = [
+    ("README.md", "README.zh-CN.md"),
+    ("START_HERE.md", "START_HERE.zh-CN.md"),
+    ("STATUS.md", "STATUS.zh-CN.md"),
+    ("CHARTER.md", "CHARTER.zh-CN.md"),
+    ("RESEARCH_QUESTIONS.md", "RESEARCH_QUESTIONS.zh-CN.md"),
+    ("ASSUMPTION_REGISTER.md", "ASSUMPTION_REGISTER.zh-CN.md"),
+    ("CONTRIBUTING.md", "CONTRIBUTING.zh-CN.md"),
+    ("docs/terminology.md", "docs/terminology.zh-CN.md"),
+    ("docs/language-policy.md", "docs/language-policy.zh-CN.md"),
+    ("case-lab/README.md", "case-lab/README.zh-CN.md"),
+    ("case-lab/case-card-template.md", "case-lab/case-card-template.zh-CN.md"),
+    ("case-lab/case-review-checklist.md", "case-lab/case-review-checklist.zh-CN.md"),
+    ("case-lab/distinction-atlas.md", "case-lab/distinction-atlas.zh-CN.md"),
+    ("systems/README.md", "systems/README.zh-CN.md"),
+    ("systems/system-card-template.md", "systems/system-card-template.zh-CN.md"),
+    ("community/architecture-clinic-guide.md", "community/architecture-clinic-guide.zh-CN.md"),
+    ("community/case-clinic-guide.md", "community/case-clinic-guide.zh-CN.md"),
+    ("community/consent-levels.md", "community/consent-levels.zh-CN.md"),
+    ("community/contribution-consent-record-template.md", "community/contribution-consent-record-template.zh-CN.md"),
+    ("community/founding-circle-invitation.md", "community/founding-circle-invitation.zh-CN.md"),
+    ("community/incident-seed-template.md", "community/incident-seed-template.zh-CN.md"),
+    ("community/participation-principles.md", "community/participation-principles.zh-CN.md"),
+    ("decisions/ADR-0001-research-first-bootstrap.md", "decisions/ADR-0001-research-first-bootstrap.zh-CN.md"),
+    ("decisions/ADR-0002-vision-doc-is-non-normative.md", "decisions/ADR-0002-vision-doc-is-non-normative.zh-CN.md"),
+    ("decisions/ADR-0003-mixed-domain-memory-ecology.md", "decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md"),
+    ("decisions/ADR-0004-r0-bilingual-documentation.md", "decisions/ADR-0004-r0-bilingual-documentation.zh-CN.md"),
+]
+
+CASE_METADATA_MARKERS = (
+    "**Locale:**",
+    "**Coverage stratum:**",
+    "**Content domains:**",
+    "**Use domain:**",
+    "**Surfaces:**",
+    "**Roles:**",
+    "**Projects/scopes:**",
+    "**Continuity horizon:**",
+    "**Primary operation under test:**",
+)
 
 PROHIBITED_DIRECTORY_NAMES = {
     "relata-research-foundation",
@@ -187,6 +253,82 @@ def check_markdown_links() -> tuple[list[str], int, int]:
     return failures, len(markdown_files), links_checked
 
 
+def git_paths_changed_from_head() -> set[str]:
+    tracked = subprocess.run(
+        ["git", "diff", "--name-only", "HEAD", "--"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+    untracked = subprocess.run(
+        ["git", "ls-files", "--others", "--exclude-standard"],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.splitlines()
+    return set(tracked) | set(untracked)
+
+
+def last_commit_for(relative: str) -> str:
+    return subprocess.run(
+        ["git", "log", "-1", "--format=%H", "--", relative],
+        cwd=ROOT,
+        check=True,
+        capture_output=True,
+        text=True,
+    ).stdout.strip()
+
+
+def check_bilingual_pairs() -> list[str]:
+    failures: list[str] = []
+    changed = git_paths_changed_from_head()
+
+    for english_relative, chinese_relative in BILINGUAL_PAIRS:
+        english = ROOT / english_relative
+        chinese = ROOT / chinese_relative
+        if not english.is_file() or not chinese.is_file():
+            continue
+
+        english_text = english.read_text(encoding="utf-8")
+        chinese_text = chinese.read_text(encoding="utf-8")
+        expected_english = (
+            f"<!-- language: en; mirror: {chinese.name}; "
+            "translation-status: synchronized -->"
+        )
+        expected_chinese = (
+            f"<!-- language: zh-CN; mirror: {english.name}; "
+            "translation-status: synchronized -->"
+        )
+        if expected_english not in english_text:
+            failures.append(f"{english_relative}: missing synchronized English mirror declaration")
+        if expected_chinese not in chinese_text:
+            failures.append(f"{chinese_relative}: missing synchronized Chinese mirror declaration")
+
+        english_links = INLINE_LINK.findall(markdown_without_fenced_code(english_text))
+        chinese_links = INLINE_LINK.findall(markdown_without_fenced_code(chinese_text))
+        if not any(link_destination(target).split("#", 1)[0] == chinese.name for target in english_links):
+            failures.append(f"{english_relative}: missing reciprocal link to {chinese.name}")
+        if not any(link_destination(target).split("#", 1)[0] == english.name for target in chinese_links):
+            failures.append(f"{chinese_relative}: missing reciprocal link to {english.name}")
+
+        english_changed = english_relative in changed
+        chinese_changed = chinese_relative in changed
+        if english_changed != chinese_changed:
+            failures.append(
+                f"translation drift: {english_relative} and {chinese_relative} "
+                "must change together"
+            )
+        elif not english_changed and last_commit_for(english_relative) != last_commit_for(chinese_relative):
+            failures.append(
+                f"translation drift: {english_relative} and {chinese_relative} "
+                "were last synchronized in different commits"
+            )
+
+    return failures
+
+
 def main() -> int:
     failures: list[str] = []
 
@@ -231,10 +373,21 @@ def main() -> int:
             "current-turn-only",
             "no-memory",
             "reference-context",
+            "full-history",
+            "scope note",
+            "narrow shared-relational",
             "system under study",
         ):
             if marker not in text:
                 failures.append(f"Pilot 001 is missing required marker: {marker}")
+
+    for case in sorted((ROOT / "case-lab/cases").glob("*.md")):
+        text = case.read_text(encoding="utf-8")
+        for marker in CASE_METADATA_MARKERS:
+            if marker not in text:
+                failures.append(f"{case.relative_to(ROOT)} is missing Case Card metadata: {marker}")
+
+    failures.extend(check_bilingual_pairs())
 
     stale_terms = {
         "tools/check_bootstrap.py": "stale checker path",
@@ -263,6 +416,7 @@ def main() -> int:
     print("Relata repository check: PASS")
     print(f"Root: {ROOT}")
     print(f"Required files checked: {len(REQUIRED)}")
+    print(f"Bilingual pairs checked: {len(BILINGUAL_PAIRS)}")
     print(f"Markdown files checked: {markdown_count}")
     print(f"Internal Markdown links checked: {link_count}")
     return 0

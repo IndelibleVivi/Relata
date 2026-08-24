@@ -6,6 +6,14 @@
 **Reviewer(s):** maintainer source-fidelity review; GPT-5.6 Pro advisory review reconciled against pinned public bytes on 2026-08-24
 **Relata questions / consumers:** RQ1, RQ6, RQ7; Assumptions 5 and 20; first System Census Architecture Pressure Map
 
+## 中文摘要
+
+EC-001 锁定 Agent Memory Leaderboard 的 public source、versioned result snapshot 与 dated hosted contract。可接受 transfer 只包括：AML 把 system under study 暴露成 synchronous Add/Search service；固定 downstream reader 仍不能单独识别 memory-only causal effect；该 boundary 对 discrete textual Top-K retrieval 等 architecture 施加特定压力；public result snapshot 不足以证明 hosted eligibility records 与 exact runtime bindings。它不验证 AML scores、construct validity、architecture neutrality 或 end-to-end reproducibility，也不为 Relata 选择 interface。
+
+## English summary
+
+EC-001 pins Agent Memory Leaderboard's public source, versioned result snapshot, and dated hosted contract. Its accepted transfer is limited to the Add/Search responsibility seam, the causal limits of a fixed downstream reader, architecture-specific interface pressure, and missing public proof for exact hosted runtime bindings. It does not validate AML scores, construct validity, architecture neutrality, or end-to-end reproducibility, and it does not select a Relata interface.
+
 ## 1. Decision target
 
 This card asks one bounded question: **what does Agent Memory Leaderboard (AML) actually place inside the system-under-study boundary from ingestion through public result, and which parts of that path are publicly inspectable?**

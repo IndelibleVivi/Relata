@@ -1,3 +1,6 @@
+**简体中文** | [English](consent-levels.md)
+<!-- language: zh-CN; mirror: consent-levels.md; translation-status: synchronized -->
+
 # Relata Community Contribution Consent Modes
 
 这些 labels 只说明“一份 contribution 可以怎样被使用”。它们**不是**投入程度、身份、信任或研究价值的升级阶梯。同一个人可以对不同 artifacts 选择不同 mode，也可以完全不参加某条路径。

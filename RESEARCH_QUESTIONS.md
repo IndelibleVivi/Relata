@@ -1,3 +1,6 @@
+[简体中文](RESEARCH_QUESTIONS.zh-CN.md) | **English**
+<!-- language: en; mirror: RESEARCH_QUESTIONS.zh-CN.md; translation-status: synchronized -->
+
 # Relata Research Questions
 
 Each research question requires a traceable combination of exact-source evidence, community-grounded incidents, system observation, synthetic cases, and appropriate controls. A polished definition alone does not close a question.

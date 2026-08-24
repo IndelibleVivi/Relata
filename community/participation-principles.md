@@ -1,3 +1,6 @@
+[简体中文](participation-principles.zh-CN.md) | **English**
+<!-- language: en; mirror: participation-principles.zh-CN.md; translation-status: synchronized -->
+
 # Community Participation Principles
 
 ## 1. Co-research, not extraction

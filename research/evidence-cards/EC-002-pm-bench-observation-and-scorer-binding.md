@@ -6,6 +6,14 @@
 **Reviewer(s):** maintainer source-fidelity and adversarial review against pinned public bytes on 2026-08-24
 **Relata questions / consumers:** RQ6, RQ8; Distinction D-006; Assumptions 14 and 20
 
+## 中文摘要
+
+EC-002 锁定 PM-Bench paper v1、official repo commit、scenario、scorer 与 64 份 released primary logs。Accepted transfer 是 scorer-contract boundary：最终 action success 不总能绑定到 required observation、agent intended task version 或 declared `step_id`；diagnostic label 因此可能超出 logged evidence。Fresh replay 同时确认 released corpus 中 row order 与 declared `step_id` 一致，reordering defect 对 released headline results 的 observed impact 为零。本 card 不否定 PM-Bench tables，也不采用其 architecture、scenario、metric 或 runtime。
+
+## English summary
+
+EC-002 pins PM-Bench's paper, repository commit, scenario, scorer, and 64 released primary logs. Its accepted transfer is a scorer-contract limit: final action success is not always bound to required observation, intended task version, or declared `step_id`, so diagnostic labels can outrun logged evidence. Fresh replay also found no row-order impact in the released corpus. The card neither invalidates PM-Bench's headline tables nor adopts its architecture, scenario, metrics, or runtime.
+
 ## 1. Decision target
 
 This card asks one bounded question: **does PM-Bench's released scorer and log contract bind a successful or failed action to the observation and step identity needed for causal and diagnostic claims?**

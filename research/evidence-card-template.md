@@ -6,6 +6,14 @@
 **Reviewer(s):**  
 **Relata questions / consumers:** RQ- / D- / RC- / assumption / ADR
 
+## 中文摘要
+
+用简洁中文说明 exact object、version/boundary、accepted findings、关键 limits，以及本 card 明确不支持什么。
+
+## English summary
+
+Summarize the exact object, version and boundary, accepted findings, material limits, and what the card explicitly does not support.
+
 ## 1. Decision target
 
 What Relata question, distinction, case, assumption, or decision could this object change? What would make the card irrelevant?

@@ -1,3 +1,6 @@
+[简体中文](distinction-atlas.zh-CN.md) | **English**
+<!-- language: en; mirror: distinction-atlas.zh-CN.md; translation-status: synchronized -->
+
 # Relata Distinction Atlas
 
 **Status:** seed hypotheses, not canonical taxonomy

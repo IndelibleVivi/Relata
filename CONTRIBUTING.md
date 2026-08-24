@@ -1,3 +1,6 @@
+[简体中文](CONTRIBUTING.zh-CN.md) | **English**
+<!-- language: en; mirror: CONTRIBUTING.zh-CN.md; translation-status: synchronized -->
+
 # Contributing to Relata
 
 Relata accepts research, lived-experience, technical, editorial, linguistic, case, and governance contributions. Coding skill is not a prerequisite. The source repository is public. Public-safe code, documentation, source research, and synthetic-case changes may use normal GitHub contributions; intimate lived-experience material, identifying consent records, and restricted system details must not be submitted through public issues or pull requests.

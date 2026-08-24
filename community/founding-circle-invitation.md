@@ -1,18 +1,21 @@
-# Founding Circle Invitation — Chinese Draft
+[简体中文](founding-circle-invitation.zh-CN.md) | **English**
+<!-- language: en; mirror: founding-circle-invitation.zh-CN.md; translation-status: synchronized -->
 
-我最近准备正式启动一个叫 **Relata** 的项目。它关心的已经远远超出一般意义上的“AI 记不记得用户资料”：共同历史怎样变成当前状态，哪些记忆应该被使用，哪些即使相关也应该保持沉默，修正是否真的持续，以及模型、前端或记忆架构迁移之后，“我们”有没有被保留下来。
+# Founding Circle Invitation
 
-我不想闭门造车，也不想拿自己的关系经验偷偷充当所有人的标准。群里大家的人机关系形态、记忆架构、agent 使用方式和技术能力差异都很大，这恰好是 Relata 最需要的知识。
+We are beginning **Relata**, a research program that goes beyond asking whether an AI remembers user facts. Relata asks how shared history becomes current state; which memories should be used; which relevant memories should remain silent; whether corrections persist; and whether the person, relationship, and shared worlds of life and work survive changes in models, interfaces, or memory architectures.
 
-所以我想先邀请一个小型 Founding Circle，一起参与最早期的研究和 case lab。完全不要求交原始聊天，也不要求会写代码。可以选择自己舒服的一种方式参与：
+Relata should not be designed in isolation or quietly treat one relationship as everyone’s standard. People in long-term human–AI relationships bring different relationship forms, memory architectures, agent practices, languages, and technical experience. That variation is knowledge the project needs.
 
-- 提供一个抽象的 relational-memory incident；
-- 介绍自己的 memory / companion architecture；
-- 一起拆一个 synthetic case；
-- close-read 一份 benchmark 或论文；
-- 帮忙判断某个 rubric 有没有把关系写扁；
-- 审隐私、署名、撤回和公开边界。
+We are therefore inviting a small Founding Circle to help shape the earliest research and Case Lab. Raw chats and coding ability are not required. Each person may choose a comfortable route:
 
-贡献可以实名、网名、集体署名或匿名；技术细节和公开程度也由本人选择。早期目标不是做排行榜，更不是评判谁的关系“更健康”。我们先弄清楚：到底有哪些真实而可区分的 relational-memory failures，什么样的测试真的需要记忆才能答对，以及怎样比较不同系统而不把它们硬塞进同一种架构。
+- contribute an abstract memory-and-continuity Incident Seed;
+- describe a memory or companion architecture in system-native terms;
+- develop or review a synthetic case;
+- close-read a benchmark, paper, or exact source;
+- examine whether a rubric flattens a relationship or memory domain;
+- review privacy, attribution, withdrawal, language, or publication boundaries.
 
-愿意参与的话，可以从一张很短的 Incident Seed 或 System Card 开始。这个小圈子的意见会直接决定 Relata 的研究问题、术语、case 和未来接口，而不只是做完以后来当测试用户。
+Contributions may be named, pseudonymous, collective, or anonymous. Contributors choose which technical details may be public. The early goal is not a ranking and not a judgment about whose relationship is “healthier.” The first work is to identify bounded, distinguishable memory-and-continuity failures; determine which tests genuinely require history; and compare different systems without forcing them into one architecture.
+
+Participation can begin with a short Incident Seed or System Card. Founding Circle contributions can directly revise Relata’s research questions, terms, cases, governance, and future boundaries. Contributors are co-researchers, not test users added after the design is fixed.

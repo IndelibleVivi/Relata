@@ -5,6 +5,14 @@
 **Review mode:** architecture, research validity, measurement, and community epistemics  
 **Resolution status:** research-first repository materials adopted; no evaluation-platform implementation proposed
 
+## 中文摘要
+
+Draft 0.1 有清晰的 domain thesis 与若干值得研究的 failure distinctions，但不是有效 implementation spec：它在 construct validation、architecture census、causal case controls 与 evaluator calibration 之前锁定了 ontology、tracks、scoring 与 infrastructure。当前 resolution 是把它降为 non-normative north-star provocation，并让 Relata 从 exact-source research、community co-research、system census、minimal cases 与 disagreement-aware review 开始。
+
+## English summary
+
+Draft 0.1 contains a strong domain thesis and promising failure distinctions, but it is not a valid implementation specification: it locks ontology, tracks, scoring, and infrastructure before construct validation, architecture census, causal case controls, or evaluator calibration. The accepted resolution makes it a non-normative north-star provocation and begins Relata with research, co-research governance, system census, bounded cases, and disagreement-aware review.
+
 ## Overall verdict
 
 Draft 0.1 contains a strong domain thesis and several valuable failure distinctions. It is not a valid implementation specification. It moves from “proposed, not yet built” to 22 locked decisions before construct validation, architecture census, case controls, or evaluator calibration.

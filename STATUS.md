@@ -1,3 +1,6 @@
+[简体中文](STATUS.zh-CN.md) | **English**
+<!-- language: en; mirror: STATUS.zh-CN.md; translation-status: synchronized -->
+
 # Relata Status
 
 **Project:** Relata  

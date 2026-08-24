@@ -1,3 +1,6 @@
+**简体中文** | [English](START_HERE.md)
+<!-- language: zh-CN; mirror: START_HERE.md; translation-status: synchronized -->
+
 # Relata 从这里开始：Research Foundation 执行路径
 
 这条路径负责把 non-normative 的 Target Architecture Draft 0.1，推进成有 source provenance、architecture pressure、community authority 与 case evidence 的 Relata。
@@ -10,7 +13,9 @@
 - community co-research、consent、attribution 与 withdrawal 材料
 - System Census 与 Architecture Pressure Map templates
 - Distinction Atlas、case method、Pilot 001 与 manual pilot plan
-- repository structure / Markdown link checker
+- [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md) 确立的 mixed-domain scope authority
+- [`ADR-0004`](decisions/ADR-0004-r0-bilingual-documentation.zh-CN.md) 与 [language policy](docs/language-policy.zh-CN.md) 确立的中文优先双语 authority
+- repository structure、bilingual drift、Case Card metadata 与 Markdown link checker
 
 先运行：
 
@@ -60,6 +65,17 @@ python3 tools/check_repo.py
 - [x] 在 narrow transfer 进入 RQ6 / RQ8 前完成 source-fidelity 与 adversarial review。
 
 **已于 2026-08-24 达成：** 一张 accepted、针对 observation / scorer binding 的 decision-targeted card；不是泛泛的 PM-Bench summary，也没有新建 benchmark run。accepted transfer 明确记录 released logs 的 step-order impact 为零，也不否定 PM-Bench headline tables。
+
+## 第五项：Scope correction 与 bilingual foundation 已 accepted
+
+- [x] 区分 Relata 的成人长期人机关系 deployment domain 与 memory content domains。
+- [x] 让 personal-lived、shared-relational、operational-project 与 companion-system material 成为 mixed-domain memory ecology 中的一等对象。
+- [x] 保留 general-memory validity controls，打开 routing、isolation 与 contamination questions，但不创建永久 tracks。
+- [x] 把 Pilot 001 标记为窄的 shared-relational case，不再当 project representative shape。
+- [x] 中文成为 R0 primary working / participation language，同时维护完整 English public entrypoints。
+- [x] Stable authority 成对维护、research artifacts 提供双语摘要；locale-sensitive cases 作为独立 review 的 adaptations。
+
+**已于 2026-08-24 达成：** [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md) 与 [`ADR-0004`](decisions/ADR-0004-r0-bilingual-documentation.zh-CN.md) accepted；二者都不推出 protocol、runner、score 或 implementation interface。
 
 ## 当前开放事项完成以后
 

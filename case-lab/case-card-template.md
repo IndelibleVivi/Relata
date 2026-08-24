@@ -1,3 +1,6 @@
+[简体中文](case-card-template.zh-CN.md) | **English**
+<!-- language: en; mirror: case-card-template.zh-CN.md; translation-status: synchronized -->
+
 # Case Card: <Title>
 
 **Case ID:** RC-000  

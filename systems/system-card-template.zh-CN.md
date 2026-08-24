@@ -1,3 +1,6 @@
+**简体中文** | [English](system-card-template.md)
+<!-- language: zh-CN; mirror: system-card-template.md; translation-status: synchronized -->
+
 # System Card：<系统名称>
 
 **Card ID：** SC-000  
@@ -9,6 +12,14 @@
 **Exact version 或 observation date：**
 
 > 这不是产品评分表。先用系统自己的 vocabulary 讲清真实结构，再讨论它怎样映射到 Relata 的拟议 boundary。
+
+## 中文摘要
+
+用简洁中文说明这个 system 是什么、当前 card 绑定的 version / boundary、哪些关键 findings 有 evidence、哪些仍 opaque / unknown，以及它对 Relata 哪个 research question 施加 pressure。
+
+## English summary
+
+Summarize the system, the version and boundary represented by this card, the key evidence-backed findings, what remains opaque or unknown, and which Relata research question it pressure-tests.
 
 ## 1. System identity 与 scope
 

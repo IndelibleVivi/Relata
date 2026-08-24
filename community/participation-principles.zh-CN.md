@@ -1,3 +1,6 @@
+**简体中文** | [English](participation-principles.md)
+<!-- language: zh-CN; mirror: participation-principles.md; translation-status: synchronized -->
+
 # Relata 社区参与原则
 
 ## 1. 共研，不做素材提取

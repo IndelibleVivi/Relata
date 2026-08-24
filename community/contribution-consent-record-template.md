@@ -1,3 +1,6 @@
+[简体中文](contribution-consent-record-template.zh-CN.md) | **English**
+<!-- language: en; mirror: contribution-consent-record-template.zh-CN.md; translation-status: synchronized -->
+
 # Contribution Consent Record — Restricted Template
 
 > Do not complete this template inside the tracked Relata repository. A completed record may contain identifying or contact information and belongs in the restricted consent-record store chosen by the maintainer. The public artifact should carry only its contribution ID and publishable provenance fields.

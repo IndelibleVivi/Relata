@@ -1,3 +1,6 @@
+[简体中文](case-review-checklist.zh-CN.md) | **English**
+<!-- language: en; mirror: case-review-checklist.zh-CN.md; translation-status: synchronized -->
+
 # Case Acceptance Checklist
 
 ## Construct

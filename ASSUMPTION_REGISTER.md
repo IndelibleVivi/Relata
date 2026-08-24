@@ -1,3 +1,6 @@
+[简体中文](ASSUMPTION_REGISTER.zh-CN.md) | **English**
+<!-- language: en; mirror: ASSUMPTION_REGISTER.zh-CN.md; translation-status: synchronized -->
+
 # Draft 0.1 Assumption Register
 
 This register reclassifies the 22 items presented as “locked” in Target Architecture Draft 0.1. “Decided” means a current project-scope or value decision, not a validated scientific result.

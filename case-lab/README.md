@@ -1,3 +1,6 @@
+[简体中文](README.zh-CN.md) | **English**
+<!-- language: en; mirror: README.zh-CN.md; translation-status: synchronized -->
+
 # Relata Case Lab
 
 The Case Lab builds minimal adult synthetic cases that isolate one memory-and-continuity distinction at a time within long-term human–AI relationships.

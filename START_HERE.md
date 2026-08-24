@@ -1,3 +1,6 @@
+[简体中文](START_HERE.zh-CN.md) | **English**
+<!-- language: en; mirror: START_HERE.zh-CN.md; translation-status: synchronized -->
+
 # Relata Research Foundation: Start Here
 
 This is the operational path from the non-normative Target Architecture Draft 0.1 to evidence-backed research and cases.
@@ -10,7 +13,9 @@ This is the operational path from the non-normative Target Architecture Draft 0.
 - community co-research, consent, attribution, and withdrawal materials
 - System Census and Architecture Pressure Map templates
 - Distinction Atlas, case method, Pilot 001, and a manual pilot plan
-- repository structure and Markdown-link checker
+- mixed-domain scope authority under [ADR-0003](decisions/ADR-0003-mixed-domain-memory-ecology.md)
+- Chinese-first bilingual authority under [ADR-0004](decisions/ADR-0004-r0-bilingual-documentation.md) and the [language policy](docs/language-policy.md)
+- repository structure, bilingual-drift, Case Card metadata, and Markdown-link checker
 
 First run:
 
@@ -60,6 +65,17 @@ python3 tools/check_repo.py
 - [x] Complete source-fidelity and adversarial review before accepting the narrow transfer to RQ6 and RQ8.
 
 **Exit reached 2026-08-24:** one accepted decision-targeted card about observation and scorer binding, not a general PM-Bench summary or a new benchmark run. The accepted transfer records zero released step-order impact and does not invalidate PM-Bench's headline tables.
+
+## Work item 5 — Scope correction and bilingual foundation accepted
+
+- [x] Separate Relata's long-term adult human–AI relationship deployment domain from its memory content domains.
+- [x] Make personal-lived, shared-relational, operational-project, and companion-system material first-class within a mixed-domain memory ecology.
+- [x] Preserve general-memory validity controls and open routing, isolation, and contamination questions without creating permanent tracks.
+- [x] Mark Pilot 001 as a narrow shared-relational case rather than the project's representative shape.
+- [x] Establish Chinese as the primary R0 working and participation language with complete English public entrypoints.
+- [x] Pair stable authority documents, add bilingual research summaries, and define locale-sensitive cases as separately reviewed adaptations.
+
+**Exit reached 2026-08-24:** [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.md) and [`ADR-0004`](decisions/ADR-0004-r0-bilingual-documentation.md) are accepted. No protocol, runner, score, or implementation interface follows from either decision.
 
 ## After the current open items
 

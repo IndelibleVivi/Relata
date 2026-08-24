@@ -1,4 +1,9 @@
+[简体中文](README.zh-CN.md) | **English**
+<!-- language: en; mirror: README.zh-CN.md; translation-status: synchronized -->
+
 # Relata
+
+> 中文贡献者可以直接从 [中文 README](README.zh-CN.md) 与 [中文执行路径](START_HERE.zh-CN.md) 开始；R0 的主要工作与社区参与语言是中文。
 
 **Relata** is an open, community-grounded research program and case laboratory for memory and continuity in long-term adult human–AI relationships.
 
@@ -88,6 +93,7 @@ Relata has not selected public licenses yet. Repository visibility does not itse
 - [`governance/`](governance/public-private-boundary.md) — privacy, attribution, withdrawal, and publication boundaries
 - [`decisions/`](decisions/README.md) — accepted and proposed decisions
 - [`docs/terminology.md`](docs/terminology.md) — canonical current research terms
+- [`docs/language-policy.md`](docs/language-policy.md) — R0 bilingual authority and drift contract
 - [`docs/vision/`](docs/vision/README.md) — non-normative historical vision
 
 ## Authority and checks
@@ -108,4 +114,4 @@ Run the repository check from the root:
 python3 tools/check_repo.py
 ```
 
-The check validates required research surfaces, prohibited premature project shells, the Draft 0.1 authority banner, assumption-register coverage, Pilot 001 controls, and local Markdown links.
+The check validates required research surfaces, prohibited premature project shells, the Draft 0.1 authority banner, assumption-register coverage, required Case Card metadata, Pilot 001 controls and scope markers, bilingual-pair declarations and paired Git changes, and local Markdown links. It cannot establish semantic translation equivalence.

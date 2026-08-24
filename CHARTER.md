@@ -1,3 +1,6 @@
+[简体中文](CHARTER.zh-CN.md) | **English**
+<!-- language: en; mirror: CHARTER.zh-CN.md; translation-status: synchronized -->
+
 # Relata Working Charter
 
 ## 1. Mission

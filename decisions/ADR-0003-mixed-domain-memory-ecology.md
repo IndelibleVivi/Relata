@@ -1,3 +1,6 @@
+[简体中文](ADR-0003-mixed-domain-memory-ecology.zh-CN.md) | **English**
+<!-- language: en; mirror: ADR-0003-mixed-domain-memory-ecology.zh-CN.md; translation-status: synchronized -->
+
 # ADR-0003 — Relata Studies a Mixed-Domain Memory Ecology
 
 **Status:** accepted

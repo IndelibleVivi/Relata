@@ -4,6 +4,14 @@
 **Objects reviewed:** the extracted foundation material and the original Relata Target Architecture Draft 0.1  
 **Authority:** this review records integration choices; current project authority remains in `STATUS.md`, `CHARTER.md`, `ASSUMPTION_REGISTER.md`, governance, and accepted decisions
 
+## 中文摘要
+
+Foundation package 是有价值的起点，但仍带有 delivered bootstrap bundle 的 transitional framing，并存在 terminology ambiguity、architecture-shaped templates、不可执行的 consent storage assumption 与结构型 checker。Integration 保留 research-first pivot、adversarial review、assumption register、case method 与 Pilot 001，重写 onboarding、evidence lifecycle、co-research governance、System Census、case vocabulary、pilot records 与 repo checks；没有把任何 Draft 0.1 named-source claim 当成已验证事实。
+
+## English summary
+
+The foundation package was a useful starting point but still carried transitional bootstrap framing, ambiguous terminology, architecture-shaped templates, an unexecutable consent-storage assumption, and a structure-only checker. Integration retained the research-first pivot, adversarial review, assumption register, case method, and Pilot 001 while rewriting onboarding, evidence lifecycle, co-research governance, System Census, case vocabulary, pilot records, and repository checks. No named-source claim from Draft 0.1 was treated as verified.
+
 ## Verdict
 
 The foundation was a strong starting package, but it still read as a delivered “bootstrap bundle” rather than the living Relata repository. Its research-first pivot, adversarial review, assumption register, case method, and first pilot were retained. Transitional instructions, ambiguous terminology, architecture-shaped templates, incomplete consent operations, and a structure-only checker were revised before adoption.

@@ -1,3 +1,6 @@
+**简体中文** | [English](case-clinic-guide.md)
+<!-- language: zh-CN; mirror: case-clinic-guide.md; translation-status: synchronized -->
+
 # Case Clinic 中文指南
 
 ## 目的
