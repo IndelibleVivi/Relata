@@ -15,7 +15,7 @@ A later correction changes what behavior is valid, while the relationship should
 The system preserves who said, inferred, accepted, disputed, or corrected a claim.
 
 - Failure: companion inference becomes a stable “user fact.”
-- Failure: one participant’s interpretation overwrites unresolved disagreement.
+- Failure: one relationship party’s interpretation overwrites unresolved disagreement.
 - Key test: identical content under different authority paths.
 
 ## D-003 — Relevance without resurfacing

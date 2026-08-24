@@ -1,5 +1,11 @@
 # Evidence Cards
 
+## Current cards
+
+| Card | Object | Status | Authorized use |
+|---|---|---|---|
+| [`EC-001`](EC-001-agent-memory-leaderboard.md) | Agent Memory Leaderboard public evaluation boundary | accepted | public-boundary, causal-limit, pressure-hypothesis, and public-proof findings only |
+
 Store one pinned object per card:
 
 ```text

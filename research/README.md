@@ -2,6 +2,12 @@
 
 Relata research is organized around decisions and cases, not a pile of summaries. A source name, paper title, repository, or benchmark mentioned in Draft 0.1 carries no current evidentiary weight until the exact object is pinned and reviewed in an Evidence Card.
 
+## Current evidence spine
+
+| Card | Status | Current use |
+|---|---|---|
+| [`EC-001 — Agent Memory Leaderboard public evaluation boundary`](evidence-cards/EC-001-agent-memory-leaderboard.md) | accepted | narrow use for RQ1/RQ6/RQ7, Assumptions 5/20, and System Census pressure questions; no AML score or validity endorsement |
+
 ## Evidence classes
 
 | Class | Meaning | Typical artifact |

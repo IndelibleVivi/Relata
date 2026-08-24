@@ -27,3 +27,18 @@ A census object may be a memory engine, context compiler, complete companion age
 The census does not require source code, production access, credentials, raw chats, or private configuration. Restricted cards stay outside the public repository; only contributor-approved summaries may be added here.
 
 Start from the [English](system-card-template.md) or [Chinese](system-card-template.zh-CN.md) System Card, then use the [Architecture Pressure Map](architecture-pressure-map-template.md).
+
+## First pressure dimensions opened by source evidence
+
+[`EC-001`](../research/evidence-cards/EC-001-agent-memory-leaderboard.md) does not choose a Relata interface. It gives the first concrete boundary to test against materially different systems. The first Architecture Pressure Map must therefore classify, rather than assume:
+
+- synchronous ingestion and immediate search visibility;
+- external chunking versus system-native episode/session boundaries;
+- `user_id` and `session_id` as isolation and organization surfaces;
+- whether Search sees the question and answer options;
+- discrete, textual, relevance-ordered evidence with a fixed Top K;
+- correction, revocation, expiry, provenance, authority, and disagreement semantics;
+- final-answer generation inside or outside the system-native boundary;
+- public version identity and the evidence that binds a result to that version.
+
+These are pressure questions, not required capabilities or scoring dimensions.

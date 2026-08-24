@@ -18,15 +18,15 @@
 python3 tools/check_repo.py
 ```
 
-## 第一项：完成 Evidence Card 001
+## 第一项：Evidence Card 001 已 accepted
 
-- [ ] 锁定 AML 的 exact public object：repo、commit 或 release、docs、evaluation data，以及实际检查过的 hosted boundary。
-- [ ] 如果复用已有 local audit，只把它当 working evidence；迁入结论前重新确认 exact source identity 与 claim scope。
-- [ ] 按 `research/evidence-card-template.md` 分开写 source claim、reproduced observation、editorial inference 与 unverified boundary。
-- [ ] 每条转入 Relata 的结论都连到一个 RQ、distinction、case idea、assumption 或 decision。
-- [ ] 做 source-faithful review 后，才把 card 状态改成 `accepted`。
+- [x] 分开锁定 AML 的 pinned GitHub source、pinned Hugging Face result snapshot 与 dated mutable hosted observations。
+- [x] 确认本地没有可复用的既有 AML audit artifact，因此没有迁入悬空结论。
+- [x] 在 [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) 中分开 source claim、reproduced observation、inference、contradiction 与 unverified boundary。
+- [x] 把 accepted transfer 连到 RQ1/RQ6/RQ7、Assumptions 5/20 与 System Census pressure questions。
+- [x] 完成 adversarial source-fidelity review 并逐条对回 pinned bytes 后，才 narrow-accept 该 card。
 
-**完成标志：** 一张可以支撑具体 Relata 决策或 case 的 accepted Evidence Card，而不是泛泛的 benchmark summary。
+**已于 2026-08-24 达成：** 一张支撑 bounded Relata questions 的 accepted Evidence Card；但不为 AML 的 score、validity、architecture、hosted execution 或 governance 背书。
 
 ## 第二项：做第一轮 System Census
 
@@ -51,7 +51,17 @@ python3 tools/check_repo.py
 
 **完成标志：** 对 Pilot 001 是否真正证明 memory necessity 与 counterfactual discriminability，得到有 review evidence 的决定。
 
-## 三项完成以后
+## 第四项：完成 Evidence Card 002
+
+- [ ] 重新锁定 PM-Bench 的 official paper revision、repo commit、scorer、released scenario 与 primary-log boundary。
+- [ ] 把本地已验证的 scorer-contract audit 只当 candidate evidence package，不当 Relata authority。
+- [ ] 分开追踪 observation provenance、`step_id` identity、scorer consumption、diagnostic meaning 与 released-result impact。
+- [ ] 分清 source-level possibility、released-corpus prevalence、causal interpretation 与 no-observed-impact finding。
+- [ ] 任何结论转入 RQ6 / RQ8 前完成 source-faithful review。
+
+**完成标志：** 一张针对 observation / scorer binding 的 decision-targeted card；不是泛泛的 PM-Bench summary，也不是新建 benchmark run。
+
+## 当前开放事项完成以后
 
 更新 `STATUS.md`、Distinction Atlas 以及受影响的 assumption / decision records。然后才判断 working promotion gate 是否足以支持第一份 implementation-boundary ADR。
 

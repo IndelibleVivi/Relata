@@ -16,7 +16,7 @@ Relata is in **R0 — Research Foundation**. `R0` names the stage, not the proje
 |---|---|
 | Charter and research questions | working authority |
 | Draft 0.1 assumptions | reclassified as decisions, hypotheses, aspirations, deferred items, or rejected items |
-| Source research | workflow and templates exist; no accepted Evidence Card yet |
+| Source research | one accepted Evidence Card; AML boundary findings transferred without adopting its architecture or scores |
 | Community participation | co-research and consent materials exist; no intimate-material collection is open |
 | System Census | templates exist; no reviewed System Card yet |
 | Distinction Atlas | six seed hypotheses; none promoted to supported |
@@ -31,12 +31,14 @@ The original architecture draft specifies a mature evaluation platform before Re
 
 The preserved [Target Architecture Draft 0.1](docs/vision/relata-target-architecture-draft-0.1.md) is therefore a **non-normative north-star draft**. The [adversarial review](docs/reviews/target-architecture-draft-0.1-adversarial-review.md), [foundation integration review](docs/reviews/research-foundation-integration-review.md), and [assumption register](ASSUMPTION_REGISTER.md) record what remains valuable, what was rewritten, and what was deferred or rejected.
 
-## First research tranche
+## Research now in motion
 
-The first three executable work items are:
+The first exact-source target is complete: [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) pins and audits Agent Memory Leaderboard's public evaluation boundary. It is accepted only for narrow findings about responsibility seams, fixed-reader causal limits, architecture-specific interface commitments, and public proof of version bindings—not for AML score validity or as a Relata interface.
 
-1. Produce `EC-001` by pinning and auditing one exact public memory-evaluation object, beginning with Agent Memory Leaderboard (AML) if the source remains the best fit.
-2. Complete three materially different System Cards and one Architecture Pressure Map with contributor review and explicit observability limits.
+The next three executable work items are:
+
+1. Produce `EC-002` by re-pinning PM-Bench's official paper, scorer, and released-log boundary, then auditing observation and step-identity binding without importing another repo's conclusion as authority.
+2. Complete three materially different System Cards and one Architecture Pressure Map with contributor review and explicit observability limits; select restricted consent-record stewardship before collecting sensitive contributions.
 3. Run the Pilot 001 controls and blind Case Clinic review, then accept, revise, split, or reject the case from recorded evidence.
 
 These tasks are described in the [Chinese execution path](START_HERE.zh-CN.md) and [English execution path](START_HERE.md).

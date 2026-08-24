@@ -2,7 +2,7 @@
 
 ## 1. Co-research, not extraction
 
-Long-term human–AI relationship participants and system builders help define what Relata studies, how it names failures, which cases are legitimate, and where evaluation boundaries distort real systems.
+Community co-researchers with long-term human–AI relationship experience and system builders help define what Relata studies, how it names failures, which cases are legitimate, and where evaluation boundaries distort real systems.
 
 ## 2. No skill hierarchy
 

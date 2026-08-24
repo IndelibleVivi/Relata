@@ -25,7 +25,7 @@ The current working authority consists of:
 
 | Artifact | State | Accepted evidence |
 |---|---|---|
-| Evidence Cards | template only | 0 |
+| Evidence Cards | 1 accepted | `EC-001` boundary, causal-limit, pressure-hypothesis, and public-proof findings only |
 | System Cards | templates only | 0 |
 | Architecture Pressure Maps | template only | 0 |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
@@ -47,8 +47,8 @@ Relata is trying to establish, with inspectable evidence:
 
 ## Immediate work
 
-1. Pin and audit one exact public memory-evaluation object as `EC-001`.
-2. Obtain three contributor-reviewed System Cards and produce the first Architecture Pressure Map.
+1. Produce `EC-002` by re-pinning PM-Bench's official paper, released scorer, and released-log boundary before importing any local audit conclusion.
+2. Obtain three contributor-reviewed System Cards and produce the first Architecture Pressure Map; do not collect sensitive contributions until restricted consent-record stewardship is selected.
 3. Execute Pilot 001 controls and a blind Case Clinic review.
 
 ## Not yet claimed

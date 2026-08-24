@@ -2,11 +2,11 @@
 
 This file is a research queue, not a bibliography and not evidence by itself. A source name listed here carries no accepted claim until an Evidence Card pins and audits the exact object. Named-source claims inherited from Target Architecture Draft 0.1 remain `UNVERIFIED` here unless a card says otherwise.
 
-## Lane A — Memory evaluation and participant boundaries
+## Lane A — Memory evaluation and system-under-study boundaries
 
 Initial targets:
 
-- Agent Memory Leaderboard (AML)
+- [Agent Memory Leaderboard (AML)](evidence-cards/EC-001-agent-memory-leaderboard.md) — `EC-001` accepted for narrow boundary, causal-limit, pressure-hypothesis, and public-proof findings
 - AgentMemoryBench and related mode-based agent-memory evaluations
 - LoCoMo
 - LongMemEval
@@ -15,7 +15,7 @@ Initial targets:
 
 Questions:
 
-- What operation boundary does the participant expose?
+- What operation boundary does the system under study expose?
 - Who produces the final answer?
 - How are memory outputs consumed?
 - What is public, hidden, hosted, or manually reviewed?
@@ -35,7 +35,7 @@ Questions:
 
 - What makes an agent recognizable across time?
 - Which memories must remain latent?
-- How do participants understand companion agency and identity?
+- How do community co-researchers understand companion agency and identity?
 - What changes after model, platform, prompt, or memory migration?
 
 ## Lane C — State, correction, and belief revision
@@ -80,14 +80,18 @@ Initial target families:
 
 Questions:
 
-- How can participants shape constructs without surrendering private logs?
+- How can community co-researchers shape constructs without surrendering private logs?
 - How should a synthetic case derived from lived experience be reviewed and attributed?
 - What can withdrawal realistically remove after public release?
 
-## First exact-source target
+## First exact-source target — accepted for narrow use
 
-Begin with Agent Memory Leaderboard (AML) if its public source and evaluation boundary still best address RQ1, RQ6, and RQ7.
+`EC-001` pinned and audited Agent Memory Leaderboard's official repository, hosted documentation and public leaderboard boundary against RQ1, RQ6, and RQ7.
 
-If a prior local audit exists, reuse its evidence notes rather than restarting broad discovery. Before importing any conclusion, re-pin the public repository, commit or release, documentation, data, and hosted/manual boundary actually inspected. The previous audit is working evidence, not Relata authority by itself.
+The 2026-08-24 local scan found no prior AML audit artifact in Agent Memory Study, so no inherited conclusion was imported. The new card found a clear Add/Search responsibility split, an unexposed seam between that contract and the published answer/scoring modules, architecture-specific interface commitments whose differential pressure remains unmeasured, and public result rows that do not themselves demonstrate the exact-version bindings claimed in operator documentation.
 
-`EC-001` should answer one bounded question: what object AML actually evaluates from system input through answer/scoring and result publication, including what remains outside the public reproducible boundary.
+After adversarial review and revision, the card is accepted only for its stated boundary, causal-limit, architecture-commitment, and public-proof findings. It does not endorse AML scores, validity, reproducibility, architecture neutrality, hosted execution, or governance.
+
+## Next exact-source target
+
+Produce `EC-002` from the locally verified PM-Bench scoring-contract audit candidate. Re-pin the official paper, released scorer, and observed log boundary before importing any conclusion. The decision target is narrower than a benchmark summary: whether the scorer binds observations to the correct step and evidence channel strongly enough to support RQ6 and RQ8.

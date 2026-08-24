@@ -18,15 +18,15 @@ First run:
 python3 tools/check_repo.py
 ```
 
-## Work item 1 — Produce Evidence Card 001
+## Work item 1 — Evidence Card 001 accepted
 
-- [ ] Select and pin the exact public AML object: repository, commit or release, documentation, evaluation data, and any hosted boundary actually inspected.
-- [ ] Reuse an existing local audit only as working evidence; recheck its exact source identity and current claim scope before importing conclusions.
-- [ ] Complete `research/evidence-card-template.md` with source claims, reproduced observations, inferences, and unverified boundaries separated.
-- [ ] Link every transferred claim to a Relata research question, distinction, case idea, assumption, or decision.
-- [ ] Obtain a source-faithful review before changing the card status to `accepted`.
+- [x] Separate and identify the pinned AML GitHub source, pinned Hugging Face result snapshot, and dated mutable hosted observations.
+- [x] Confirm that no prior local AML audit artifact existed; import no inherited AML conclusion.
+- [x] Separate source claims, reproduced observations, inferences, contradictions, and unverified boundaries in [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md).
+- [x] Link the accepted transfer to RQ1/RQ6/RQ7, Assumptions 5/20, and System Census pressure questions.
+- [x] Reconcile an adversarial source-fidelity review before accepting the card for narrow use.
 
-**Exit:** one accepted Evidence Card that can support a specific Relata decision or case, not a general summary of a benchmark.
+**Exit reached 2026-08-24:** one accepted Evidence Card supporting bounded Relata questions without endorsing AML scores, validity, architecture, hosted execution, or governance.
 
 ## Work item 2 — Run the first System Census
 
@@ -51,7 +51,17 @@ python3 tools/check_repo.py
 
 **Exit:** a reviewed decision on whether Pilot 001 demonstrates memory necessity and counterfactual discriminability.
 
-## After those three items
+## Work item 4 — Produce Evidence Card 002
+
+- [ ] Re-pin PM-Bench's official paper revision, repository commit, scorer, released scenario, and released primary-log boundary.
+- [ ] Treat the locally verified scorer-contract audit as a candidate evidence package, not Relata authority.
+- [ ] Trace observation provenance, `step_id` identity, scorer consumption, diagnostic meaning, and released-result impact separately.
+- [ ] Separate source-level possibility, released-corpus prevalence, causal interpretation, and no-observed-impact findings.
+- [ ] Obtain source-faithful review before accepting any transfer to RQ6 or RQ8.
+
+**Exit:** one decision-targeted card about observation and scorer binding, not a general PM-Bench summary or a new benchmark run.
+
+## After the current open items
 
 Update `STATUS.md`, the Distinction Atlas, and the relevant assumption or decision records. Only then assess whether the working promotion gate has enough evidence for an implementation-boundary ADR.
 

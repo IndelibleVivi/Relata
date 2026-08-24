@@ -29,8 +29,8 @@ Record:
 
 Compare at minimum, when people take the defined reviewer role:
 
-- long-term human–AI relationship participants;
-- architecture/builders;
+- community co-researchers with long-term human–AI relationship experience;
+- system architects/builders;
 - reviewers without companion experience.
 
 Do not merge pools before reporting their differences.
@@ -53,7 +53,7 @@ A model judge may assist only for dimensions where:
 - the construct is bounded;
 - human anchors exist;
 - disagreement is characterized;
-- model failure is visible and does not silently become participant failure;
+- model failure is visible and does not silently become reviewer failure;
 - human appeal remains possible.
 
 No aggregate score is planned during R0 evaluator research.
