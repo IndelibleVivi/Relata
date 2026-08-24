@@ -38,8 +38,8 @@ Relata 处于 **R0 — Research Foundation**。`R0` 是阶段名，不是项目�
 | Community participation | co-research 与 consent materials 已存在；尚未开放 intimate-material collection |
 | System Census | templates 已存在；尚无 reviewed System Card |
 | Distinction Atlas | 六条 seed hypotheses 与 mixed-domain incident families；尚无 supported distinction |
-| Case coverage | 五个 proposed coverage strata；一张 clinic-ready pilot 与两张未经 review 的中文 case seeds；尚未运行，也没有 balanced pilot set |
-| Pilot 001 | clinic-ready 的 shared-relational/current-state-use case；尚未运行，也不能代表完整 scope |
+| Case coverage | 五个 proposed coverage strata；一张 clinic-ready pilot 与三张未经 review 的中文 case seeds；尚未运行，也没有 balanced pilot set |
+| Pilot 001 | clinic-ready 的 shared-relational/current-state-use case，加上一份未经 review 的 E0 calibration fixture pack；尚未运行，也不能代表完整 scope |
 | Software | 只有 repository checker |
 
 Relata 当前**不声称**拥有 canonical ontology、system protocol、scoring contract、benchmark release、runner、Leaderboard、Arena、SDK、service、hosted infrastructure 或 accepted implementation architecture。
@@ -57,13 +57,13 @@ Relata 当前**不声称**拥有 canonical ontology、system protocol、scoring 
 - [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) 锁定 Agent Memory Leaderboard 的 public evaluation boundary，只接受 responsibility seam、fixed-reader causal limit、architecture-specific interface commitment 与 version-binding public proof findings。
 - [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) 锁定 PM-Bench paper、scorer、scenario 与 64 份 released primary logs，分开 action success、observation provenance、current-version intent 与 step identity，并记录 released logs 没有 step-order score impact。
 
-两张 card 都不验证 source benchmark，也不为 Relata 选择 interface。[`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md) 使 mixed-domain scope correction 成为 authority，同时明确 coverage strata 不是 implementation tracks。
+两张 card 都不验证 source benchmark，也不为 Relata 选择 interface。[`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md) 使 mixed-domain scope correction 成为 authority，同时明确 coverage strata 不是 implementation tracks。新增的双语 [`Candidate Claim-Boundary Study`](research/claim-boundary-study.zh-CN.md)、[`RC-001 E0 calibration pack`](case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md) 与 [`RC-004-zh-CN`](case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md) 只属于 proposed research objects；没有一项已经 validated，也不构成 accepted protocol evidence。
 
 接下来三项可执行工作是：
 
-1. Review 并 refine 新增的 ordinary-life 与 operational/project seeds；然后设计第一张 mixed-domain routing/isolation seed，且不把任何 seed 冒充 clinic-ready。
+1. Review 并 refine ordinary-life、operational/project 与 scope-conditioned mixed-domain seeds，且不把任何 seed 冒充 clinic-ready。
 2. 完成三张 materially different、contributor-reviewed System Cards 与一张 Architecture Pressure Map；在收集 sensitive contributions 前选择 restricted consent-record stewardship。
-3. 运行 Pilot 001 controls 与 blind Case Clinic review，同时构建 full-scope claim 所需的第一批 ordinary-life、operational/project 与 mixed-domain routing cases。
+3. 先 dry-review RC-001 E0 calibration pack，再运行 Pilot 001 controls 与 blind Case Clinic review，同时构建 full-scope claim 所需的第一批 ordinary-life、operational/project 与 mixed-domain routing cases。
 
 这些任务可从 [中文执行路径](START_HERE.zh-CN.md) 进入；[English execution path](START_HERE.md) 与之同步。
 

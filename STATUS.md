@@ -29,13 +29,14 @@ The current working authority consists of:
 | Artifact | State | Accepted evidence |
 |---|---|---|
 | Evidence Cards | 2 accepted | `EC-001` public-boundary and causal-limit findings; `EC-002` observation/scorer-binding limits and released-corpus no-impact finding, each only within its card authorization |
+| Claim boundaries | bilingual candidate study | proposed CL0–CL6 ladder, observation lanes, comparability cells, and adapter classes only; no accepted result unit, lane, cell, adapter threshold, or publication policy |
 | System Cards | templates only | 0 |
 | Architecture Pressure Maps | template only | 0 |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
-| Pilot 001 | clinic-ready case and manual plan | not run; not accepted |
-| Case coverage strata | proposed under `ADR-0003`; `RC-002-zh-CN` personal-lived seed and `RC-003-zh-CN` operational-project seed now exist | neither seed reviewed or run; no balanced pilot set yet |
-| Mixed-domain routing | research question and candidate incident families only | no accepted case or system evidence |
-| Evaluator calibration | study plan only | no reviewer data |
+| Pilot 001 | clinic-ready case, manual plan, and candidate E0 calibration pack | not run or accepted; calibration anchors are authored fixtures, not system outputs |
+| Case coverage strata | proposed under `ADR-0003`; `RC-002-zh-CN` personal-lived, `RC-003-zh-CN` operational-project, and `RC-004-zh-CN` mixed-domain seeds now exist | none of the three seeds reviewed or run; no balanced pilot set yet |
+| Mixed-domain routing | research question, incident families, and one scope-conditioned seed | `RC-004-zh-CN` is unreviewed and not a pure historical counterfactual; no accepted case or system evidence |
+| Evaluator calibration | study plan and candidate RC-001 E0 fixture pack | no dry review or reviewer data; no validated evaluator boundary |
 | Community contribution path | public-safe governance and templates | restricted contribution path not yet exercised |
 
 The existence of a template, plan, or seed is not evidence that its method has worked.
@@ -53,10 +54,10 @@ Relata is trying to establish, with inspectable evidence:
 ## Immediate work
 
 1. Obtain three contributor-reviewed System Cards and produce the first Architecture Pressure Map; do not collect sensitive contributions until restricted consent-record stewardship is selected.
-2. Execute Pilot 001 controls and a blind Case Clinic review.
+2. Dry-review the RC-001 E0 calibration pack, then execute Pilot 001 controls and a blind Case Clinic review.
 3. Build the first D-006 relational microcase only after a community-grounded prospective-intention incident supplies authority and the observation boundary can be stated without importing PM-Bench's task-handle architecture.
 4. Define coverage across personal-lived, shared-relational, operational-project, companion-system, and mixed-domain cases without treating them as permanent tracks.
-5. Review and refine the ordinary-life and operational/project seeds, then add a mixed-domain routing/isolation seed before treating Pilot 001 as representative of Relata.
+5. Review and refine the ordinary-life, operational/project, and scope-conditioned mixed-domain seeds before treating Pilot 001 as representative of Relata.
 
 ## Not yet claimed
 
@@ -93,4 +94,4 @@ The following do not block local research, but must be resolved before the named
 - formal release and case-publication policy — before publishing accepted cases or evaluation results;
 - licenses for code, documents, synthetic case data, and contributed artifacts — before public release;
 - restricted storage and stewardship for identifying consent records — before collecting community contributions;
-- whether Pilot 001 treats semantic equivalents of the revoked phrase as a formal failure — during the first Case Clinic, before case acceptance.
+- whether Pilot 001 treats semantic equivalents of the revoked phrase as a formal failure — the E0 pack proposes bounded human review for v1, but the first dry review and Case Clinic must decide before case acceptance.

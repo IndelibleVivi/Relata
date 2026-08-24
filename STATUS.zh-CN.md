@@ -29,13 +29,14 @@
 | Artifact | State | Accepted evidence |
 |---|---|---|
 | Evidence Cards | 2 accepted | `EC-001` 的 public-boundary / causal-limit findings；`EC-002` 的 observation/scorer-binding limits 与 released-corpus no-impact finding；每张 card 只在自身 authorization 内有效 |
+| Claim boundaries | 双语 candidate study | 只有 proposed CL0–CL6 ladder、observation lanes、comparability cells 与 adapter classes；没有 accepted result unit、lane、cell、adapter threshold 或 publication policy |
 | System Cards | templates only | 0 |
 | Architecture Pressure Maps | template only | 0 |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
-| Pilot 001 | clinic-ready case 与 manual plan | 未运行；未 accepted |
-| Case coverage strata | 由 `ADR-0003` 提出；已有 `RC-002-zh-CN` personal-lived seed 与 `RC-003-zh-CN` operational-project seed | 两张 seed 都未经 review / run；尚无 balanced pilot set |
-| Mixed-domain routing | research question 与 candidate incident families | 尚无 accepted case 或 system evidence |
-| Evaluator calibration | study plan only | 尚无 reviewer data |
+| Pilot 001 | clinic-ready case、manual plan 与 candidate E0 calibration pack | 未运行、未 accepted；calibration anchors 是 authored fixtures，不是 system outputs |
+| Case coverage strata | 由 `ADR-0003` 提出；已有 `RC-002-zh-CN` personal-lived、`RC-003-zh-CN` operational-project 与 `RC-004-zh-CN` mixed-domain seeds | 三张 seeds 都未经 review / run；尚无 balanced pilot set |
+| Mixed-domain routing | research question、incident families 与一张 scope-conditioned seed | `RC-004-zh-CN` 未经 review，也不是 pure historical counterfactual；尚无 accepted case 或 system evidence |
+| Evaluator calibration | study plan 与 candidate RC-001 E0 fixture pack | 尚无 dry review / reviewer data；没有 validated evaluator boundary |
 | Community contribution path | public-safe governance 与 templates | restricted contribution path 尚未实际使用 |
 
 Template、plan 或 seed 的存在，不是 method 已经生效的 evidence。
@@ -53,10 +54,10 @@ Relata 正在用可 inspect 的 evidence 建立：
 ## Immediate work
 
 1. 获得三张 contributor-reviewed System Cards，并完成第一张 Architecture Pressure Map；在选择 restricted consent-record stewardship 前不收集 sensitive contribution。
-2. 执行 Pilot 001 controls 与 blind Case Clinic review。
+2. 先 dry-review RC-001 E0 calibration pack，再执行 Pilot 001 controls 与 blind Case Clinic review。
 3. 只有在 community-grounded prospective-intention incident 提供 authority，且 observation boundary 不偷带 PM-Bench task-handle architecture 后，才构建第一张 D-006 relational microcase。
 4. 定义 `personal-lived`、`shared-relational`、`operational-project`、`companion-system` 与 `mixed-domain` coverage，但不把它们当作永久 tracks。
-5. Review 并 refine ordinary-life / operational-project seeds，再补一张 mixed-domain routing/isolation seed，之后才可把 Pilot 001 视为 Relata representative。
+5. Review 并 refine ordinary-life、operational/project 与 scope-conditioned mixed-domain seeds，之后才可把 Pilot 001 视为 Relata representative。
 
 ## 尚未声称
 
@@ -93,4 +94,4 @@ Relata 当前不声称：
 - formal release 与 case-publication policy — 在发布 accepted cases 或 evaluation results 前；
 - code、documents、synthetic case data 与 contributed artifacts 的 licenses — 在 public release 前；
 - identifying consent records 的 restricted storage 与 stewardship — 在收集 community contributions 前；
-- Pilot 001 是否把 revoked phrase 的 semantic equivalents 作为 formal failure — 在第一次 Case Clinic 中、case acceptance 前决定。
+- Pilot 001 是否把 revoked phrase 的 semantic equivalents 作为 formal failure — E0 pack 为 v1 提议 bounded human review，但仍须在第一次 dry review 与 Case Clinic 中、case acceptance 前决定。

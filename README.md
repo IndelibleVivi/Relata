@@ -38,8 +38,8 @@ Relata is in **R0 — Research Foundation**. `R0` names the stage, not the proje
 | Community participation | co-research and consent materials exist; no intimate-material collection is open |
 | System Census | templates exist; no reviewed System Card yet |
 | Distinction Atlas | six seed hypotheses plus mixed-domain incident families; none promoted to supported |
-| Case coverage | five proposed coverage strata; one clinic-ready pilot and two unreviewed Chinese case seeds, with no run or balanced pilot set yet |
-| Pilot 001 | clinic-ready shared-relational/current-state-use case; no run has been completed and it is not representative of full scope |
+| Case coverage | five proposed coverage strata; one clinic-ready pilot and three unreviewed Chinese case seeds, with no run or balanced pilot set yet |
+| Pilot 001 | clinic-ready shared-relational/current-state-use case plus an unreviewed E0 calibration fixture pack; no run has been completed and it is not representative of full scope |
 | Software | repository checker only |
 
 Relata does **not** currently claim a canonical ontology, system protocol, scoring contract, benchmark release, runner, Leaderboard, Arena, SDK, service, hosted infrastructure, or accepted implementation architecture.
@@ -52,13 +52,13 @@ The preserved [Target Architecture Draft 0.1](docs/vision/relata-target-architec
 
 ## Research now in motion
 
-The first two exact-source targets are complete. [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) pins Agent Memory Leaderboard's public evaluation boundary and is accepted only for responsibility seams, fixed-reader causal limits, architecture-specific interface commitments, and public proof of version bindings. [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) pins PM-Bench's paper, scorer, scenario, and 64 released primary logs; it separates action success from observation provenance, current-version intent, and step identity while recording that the released logs showed no step-order score impact. Neither card validates the source benchmark or selects a Relata interface. [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.md) makes the mixed-domain scope correction authoritative without turning its coverage strata into implementation tracks.
+The first two exact-source targets are complete. [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) pins Agent Memory Leaderboard's public evaluation boundary and is accepted only for responsibility seams, fixed-reader causal limits, architecture-specific interface commitments, and public proof of version bindings. [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) pins PM-Bench's paper, scorer, scenario, and 64 released primary logs; it separates action success from observation provenance, current-version intent, and step identity while recording that the released logs showed no step-order score impact. Neither card validates the source benchmark or selects a Relata interface. [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.md) makes the mixed-domain scope correction authoritative without turning its coverage strata into implementation tracks. The new bilingual [`Candidate Claim-Boundary Study`](research/claim-boundary-study.md), [`RC-001 E0 calibration pack`](case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md), and [`RC-004-zh-CN`](case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md) are proposed research objects only; none is validated or accepted protocol evidence.
 
 The next three executable work items are:
 
-1. Review and refine the new ordinary-life and operational/project seeds; then design the first mixed-domain routing/isolation seed without calling any seed clinic-ready.
+1. Review and refine the ordinary-life, operational/project, and scope-conditioned mixed-domain seeds without calling any seed clinic-ready.
 2. Complete three materially different System Cards and one Architecture Pressure Map with contributor review and explicit observability limits; select restricted consent-record stewardship before collecting sensitive contributions.
-3. Run the Pilot 001 controls and blind Case Clinic review while building the first ordinary-life, operational/project, and mixed-domain routing cases needed before a full-scope claim.
+3. Dry-review the RC-001 E0 calibration pack, then run the Pilot 001 controls and blind Case Clinic review while building the first ordinary-life, operational/project, and mixed-domain routing cases needed before a full-scope claim.
 
 These tasks are described in the [Chinese execution path](START_HERE.zh-CN.md) and [English execution path](START_HERE.md).
 

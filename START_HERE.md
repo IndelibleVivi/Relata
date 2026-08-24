@@ -15,6 +15,7 @@ This is the operational path from the non-normative Target Architecture Draft 0.
 - Distinction Atlas, case method, Pilot 001, and a manual pilot plan
 - mixed-domain scope authority under [ADR-0003](decisions/ADR-0003-mixed-domain-memory-ecology.md)
 - Chinese-first bilingual authority under [ADR-0004](decisions/ADR-0004-r0-bilingual-documentation.md) and the [language policy](docs/language-policy.md)
+- a proposed bilingual [claim-boundary study](research/claim-boundary-study.md), candidate [RC-001 E0 calibration fixtures](case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md), and unreviewed [RC-004 mixed-domain seed](case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md)
 - repository structure, bilingual-drift, Case Card metadata, and Markdown-link checker
 
 First run:
@@ -46,6 +47,7 @@ python3 tools/check_repo.py
 
 ## Work item 3 — Run Pilot 001
 
+- [ ] Randomize and dry-review the candidate [`RC-001 E0 calibration pack`](case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md); revise its normalization or semantic boundary before using it for system evaluation.
 - [ ] Freeze one revision of `case-lab/cases/pilot-001-current-state-without-erasure.md`.
 - [ ] Produce current-turn-only, no-memory, full-minimal-history, reference-context, and system-native outputs for both twins.
 - [ ] Keep the current turn byte-identical and the answer-model configuration fixed within each comparison.
@@ -77,7 +79,7 @@ python3 tools/check_repo.py
 
 **Exit reached 2026-08-24:** [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.md) and [`ADR-0004`](decisions/ADR-0004-r0-bilingual-documentation.md) are accepted. No protocol, runner, score, or implementation interface follows from either decision.
 
-The first portfolio correction objects now exist as unreviewed seeds: [`RC-002-zh-CN`](case-lab/cases/seed-002-ordinary-life-location-continuity.zh-CN.md) for ordinary-life continuity and [`RC-003-zh-CN`](case-lab/cases/seed-003-project-authority-handoff.zh-CN.md) for project authority and handoff. Their next action is Case Clinic review and fixture refinement, not promotion by documentation alone.
+The first portfolio correction objects now exist as unreviewed seeds: [`RC-002-zh-CN`](case-lab/cases/seed-002-ordinary-life-location-continuity.zh-CN.md) for ordinary-life continuity, [`RC-003-zh-CN`](case-lab/cases/seed-003-project-authority-handoff.zh-CN.md) for project authority and handoff, and [`RC-004-zh-CN`](case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md) for scope-conditioned private/public routing. Their next action is Case Clinic review and fixture refinement, not promotion by documentation alone. The bilingual [`Candidate Claim-Boundary Study`](research/claim-boundary-study.md) remains a pressure-test proposal and does not select an observation lane, adapter threshold, schema, or publication policy.
 
 ## After the current open items
 

@@ -15,6 +15,7 @@
 - Distinction Atlas、case method、Pilot 001 与 manual pilot plan
 - [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md) 确立的 mixed-domain scope authority
 - [`ADR-0004`](decisions/ADR-0004-r0-bilingual-documentation.zh-CN.md) 与 [language policy](docs/language-policy.zh-CN.md) 确立的中文优先双语 authority
+- proposed 双语 [claim-boundary study](research/claim-boundary-study.zh-CN.md)、candidate [`RC-001 E0 calibration fixtures`](case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md)，以及未经 review 的 [`RC-004` mixed-domain seed](case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md)
 - repository structure、bilingual drift、Case Card metadata 与 Markdown link checker
 
 先运行：
@@ -46,6 +47,7 @@ python3 tools/check_repo.py
 
 ## 第三项：执行 Pilot 001
 
+- [ ] Randomize 并 dry-review candidate [`RC-001 E0 calibration pack`](case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md)；在用于 system evaluation 前，先依据结果修改 normalization 或 semantic boundary。
 - [ ] freeze `case-lab/cases/pilot-001-current-state-without-erasure.md` 的一个 revision。
 - [ ] 为 twins 分别生成 current-turn-only、no-memory、full-minimal-history、reference-context 与 system-native outputs。
 - [ ] current turn 保持 byte-identical；每组比较内部固定 answer-model config。
@@ -77,7 +79,7 @@ python3 tools/check_repo.py
 
 **已于 2026-08-24 达成：** [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md) 与 [`ADR-0004`](decisions/ADR-0004-r0-bilingual-documentation.zh-CN.md) accepted；二者都不推出 protocol、runner、score 或 implementation interface。
 
-第一批 portfolio correction objects 已以 unreviewed seeds 落地：[`RC-002-zh-CN`](case-lab/cases/seed-002-ordinary-life-location-continuity.zh-CN.md) 测 ordinary-life continuity；[`RC-003-zh-CN`](case-lab/cases/seed-003-project-authority-handoff.zh-CN.md) 测 project authority / handoff。下一步是 Case Clinic review 与 fixture refinement，不能只凭写进文档就 promote。
+第一批 portfolio correction objects 已以 unreviewed seeds 落地：[`RC-002-zh-CN`](case-lab/cases/seed-002-ordinary-life-location-continuity.zh-CN.md) 测 ordinary-life continuity；[`RC-003-zh-CN`](case-lab/cases/seed-003-project-authority-handoff.zh-CN.md) 测 project authority / handoff；[`RC-004-zh-CN`](case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md) 测 scope-conditioned private/public routing。下一步是 Case Clinic review 与 fixture refinement，不能只凭写进文档就 promote。双语 [`Candidate Claim-Boundary Study`](research/claim-boundary-study.zh-CN.md) 继续是 pressure-test proposal，不选择 observation lane、adapter threshold、schema 或 publication policy。
 
 ## 当前开放事项完成以后
 

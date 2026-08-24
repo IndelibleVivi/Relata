@@ -9,6 +9,14 @@ Relata research is organized around decisions and cases, not a pile of summaries
 | [`EC-001 — Agent Memory Leaderboard public evaluation boundary`](evidence-cards/EC-001-agent-memory-leaderboard.md) | accepted | narrow use for RQ1/RQ6/RQ7, Assumptions 5/20, and System Census pressure questions; no AML score or validity endorsement |
 | [`EC-002 — PM-Bench observation and scorer binding`](evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) | accepted | narrow use for RQ6/RQ8, D-006, and Assumptions 14/20; no PM-Bench score invalidation, model-failure label, or interface adoption |
 
+## Candidate methodology studies
+
+| Study | Status | Current use |
+|---|---|---|
+| [`Candidate Claim-Boundary Study`](claim-boundary-study.md) ([中文](claim-boundary-study.zh-CN.md)) | proposed; unvalidated | pressure-test the distinction between bounded outcomes, history dependence, memory contribution, stage localization, and comparison eligibility across RQ1/RQ6/RQ7/RQ8/RQ11; no accepted result schema, observation lane, adapter threshold, or publication policy follows |
+
+Candidate methodology is editorial research material, not accepted evidence that a method works. It must be revised or accepted through the decision and review path named in the study before it can govern a run or public claim.
+
 ## Evidence classes
 
 | Class | Meaning | Typical artifact |

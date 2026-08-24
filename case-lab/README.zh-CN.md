@@ -38,5 +38,10 @@ Case Lab 在成人长期人机关系中构建最小 synthetic cases，每次只�
 | [`RC-001`](cases/pilot-001-current-state-without-erasure.md) | shared-relational | clinic-ready；未 run / accepted | explicit relational correction 后的 current state |
 | [`RC-002-zh-CN`](cases/seed-002-ordinary-life-location-continuity.zh-CN.md) | personal-lived | seed；unreviewed | ordinary location continuity，不强造 significance |
 | [`RC-003-zh-CN`](cases/seed-003-project-authority-handoff.zh-CN.md) | operational-project | seed；unreviewed | project authority、supersession、handoff 与 neighboring-scope isolation |
+| [`RC-004-zh-CN`](cases/seed-004-private-greeting-public-template.zh-CN.md) | mixed-domain | seed；unreviewed | private/public 的 scope-conditioned routing，不把 metadata variation 冒充 pure historical counterfactual |
 
-两张新 seed 只建立 portfolio objects，不构成 evidence。它们各自还需完成 acceptance-decision section 中的 review 与 fixture work，才可考虑进入 `clinic-ready`。
+三张 seeds 只建立 portfolio objects，不构成 evidence。它们各自还需完成 acceptance-decision section 中的 review 与 fixture work，才可考虑进入 `clinic-ready`。
+
+## Evaluator calibration
+
+中文优先的 [`RC-001 E0 calibration pack`](reviews/RC-001-e0-calibration-pack.zh-CN.md) 提出一条收窄的 exact-phrase normalization rule、randomized-ready anchors、reviewer questions 与 disagreement categories。它尚未 dry-review，不含 system outputs，也不改变 RC-001 的 state。

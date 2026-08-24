@@ -38,5 +38,10 @@ Long worlds may later compose accepted chains. Length is not evidence of validit
 | [`RC-001`](cases/pilot-001-current-state-without-erasure.md) | shared-relational | clinic-ready; not run or accepted | current state after explicit relational correction |
 | [`RC-002-zh-CN`](cases/seed-002-ordinary-life-location-continuity.zh-CN.md) | personal-lived | seed; unreviewed | ordinary location continuity without invented significance |
 | [`RC-003-zh-CN`](cases/seed-003-project-authority-handoff.zh-CN.md) | operational-project | seed; unreviewed | project authority, supersession, handoff, and neighboring-scope isolation |
+| [`RC-004-zh-CN`](cases/seed-004-private-greeting-public-template.zh-CN.md) | mixed-domain | seed; unreviewed | scope-conditioned private/public routing without treating metadata variation as a pure historical counterfactual |
 
-The two new seeds establish portfolio objects, not evidence. Each still needs the review and fixture work named in its acceptance-decision section before `clinic-ready` consideration.
+The three seeds establish portfolio objects, not evidence. Each still needs the review and fixture work named in its acceptance-decision section before `clinic-ready` consideration.
+
+## Evaluator calibration
+
+The Chinese-first [`RC-001 E0 calibration pack`](reviews/RC-001-e0-calibration-pack.zh-CN.md) proposes one narrow exact-phrase normalization rule, randomized-ready anchors, reviewer questions, and disagreement categories. It has not been dry-reviewed, contains no system outputs, and does not change RC-001's state.
