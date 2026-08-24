@@ -1,0 +1,71 @@
+# Relata Research Foundation: Start Here
+
+This is the operational path from the non-normative Target Architecture Draft 0.1 to evidence-backed research and cases.
+
+## Foundation now present
+
+- [Charter](CHARTER.md), [research questions](RESEARCH_QUESTIONS.md), and [assumption register](ASSUMPTION_REGISTER.md)
+- [adversarial architecture review](docs/reviews/target-architecture-draft-0.1-adversarial-review.md)
+- [source/evidence workflow](research/README.md) and Evidence Card template
+- community co-research, consent, attribution, and withdrawal materials
+- System Census and Architecture Pressure Map templates
+- Distinction Atlas, case method, Pilot 001, and a manual pilot plan
+- repository structure and Markdown-link checker
+
+First run:
+
+```bash
+python3 tools/check_repo.py
+```
+
+## Work item 1 — Produce Evidence Card 001
+
+- [ ] Select and pin the exact public AML object: repository, commit or release, documentation, evaluation data, and any hosted boundary actually inspected.
+- [ ] Reuse an existing local audit only as working evidence; recheck its exact source identity and current claim scope before importing conclusions.
+- [ ] Complete `research/evidence-card-template.md` with source claims, reproduced observations, inferences, and unverified boundaries separated.
+- [ ] Link every transferred claim to a Relata research question, distinction, case idea, assumption, or decision.
+- [ ] Obtain a source-faithful review before changing the card status to `accepted`.
+
+**Exit:** one accepted Evidence Card that can support a specific Relata decision or case, not a general summary of a benchmark.
+
+## Work item 2 — Run the first System Census
+
+- [ ] Confirm restricted consent-record storage before collecting community contributions.
+- [ ] Invite a small, varied Founding Circle privately; the source repo is public, but do not collect sensitive community material through public issues or pull requests.
+- [ ] Let each contributor choose Incident Seed, System Card, case review, source review, or governance work without a skill hierarchy.
+- [ ] Complete three contributor-reviewed System Cards using each system’s native vocabulary and boundary.
+- [ ] Produce one Architecture Pressure Map that distinguishes native, adapter-emulated, opaque, unsupported, unknown, and not-applicable behavior.
+- [ ] List every proposed observation boundary that would privilege or erase a represented architecture.
+
+**Exit:** three materially different systems and one explicit protocol-bias record. No ranking follows.
+
+## Work item 3 — Run Pilot 001
+
+- [ ] Freeze one revision of `case-lab/cases/pilot-001-current-state-without-erasure.md`.
+- [ ] Produce current-turn-only, no-memory, full-minimal-history, reference-context, and system-native outputs for both twins.
+- [ ] Keep the current turn byte-identical and the answer-model configuration fixed within each comparison.
+- [ ] Blind-review outputs with at least two disclosed reviewer perspectives.
+- [ ] Record deterministic assertions, bounded semantic judgment, legitimate disagreement, evaluator ambiguity, and observability limits separately.
+- [ ] Decide whether semantic equivalents of the revoked phrase are inside this pilot’s formal failure boundary.
+- [ ] Accept, revise, split, or reject the case; do not produce a composite score.
+
+**Exit:** a reviewed decision on whether Pilot 001 demonstrates memory necessity and counterfactual discriminability.
+
+## After those three items
+
+Update `STATUS.md`, the Distinction Atlas, and the relevant assumption or decision records. Only then assess whether the working promotion gate has enough evidence for an implementation-boundary ADR.
+
+## Explicitly deferred
+
+- canonical event-sourced world schema;
+- permanent Recall / Context / Companion / Living tracks;
+- system-under-study API;
+- benchmark runner and SDKs;
+- composite scoring and model-judge panel;
+- Arena and Leaderboard;
+- sealed benchmark repository;
+- services and hosted orchestration;
+- FastAPI, Temporal, Kubernetes, S3, or multi-repository operations;
+- 100–300-session synthetic worlds.
+
+These items may return only through evidence-backed decisions that name architecture and governance consequences.
