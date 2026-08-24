@@ -2,6 +2,30 @@
 
 **Status:** seed hypotheses, not canonical taxonomy
 
+## Coverage strata
+
+- `personal-lived`
+- `shared-relational`
+- `operational-project`
+- `companion-system`
+- `mixed-domain`
+
+Coverage strata describe which parts of the memory ecology a case touches. They are not permanent evaluation tracks and do not turn every incident into a new distinction.
+
+## Candidate incident families
+
+- ordinary-event continuity without forced significance;
+- project state, milestone, and handoff continuity;
+- decision rationale and supersession;
+- artifact and source-authority fidelity;
+- cross-project isolation;
+- role and surface routing;
+- shared-work repair;
+- personal-to-project natural association;
+- companion identity across operational and private surfaces.
+
+These remain incident families until source, community, system, and case evidence justifies a bounded `D-xxx` entry.
+
 ## D-001 — Current state without relational erasure
 
 A later correction changes what behavior is valid, while the relationship should remain recognizable and warm.

@@ -26,6 +26,13 @@ A census object may be a memory engine, context compiler, complete companion age
 
 The census does not require source code, production access, credentials, raw chats, or private configuration. Restricted cards stay outside the public repository; only contributor-approved summaries may be added here.
 
+Every first-round System Card should also ask:
+
+- How are ordinary personal history and operational/project history represented, if at all?
+- How are multiple projects, roles, people, surfaces, accounts, and instances isolated or connected?
+- How does the system decide whether personal, relational, or operational material belongs in the current context?
+- What happens under full-history or full-search exposure, and which native boundaries make that comparison meaningful or distorting?
+
 Start from the [English](system-card-template.md) or [Chinese](system-card-template.zh-CN.md) System Card, then use the [Architecture Pressure Map](architecture-pressure-map-template.md).
 
 ## First pressure dimensions opened by source evidence
@@ -40,5 +47,8 @@ Start from the [English](system-card-template.md) or [Chinese](system-card-templ
 - correction, revocation, expiry, provenance, authority, and disagreement semantics;
 - final-answer generation inside or outside the system-native boundary;
 - public version identity and the evidence that binds a result to that version.
+- multi-project isolation and cross-domain context contamination;
+- artifact/source authority and decision supersession;
+- role/surface routing and full-history behavior.
 
 These are pressure questions, not required capabilities or scoring dimensions.

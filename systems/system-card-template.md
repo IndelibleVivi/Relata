@@ -31,6 +31,8 @@ Draw or describe the real components and flows without forcing an event → retr
 
 What is retained, reconstructed, inferred, rehearsed, or made available over time? Examples may include raw history, summaries, embeddings, graphs, files, prompts, model state, rituals, decisions, identity material, human curation, or no inspectable object.
 
+Describe personal-lived, shared-relational, operational/project, and companion/system material separately where the distinction exists. How are ordinary personal history and project history represented?
+
 ## 4. Change and repair
 
 How can material or behavior change? Describe correction, supersession, coexistence, uncertainty, expiry, deletion, reauthorization, manual editing, consolidation, or unsupported routes. What can fail silently?
@@ -50,6 +52,8 @@ Which times exist or matter: event time, record time, current time, effective in
 ## 8. Surfaces, models, and identity
 
 What is shared or separated across private chat, group chat, CLI, voice, roleplay, projects, devices, models, providers, accounts, and instances? What changes during migration?
+
+How are multiple projects, roles, people, and surfaces isolated or connected? How does the system decide whether personal, relational, or operational material belongs in the current context?
 
 ## 9. Prospective behavior
 
@@ -77,6 +81,11 @@ Use `N`, `E`, `O`, `U`, `?`, or `—` as defined in `systems/README.md`.
 | correction/revocation route |  |  |  |
 | inspection/explanation route |  |  |  |
 | time advance or future wake |  |  |  |
+| full-history or full-search exposure |  |  |  |
+| multi-project isolation |  |  |  |
+| artifact/source authority |  |  |  |
+| role/surface routing |  |  |  |
+| cross-domain context contamination |  |  |  |
 
 ## 13. Candidate Relata probes
 

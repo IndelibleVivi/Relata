@@ -20,6 +20,12 @@ Legend: `N` system-native · `E` adapter-emulated · `O` opaque at this boundary
 | exposes inspection or explanation |  |  |  |  |  |
 | supports model, instance, or surface migration |  |  |  |  |  |
 | separates people, relationships, or scopes |  |  |  |  |  |
+| isolates multiple projects |  |  |  |  |  |
+| preserves artifact and source authority |  |  |  |  |  |
+| represents decision supersession |  |  |  |  |  |
+| routes by role or surface |  |  |  |  |  |
+| exposes meaningful full-history/full-search behavior |  |  |  |  |  |
+| avoids cross-domain context contamination |  |  |  |  |  |
 | can be examined without network or provider access |  |  |  |  |  |
 | can bind an exact observable version or configuration |  |  |  |  |  |
 

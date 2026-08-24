@@ -19,3 +19,9 @@ Each record includes:
 - review or reversal gate.
 
 Vision documents do not become authority without an accepted decision record.
+
+## Accepted decisions
+
+- [`ADR-0001`](ADR-0001-research-first-bootstrap.md) — begin as a research program and case lab;
+- [`ADR-0002`](ADR-0002-vision-doc-is-non-normative.md) — preserve Target Architecture Draft 0.1 as non-normative history;
+- [`ADR-0003`](ADR-0003-mixed-domain-memory-ecology.md) — study a longitudinal mixed-domain memory ecology within the primary long-term relationship domain.

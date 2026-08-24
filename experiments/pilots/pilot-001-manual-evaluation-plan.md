@@ -18,7 +18,7 @@ Produce outputs for both twins under:
 
 1. current-turn-only;
 2. no-memory;
-3. full minimal history;
+3. full-history/full-search over all case-bounded history;
 4. reference current-state context.
 
 Use the same answer model and response prompt within each baseline comparison. Record versions and settings.

@@ -4,15 +4,15 @@ Each research question requires a traceable combination of exact-source evidence
 
 ## RQ1 — What exactly is being evaluated?
 
-Possible objects include a memory engine, context compiler, complete companion agent, relationship trajectory, repair process, or user-governance surface.
+Possible objects include a memory engine, context compiler, complete companion agent, relationship trajectory, mixed-domain memory ecology, repair process, or user-governance surface.
 
 **Evidence needed:** competing decompositions, causal controls, and pilot observations showing which failures can and cannot be attributed at each boundary.
 
 ## RQ2 — What is the remembered object?
 
-Candidate objects include raw episodes, claims, facts, preferences, decisions, rituals, roles, interpretations, relationship state, future intentions, unresolved tensions, and model or instance identity. Some systems may preserve continuity without exposing a discrete “memory object.”
+Candidate objects include raw episodes, ordinary events, people and places, claims, facts, preferences, project state, artifacts and source authority, tasks and blockers, decisions and rationale, milestones, working context, external references, handoff state, unfinished threads, rituals, roles, interpretations, relationship state, future intentions, unresolved tensions, and model or instance identity. Some systems may preserve continuity without exposing a discrete “memory object.”
 
-**Evidence needed:** System Cards plus incidents where materially different architectures handle the same relational phenomenon.
+**Evidence needed:** System Cards plus incidents where materially different architectures handle the same personal, relational, operational, or companion-continuity phenomenon.
 
 ## RQ3 — How do authority, perspective, consent, and disagreement work?
 
@@ -36,7 +36,7 @@ Retrieval relevance, context eligibility, and response appropriateness are separ
 
 A good final response can come from the current turn, model priors, system prompt, persona, or memory. A bad response can arise at retention, state change, activation, context construction, or response use.
 
-**Evidence needed:** current-turn-only, no-memory, reference-context, and system-native controls; preserve intermediate artifacts only where the system exposes them.
+**Evidence needed:** current-turn-only, no-memory, full-history/full-search, bounded-context, reference-context, and system-native controls; cross-domain ablation and project-isolated versus merged-history comparison where relevant; preserve intermediate artifacts only where the system exposes them.
 
 ## RQ7 — What system-under-study boundary compares systems without erasing them?
 
@@ -61,3 +61,9 @@ Relata needs lived expertise without turning private relationships into harveste
 An evaluation is useful only when its evidence supports action: a clearer relational distinction, a system diagnosis, a regression case, a governance repair, or an explicit limit on what can be claimed.
 
 **Evidence needed:** pilot postmortems showing whether contributors and maintainers can locate a failure or ambiguity without reconstructing hidden evaluator reasoning.
+
+## RQ11 — How do mixed memory domains coexist and route?
+
+How should personal life, shared relationship history, operational projects, and companion identity influence one another without being flattened into a single profile or leaking across roles, surfaces, projects, people, or instances?
+
+**Evidence needed:** multi-project and multi-surface System Cards; cross-domain Incident Seeds; routing and isolation counterfactuals; full-history/full-search and system-native baselines; and cases where the same memory is valid in one role but distracting, private, stale, or misleading in another.

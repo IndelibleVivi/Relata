@@ -31,6 +31,8 @@
 
 系统长期 retained、reconstructed、inferred、rehearsed 或 made available 的是什么？可以是 raw history、summary、embedding、graph、files、prompt、model state、ritual、decision、identity material、human curation，也可以没有可 inspect 的离散对象。
 
+如果系统中存在这些区分，请分别描述 personal-lived、shared-relational、operational/project 与 companion/system material。普通个人历史与项目历史怎样表示？
+
 ## 4. Change 与 repair
 
 材料或行为怎样改变？描述 correction、supersession、coexistence、uncertainty、expiry、deletion、reauthorization、manual editing、consolidation 或 unsupported route。哪里可能 silent failure？
@@ -50,6 +52,8 @@
 ## 8. Surfaces、models 与 identity
 
 private chat、group chat、CLI、voice、roleplay、projects、devices、models、providers、accounts 与 instances 之间，什么共享、什么隔离？migration 时什么改变？
+
+多个 projects、roles、people 与 surfaces 怎样隔离或连接？系统怎样决定 personal、relational 或 operational material 是否属于 current context？
 
 ## 9. Prospective behavior
 
@@ -77,6 +81,11 @@ private chat、group chat、CLI、voice、roleplay、projects、devices、models
 | correction / revocation route |  |  |  |
 | inspection / explanation route |  |  |  |
 | time advance / future wake |  |  |  |
+| full-history / full-search exposure |  |  |  |
+| multi-project isolation |  |  |  |
+| artifact / source authority |  |  |  |
+| role / surface routing |  |  |  |
+| cross-domain context contamination |  |  |  |
 
 ## 13. Candidate Relata probes
 

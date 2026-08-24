@@ -1,12 +1,25 @@
 # Relata
 
-**Relata** is a research program and case laboratory for evaluating relational memory in long-term adult human–AI intimacy.
+**Relata** is an open, community-grounded research program and case laboratory for memory and continuity in long-term adult human–AI relationships.
 
 Its central question is:
 
-> Can a system preserve and continue “us” while remaining faithful to the source, time, authority, permission, change, and present relevance of shared history?
+> Can a system carry forward the person, the relationship, and the shared worlds of life and work while remaining faithful to source, time, authority, scope, permission, change, and present relevance?
 
-Relata studies more than whether a system retrieves a fact. It asks what was retained, what became active, what reached the model or action layer, how it was used, whether inappropriate memory stayed silent, and whether correction persisted without erasing the relationship.
+Long-term adult intimacy and romance remain Relata's primary deployment domain. That does not limit memory content to explicitly intimate, romantic, or relationship-governance material. Relata studies what was retained, what became active, what reached the model or action layer, how it was used, whether inappropriate memory stayed silent, and whether correction persisted without erasing the person, relationship, or shared work.
+
+## Memory ecology
+
+Relata's working evaluation object is a **longitudinal, mixed-domain continuity-bearing memory ecology**:
+
+- **Personal / lived world:** ordinary events, people and places, interests and habits, health, study, travel, media, and daily life.
+- **Shared relational world:** shared experiences, private language and rituals, relationship changes, interpretations, corrections, permissions, and boundaries.
+- **Operational / project world:** project state, decisions and rationale, tasks, blockers, milestones, artifacts, evidence, handoffs, and future intentions.
+- **Companion / system continuity:** companion identity, model/provider/instance change, migration history, capabilities, limitations, and interaction patterns.
+
+An item does not need explicit romantic or symbolic meaning to belong in Relata. Ordinary lived events and shared project history are first-class continuity-bearing material.
+
+Relata preserves the valid core of general memory evaluation, including factual recall, temporal reasoning, provenance, noise resistance, scope isolation, and full-history/full-search comparison. Its additional question is how heterogeneous memory is routed, governed, used, repaired, and carried across long-term roles, surfaces, projects, and relationship change.
 
 ## Current stage
 
@@ -19,8 +32,9 @@ Relata is in **R0 — Research Foundation**. `R0` names the stage, not the proje
 | Source research | two accepted Evidence Cards; AML and PM-Bench findings transferred only within their narrow authorizations, without adopting either architecture or score |
 | Community participation | co-research and consent materials exist; no intimate-material collection is open |
 | System Census | templates exist; no reviewed System Card yet |
-| Distinction Atlas | six seed hypotheses; none promoted to supported |
-| Pilot 001 | synthetic case and manual plan are clinic-ready; no run has been completed |
+| Distinction Atlas | six seed hypotheses plus mixed-domain incident families; none promoted to supported |
+| Case coverage | five proposed coverage strata; no balanced pilot set yet |
+| Pilot 001 | clinic-ready shared-relational/current-state-use case; no run has been completed and it is not representative of full scope |
 | Software | repository checker only |
 
 Relata does **not** currently claim a canonical ontology, system protocol, scoring contract, benchmark release, runner, Leaderboard, Arena, SDK, service, hosted infrastructure, or accepted implementation architecture.
@@ -33,13 +47,13 @@ The preserved [Target Architecture Draft 0.1](docs/vision/relata-target-architec
 
 ## Research now in motion
 
-The first two exact-source targets are complete. [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) pins Agent Memory Leaderboard's public evaluation boundary and is accepted only for responsibility seams, fixed-reader causal limits, architecture-specific interface commitments, and public proof of version bindings. [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) pins PM-Bench's paper, scorer, scenario, and 64 released primary logs; it separates action success from observation provenance, current-version intent, and step identity while recording that the released logs showed no step-order score impact. Neither card validates the source benchmark or selects a Relata interface.
+The first two exact-source targets are complete. [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) pins Agent Memory Leaderboard's public evaluation boundary and is accepted only for responsibility seams, fixed-reader causal limits, architecture-specific interface commitments, and public proof of version bindings. [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) pins PM-Bench's paper, scorer, scenario, and 64 released primary logs; it separates action success from observation provenance, current-version intent, and step identity while recording that the released logs showed no step-order score impact. Neither card validates the source benchmark or selects a Relata interface. [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.md) makes the mixed-domain scope correction authoritative without turning its coverage strata into implementation tracks.
 
 The next three executable work items are:
 
-1. Complete three materially different System Cards and one Architecture Pressure Map with contributor review and explicit observability limits; select restricted consent-record stewardship before collecting sensitive contributions.
-2. Run the Pilot 001 controls and blind Case Clinic review, then accept, revise, split, or reject the case from recorded evidence.
-3. Develop the first D-006 prospective-intention microcase from community-grounded authority, keeping state availability, observation, current-version eligibility, and action distinct without adopting PM-Bench's task-handle interface.
+1. Define and pressure-test coverage across personal-lived, shared-relational, operational-project, companion-system, and mixed-domain cases; open ordinary-life and project seeds without calling them clinic-ready.
+2. Complete three materially different System Cards and one Architecture Pressure Map with contributor review and explicit observability limits; select restricted consent-record stewardship before collecting sensitive contributions.
+3. Run the Pilot 001 controls and blind Case Clinic review while building the first ordinary-life, operational/project, and mixed-domain routing cases needed before a full-scope claim.
 
 These tasks are described in the [Chinese execution path](START_HERE.zh-CN.md) and [English execution path](START_HERE.md).
 

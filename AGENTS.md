@@ -22,9 +22,13 @@ The body of `docs/vision/relata-target-architecture-draft-0.1.md` is preserved h
 
 Work may advance project questions, source Evidence Cards, community contribution methods, System Cards, Architecture Pressure Maps, distinctions, synthetic cases, pilot records, decision records, and repository checks.
 
+Relata's primary deployment domain is adult long-term human–AI intimacy and romance. Its working evaluation object is a longitudinal mixed-domain memory ecology spanning personal/lived, shared-relational, operational/project, and companion/system continuity. Do not require ordinary events or shared work to carry explicit romantic symbolism. Treat coverage strata as portfolio labels, not permanent tracks or an internal ontology.
+
 Do not add a benchmark runner, system-under-study API, Leaderboard, Arena, SDK, services, hosted infrastructure, sealed corpus, or canonical system ontology unless a later accepted decision changes `STATUS.md`.
 
 Use `system under study` for a technical system. Reserve `community contributor`, `co-researcher`, and `reviewer` for people. Use `probe evidence contract` for case-bounded reference evidence; do not imply that a case author owns total relationship truth.
+
+Cases and system work must distinguish deployment domain, memory content domain, use domain, coverage stratum, and system boundary where they matter. Preserve valid general-memory controls, mixed-domain routing, scope isolation, and full-history/full-search comparison without mandating one architecture.
 
 ## Research and privacy boundaries
 

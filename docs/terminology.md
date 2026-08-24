@@ -14,6 +14,17 @@ These terms govern current research materials. Draft 0.1 retains its original vo
 | **probe evidence contract** | case-bounded event evidence, explicit accord, allowed interpretations, and must/may/must-not expectations | `oracle truth` as a claim to total relationship truth |
 | **reference-context baseline** | a compact case-author-provided context used to test whether the response contract is feasible | implying the format is a required system ontology |
 | **relationship-local norms** | norms supported by the bounded synthetic history and current case state | a universal `Relationship Constitution` |
+| **deployment domain** | the long-term setting and population in which Relata's questions matter; currently adult long-term human–AI intimacy and romance | treating it as a restriction on which memory content may count |
+| **memory content domain** | the kind of continuity-bearing material involved: personal/lived, shared-relational, operational/project, companion/system, or a combination | assuming content domain determines storage architecture |
+| **use domain** | the activity in which memory may affect behavior, such as private conversation, group conversation, coding, research, planning, or roleplay | treating one surface as the whole relationship |
+| **coverage stratum** | a case-portfolio label for `personal-lived`, `shared-relational`, `operational-project`, `companion-system`, or `mixed-domain` coverage | a permanent benchmark track or mutually exclusive ontology |
+| **continuity-bearing material** | any retained, reconstructed, inferred, or externally maintained material that can affect continuity over time | requiring an inspectable discrete memory object |
+| **memory ecology** | the interacting personal, relational, operational, and companion/system material and processes that sustain longitudinal continuity | one undifferentiated user profile |
+| **relational memory** | memory situated within an ongoing relationship; the remembered object need not be explicitly about the relationship | intimacy-specific content only |
+| **mixed-domain routing** | deciding which role, surface, project, person, or instance should receive material spanning content domains | broadcasting every relevant item everywhere |
+| **scope contamination** | material from a neighboring project, role, person, surface, or authority enters a context where it is distracting, private, stale, or misleading | every cross-domain association |
+| **ordinary-event continuity** | faithful retention and use of everyday information without forced symbolic interpretation | inventing relational significance to make an event evaluable |
+| **operational/project continuity** | continuity of project state, artifacts, decisions, rationale, milestones, handoffs, blockers, and unfinished work | reducing shared work to generic factual recall alone |
 
 ## Artifact-state words
 

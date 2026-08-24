@@ -30,6 +30,8 @@ The current working authority consists of:
 | Architecture Pressure Maps | template only | 0 |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
 | Pilot 001 | clinic-ready case and manual plan | not run; not accepted |
+| Case coverage strata | proposed under `ADR-0003` | no balanced pilot set yet |
+| Mixed-domain routing | research question and candidate incident families only | no accepted case or system evidence |
 | Evaluator calibration | study plan only | no reviewer data |
 | Community contribution path | public-safe governance and templates | restricted contribution path not yet exercised |
 
@@ -39,7 +41,7 @@ The existence of a template, plan, or seed is not evidence that its method has w
 
 Relata is trying to establish, with inspectable evidence:
 
-1. which relational-memory constructs are bounded and evaluable;
+1. which memory-and-continuity constructs are bounded and evaluable within long-term, mixed-role human–AI relationships;
 2. which failures actually require memory to distinguish;
 3. which observable boundaries can compare materially different systems without hiding architecture pressure;
 4. which judgments can be deterministic, which need bounded semantic review, and which remain legitimate disagreement;
@@ -50,6 +52,8 @@ Relata is trying to establish, with inspectable evidence:
 1. Obtain three contributor-reviewed System Cards and produce the first Architecture Pressure Map; do not collect sensitive contributions until restricted consent-record stewardship is selected.
 2. Execute Pilot 001 controls and a blind Case Clinic review.
 3. Build the first D-006 relational microcase only after a community-grounded prospective-intention incident supplies authority and the observation boundary can be stated without importing PM-Bench's task-handle architecture.
+4. Define coverage across personal-lived, shared-relational, operational-project, companion-system, and mixed-domain cases without treating them as permanent tracks.
+5. Draft one ordinary-life case and one operational/project case before treating Pilot 001 as representative of Relata.
 
 ## Not yet claimed
 
@@ -63,6 +67,7 @@ Relata does not currently claim to:
 - protect hidden cases;
 - certify privacy, safety, health, or relational legitimacy;
 - represent the full diversity of human–AI intimacy.
+- cover the full mixed-domain memory ecology through Pilot 001 alone.
 
 ## Working promotion gate
 
@@ -71,6 +76,7 @@ An implementation-boundary decision should not be accepted until:
 - at least five bounded distinctions have multi-source support;
 - at least three materially different systems have reviewed System Cards and boundary analysis;
 - at least one pilot case passes the Memory Necessity Gate;
+- ordinary-life, operational/project, shared-relational, and mixed-domain routing or isolation cases have each been run before any full-scope coverage claim;
 - reviewer disagreement has been recorded and used to revise the rubric;
 - the consent-to-synthetic-publication path has been exercised once without raw-chat transfer;
 - the proposed boundary has an accepted decision record naming excluded systems and adapter distortion.

@@ -4,8 +4,18 @@
 **Status:** clinic-ready  
 **Distinction:** D-001  
 **Locale:** zh-CN  
+**Coverage stratum:** shared-relational
+**Content domains:** shared-relational
+**Use domain:** private conversation
+**Surfaces:** private companion chat
+**Roles:** adult human; companion
+**Projects/scopes:** relationship-local comfort ritual
+**Continuity horizon:** delayed correction persistence
+**Primary operation under test:** update | retrieve | use | repair
 **Adult synthetic case:** yes  
 **Public source:** fully synthetic; no real-chat excerpt
+
+> **Scope note:** Pilot 001 represents one narrow shared-relational current-state-use distinction. It does not define the complete Relata evaluation object and does not cover ordinary-life, operational/project, companion-system, or mixed-domain memory.
 
 ## 1. Bounded construct
 
@@ -153,9 +163,9 @@ Input only the current probe. Preserve the output as evidence of what model prio
 
 Run the same agent configuration without access to E1–E3. Compare whether its outputs change across twins.
 
-### C2 — Full transcript
+### C2 — Full-history / full-search
 
-Provide the ordered minimal history and current turn. This tests whether the answer model can follow the explicit correction when evidence is directly available.
+Provide the complete case-bounded history and current turn, or give the system's supported search boundary access to all case-bounded history. This tests whether the answer model or complete system can follow the explicit correction when no relevant case evidence is withheld. It is exhaustive only within this synthetic case, not within a person's real history.
 
 ### C3 — Reference context
 

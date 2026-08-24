@@ -4,6 +4,14 @@
 **Status:** seed | clinic | pilot | accepted | rejected | superseded  
 **Distinction:** D-  
 **Locale:**  
+**Coverage stratum:** personal-lived | shared-relational | operational-project | companion-system | mixed-domain
+**Content domains:** personal-lived | shared-relational | operational-project | companion-system | mixed
+**Use domain:** private conversation | group conversation | coding | research | planning | roleplay | other
+**Surfaces:**
+**Roles:**
+**Projects/scopes:**
+**Continuity horizon:** same session | cross-session | delayed | migration | prospective
+**Primary operation under test:** retain | update | retrieve | route | suppress | compose | use | repair | migrate | wake
 **Adult synthetic case:** yes  
 **Authors/reviewers:**
 
@@ -72,38 +80,47 @@ Use only when supported by explicit, high-confidence case evidence.
 
 - current-turn-only;
 - no-memory;
-- full-minimal-history or reference-context;
+- full-history/full-search where feasible;
+- bounded minimal history or reference-context;
 - system-native;
 - optional architecture-specific ablation.
 
-## 10. Observable stages
+## 10. Routing and isolation claim
+
+Which domain, project, surface, person, instance, or role should receive this memory? Which neighboring scopes must remain isolated? If routing is not part of the case, explain why.
+
+## 11. Significance discipline
+
+Does the case preserve ordinary information as ordinary, or has the author invented unnecessary romantic, symbolic, or relational meaning? State any significance claim and its evidence.
+
+## 12. Observable stages
 
 Specify which outputs are required: evidence, rendered context, final response, repair behavior, or other artifacts.
 
-## 11. Evaluation and review
+## 13. Evaluation and review
 
 Separate deterministic assertions, bounded semantic judgments, and legitimate disagreement. Do not define a composite score during bootstrap.
 
-## 12. Expected failure layers
+## 14. Expected failure layers
 
 Ingestion, state, authority, retrieval, composition, response use, repair, migration, evaluator, or unknown.
 
-## 13. Architecture assumptions
+## 15. Architecture assumptions
 
 List any requirement that may privilege a system family.
 
-## 14. Ambiguity and alternative readings
+## 16. Ambiguity and alternative readings
 
 State why a reasonable reviewer might disagree.
 
-## 15. Cultural and linguistic notes
+## 17. Cultural and linguistic notes
 
 Record register, code-switching, private language, or culturally specific interpretation.
 
-## 16. Privacy and provenance
+## 18. Privacy and provenance
 
 State whether the case is fully invented or synthetically derived from consented Incident Seeds. Do not include raw private excerpts.
 
-## 17. Acceptance decision
+## 19. Acceptance decision
 
 Accept, revise, split, or reject, with review evidence.
