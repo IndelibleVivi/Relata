@@ -30,3 +30,13 @@ A chain contains:
 - an expected failure-attribution map.
 
 Long worlds may later compose accepted chains. Length is not evidence of validity. Ordinary information should remain ordinary unless the evidence makes relational significance part of the bounded construct. Pilot 001 is one `shared-relational` current-state-use case, not the default shape or complete scope of Relata.
+
+## Current case material
+
+| Case | Coverage | State | What it opens |
+|---|---|---|---|
+| [`RC-001`](cases/pilot-001-current-state-without-erasure.md) | shared-relational | clinic-ready; not run or accepted | current state after explicit relational correction |
+| [`RC-002-zh-CN`](cases/seed-002-ordinary-life-location-continuity.zh-CN.md) | personal-lived | seed; unreviewed | ordinary location continuity without invented significance |
+| [`RC-003-zh-CN`](cases/seed-003-project-authority-handoff.zh-CN.md) | operational-project | seed; unreviewed | project authority, supersession, handoff, and neighboring-scope isolation |
+
+The two new seeds establish portfolio objects, not evidence. Each still needs the review and fixture work named in its acceptance-decision section before `clinic-ready` consideration.

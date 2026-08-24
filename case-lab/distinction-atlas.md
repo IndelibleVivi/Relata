@@ -29,6 +29,8 @@ Coverage strata describe which parts of the memory ecology a case touches. They 
 
 These remain incident families until source, community, system, and case evidence justifies a bounded `D-xxx` entry.
 
+The first instantiated, still-unreviewed objects are the [`RC-002-zh-CN` ordinary-life seed](cases/seed-002-ordinary-life-location-continuity.zh-CN.md) and [`RC-003-zh-CN` project-authority seed](cases/seed-003-project-authority-handoff.zh-CN.md). Their existence does not promote either candidate family or create a supported distinction.
+
 ## D-001 — Current state without relational erasure
 
 A later correction changes what behavior is valid, while the relationship should remain recognizable and warm.

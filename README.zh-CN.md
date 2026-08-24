@@ -38,7 +38,7 @@ Relata 处于 **R0 — Research Foundation**。`R0` 是阶段名，不是项目�
 | Community participation | co-research 与 consent materials 已存在；尚未开放 intimate-material collection |
 | System Census | templates 已存在；尚无 reviewed System Card |
 | Distinction Atlas | 六条 seed hypotheses 与 mixed-domain incident families；尚无 supported distinction |
-| Case coverage | 五个 proposed coverage strata；尚无 balanced pilot set |
+| Case coverage | 五个 proposed coverage strata；一张 clinic-ready pilot 与两张未经 review 的中文 case seeds；尚未运行，也没有 balanced pilot set |
 | Pilot 001 | clinic-ready 的 shared-relational/current-state-use case；尚未运行，也不能代表完整 scope |
 | Software | 只有 repository checker |
 
@@ -61,7 +61,7 @@ Relata 当前**不声称**拥有 canonical ontology、system protocol、scoring 
 
 接下来三项可执行工作是：
 
-1. 定义并 pressure-test `personal-lived`、`shared-relational`、`operational-project`、`companion-system` 与 `mixed-domain` coverage；开放 ordinary-life 与 project seeds，但不把它们冒充 clinic-ready。
+1. Review 并 refine 新增的 ordinary-life 与 operational/project seeds；然后设计第一张 mixed-domain routing/isolation seed，且不把任何 seed 冒充 clinic-ready。
 2. 完成三张 materially different、contributor-reviewed System Cards 与一张 Architecture Pressure Map；在收集 sensitive contributions 前选择 restricted consent-record stewardship。
 3. 运行 Pilot 001 controls 与 blind Case Clinic review，同时构建 full-scope claim 所需的第一批 ordinary-life、operational/project 与 mixed-domain routing cases。
 

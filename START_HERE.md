@@ -77,6 +77,8 @@ python3 tools/check_repo.py
 
 **Exit reached 2026-08-24:** [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.md) and [`ADR-0004`](decisions/ADR-0004-r0-bilingual-documentation.md) are accepted. No protocol, runner, score, or implementation interface follows from either decision.
 
+The first portfolio correction objects now exist as unreviewed seeds: [`RC-002-zh-CN`](case-lab/cases/seed-002-ordinary-life-location-continuity.zh-CN.md) for ordinary-life continuity and [`RC-003-zh-CN`](case-lab/cases/seed-003-project-authority-handoff.zh-CN.md) for project authority and handoff. Their next action is Case Clinic review and fixture refinement, not promotion by documentation alone.
+
 ## After the current open items
 
 Update `STATUS.md`, the Distinction Atlas, and the relevant assumption or decision records. Only then assess whether the working promotion gate has enough evidence for an implementation-boundary ADR.

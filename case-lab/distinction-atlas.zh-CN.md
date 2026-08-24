@@ -29,6 +29,8 @@ Coverage strata 描述 case 触及 memory ecology 的哪些部分。它们不是
 
 在 source、community、system 与 case evidence 足以支持 bounded `D-xxx` entry 前，它们都只是 incident families。
 
+第一批 instantiated、仍未经 review 的 objects 是 [`RC-002-zh-CN` ordinary-life seed](cases/seed-002-ordinary-life-location-continuity.zh-CN.md) 与 [`RC-003-zh-CN` project-authority seed](cases/seed-003-project-authority-handoff.zh-CN.md)。它们的存在不会 promote candidate family，也不建立 supported distinction。
+
 ## D-001 — Current state without relational erasure
 
 Later correction 改变了当前 valid behavior，但 relationship 仍应可识别且保有 warmth。

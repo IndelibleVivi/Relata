@@ -33,7 +33,7 @@
 | Architecture Pressure Maps | template only | 0 |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
 | Pilot 001 | clinic-ready case 与 manual plan | 未运行；未 accepted |
-| Case coverage strata | 由 `ADR-0003` 提出 | 尚无 balanced pilot set |
+| Case coverage strata | 由 `ADR-0003` 提出；已有 `RC-002-zh-CN` personal-lived seed 与 `RC-003-zh-CN` operational-project seed | 两张 seed 都未经 review / run；尚无 balanced pilot set |
 | Mixed-domain routing | research question 与 candidate incident families | 尚无 accepted case 或 system evidence |
 | Evaluator calibration | study plan only | 尚无 reviewer data |
 | Community contribution path | public-safe governance 与 templates | restricted contribution path 尚未实际使用 |
@@ -56,7 +56,7 @@ Relata 正在用可 inspect 的 evidence 建立：
 2. 执行 Pilot 001 controls 与 blind Case Clinic review。
 3. 只有在 community-grounded prospective-intention incident 提供 authority，且 observation boundary 不偷带 PM-Bench task-handle architecture 后，才构建第一张 D-006 relational microcase。
 4. 定义 `personal-lived`、`shared-relational`、`operational-project`、`companion-system` 与 `mixed-domain` coverage，但不把它们当作永久 tracks。
-5. 在把 Pilot 001 视为 Relata representative 之前，先起草一张 ordinary-life case 与一张 operational/project case。
+5. Review 并 refine ordinary-life / operational-project seeds，再补一张 mixed-domain routing/isolation seed，之后才可把 Pilot 001 视为 Relata representative。
 
 ## 尚未声称
 

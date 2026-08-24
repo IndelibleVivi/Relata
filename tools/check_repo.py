@@ -65,6 +65,8 @@ REQUIRED = [
     "case-lab/distinction-atlas.md",
     "case-lab/distinction-atlas.zh-CN.md",
     "case-lab/cases/pilot-001-current-state-without-erasure.md",
+    "case-lab/cases/seed-002-ordinary-life-location-continuity.zh-CN.md",
+    "case-lab/cases/seed-003-project-authority-handoff.zh-CN.md",
     "experiments/README.md",
     "experiments/pilot-record-template.md",
     "experiments/pilots/pilot-001-manual-evaluation-plan.md",

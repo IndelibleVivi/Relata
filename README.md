@@ -38,7 +38,7 @@ Relata is in **R0 — Research Foundation**. `R0` names the stage, not the proje
 | Community participation | co-research and consent materials exist; no intimate-material collection is open |
 | System Census | templates exist; no reviewed System Card yet |
 | Distinction Atlas | six seed hypotheses plus mixed-domain incident families; none promoted to supported |
-| Case coverage | five proposed coverage strata; no balanced pilot set yet |
+| Case coverage | five proposed coverage strata; one clinic-ready pilot and two unreviewed Chinese case seeds, with no run or balanced pilot set yet |
 | Pilot 001 | clinic-ready shared-relational/current-state-use case; no run has been completed and it is not representative of full scope |
 | Software | repository checker only |
 
@@ -56,7 +56,7 @@ The first two exact-source targets are complete. [`EC-001`](research/evidence-ca
 
 The next three executable work items are:
 
-1. Define and pressure-test coverage across personal-lived, shared-relational, operational-project, companion-system, and mixed-domain cases; open ordinary-life and project seeds without calling them clinic-ready.
+1. Review and refine the new ordinary-life and operational/project seeds; then design the first mixed-domain routing/isolation seed without calling any seed clinic-ready.
 2. Complete three materially different System Cards and one Architecture Pressure Map with contributor review and explicit observability limits; select restricted consent-record stewardship before collecting sensitive contributions.
 3. Run the Pilot 001 controls and blind Case Clinic review while building the first ordinary-life, operational/project, and mixed-domain routing cases needed before a full-scope claim.
 

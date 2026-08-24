@@ -77,6 +77,8 @@ python3 tools/check_repo.py
 
 **已于 2026-08-24 达成：** [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md) 与 [`ADR-0004`](decisions/ADR-0004-r0-bilingual-documentation.zh-CN.md) accepted；二者都不推出 protocol、runner、score 或 implementation interface。
 
+第一批 portfolio correction objects 已以 unreviewed seeds 落地：[`RC-002-zh-CN`](case-lab/cases/seed-002-ordinary-life-location-continuity.zh-CN.md) 测 ordinary-life continuity；[`RC-003-zh-CN`](case-lab/cases/seed-003-project-authority-handoff.zh-CN.md) 测 project authority / handoff。下一步是 Case Clinic review 与 fixture refinement，不能只凭写进文档就 promote。
+
 ## 当前开放事项完成以后
 
 更新 `STATUS.md`、Distinction Atlas 以及受影响的 assumption / decision records。然后才判断 working promotion gate 是否足以支持第一份 implementation-boundary ADR。
