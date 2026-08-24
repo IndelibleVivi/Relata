@@ -51,15 +51,15 @@ python3 tools/check_repo.py
 
 **完成标志：** 对 Pilot 001 是否真正证明 memory necessity 与 counterfactual discriminability，得到有 review evidence 的决定。
 
-## 第四项：完成 Evidence Card 002
+## 第四项：Evidence Card 002 已 accepted
 
-- [ ] 重新锁定 PM-Bench 的 official paper revision、repo commit、scorer、released scenario 与 primary-log boundary。
-- [ ] 把本地已验证的 scorer-contract audit 只当 candidate evidence package，不当 Relata authority。
-- [ ] 分开追踪 observation provenance、`step_id` identity、scorer consumption、diagnostic meaning 与 released-result impact。
-- [ ] 分清 source-level possibility、released-corpus prevalence、causal interpretation 与 no-observed-impact finding。
-- [ ] 任何结论转入 RQ6 / RQ8 前完成 source-faithful review。
+- [x] 重新锁定 PM-Bench 的 official paper revision、repo commit、scorer、released scenario 与 primary-log boundary。
+- [x] 把本地已验证的 scorer-contract audit 只当 candidate evidence package，不当 Relata authority。
+- [x] 分开追踪 observation provenance、`step_id` identity、scorer consumption、diagnostic meaning 与 released-result impact。
+- [x] 分清 source-level possibility、released-corpus prevalence、causal interpretation 与 no-observed-impact finding。
+- [x] 在 narrow transfer 进入 RQ6 / RQ8 前完成 source-fidelity 与 adversarial review。
 
-**完成标志：** 一张针对 observation / scorer binding 的 decision-targeted card；不是泛泛的 PM-Bench summary，也不是新建 benchmark run。
+**已于 2026-08-24 达成：** 一张 accepted、针对 observation / scorer binding 的 decision-targeted card；不是泛泛的 PM-Bench summary，也没有新建 benchmark run。accepted transfer 明确记录 released logs 的 step-order impact 为零，也不否定 PM-Bench headline tables。
 
 ## 当前开放事项完成以后
 

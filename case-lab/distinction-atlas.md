@@ -44,7 +44,8 @@ Facts and style can survive while companion identity or shared trajectory become
 
 A system should act when a valid future trigger occurs and remain silent after expiry, withdrawal, or scope change.
 
-- Candidate only. Requires prospective-system evidence.
+- Exact-source basis: [`EC-002`](../research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) supports separating state availability, observation, current task version, and final action; it does not establish relational validity or promote this distinction.
+- Candidate only. Still requires a community-grounded incident, a bounded relational counterfactual, an architecture-neutral observation boundary, and an accepted microcase.
 
 ## Promotion rule
 

@@ -51,15 +51,15 @@ python3 tools/check_repo.py
 
 **Exit:** a reviewed decision on whether Pilot 001 demonstrates memory necessity and counterfactual discriminability.
 
-## Work item 4 — Produce Evidence Card 002
+## Work item 4 — Evidence Card 002 accepted
 
-- [ ] Re-pin PM-Bench's official paper revision, repository commit, scorer, released scenario, and released primary-log boundary.
-- [ ] Treat the locally verified scorer-contract audit as a candidate evidence package, not Relata authority.
-- [ ] Trace observation provenance, `step_id` identity, scorer consumption, diagnostic meaning, and released-result impact separately.
-- [ ] Separate source-level possibility, released-corpus prevalence, causal interpretation, and no-observed-impact findings.
-- [ ] Obtain source-faithful review before accepting any transfer to RQ6 or RQ8.
+- [x] Re-pin PM-Bench's official paper revision, repository commit, scorer, released scenario, and released primary-log boundary.
+- [x] Treat the locally verified scorer-contract audit as a candidate evidence package, not Relata authority.
+- [x] Trace observation provenance, `step_id` identity, scorer consumption, diagnostic meaning, and released-result impact separately.
+- [x] Separate source-level possibility, released-corpus prevalence, causal interpretation, and no-observed-impact findings.
+- [x] Complete source-fidelity and adversarial review before accepting the narrow transfer to RQ6 and RQ8.
 
-**Exit:** one decision-targeted card about observation and scorer binding, not a general PM-Bench summary or a new benchmark run.
+**Exit reached 2026-08-24:** one accepted decision-targeted card about observation and scorer binding, not a general PM-Bench summary or a new benchmark run. The accepted transfer records zero released step-order impact and does not invalidate PM-Bench's headline tables.
 
 ## After the current open items
 

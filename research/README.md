@@ -7,6 +7,7 @@ Relata research is organized around decisions and cases, not a pile of summaries
 | Card | Status | Current use |
 |---|---|---|
 | [`EC-001 — Agent Memory Leaderboard public evaluation boundary`](evidence-cards/EC-001-agent-memory-leaderboard.md) | accepted | narrow use for RQ1/RQ6/RQ7, Assumptions 5/20, and System Census pressure questions; no AML score or validity endorsement |
+| [`EC-002 — PM-Bench observation and scorer binding`](evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) | accepted | narrow use for RQ6/RQ8, D-006, and Assumptions 14/20; no PM-Bench score invalidation, model-failure label, or interface adoption |
 
 ## Evidence classes
 

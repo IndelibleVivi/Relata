@@ -25,7 +25,7 @@ The current working authority consists of:
 
 | Artifact | State | Accepted evidence |
 |---|---|---|
-| Evidence Cards | 1 accepted | `EC-001` boundary, causal-limit, pressure-hypothesis, and public-proof findings only |
+| Evidence Cards | 2 accepted | `EC-001` public-boundary and causal-limit findings; `EC-002` observation/scorer-binding limits and released-corpus no-impact finding, each only within its card authorization |
 | System Cards | templates only | 0 |
 | Architecture Pressure Maps | template only | 0 |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
@@ -47,9 +47,9 @@ Relata is trying to establish, with inspectable evidence:
 
 ## Immediate work
 
-1. Produce `EC-002` by re-pinning PM-Bench's official paper, released scorer, and released-log boundary before importing any local audit conclusion.
-2. Obtain three contributor-reviewed System Cards and produce the first Architecture Pressure Map; do not collect sensitive contributions until restricted consent-record stewardship is selected.
-3. Execute Pilot 001 controls and a blind Case Clinic review.
+1. Obtain three contributor-reviewed System Cards and produce the first Architecture Pressure Map; do not collect sensitive contributions until restricted consent-record stewardship is selected.
+2. Execute Pilot 001 controls and a blind Case Clinic review.
+3. Build the first D-006 relational microcase only after a community-grounded prospective-intention incident supplies authority and the observation boundary can be stated without importing PM-Bench's task-handle architecture.
 
 ## Not yet claimed
 

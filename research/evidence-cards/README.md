@@ -5,11 +5,12 @@
 | Card | Object | Status | Authorized use |
 |---|---|---|---|
 | [`EC-001`](EC-001-agent-memory-leaderboard.md) | Agent Memory Leaderboard public evaluation boundary | accepted | public-boundary, causal-limit, pressure-hypothesis, and public-proof findings only |
+| [`EC-002`](EC-002-pm-bench-observation-and-scorer-binding.md) | PM-Bench observation and scorer binding | accepted | query/action boundary, diagnostic-meaning limits, step-identity risk, released-corpus no-impact finding, and exact-artifact binding only |
 
 Store one pinned object per card:
 
 ```text
-EC-001-<short-object-name>.md
+EC-000-<short-object-name>.md
 ```
 
 ## Status

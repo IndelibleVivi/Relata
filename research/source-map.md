@@ -7,6 +7,7 @@ This file is a research queue, not a bibliography and not evidence by itself. A 
 Initial targets:
 
 - [Agent Memory Leaderboard (AML)](evidence-cards/EC-001-agent-memory-leaderboard.md) — `EC-001` accepted for narrow boundary, causal-limit, pressure-hypothesis, and public-proof findings
+- [PM-Bench](evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) — `EC-002` accepted for narrow observation/action, diagnostic-meaning, step-identity, and exact-artifact-binding findings
 - AgentMemoryBench and related mode-based agent-memory evaluations
 - LoCoMo
 - LongMemEval
@@ -92,6 +93,12 @@ The 2026-08-24 local scan found no prior AML audit artifact in Agent Memory Stud
 
 After adversarial review and revision, the card is accepted only for its stated boundary, causal-limit, architecture-commitment, and public-proof findings. It does not endorse AML scores, validity, reproducibility, architecture neutrality, hosted execution, or governance.
 
+## Second exact-source target — accepted for narrow use
+
+[`EC-002`](evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) independently re-pinned PM-Bench's official arXiv v1 paper, repository commit, scorer, scenario, and 64 released primary logs before reproducing the local audit candidate. It separates a correct action from required-channel observation, current-versus-retired update intent, and declared step identity.
+
+The card accepts a diagnostic taxonomy mismatch, a source-level positional replay risk, two exact release contradictions, and artifact-binding requirements. It also records the limiting counter-evidence: all 64 released logs have valid ordered step identities and identity alignment changes zero scores. It does not claim that PM-Bench's headline tables are wrong, infer model intent from absent log fields, generalize beyond the released week, or adopt PM-Bench's architecture.
+
 ## Next exact-source target
 
-Produce `EC-002` from the locally verified PM-Bench scoring-contract audit candidate. Re-pin the official paper, released scorer, and observed log boundary before importing any conclusion. The decision target is narrower than a benchmark summary: whether the scorer binds observations to the correct step and evidence channel strongly enough to support RQ6 and RQ8.
+Select the next source only against an open Relata decision. High-value candidates are prospective-intention authority and expiry, observation-versus-use evidence, or a materially different complete-agent boundary that can challenge the interface assumptions surfaced by `EC-001` and `EC-002`. A source name remains a queue item until the exact object and consumer are declared.

@@ -16,7 +16,7 @@ Relata is in **R0 — Research Foundation**. `R0` names the stage, not the proje
 |---|---|
 | Charter and research questions | working authority |
 | Draft 0.1 assumptions | reclassified as decisions, hypotheses, aspirations, deferred items, or rejected items |
-| Source research | one accepted Evidence Card; AML boundary findings transferred without adopting its architecture or scores |
+| Source research | two accepted Evidence Cards; AML and PM-Bench findings transferred only within their narrow authorizations, without adopting either architecture or score |
 | Community participation | co-research and consent materials exist; no intimate-material collection is open |
 | System Census | templates exist; no reviewed System Card yet |
 | Distinction Atlas | six seed hypotheses; none promoted to supported |
@@ -33,13 +33,13 @@ The preserved [Target Architecture Draft 0.1](docs/vision/relata-target-architec
 
 ## Research now in motion
 
-The first exact-source target is complete: [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) pins and audits Agent Memory Leaderboard's public evaluation boundary. It is accepted only for narrow findings about responsibility seams, fixed-reader causal limits, architecture-specific interface commitments, and public proof of version bindings—not for AML score validity or as a Relata interface.
+The first two exact-source targets are complete. [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) pins Agent Memory Leaderboard's public evaluation boundary and is accepted only for responsibility seams, fixed-reader causal limits, architecture-specific interface commitments, and public proof of version bindings. [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) pins PM-Bench's paper, scorer, scenario, and 64 released primary logs; it separates action success from observation provenance, current-version intent, and step identity while recording that the released logs showed no step-order score impact. Neither card validates the source benchmark or selects a Relata interface.
 
 The next three executable work items are:
 
-1. Produce `EC-002` by re-pinning PM-Bench's official paper, scorer, and released-log boundary, then auditing observation and step-identity binding without importing another repo's conclusion as authority.
-2. Complete three materially different System Cards and one Architecture Pressure Map with contributor review and explicit observability limits; select restricted consent-record stewardship before collecting sensitive contributions.
-3. Run the Pilot 001 controls and blind Case Clinic review, then accept, revise, split, or reject the case from recorded evidence.
+1. Complete three materially different System Cards and one Architecture Pressure Map with contributor review and explicit observability limits; select restricted consent-record stewardship before collecting sensitive contributions.
+2. Run the Pilot 001 controls and blind Case Clinic review, then accept, revise, split, or reject the case from recorded evidence.
+3. Develop the first D-006 prospective-intention microcase from community-grounded authority, keeping state availability, observation, current-version eligibility, and action distinct without adopting PM-Bench's task-handle interface.
 
 These tasks are described in the [Chinese execution path](START_HERE.zh-CN.md) and [English execution path](START_HERE.md).
 
