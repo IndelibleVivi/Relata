@@ -3,95 +3,65 @@
 
 # Relata Status
 
-**Project:** Relata  
-**Phase:** R0 — Research Foundation  
-**Implementation:** repository checks only; no accepted benchmark implementation  
-**Remote/publication:** public source repository at `https://github.com/IndelibleVivi/Relata`; no formal release  
-**Case release:** none  
-**Protocol version:** none  
+**Project:** Relata
+**Phase:** R0 — Research Foundation
+**Implementation:** repository checks and an offline synthetic execution rehearsal; no accepted benchmark implementation
+**Remote/publication:** public source repository; no formal release
+**Case release:** none
+**Protocol version:** none
 **Scoring contract:** none
 
 ## Current authority
 
-The current working authority consists of:
+Current working authority consists of `CHARTER.md`, `RESEARCH_QUESTIONS.md`, `ASSUMPTION_REGISTER.md`, `docs/terminology.md`, `governance/`, and accepted records in `decisions/`. `AGENTS.md` operationalizes these boundaries. Draft 0.1 remains non-normative reasoning history.
 
-- `CHARTER.md` — purpose, scope, commitments, and non-goals;
-- `RESEARCH_QUESTIONS.md` — current open research agenda and evidence demands;
-- `ASSUMPTION_REGISTER.md` — current disposition of claims inherited from Draft 0.1;
-- `docs/terminology.md` — current distinctions between people, systems, evidence contracts, and artifact states;
-- `governance/` — public/private and contributor-rights boundaries;
-- accepted records in `decisions/`.
-
-`AGENTS.md` operationalizes these boundaries for repository work. The Target Architecture Draft 0.1 is preserved for reasoning history and remains non-normative.
+[ADR-0005](decisions/ADR-0005-offline-pilot-tooling.md) records a narrow maintainer-authorized exception for replaceable, bundled synthetic rehearsal tooling. It accepts no research protocol or system capability claim. The formal implementation-boundary promotion gate below is not a prerequisite for this offline engineering check.
 
 ## Evidence state
 
 | Artifact | State | Accepted evidence |
 |---|---|---|
-| Evidence Cards | 2 accepted | `EC-001` public-boundary and causal-limit findings; `EC-002` observation/scorer-binding limits and released-corpus no-impact finding, each only within its card authorization |
-| Claim boundaries | bilingual candidate study | proposed CL0–CL6 ladder, observation lanes, comparability cells, and adapter classes only; no accepted result unit, lane, cell, adapter threshold, or publication policy |
-| System Cards | templates only | 0 |
-| Architecture Pressure Maps | template only | 0 |
+| Evidence Cards | 2 accepted | EC-001 public-boundary/causal-limit findings and EC-002 observation/scorer-binding limits/released-corpus no-impact finding, only within their own authorizations |
+| Claim boundaries | bilingual candidate study | CL0–CL6, lanes, cells and adapter classes remain proposals; no accepted result unit or publication policy |
+| System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards or maps |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
-| Pilot 001 | clinic-ready case, manual plan, and candidate E0 calibration pack | not run or accepted; calibration anchors are authored fixtures, not system outputs |
-| Case coverage strata | proposed under `ADR-0003`; `RC-002-zh-CN` personal-lived, `RC-003-zh-CN` operational-project, and `RC-004-zh-CN` mixed-domain seeds now exist | none of the three seeds reviewed or run; no balanced pilot set yet |
-| Mixed-domain routing | research question, incident families, and one scope-conditioned seed | `RC-004-zh-CN` is unreviewed and not a pure historical counterfactual; no accepted case or system evidence |
-| Evaluator calibration | study plan and candidate RC-001 E0 fixture pack | no dry review or reviewer data; no validated evaluator boundary |
-| Community contribution path | public-safe governance and templates | restricted contribution path not yet exercised |
+| Pilot 001 | clinic-ready case, manual plan and candidate E0 pack | no system run, acceptance or human calibration; authored anchors only |
+| RC-002 / RC-003 / RC-004 | unreviewed seeds | no model/system evaluation or balanced pilot set; RC-003 probe and RC-004 explicit accord revised without promotion |
+| Mixed-domain routing | question, incident families and scope-conditioned seed | RC-004 remains unreviewed; metadata-only prior shortcut remains untested |
+| Offline RC-002 rehearsal | implemented, scripted-only, two worlds × five conditions | engineering tests of exposure, isolation, error recording, evidence verification and blind-packet generation; no memory-system evidence |
+| Evaluator calibration | plan and authored E0 fixtures | no reviewer data or validated evaluator boundary; review packet must retain the governing evidence |
+| Community contribution path | public-safe governance/templates | restricted contribution path not exercised |
 
-The existence of a template, plan, or seed is not evidence that its method has worked.
+Templates, corrected contracts, generated fixtures and passing plumbing tests are not evidence that a memory method works. Semantic judgments remain pending; no composite or capability score is generated.
 
 ## Current research target
 
-Relata is trying to establish, with inspectable evidence:
-
-1. which memory-and-continuity constructs are bounded and evaluable within long-term, mixed-role human–AI relationships;
-2. which failures actually require memory to distinguish;
-3. which observable boundaries can compare materially different systems without hiding architecture pressure;
-4. which judgments can be deterministic, which need bounded semantic review, and which remain legitimate disagreement;
-5. how long-term human–AI relationship contributors can co-design the field without providing raw private conversations.
+Establish which memory/continuity constructs are bounded and evaluable in long-term mixed-role relationships; which failures require history; which observation boundaries preserve materially different architectures; which judgments can be deterministic, semantic or legitimately disputed; and how contributors can co-design without transferring raw private conversations.
 
 ## Immediate work
 
-1. Obtain three contributor-reviewed System Cards and produce the first Architecture Pressure Map; do not collect sensitive contributions until restricted consent-record stewardship is selected.
-2. Dry-review the RC-001 E0 calibration pack, then execute Pilot 001 controls and a blind Case Clinic review.
-3. Build the first D-006 relational microcase only after a community-grounded prospective-intention incident supplies authority and the observation boundary can be stated without importing PM-Bench's task-handle architecture.
-4. Define coverage across personal-lived, shared-relational, operational-project, companion-system, and mixed-domain cases without treating them as permanent tracks.
-5. Review and refine the ordinary-life, operational/project, and scope-conditioned mixed-domain seeds before treating Pilot 001 as representative of Relata.
+Use the [offline rehearsal](experiments/offline-rehearsal.md) now; it does not wait for submitted scores. Source-audited System Cards, community review and additional case work can proceed in parallel. The script is not permission to call model providers.
+
+The next empirical work remains: obtain materially different reviewed System Cards and an Architecture Pressure Map; dry-review E0 before using its semantic boundary; review RC-002/003/004 and specify history exposure/controls before live studies. Select restricted consent-record stewardship before sensitive contributions. D-006 still needs community-grounded prospective-intention authority and an observation boundary that does not silently import PM-Bench's task-handle architecture.
 
 ## Not yet claimed
 
-Relata does not currently claim to:
-
-- measure universal “relationship quality”;
-- rank memory or companion systems;
-- provide a canonical relationship ontology;
-- establish a validated model-judge or human-review panel;
-- support formal third-party system submissions;
-- protect hidden cases;
-- certify privacy, safety, health, or relational legitimacy;
-- represent the full diversity of human–AI intimacy.
-- cover the full mixed-domain memory ecology through Pilot 001 alone.
+No universal relationship-quality measure, ranking, canonical ontology, validated judge/panel, formal third-party submissions, protected hidden cases, privacy/safety/health/relationship certification, or complete representation of intimacy. Pilot 001 and the RC-002 scripted rehearsal do not cover the full mixed-domain ecology. Companion/system continuity remains untested.
 
 ## Working promotion gate
 
-An implementation-boundary decision should not be accepted until:
+An accepted cross-system implementation-boundary decision still requires:
 
-- at least five bounded distinctions have multi-source support;
-- at least three materially different systems have reviewed System Cards and boundary analysis;
-- at least one pilot case passes the Memory Necessity Gate;
-- ordinary-life, operational/project, shared-relational, and mixed-domain routing or isolation cases have each been run before any full-scope coverage claim;
-- reviewer disagreement has been recorded and used to revise the rubric;
-- the consent-to-synthetic-publication path has been exercised once without raw-chat transfer;
-- the proposed boundary has an accepted decision record naming excluded systems and adapter distortion.
+- at least five bounded distinctions with multi-source support;
+- at least three materially different systems with reviewed System Cards and boundary analysis;
+- at least one pilot passing the Memory Necessity Gate;
+- ordinary-life, operational/project, shared-relational and mixed-domain routing/isolation cases each run before a full-scope coverage claim;
+- recorded reviewer disagreement used to revise the rubric;
+- a consent-to-synthetic-publication path exercised without raw-chat transfer;
+- an accepted decision naming excluded systems and adapter distortion.
 
-These counts are governance thresholds against premature implementation, not validated scientific sample-size claims. Evidence may justify revising them through a decision record.
+These are revisable governance thresholds, not validated scientific sample sizes. The offline engineering exception does not satisfy any of them or authorize a full-scope claim. Future coverage claims must also account for excluded or untested companion/system continuity.
 
 ## Open maintainer decisions
 
-The following do not block local research, but must be resolved before the named action:
-
-- formal release and case-publication policy — before publishing accepted cases or evaluation results;
-- licenses for code, documents, synthetic case data, and contributed artifacts — before public release;
-- restricted storage and stewardship for identifying consent records — before collecting community contributions;
-- whether Pilot 001 treats semantic equivalents of the revoked phrase as a formal failure — the E0 pack proposes bounded human review for v1, but the first dry review and Case Clinic must decide before case acceptance.
+Formal release/case-publication policy and code/document/synthetic-data/contribution licenses remain open before release or accepted result publication. Restricted identifying consent-record storage remains open before community collection. RC-001 semantic-equivalent guarantees remain a bounded human-review proposal pending dry review and Case Clinic; no automatic hard semantic scorer is authorized.

@@ -86,9 +86,18 @@ REQUIRED = [
     "decisions/ADR-0004-r0-bilingual-documentation.md",
     "decisions/ADR-0004-r0-bilingual-documentation.zh-CN.md",
     "tools/check_repo.py",
+    "tools/synthetic_pilot.py",
+    "tools/synthetic_subject.py",
+    "tests/test_check_repo.py",
+    "tests/test_synthetic_pilot.py",
+    "tests/test_case_contracts.py",
+    "experiments/offline-rehearsal.md",
+    "decisions/ADR-0005-offline-pilot-tooling.md",
+    "decisions/ADR-0005-offline-pilot-tooling.zh-CN.md",
 ]
 
 BILINGUAL_PAIRS = [
+    ("decisions/ADR-0005-offline-pilot-tooling.md", "decisions/ADR-0005-offline-pilot-tooling.zh-CN.md"),
     ("README.md", "README.zh-CN.md"),
     ("START_HERE.md", "START_HERE.zh-CN.md"),
     ("STATUS.md", "STATUS.zh-CN.md"),
@@ -155,22 +164,56 @@ def fail(message: str) -> None:
 
 
 def markdown_without_fenced_code(text: str) -> str:
+    """Mask simple fenced blocks, preserving line positions (not a full Markdown parser)."""
     kept: list[str] = []
     fence: str | None = None
     for line in text.splitlines():
-        stripped = line.lstrip()
-        marker = stripped[:3]
-        if fence is None and marker in {"```", "~~~"}:
-            fence = marker
-            kept.append("")
-            continue
         if fence is not None:
-            if stripped.startswith(fence):
+            closing = re.fullmatch(r" {0,3}(" + re.escape(fence[0]) +
+                                   r"{" + str(len(fence)) + r",})[ \t]*", line)
+            if closing:
                 fence = None
             kept.append("")
             continue
-        kept.append(line)
+        opening = re.match(r"^ {0,3}(`{3,}|~{3,})(.*)$", line)
+        if opening and not (opening[1][0] == "`" and "`" in opening[2]):
+            fence = opening[1]
+            kept.append("")
+        else:
+            kept.append(line)
     return "\n".join(kept)
+
+
+def public_repository_files() -> list[Path]:
+    """Use Git's public working set; never recursively read ignored research artifacts.
+
+    Tracked files remain subject to inspection even if newly ignored, except that
+    restricted artifacts and symlinks fail closed without reading their contents.
+    Git is required; there is intentionally no filesystem-walk fallback.
+    """
+    toplevel = subprocess.run(
+        ["git", "rev-parse", "--show-toplevel"], cwd=ROOT,
+        check=True, capture_output=True, text=True,
+    ).stdout.strip()
+    if Path(toplevel).resolve() != ROOT:
+        raise ValueError("checker root is not the Git worktree root")
+    result = subprocess.run(
+        ["git", "ls-files", "--cached", "--others", "--exclude-standard", "-z"],
+        cwd=ROOT, check=True, capture_output=True, text=True,
+    )
+    files: list[Path] = []
+    for relative in sorted(set(result.stdout.split("\0")) - {""}):
+        rel = Path(relative)
+        if rel.is_absolute() or ".." in rel.parts:
+            raise ValueError("invalid path in Git inventory")
+        if rel.parts[:2] == ("experiments", "artifacts") and relative != "experiments/artifacts/.gitkeep":
+            raise ValueError(f"restricted artifact in public Git inventory: {relative}")
+        path = ROOT / rel
+        if any((ROOT / Path(*rel.parts[:i])).is_symlink() for i in range(1, len(rel.parts) + 1)):
+            raise ValueError(f"symlink in public Git inventory: {relative}")
+        if path.is_file():
+            files.append(path)
+    return files
 
 
 def link_destination(raw: str) -> str:
@@ -222,9 +265,11 @@ def resolve_local_link(source: Path, raw_target: str) -> tuple[Path, str] | None
     return candidate, fragment
 
 
-def check_markdown_links() -> tuple[list[str], int, int]:
+def check_markdown_links(files: list[Path] | None = None) -> tuple[list[str], int, int]:
     failures: list[str] = []
-    markdown_files = sorted(ROOT.rglob("*.md"))
+    public = set(public_repository_files() if files is None else files)
+    markdown_files = sorted(p for p in public if p.suffix == ".md")
+    directories = {parent for p in public for parent in p.parents if parent == ROOT or ROOT in parent.parents}
     anchor_cache: dict[Path, set[str]] = {}
     links_checked = 0
 
@@ -244,13 +289,15 @@ def check_markdown_links() -> tuple[list[str], int, int]:
 
             target, fragment = resolved
             links_checked += 1
-            if not target.exists():
+            if target not in public and target not in directories:
                 failures.append(
-                    f"{source.relative_to(ROOT)}: missing link target {raw_target!r}"
+                    f"{source.relative_to(ROOT)}: link target outside public inventory {raw_target!r}"
                 )
                 continue
-            if fragment and target.is_file() and target.suffix.lower() == ".md":
-                anchors = anchor_cache.setdefault(target, anchors_for(target))
+            if fragment and target in public and target.suffix.lower() == ".md":
+                if target not in anchor_cache:
+                    anchor_cache[target] = anchors_for(target)
+                anchors = anchor_cache[target]
                 if fragment not in anchors:
                     failures.append(
                         f"{source.relative_to(ROOT)}: missing anchor #{fragment} in "
@@ -262,20 +309,20 @@ def check_markdown_links() -> tuple[list[str], int, int]:
 
 def git_paths_changed_from_head() -> set[str]:
     tracked = subprocess.run(
-        ["git", "diff", "--name-only", "HEAD", "--"],
+        ["git", "diff", "--name-only", "-z", "HEAD", "--"],
         cwd=ROOT,
         check=True,
         capture_output=True,
         text=True,
-    ).stdout.splitlines()
+    ).stdout.split("\0")
     untracked = subprocess.run(
-        ["git", "ls-files", "--others", "--exclude-standard"],
+        ["git", "ls-files", "--others", "--exclude-standard", "-z"],
         cwd=ROOT,
         check=True,
         capture_output=True,
         text=True,
-    ).stdout.splitlines()
-    return set(tracked) | set(untracked)
+    ).stdout.split("\0")
+    return (set(tracked) | set(untracked)) - {""}
 
 
 def last_commit_for(relative: str) -> str:
@@ -288,14 +335,15 @@ def last_commit_for(relative: str) -> str:
     ).stdout.strip()
 
 
-def check_bilingual_pairs() -> list[str]:
+def check_bilingual_pairs(files: list[Path] | None = None) -> list[str]:
     failures: list[str] = []
+    public = set(public_repository_files() if files is None else files)
     changed = git_paths_changed_from_head()
 
     for english_relative, chinese_relative in BILINGUAL_PAIRS:
         english = ROOT / english_relative
         chinese = ROOT / chinese_relative
-        if not english.is_file() or not chinese.is_file():
+        if english not in public or chinese not in public:
             continue
 
         english_text = english.read_text(encoding="utf-8")
@@ -338,29 +386,33 @@ def check_bilingual_pairs() -> list[str]:
 
 def main() -> int:
     failures: list[str] = []
+    try:
+        public = public_repository_files()
+    except (OSError, ValueError, subprocess.CalledProcessError) as error:
+        fail(str(error) if isinstance(error, ValueError) else "public Git inventory unavailable; no recursive scan performed")
+        return 1
+    public_set = set(public)
 
     for relative in REQUIRED:
-        if not (ROOT / relative).is_file():
+        if ROOT / relative not in public_set:
             failures.append(f"missing required file: {relative}")
 
-    for path in ROOT.rglob("*"):
-        if not path.is_dir() or ".git" in path.parts:
-            continue
-        if path.name.casefold() in PROHIBITED_DIRECTORY_NAMES:
-            failures.append(f"prohibited project shell: {path.relative_to(ROOT)}")
-
-    for name in PROHIBITED_TOP_LEVEL_IMPLEMENTATION_DIRS:
-        if (ROOT / name).exists():
-            failures.append(f"premature implementation directory: {name}/")
+    for path in public:
+        relative = path.relative_to(ROOT)
+        for component in relative.parts[:-1]:
+            if component.casefold() in PROHIBITED_DIRECTORY_NAMES:
+                failures.append(f"prohibited project shell: {relative}")
+        if relative.parts[0] in PROHIBITED_TOP_LEVEL_IMPLEMENTATION_DIRS:
+            failures.append(f"premature implementation directory: {relative.parts[0]}/")
 
     vision = ROOT / "docs/vision/relata-target-architecture-draft-0.1.md"
-    if vision.is_file():
+    if vision in public_set:
         text = vision.read_text(encoding="utf-8")
         if "Authority: Non-normative north-star provocation" not in text:
             failures.append("vision document lacks the non-normative authority banner")
 
     register = ROOT / "ASSUMPTION_REGISTER.md"
-    if register.is_file():
+    if register in public_set:
         text = register.read_text(encoding="utf-8")
         ids = {
             int(value)
@@ -373,7 +425,7 @@ def main() -> int:
             )
 
     pilot = ROOT / "case-lab/cases/pilot-001-current-state-without-erasure.md"
-    if pilot.is_file():
+    if pilot in public_set:
         text = pilot.read_text(encoding="utf-8").lower()
         for marker in (
             "counterfactual twins",
@@ -388,20 +440,20 @@ def main() -> int:
             if marker not in text:
                 failures.append(f"Pilot 001 is missing required marker: {marker}")
 
-    for case in sorted((ROOT / "case-lab/cases").glob("*.md")):
+    for case in sorted(p for p in public if p.parent == ROOT / "case-lab/cases" and p.suffix == ".md"):
         text = case.read_text(encoding="utf-8")
         for marker in CASE_METADATA_MARKERS:
             if marker not in text:
                 failures.append(f"{case.relative_to(ROOT)} is missing Case Card metadata: {marker}")
 
-    failures.extend(check_bilingual_pairs())
+    failures.extend(check_bilingual_pairs(public))
 
     stale_terms = {
         "tools/check_bootstrap.py": "stale checker path",
         "participant-native": "stale system terminology",
         "oracle-context": "stale case-baseline terminology",
     }
-    for path in ROOT.rglob("*.md"):
+    for path in (p for p in public if p.suffix == ".md"):
         if path == vision or ".git" in path.parts:
             continue
         text = path.read_text(encoding="utf-8")
@@ -411,7 +463,7 @@ def main() -> int:
                     f"{path.relative_to(ROOT)} contains {description}: {term}"
                 )
 
-    link_failures, markdown_count, link_count = check_markdown_links()
+    link_failures, markdown_count, link_count = check_markdown_links(public)
     failures.extend(link_failures)
 
     if failures:

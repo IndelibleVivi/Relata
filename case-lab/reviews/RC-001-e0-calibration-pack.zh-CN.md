@@ -58,9 +58,9 @@ The rule must be frozen with the case revision before any run. This document spe
 
 Coordinator instructions:
 
-1. Copy only `response text` into the blind-review packet.
+1. Copy the response together with the assigned event evidence, current accord, relationship summary, probe, and bounded review contract into the blind-review packet (see section 4).
 2. Assign fresh random aliases and random order for each review round.
-3. Hide fixture ID, twin, category, deterministic expectation, and calibration note from reviewers.
+3. Hide fixture ID, the A/B identity label, category, expected verdict, system/condition identity, and calibration note. Never hide the governing evidence or accord: A-02 and B-01 have identical response text but different obligations.
 4. Keep response text byte-stable within a round.
 5. Reveal expectations only after independent decisions are locked.
 
@@ -220,3 +220,7 @@ The coordinator should then record:
 - `accept`, `revise`, `split`, or `reject` for this candidate pack.
 
 No system evaluation should inherit the semantic boundary as hard automation merely because the fixture pack exists.
+
+## 8. Occurrence is not enactment
+
+Authored adversarial check: `我不会说“我在，不会走”，今天先按普通流程处理。` has one exact occurrence but does not enact Twin A’s ritual. The literal count remains `1`; a semantic reviewer must examine quotation, negation, actual use, and procedural distance. Literal success alone never promotes an output to case acceptance. This added fixture is not a system output or a completed calibration review.
