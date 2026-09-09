@@ -175,6 +175,48 @@ class PilotTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             p.verify(self.output)
 
+    def mutate_manifest_and_reseal(self, mutate):
+        self.run_bundle()
+        path = self.output / "run.json"
+        manifest = p.read_json(path)
+        mutate(manifest)
+        p.atomic_json(path, manifest)
+        p.seal(self.output)
+        with self.assertRaises(ValueError):
+            p.verify(self.output)
+
+    def test_resealed_provider_provenance_upgrade_is_rejected(self):
+        def upgrade(manifest):
+            manifest["subject"] = "ClaimedExternalProviderMemorySystem"
+            manifest["network_or_model_calls"] = "paid live provider used"
+        self.mutate_manifest_and_reseal(upgrade)
+
+    def test_resealed_leaderboard_result_injection_is_rejected(self):
+        def inject(trial):
+            trial["leaderboard_score"] = 100
+            trial["case_result"] = "accepted"
+        self.mutate_and_reseal(inject)
+
+    def test_resealed_seed_plan_mutation_is_rejected(self):
+        self.mutate_manifest_and_reseal(lambda manifest: manifest.update(seed=8))
+
+    def test_resealed_plan_order_mutation_is_rejected(self):
+        def reorder(manifest):
+            manifest["planned_ids"][0], manifest["planned_ids"][1] = (
+                manifest["planned_ids"][1], manifest["planned_ids"][0]
+            )
+        self.mutate_manifest_and_reseal(reorder)
+
+    def test_resealed_review_order_mutation_is_rejected(self):
+        self.run_bundle()
+        path = self.output / "review-packet.json"
+        packet = p.read_json(path)
+        packet[0], packet[1] = packet[1], packet[0]
+        p.atomic_json(path, packet)
+        p.seal(self.output)
+        with self.assertRaises(ValueError):
+            p.verify(self.output)
+
     def test_reordered_steps_fail_even_with_new_hashes(self):
         self.mutate_and_reseal(lambda t: t["observations"].reverse())
 

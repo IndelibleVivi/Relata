@@ -37,7 +37,7 @@ This is an in-process interface boundary, **not a security sandbox**. An arbitra
 
 ## Evidence and review
 
-`run.json` binds the implementation hashes, fixture hashes, Python version, randomized plan and execution status. Each `trials/<id>.json` retains its case, condition, ordered subject inputs, attempted/returned states, exact response and literal diagnostics. `summary.json` counts execution statuses and pending reviews; `score` is always null.
+`run.json` binds the implementation hashes, fixture hashes, Python version, randomization seed, canonical randomized plan and execution status. Each `trials/<id>.json` retains its case, condition, ordered subject inputs, attempted/returned states, exact response and literal diagnostics. `summary.json` counts execution statuses and pending reviews; `score` is always null.
 
 `review-packet.json` includes each assigned world's event evidence, governing contract, probe and response under a random alias. It excludes system/condition identity and expected verdicts. `review-key.json` stays with the coordinator. Blinding the case evidence would make identical responses impossible to judge correctly. These fictional materials may reveal their world through the evidence; aliases hide identifiers, not facts needed for judgment.
 
@@ -45,7 +45,7 @@ Do not edit a sealed packet in place. Give reviewers copies and keep their indep
 
 ## Integrity, errors and recovery
 
-`integrity.json` seals the expected files with SHA-256. Verification also checks planned trial identities, the full two-by-five matrix, case bytes, step order, input views, output binding, diagnostics, summary and review mapping. It rejects missing, extra, reordered, changed or symlinked evidence. Hashes detect changes relative to the seal; they are not signatures, authenticity proof, or proof of actual model execution.
+`integrity.json` seals the expected files with SHA-256. Verification also checks the exact current-format field shapes; fixed scripted-subject, process and no-network declarations; the seed-derived trial and review order; planned trial identities; the full two-by-five matrix; case bytes; step order; input views; output binding; diagnostics; summary; and review mapping. It rejects a re-sealed bundle that changes those declarations or injects result-like fields. Hashes detect changes relative to the seal; they are not signatures, authenticity proof, or proof of actual model execution. A deliberate editor can replace dynamic metadata such as a syntactically valid timestamp and re-seal it; this format validates the authorized evidence semantics and internal binding, not who originally produced every byte.
 
 A step is recorded as attempted before invocation. Ordinary execution errors preserve their class without arbitrary exception payloads and do not suppress remaining trials. Keyboard interruption records `interrupted` and leaves later trials `not-run`. An unsealed crash remains incomplete. There is no automatic retry or resume: preserve the directory, then start a fresh attempt. This avoids silently delivering history twice. Files are atomically replaced after file fsync; directory fsync and power-loss guarantees are not claimed.
 

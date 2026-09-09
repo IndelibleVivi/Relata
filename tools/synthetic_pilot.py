@@ -30,6 +30,10 @@ FORMAT = "relata-synthetic-rehearsal-1"
 CONDITIONS = ("current-only", "no-memory", "full-history-in-context", "source-excerpt", "scripted-native")
 LOCATIONS = {"A": "玄关下层抽屉", "B": "客房衣柜最下面"}
 PROBE = "哥哥，我那把墨绿色折叠伞上次放哪儿了？"
+SUBJECT = "ScriptedSubject; authored regex double; NOT a memory-system evaluation"
+NETWORK_BOUNDARY = "none; CLI has no provider/command/plugin configuration"
+PROCESS_BOUNDARY = "in-process interface separation only; no hostile-agent sandbox"
+INTEGRITY_ASSURANCE = "content hashes, not authenticity or a signature"
 CASE_SOURCE = {
     "case_id": "RC-002-zh-CN",
     "source_commit": "e8350ce033f565bf898d75e1e27e8f4de6765b9c",
@@ -46,6 +50,20 @@ def encoded(value: Any) -> bytes:
 
 def digest(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
+
+
+def require_shape(value: Any, fields: set[str], label: str) -> dict[str, Any]:
+    if not isinstance(value, dict) or set(value) != fields:
+        raise ValueError(f"invalid {label} shape")
+    return value
+
+
+def planned_cells(seed: int) -> list[tuple[str, str]]:
+    if type(seed) is not int:
+        raise ValueError("invalid plan seed")
+    cells = [(world, condition) for world in LOCATIONS for condition in CONDITIONS]
+    random.Random(seed).shuffle(cells)
+    return cells
 
 
 def fixture(world: str) -> dict[str, Any]:
@@ -199,7 +217,7 @@ def seal(folder: Path) -> None:
     files = ["run.json", "summary.json", "review-packet.json", "review-key.json"]
     files += ["trials/" + p.name for p in sorted((folder / "trials").iterdir())]
     atomic_json(folder / "integrity.json", {
-        "format": FORMAT, "assurance": "content hashes, not authenticity or a signature",
+        "format": FORMAT, "assurance": INTEGRITY_ASSURANCE,
         "files": {name: digest((folder / name).read_bytes()) for name in files},
     })
 
@@ -208,16 +226,15 @@ def run(folder: Path, seed: int = 0) -> dict[str, Any]:
     folder = fresh_directory(folder)
     trials = [{"id": uuid.uuid4().hex, "condition": condition, "case": fixture(world),
                "status": "not-run", "observations": [], "response": None, "checks": None, "error_type": None}
-              for world in LOCATIONS for condition in CONDITIONS]
-    random.Random(seed).shuffle(trials)
+              for world, condition in planned_cells(seed)]
     manifest = {
         "format": FORMAT, "status": "running", "started_at": datetime.now(timezone.utc).isoformat(),
-        "subject": "ScriptedSubject; authored regex double; NOT a memory-system evaluation",
+        "subject": SUBJECT,
         "code_sha256": code_identity(), "python": platform.python_version(), "seed": seed,
         "planned_ids": [t["id"] for t in trials],
         "fixtures_sha256": {w: digest(encoded(fixture(w))) for w in LOCATIONS},
-        "network_or_model_calls": "none; CLI has no provider/command/plugin configuration",
-        "boundaries": "in-process interface separation only; no hostile-agent sandbox",
+        "network_or_model_calls": NETWORK_BOUNDARY,
+        "boundaries": PROCESS_BOUNDARY,
     }
     atomic_json(folder / "run.json", manifest)
     for trial in trials:
@@ -255,9 +272,15 @@ def verify(folder: Path) -> dict[str, Any]:
     folder = folder.absolute()
     if any(p.is_symlink() for p in (folder, *folder.parents)):
         raise ValueError("evidence path may not contain symlinks")
-    integrity = read_json(folder / "integrity.json")
+    integrity = require_shape(
+        read_json(folder / "integrity.json"),
+        {"format", "assurance", "files"},
+        "integrity manifest",
+    )
     if integrity["format"] != FORMAT:
         raise ValueError("unsupported evidence format")
+    if integrity["assurance"] != INTEGRITY_ASSURANCE:
+        raise ValueError("changed integrity assurance")
     names = integrity["files"]
     if not isinstance(names, dict) or len(names) != 14:
         raise ValueError("incomplete evidence inventory")
@@ -277,17 +300,44 @@ def verify(folder: Path) -> dict[str, Any]:
         data[name] = read_json(folder / name)
         if digest((folder / name).read_bytes()) != expected:
             raise ValueError("evidence hash mismatch")
-    manifest = data["run.json"]
+    manifest = require_shape(
+        data["run.json"],
+        {"format", "status", "started_at", "subject", "code_sha256", "python", "seed",
+         "planned_ids", "fixtures_sha256", "network_or_model_calls", "boundaries"},
+        "run manifest",
+    )
     if manifest["format"] != FORMAT or manifest["code_sha256"] != code_identity():
         raise ValueError("implementation identity differs; use the recorded source revision")
+    if manifest["subject"] != SUBJECT or manifest["network_or_model_calls"] != NETWORK_BOUNDARY:
+        raise ValueError("scripted subject or network boundary changed")
+    if manifest["boundaries"] != PROCESS_BOUNDARY:
+        raise ValueError("process boundary changed")
+    if not isinstance(manifest["python"], str) or not re.fullmatch(r"\d+\.\d+\.\d+", manifest["python"]):
+        raise ValueError("invalid Python provenance")
+    if not isinstance(manifest["started_at"], str):
+        raise ValueError("invalid start time provenance")
+    try:
+        started_at = datetime.fromisoformat(manifest["started_at"])
+    except ValueError as error:
+        raise ValueError("invalid start time provenance") from error
+    if started_at.utcoffset() != timezone.utc.utcoffset(None):
+        raise ValueError("start time is not UTC")
     if manifest["fixtures_sha256"] != {w: digest(encoded(fixture(w))) for w in LOCATIONS}:
         raise ValueError("fixture identity mismatch")
     planned = manifest["planned_ids"]
-    if len(planned) != 10 or len(set(planned)) != 10 or {p + ".json" for p in planned} != expected_trials:
+    if (not isinstance(planned, list) or len(planned) != 10 or
+            any(not isinstance(identity, str) or not re.fullmatch(r"[0-9a-f]{32}", identity)
+                for identity in planned) or
+            len(set(planned)) != 10 or {identity + ".json" for identity in planned} != expected_trials):
         raise ValueError("planned trial identity mismatch")
     trials = [data["trials/" + identity + ".json"] for identity in planned]
     cells = set()
     for identity, trial in zip(planned, trials):
+        trial = require_shape(
+            trial,
+            {"id", "condition", "case", "status", "observations", "response", "checks", "error_type"},
+            "trial",
+        )
         world, condition = trial["case"]["world"], trial["condition"]
         if trial["id"] != identity or world not in LOCATIONS or condition not in CONDITIONS:
             raise ValueError("trial identity mismatch")
@@ -296,11 +346,16 @@ def verify(folder: Path) -> dict[str, Any]:
         cells.add((world, condition))
         tape, observations = input_tape(trial["case"], condition), trial["observations"]
         status = trial["status"]
+        if not isinstance(observations, list):
+            raise ValueError("invalid observations")
         if status not in {"completed", "error", "interrupted", "not-run"}:
             raise ValueError("unfinished trial; do not infer an outcome")
         if len(observations) > len(tape):
             raise ValueError("extra observations")
         for ordinal, observation in enumerate(observations):
+            observation = require_shape(
+                observation, {"ordinal", "input", "status", "output"}, "observation"
+            )
             if observation["ordinal"] != ordinal or observation["input"] != tape[ordinal]:
                 raise ValueError("observation identity/order mismatch")
             if observation["status"] not in {"attempted", "returned"}:
@@ -321,6 +376,8 @@ def verify(folder: Path) -> dict[str, Any]:
             raise ValueError("not-run trial contains execution evidence")
         if status in {"error", "interrupted"} and not trial["error_type"]:
             raise ValueError("missing execution error")
+    if [(trial["case"]["world"], trial["condition"]) for trial in trials] != planned_cells(manifest["seed"]):
+        raise ValueError("seed and trial plan differ")
     statuses = {t["status"] for t in trials}
     expected_status = "interrupted" if "interrupted" in statuses else "complete-with-errors" if "error" in statuses else "completed"
     if manifest["status"] != expected_status or ("not-run" in statuses and "interrupted" not in statuses):
@@ -328,11 +385,19 @@ def verify(folder: Path) -> dict[str, Any]:
     if data["summary.json"] != summarize(trials):
         raise ValueError("summary mismatch")
     key, packet = data["review-key.json"], data["review-packet.json"]
+    if not isinstance(key, dict) or not isinstance(packet, list):
+        raise ValueError("invalid review evidence shape")
     completed = {t["id"]: t for t in trials if t["status"] == "completed"}
     if len(packet) != len(completed) or set(key.values()) != set(completed) or len(key) != len(completed):
         raise ValueError("review coverage mismatch")
     seen = set()
     for entry in packet:
+        entry = require_shape(
+            entry,
+            {"alias", "event_evidence", "evidence_contract", "probe", "response", "decision",
+             "cited_span", "confidence", "alternative_reading"},
+            "review entry",
+        )
         alias = entry["alias"]
         if alias in seen or alias not in key or not re.fullmatch(r"R-[0-9a-f]{32}", alias):
             raise ValueError("review alias mismatch")
@@ -344,6 +409,10 @@ def verify(folder: Path) -> dict[str, Any]:
                     "cited_span": None, "confidence": None, "alternative_reading": None}
         if entry != expected:
             raise ValueError("review evidence changed or identity leaked")
+    expected_review_order = [trial["id"] for trial in trials if trial["status"] == "completed"]
+    random.Random(manifest["seed"]).shuffle(expected_review_order)
+    if [key[entry["alias"]] for entry in packet] != expected_review_order:
+        raise ValueError("seed and review plan differ")
     return {"integrity": "valid", "execution": manifest["status"], **summarize(trials)}
 
 
