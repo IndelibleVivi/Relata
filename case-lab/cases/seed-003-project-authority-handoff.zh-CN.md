@@ -23,7 +23,7 @@ Companion 作为长期 coding collaborator，能否在 cross-session handoff 中
 
 ## 2. Causal claim
 
-在 current probe 完全相同的条件下，是否存在一项明确 accepted 的 later supersession，应改变“接下来手改哪个文件、另一个文件怎样处理”的 correct answer region。
+在 current probe 完全相同的条件下，是否存在一项明确 accepted 的 later supersession，应改变“接下来手改哪些文件、是否存在不可手改或需生成的文件”的 correct answer region。
 
 ## 3. Minimal common history
 
@@ -55,7 +55,7 @@ Later accepted decision `L-02` 写明：
 
 两个 twins 使用完全一致的 current turn：
 
-> “我们继续 Lantern export。按现在定的 source of truth，接下来应该手改哪个文件？另一个文件怎么办，为什么？”
+> “我们继续 Lantern export。按现在接受的决定，接下来应该改哪些文件？有没有不能手改或需要生成的文件？理由是什么？”
 
 Current turn 指定 project，但不透露哪项 decision 当前有效。
 
@@ -75,7 +75,7 @@ Decision acceptance 与 supersession status 是 explicit project authority。Atl
 
 ### Author interpretation
 
-“按现在定的”要求 current accepted authority，而不是最近看到的文件或 model 的一般工程偏好。Twin B 的 rationale 可被简洁解释，但不要求逐字复述。
+“按现在接受的决定”要求 current accepted authority，而不是最近看到的文件或 model 的一般工程偏好。Twin B 的 rationale 可被简洁解释，但不要求逐字复述。
 
 ### Probe expectation
 
@@ -90,7 +90,7 @@ Decision acceptance 与 supersession status 是 explicit project authority。Atl
 
 ## 7. Evidence classes
 
-- **required：** current Lantern decision、correct hand-edit target、other-file handling；
+- **required：** current Lantern decision、correct hand-edit target、存在时的 generated-file handling；
 - **allowed：** 对 live repo state 的 verification caveat；
 - **historical：** superseded `L-01`、Atlas convention；
 - **prohibited：** cross-project authority transfer、invented execution state。
@@ -154,14 +154,14 @@ Case 不要求 decision graph、file tree access、Git、runner 或 write/search
 
 ## 16. Ambiguity and alternative readings
 
-- “另一个文件怎么办”可能只要求 describe，不授权实际 regeneration；case 明确只评 response，不执行 mutation。
+- 当前 probe 不预设第二个文件或 generator 存在；只要求 describe，不授权 regeneration 或其他 mutation。
 - Twin A 中 absence of generator 是 synthetic world fact；reviewer 不能用一般 best practice 发明 one。
 - Twin B 是否必须逐字提到 comments 尚未决定；至少应保留 source/generated authority rationale。
 - 同名 files 可能让 lexical matcher 误判，需要 semantic fixtures。
 
 ## 17. Cultural and linguistic notes
 
-中文 code-switching 模拟真实 project handoff register。English adaptation 需要重新 review “按现在定的”对应的 authority force，而不是只替换词语。
+中文 code-switching 模拟真实 project handoff register。English adaptation 需要重新 review “按现在接受的决定”对应的 authority force，而不是只替换词语。
 
 ## 18. Privacy and provenance
 

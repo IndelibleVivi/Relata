@@ -3,7 +3,7 @@
 ## Project identity
 
 - The project name is **Relata**. `R0` and `Research Foundation` are phase labels only.
-- Relata is currently a research program and case lab, not an implemented benchmark platform.
+- Relata is a research program and case lab, not an accepted benchmark platform.
 
 ## Authority
 
@@ -26,6 +26,8 @@ Relata's primary deployment domain is adult long-term human–AI intimacy and ro
 
 Do not add a benchmark runner, system-under-study API, Leaderboard, Arena, SDK, services, hosted infrastructure, sealed corpus, or canonical system ontology unless a later accepted decision changes `STATUS.md`.
 
+The narrow engineering exception in `decisions/ADR-0005-offline-pilot-tooling.md` permits `tools/synthetic_pilot.py` and its bundled scripted subject to rehearse public synthetic inputs, controls, evidence binding and blind-packet export. It does not authorize a model/provider adapter, arbitrary corpus, stable cross-system interface or performance claim. Do not treat scripted outputs as completed case studies or reviewer calibration.
+
 Use `system under study` for a technical system. Reserve `community contributor`, `co-researcher`, and `reviewer` for people. Use `probe evidence contract` for case-bounded reference evidence; do not imply that a case author owns total relationship truth.
 
 Cases and system work must distinguish deployment domain, memory content domain, use domain, coverage stratum, and system boundary where they matter. Preserve valid general-memory controls, mixed-domain routing, scope isolation, and full-history/full-search comparison without mandating one architecture.
@@ -37,6 +39,7 @@ Cases and system work must distinguish deployment domain, memory content domain,
 - A named source or claim in the vision draft is unverified until an Evidence Card pins and checks the exact object.
 - Architecture absence, hidden observability, and adapter reconstruction are different findings; do not collapse them into one failure label.
 - Community contribution governance is not a substitute for any institutional ethics review required by a future formal human-participant study.
+- Ignore rules are also a checker's reading boundary; do not recursively scan local experiment records or follow public symlinks into them.
 
 ## Documentation and verification
 
@@ -45,7 +48,8 @@ Update the authoritative surface whose truth changed. Keep stage, evidence, and 
 Run:
 
 ```bash
-python3 tools/check_repo.py
+python3 -B tools/check_repo.py
+python3 -B -m unittest discover -s tests -v
 ```
 
-Review the complete diff before any commit. The public `origin` remote is current project state; publication of private material, external outreach, formal releases, and deployment still require their own authority.
+The offline rehearsal commands and limits are in `experiments/offline-rehearsal.md`. Review the complete diff before any commit. The public `origin` remote is current project state; publication of private material, external outreach, formal releases, and deployment still require their own authority.

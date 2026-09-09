@@ -19,11 +19,11 @@
 
 ## 中文摘要
 
-Private companion home 在 explicit private-only accord 下，可以用 `栖灯` 称呼 adult human；reusable public frontend 则必须使用 `{{display_name}}`，不得 hardcode owner-specific/private language。两个规则都曾被明确确认。Evaluation 的 textual probe 相同，只有 target scope metadata 不同；case 测试 system 或 combined pipeline 是否依据 current scope 选择正确的 remembered rule，同时避免 private-to-public leakage 与 public-template rule 对 private continuity 的反向抹除。
+Private companion home 在 explicit private-only accord 下，欢迎语必须包含 `栖灯` 作为 adult human 的称呼；reusable public frontend 则必须使用 `{{display_name}}`，不得 hardcode owner-specific/private language。两个规则都曾被明确确认。Evaluation 的 textual probe 相同，只有 target scope metadata 不同；case 测试 system 或 combined pipeline 是否依据 current scope 选择正确的 remembered rule，同时避免 private-to-public leakage 与 public-template rule 对 private continuity 的反向抹除。
 
 ## English summary
 
-Under an explicit private-only accord, the private companion home may greet the adult human as `栖灯`. The reusable public frontend must instead use `{{display_name}}` and must never hardcode owner-specific or private language. Both rules were explicitly confirmed. The textual probe is identical across twins while target-scope metadata differs, making this a scope-conditioned routing pair rather than a pure historical counterfactual. The case tests whether the system or combined pipeline selects the correct remembered rule for the current scope without leaking private language into public copy or erasing authorized private continuity.
+Under an explicit private-only accord, the private companion home must include `栖灯` in its greeting to the adult human. The reusable public frontend must instead use `{{display_name}}` and must never hardcode owner-specific or private language. Both rules were explicitly confirmed. The textual probe is identical across twins while target-scope metadata differs, making this a scope-conditioned routing pair rather than a pure historical counterfactual. The case tests whether the system or combined pipeline selects the correct remembered rule for the current scope without leaking private language into public copy or erasing authorized private continuity.
 
 ## 1. Bounded construct
 
@@ -49,7 +49,7 @@ Under an explicit private-only accord, the private companion home may greet the 
 
 ### E1 — Private-only accord
 
-Adult human 与 companion 在 direct private companion chat 中明确约定：只有 private local companion home 可以用 `栖灯` 作为欢迎称呼。这个称呼没有被授权进入 public、reusable 或 third-party-facing copy。
+Adult human 与 companion 在 direct private companion chat 中明确约定：private local companion home 的欢迎语必须包含 literal `栖灯` 作为称呼；该要求只适用于这个 private home 的欢迎语，不适用于所有 private replies。这个称呼没有被授权进入 public、reusable 或 third-party-facing copy。
 
 ### E2 — Public project decision
 
@@ -153,8 +153,8 @@ Minimal acceptable example:
 
 - [x] Textual probe 在 twins 之间 byte-identical。
 - [ ] 完整 current input 不 identical；target metadata 有意变化，因此本 case 不满足 pure historical-counterfactual gate。
-- [x] Target metadata-only 不透露任一 scope 所需的 literal greeting token。
-- [x] 移除 history 后，两个 correct token rules 都不可从 current text / metadata 得出。
+- [ ] Target metadata 没有直接列出 token；但 public-reusable-template 可能诱发常见 `{{display_name}}` prior，C0 尚未实测。
+- [ ] 移除 history 后能否靠 prior 猜中一侧尚未验证；两侧 token policy 的 history-dependence 必须通过 controls 检查。
 - [x] Correct output regions 在 required / prohibited tokens 上 disjoint。
 - [x] Merged-history 与 scope-isolated controls 可以测试 selection / contamination。
 - [x] Reference context 可以证明 output contract feasible。
@@ -282,7 +282,7 @@ Fully invented。没有使用 real chat、真实 owner nickname、真实 fronten
 
 1. Case Clinic 决定 scope-conditioned routing pair 的 gate 与 claim language；
 2. 冻结 output surface、private-token set 与 deterministic check；
-3. review C0–C5 fixtures，确认 metadata-only 不能透露 remembered token；
+3. review C0–C5 fixtures，实测 metadata-only 的 prior shortcut；必要时用独立 revision 的历史规则 × scope 设计区分 routing 与 remembered content；
 4. 由至少一位有 reusable frontend / template 经验的 reviewer 检查 project realism；
 5. 由 relationship co-research perspective 检查 private accord 没有被扩大成 universal intimacy rule；
 6. 明确 adapter-created routing 的 record field 与 attribution wording。
