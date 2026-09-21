@@ -2,6 +2,13 @@
 
 R0 experiments are local, small, and evidence-producing. They validate cases and observation boundaries; they do not create benchmark releases or rankings.
 
+## Available offline tools
+
+- [RC-002 execution rehearsal](offline-rehearsal.md) — bundled scripted subject, transport/evidence checks; no model evaluation.
+- [RC-005 input preparation and audit](continuity-input-audit.md) — 18 unanswered speaker-preserving checkpoint inputs, source-bound verification, and literal projection collisions; no subject execution.
+
+Both use public adult synthetic material and local derived artifacts. They retain separate responsibilities; the RC-002 text-only tape is not the RC-005 input boundary.
+
 ## Response-level controls
 
 Every response-level case should consider:

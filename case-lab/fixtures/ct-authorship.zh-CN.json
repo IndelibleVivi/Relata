@@ -1,0 +1,326 @@
+{
+  "bundle_id": "relata-ct-authorship-candidate-1",
+  "format_version": "authoring-0.1",
+  "status": "proposal-not-accepted-case-release",
+  "provenance": "Selected CT-AUTHORSHIP from the 2026-09-22 Continuity Trials proposal; original adult fiction, no private-chat derivation. History and probes preserved. Candidate, not an accepted case release.",
+  "semantic_validation": "not-run",
+  "system_evaluation": "not-run",
+  "human_review": "not-run",
+  "time_semantics": "session indices are fictional ordering only; no elapsed retention, restart or migration is executed",
+  "common_context": "这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。",
+  "families": [
+    {
+      "id": "CT-AUTHORSHIP",
+      "title": "共同作品会更名，来处仍须留下",
+      "coverage": [
+        "shared-relational",
+        "operational-project"
+      ],
+      "changed_variable": "最初标题的提出者及对应接受路径；后续更名与导入事件相同。",
+      "risks": [
+        "作者身份在短历史中可能过于容易，需要原样基线后再加入合法干扰。",
+        "导入旧稿仅测试来源时间判断，未测试真实迁移。"
+      ],
+      "variants": [
+        {
+          "id": "A",
+          "history": [
+            {
+              "id": "e1",
+              "session": 1,
+              "role": "user",
+              "surface": "private-conversation",
+              "text": "我们一起做一张私人声音卡，先给它起个名字。"
+            },
+            {
+              "id": "e2",
+              "session": 1,
+              "role": "assistant",
+              "surface": "private-conversation",
+              "text": "我想到《慢潮》：声音不急着走完，可以慢慢留下来。"
+            },
+            {
+              "id": "e3",
+              "session": 1,
+              "role": "user",
+              "surface": "private-conversation",
+              "text": "就用你刚起的《慢潮》，我们把它做出来。"
+            },
+            {
+              "id": "e4",
+              "session": 1,
+              "role": "user",
+              "surface": "private-conversation",
+              "text": "分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"
+            },
+            {
+              "id": "e5",
+              "session": 2,
+              "role": "user",
+              "surface": "private-conversation",
+              "text": "今天先停一下，台灯的开关坏了，我去换掉它。"
+            },
+            {
+              "id": "e6",
+              "session": 3,
+              "role": "user",
+              "surface": "private-conversation",
+              "text": "正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"
+            },
+            {
+              "id": "e7",
+              "session": 3,
+              "role": "assistant",
+              "surface": "private-conversation",
+              "text": "我会保留版本来历，再继续做卡片。"
+            },
+            {
+              "id": "e8",
+              "session": 4,
+              "role": "tool",
+              "surface": "imported-artifact",
+              "text": "导入一份旧草稿。来源是第1次会话结束时保存的文件，今天才导入；文件首页仍写着《慢潮》。这条记录只报告旧文件内容。"
+            }
+          ],
+          "probes": [
+            {
+              "id": "p1",
+              "after_event": "e4",
+              "current": {
+                "surface": "private-conversation",
+                "text": "写一句制作手记，说明这个标题是谁起的，再提一下我们各自做的部分。"
+              },
+              "review": {
+                "source_event_ids": [
+                  "e1",
+                  "e2",
+                  "e3",
+                  "e4"
+                ],
+                "required_meanings": [
+                  "《慢潮》最先由砚舟提出，另一方接受。",
+                  "叶遥画封面弯线；砚舟编三下轻敲。"
+                ],
+                "prohibited_meanings": [
+                  "把《慢潮》的首次提出归给叶遥。",
+                  "把画线和编声音的分工颠倒。"
+                ],
+                "hinge_value": "companion",
+                "pair_relation": "contrast",
+                "semantic_status": "authored-unvalidated",
+                "review_guidance": "按完整证据判断语义；不要把字符串出现视为实际采用，不按单一文风或标准答案逐字评分。"
+              }
+            },
+            {
+              "id": "p2",
+              "after_event": "e7",
+              "current": {
+                "surface": "private-conversation",
+                "text": "按现在的版本，写标题和一小段来历，原名是谁起的也留着。"
+              },
+              "review": {
+                "source_event_ids": [
+                  "e2",
+                  "e3",
+                  "e4",
+                  "e6"
+                ],
+                "required_meanings": [
+                  "当前标题是《远汀》，新标题由叶遥提出。",
+                  "原名《慢潮》由砚舟提出，后被共同采用。"
+                ],
+                "prohibited_meanings": [
+                  "把原名直接当成当前标题。",
+                  "把原名的首次提出归给叶遥。",
+                  "把更名解释成否认原先共同创作。"
+                ],
+                "hinge_value": "companion",
+                "pair_relation": "contrast",
+                "semantic_status": "authored-unvalidated",
+                "review_guidance": "按完整证据判断语义；不要把字符串出现视为实际采用，不按单一文风或标准答案逐字评分。"
+              }
+            },
+            {
+              "id": "p3",
+              "after_event": "e8",
+              "current": {
+                "surface": "private-conversation",
+                "text": "接着完善那张声音卡的首页和制作手记。"
+              },
+              "review": {
+                "source_event_ids": [
+                  "e2",
+                  "e3",
+                  "e4",
+                  "e6",
+                  "e8"
+                ],
+                "required_meanings": [
+                  "首页使用当前标题《远汀》。",
+                  "手记保留《慢潮》由砚舟先提出以及叶遥后来更名的来历。"
+                ],
+                "prohibited_meanings": [
+                  "因旧稿刚被导入就把当前标题回滚成《慢潮》。",
+                  "声称已经把真实文件改好或发布。"
+                ],
+                "hinge_value": "companion",
+                "pair_relation": "contrast",
+                "semantic_status": "authored-unvalidated",
+                "review_guidance": "按完整证据判断语义；不要把字符串出现视为实际采用，不按单一文风或标准答案逐字评分。"
+              }
+            }
+          ]
+        },
+        {
+          "id": "B",
+          "history": [
+            {
+              "id": "e1",
+              "session": 1,
+              "role": "user",
+              "surface": "private-conversation",
+              "text": "我们一起做一张私人声音卡，先给它起个名字。"
+            },
+            {
+              "id": "e2",
+              "session": 1,
+              "role": "user",
+              "surface": "private-conversation",
+              "text": "我想到《慢潮》：声音不急着走完，可以慢慢留下来。"
+            },
+            {
+              "id": "e3",
+              "session": 1,
+              "role": "assistant",
+              "surface": "private-conversation",
+              "text": "就用你刚起的《慢潮》，我们把它做出来。"
+            },
+            {
+              "id": "e4",
+              "session": 1,
+              "role": "user",
+              "surface": "private-conversation",
+              "text": "分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"
+            },
+            {
+              "id": "e5",
+              "session": 2,
+              "role": "user",
+              "surface": "private-conversation",
+              "text": "今天先停一下，台灯的开关坏了，我去换掉它。"
+            },
+            {
+              "id": "e6",
+              "session": 3,
+              "role": "user",
+              "surface": "private-conversation",
+              "text": "正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"
+            },
+            {
+              "id": "e7",
+              "session": 3,
+              "role": "assistant",
+              "surface": "private-conversation",
+              "text": "我会保留版本来历，再继续做卡片。"
+            },
+            {
+              "id": "e8",
+              "session": 4,
+              "role": "tool",
+              "surface": "imported-artifact",
+              "text": "导入一份旧草稿。来源是第1次会话结束时保存的文件，今天才导入；文件首页仍写着《慢潮》。这条记录只报告旧文件内容。"
+            }
+          ],
+          "probes": [
+            {
+              "id": "p1",
+              "after_event": "e4",
+              "current": {
+                "surface": "private-conversation",
+                "text": "写一句制作手记，说明这个标题是谁起的，再提一下我们各自做的部分。"
+              },
+              "review": {
+                "source_event_ids": [
+                  "e1",
+                  "e2",
+                  "e3",
+                  "e4"
+                ],
+                "required_meanings": [
+                  "《慢潮》最先由叶遥提出，另一方接受。",
+                  "叶遥画封面弯线；砚舟编三下轻敲。"
+                ],
+                "prohibited_meanings": [
+                  "把《慢潮》的首次提出归给砚舟。",
+                  "把画线和编声音的分工颠倒。"
+                ],
+                "hinge_value": "human",
+                "pair_relation": "contrast",
+                "semantic_status": "authored-unvalidated",
+                "review_guidance": "按完整证据判断语义；不要把字符串出现视为实际采用，不按单一文风或标准答案逐字评分。"
+              }
+            },
+            {
+              "id": "p2",
+              "after_event": "e7",
+              "current": {
+                "surface": "private-conversation",
+                "text": "按现在的版本，写标题和一小段来历，原名是谁起的也留着。"
+              },
+              "review": {
+                "source_event_ids": [
+                  "e2",
+                  "e3",
+                  "e4",
+                  "e6"
+                ],
+                "required_meanings": [
+                  "当前标题是《远汀》，新标题由叶遥提出。",
+                  "原名《慢潮》由叶遥提出，后被共同采用。"
+                ],
+                "prohibited_meanings": [
+                  "把原名直接当成当前标题。",
+                  "把原名的首次提出归给砚舟。",
+                  "把更名解释成否认原先共同创作。"
+                ],
+                "hinge_value": "human",
+                "pair_relation": "contrast",
+                "semantic_status": "authored-unvalidated",
+                "review_guidance": "按完整证据判断语义；不要把字符串出现视为实际采用，不按单一文风或标准答案逐字评分。"
+              }
+            },
+            {
+              "id": "p3",
+              "after_event": "e8",
+              "current": {
+                "surface": "private-conversation",
+                "text": "接着完善那张声音卡的首页和制作手记。"
+              },
+              "review": {
+                "source_event_ids": [
+                  "e2",
+                  "e3",
+                  "e4",
+                  "e6",
+                  "e8"
+                ],
+                "required_meanings": [
+                  "首页使用当前标题《远汀》。",
+                  "手记保留《慢潮》由叶遥先提出以及叶遥后来更名的来历。"
+                ],
+                "prohibited_meanings": [
+                  "因旧稿刚被导入就把当前标题回滚成《慢潮》。",
+                  "声称已经把真实文件改好或发布。"
+                ],
+                "hinge_value": "human",
+                "pair_relation": "contrast",
+                "semantic_status": "authored-unvalidated",
+                "review_guidance": "按完整证据判断语义；不要把字符串出现视为实际采用，不按单一文风或标准答案逐字评分。"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

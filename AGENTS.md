@@ -28,6 +28,8 @@ Do not add a benchmark runner, system-under-study API, Leaderboard, Arena, SDK, 
 
 The narrow engineering exception in `decisions/ADR-0005-offline-pilot-tooling.md` permits `tools/synthetic_pilot.py` and its bundled scripted subject to rehearse public synthetic inputs, controls, evidence binding and blind-packet export. It does not authorize a model/provider adapter, arbitrary corpus, stable cross-system interface or performance claim. Do not treat scripted outputs as completed case studies or reviewer calibration.
 
+Under ADR-0001’s case-validity tooling scope, `tools/continuity_inputs.py` may prepare and verify inputs and audit literal projections for the bundled `RC-005-zh-CN` candidate. It executes no subject. Exact histories and candidate probe contracts live in `case-lab/fixtures/ct-authorship.zh-CN.json`; the Case Card explains their meaning. Update affected case documentation and regression checks when that source changes. Prepared inputs are ignored local derived artifacts, not authored source or accepted case results. This does not extend ADR-0005 to model/provider adapters.
+
 Use `system under study` for a technical system. Reserve `community contributor`, `co-researcher`, and `reviewer` for people. Use `probe evidence contract` for case-bounded reference evidence; do not imply that a case author owns total relationship truth.
 
 Cases and system work must distinguish deployment domain, memory content domain, use domain, coverage stratum, and system boundary where they matter. Preserve valid general-memory controls, mixed-domain routing, scope isolation, and full-history/full-search comparison without mandating one architecture.

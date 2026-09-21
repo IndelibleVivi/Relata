@@ -19,6 +19,8 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 
 软件现有 public repository checker 和一个**离线 RC-002 执行演练**：用明确标识的脚本替身，在两条合成历史下分别运行五种条件，保存证据并导出盲审包。测试只建立工程链路行为，不调用模型，也不产生语义分数或能力分数。完整证据状态见 [STATUS](STATUS.zh-CN.md)。
 
+新增的离线输入工具为 **[RC-005 / 共同作品来历](case-lab/cases/seed-005-shared-work-authorship.zh-CN.md)** 准备并核验 18 份待答输入，检查输入投影是否抹掉说话者区别。该 case 仍是 authored candidate，没有独立人类 review 或系统评测。命令与边界见[输入审计说明](experiments/continuity-input-audit.md)。
+
 ## 为什么暂时不建平台
 
 尚未接受 canonical ontology、system protocol、scoring contract、benchmark release、Leaderboard、Arena、SDK、service 或 hosted infrastructure。[历史架构草案](docs/vision/relata-target-architecture-draft-0.1.md) 继续是 non-normative；[assumption register](ASSUMPTION_REGISTER.zh-CN.md) 保留各项处置。

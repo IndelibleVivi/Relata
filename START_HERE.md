@@ -5,6 +5,8 @@
 
 This is the operational path from the non-normative Target Architecture Draft 0.1 to evidence-backed research and cases.
 
+Current local tooling: use the [RC-002 scripted rehearsal](experiments/offline-rehearsal.md) or the [RC-005 candidate input audit](experiments/continuity-input-audit.md) without waiting for the broader research programme below. Neither authorizes model execution or accepts a case.
+
 ## Foundation now present
 
 - [Charter](CHARTER.md), [research questions](RESEARCH_QUESTIONS.md), and [assumption register](ASSUMPTION_REGISTER.md)

@@ -5,7 +5,7 @@
 
 **Project：** Relata
 **Phase：** R0 — Research Foundation
-**Implementation：** repository checks 与离线合成执行演练；没有 accepted benchmark implementation
+**Implementation：** repository checks、离线合成执行演练与 candidate 输入准备/核验/投影审计；没有 accepted benchmark implementation
 **Remote/publication：** public source repository；没有 formal release
 **Case release：** none
 **Protocol version：** none
@@ -29,6 +29,7 @@
 | RC-002 / RC-003 / RC-004 | 未经 review 的 seeds | 无模型/系统评测或 balanced pilot set；已修 RC-003 probe 和 RC-004 explicit accord，没有提升状态 |
 | Mixed-domain routing | question、incident families、scope-conditioned seed | RC-004 仍未经 review；metadata-only 的 prior shortcut 尚未实测 |
 | Offline RC-002 rehearsal | 已实现，scripted-only，两条历史 × 五种条件 | 验证 exposure、隔离、错误记录、证据校验、盲审包生成等工程链路；无 memory-system evidence |
+| RC-005 / CT-AUTHORSHIP | seed；选自 2026-09-22 提案；输入工具已实现 | 18 份待答输入；一个家族的 3 个相关 checkpoint 在去掉 speaker 后发生字面碰撞；无独立人类 review、系统回答或 Memory Necessity Gate acceptance |
 | Evaluator calibration | plan 与 authored E0 fixtures | 无 reviewer data 或 validated boundary；评审包必须保留治理该回答的证据 |
 | Community contribution path | public-safe governance/templates | restricted contribution path 尚未实际使用 |
 
@@ -41,6 +42,8 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 ## Immediate work
 
 现在即可运行[离线演练](experiments/offline-rehearsal.md)，无需等待别人提交分数。基于公开源码审查的 System Cards、community review 和其他 case 工作可以并行。这个脚本不授权调用模型 provider。
+
+依据 ADR-0001 的 validity/reproducibility tooling 范围，现在可以使用 [RC-005 输入审计](experiments/continuity-input-audit.md)，下一项是 review 作者归属与继续制作手记的 contract。该工具只准备输入，不接受 Continuity Trials 提案的其余内容，也不扩大模型执行权限。
 
 后续经验性工作仍包括：获得不同架构的 reviewed System Cards 与 Architecture Pressure Map；在使用 E0 语义边界前完成 dry review；review RC-002/003/004，并在 live studies 前明确 history exposure 与 controls。收集 sensitive contributions 前先选择 restricted consent-record stewardship。D-006 仍需要 community-grounded prospective-intention authority，并明确不会偷带 PM-Bench task-handle architecture 的观察边界。
 

@@ -5,7 +5,7 @@
 
 **Project:** Relata
 **Phase:** R0 — Research Foundation
-**Implementation:** repository checks and an offline synthetic execution rehearsal; no accepted benchmark implementation
+**Implementation:** repository checks, an offline synthetic execution rehearsal, and candidate input preparation/verification/projection audits; no accepted benchmark implementation
 **Remote/publication:** public source repository; no formal release
 **Case release:** none
 **Protocol version:** none
@@ -29,6 +29,7 @@ Current working authority consists of `CHARTER.md`, `RESEARCH_QUESTIONS.md`, `AS
 | RC-002 / RC-003 / RC-004 | unreviewed seeds | no model/system evaluation or balanced pilot set; RC-003 probe and RC-004 explicit accord revised without promotion |
 | Mixed-domain routing | question, incident families and scope-conditioned seed | RC-004 remains unreviewed; metadata-only prior shortcut remains untested |
 | Offline RC-002 rehearsal | implemented, scripted-only, two worlds × five conditions | engineering tests of exposure, isolation, error recording, evidence verification and blind-packet generation; no memory-system evidence |
+| RC-005 / CT-AUTHORSHIP | seed; selected from the 2026-09-22 proposal; input tooling implemented | 18 unanswered input views; literal speaker-removal collisions at 3 correlated checkpoints in one family; no independent human review, system output, or Memory Necessity Gate acceptance |
 | Evaluator calibration | plan and authored E0 fixtures | no reviewer data or validated evaluator boundary; review packet must retain the governing evidence |
 | Community contribution path | public-safe governance/templates | restricted contribution path not exercised |
 
@@ -41,6 +42,8 @@ Establish which memory/continuity constructs are bounded and evaluable in long-t
 ## Immediate work
 
 Use the [offline rehearsal](experiments/offline-rehearsal.md) now; it does not wait for submitted scores. Source-audited System Cards, community review and additional case work can proceed in parallel. The script is not permission to call model providers.
+
+The [RC-005 input audit](experiments/continuity-input-audit.md) is available under ADR-0001’s validity/reproducibility tooling scope. Review its authorship and continuing-production-note contract next. This input-only tool neither accepts the rest of the Continuity Trials proposal nor extends model execution authority.
 
 The next empirical work remains: obtain materially different reviewed System Cards and an Architecture Pressure Map; dry-review E0 before using its semantic boundary; review RC-002/003/004 and specify history exposure/controls before live studies. Select restricted consent-record stewardship before sensitive contributions. D-006 still needs community-grounded prospective-intention authority and an observation boundary that does not silently import PM-Bench's task-handle architecture.
 

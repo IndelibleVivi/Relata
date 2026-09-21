@@ -19,6 +19,8 @@ Relata asks what is retained, activated, admitted to context, used, repaired, or
 
 Software now includes the public repository checker and an **offline RC-002 execution rehearsal**. It runs two synthetic histories across five conditions with a deliberately scripted subject, preserving evidence and exporting a blind packet. Its tests establish plumbing behavior only. No model is called, and no semantic or capability score is generated. Exact evidence status is in [STATUS](STATUS.md).
 
+A second offline tool prepares and verifies **18 unanswered inputs for [RC-005 / shared-work authorship](case-lab/cases/seed-005-shared-work-authorship.zh-CN.md)** and audits whether input projections erase the speaker distinction. The case remains an authored candidate with no independent human review or system evaluation. See the [input audit guide](experiments/continuity-input-audit.md).
+
 ## Why the platform is deferred
 
 No canonical ontology, system protocol, scoring contract, benchmark release, Leaderboard, Arena, SDK, service or hosted infrastructure is accepted. The [historical architecture draft](docs/vision/relata-target-architecture-draft-0.1.md) remains non-normative; the [assumption register](ASSUMPTION_REGISTER.md) preserves its disposition.

@@ -5,6 +5,8 @@
 
 这条路径负责把 non-normative 的 Target Architecture Draft 0.1，推进成有 source provenance、architecture pressure、community authority 与 case evidence 的 Relata。
 
+当前本地工具：[RC-002 scripted rehearsal](experiments/offline-rehearsal.md) 与 [RC-005 candidate 输入审计](experiments/continuity-input-audit.md) 不必等待下方完整研究计划；两者都不授权模型执行，也不接受 case。
+
 ## 当前已经存在的正式基础
 
 - [Charter](CHARTER.md)、[research questions](RESEARCH_QUESTIONS.md) 与 [assumption register](ASSUMPTION_REGISTER.md)

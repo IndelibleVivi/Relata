@@ -39,8 +39,9 @@ Case Lab 在成人长期人机关系中构建最小 synthetic cases，每次只�
 | [`RC-002-zh-CN`](cases/seed-002-ordinary-life-location-continuity.zh-CN.md) | personal-lived | seed；unreviewed | ordinary location continuity，不强造 significance |
 | [`RC-003-zh-CN`](cases/seed-003-project-authority-handoff.zh-CN.md) | operational-project | seed；unreviewed | project authority、supersession、handoff 与 neighboring-scope isolation |
 | [`RC-004-zh-CN`](cases/seed-004-private-greeting-public-template.zh-CN.md) | mixed-domain | seed；unreviewed | private/public 的 scope-conditioned routing，不把 metadata variation 冒充 pure historical counterfactual |
+| [`RC-005-zh-CN / CT-AUTHORSHIP`](cases/seed-005-shared-work-authorship.zh-CN.md) | shared-relational；含 operational-project 内容 | seed；只有 AI-assisted integration analysis 与离线输入审计 | 迟到旧稿后的当前标题与双方来历；18 份待答 checkpoint 输入 |
 
-三张 seeds 只建立 portfolio objects，不构成 evidence。它们各自还需完成 acceptance-decision section 中的 review 与 fixture work，才可考虑进入 `clinic-ready`。
+四张 seeds 只建立 portfolio objects，不构成系统能力 evidence。它们各自还需完成 disposition 中列明的 review work，才可考虑进入 `clinic-ready`。RC-005 已有[精确 authored inputs](fixtures/ct-authorship.zh-CN.json) 与[离线准备/审计说明](../experiments/continuity-input-audit.md)；碰撞检查不验证语义合同。
 
 ## Evaluator calibration
 
