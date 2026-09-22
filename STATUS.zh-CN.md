@@ -26,7 +26,8 @@
 |---|---|---|
 | Evidence Cards | 2 accepted | EC-001 public-boundary/causal-limit findings；EC-002 observation/scorer-binding limits 与 released-corpus no-impact finding；只在各自 authorization 内有效 |
 | Agent-memory inquiry / 文章方向 | 开放研究问题、AMS 连接与初步综合 | 无 accepted definition、穷尽综述或文章正文 |
-| 开源架构研究 | 5 份有界 drafts：Mem0、Letta、Graphiti、lmc-5、Tideline Memory | 固定源码观察；lmc-5 与 Graphiti 另有窄范围离线诊断；无独立人类 review、accepted System Card 或模型参与的比较结果 |
+| 开源架构研究 | 10 份有界 drafts：Mem0、Letta、Graphiti、lmc-5、Tideline Memory、Aelios、Hindsight、OpenViking、LangMem、A-MEM | 固定源码观察；lmc-5 与 Graphiti 另有窄范围离线诊断；无独立人类 review、accepted System Card 或模型参与的比较结果 |
+| [架构图集](systems/architecture-atlas/README.md) | 10 份模型、30 幅 SVG/Mermaid 与离线交互 reader | 绑定源码的图示；没有新增上游运行或能力测量 |
 | Claim boundaries | 双语 candidate study | CL0–CL6、lanes、cells、adapter classes 仍为提议；无 accepted result unit 或 publication policy |
 | System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards/maps |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
@@ -46,7 +47,7 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 
 ## Immediate work
 
-从[五份源码研究 drafts](systems/source-studies/README.md) 推进 [agent-memory inquiry](research/agent-memory-inquiry.md)：review source fidelity、检查竞争解释，收敛独立文章的论点。选定的公开 AMS 研究可以带着原有证据限制进入问题设计。这项研究独立于 live evaluation 与 case promotion gate 推进。
+从[十份源码研究 drafts](systems/source-studies/README.md) 推进 [agent-memory inquiry](research/agent-memory-inquiry.md)：review source fidelity、检查竞争解释，收敛独立文章的论点。选定的公开 AMS 研究可以带着原有证据限制进入问题设计。这项研究独立于 live evaluation 与 case promotion gate 推进。
 
 现在即可运行[离线演练](experiments/offline-rehearsal.md)，无需等待别人提交分数。基于公开源码审查的 System Cards、community review 和其他 case 工作可以并行。这个脚本不授权调用模型 provider。
 

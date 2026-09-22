@@ -1,0 +1,66 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_caller["调用应用边界"]
+    app["应用 / harness<br/>提交材料与查询<br/>〔未知〕"]:::external
+    class app unknown
+  end
+  subgraph region_core["Python OSS runtime"]
+    api["Memory / AsyncMemory<br/>应用调用接口"]:::entry
+    extract["add extraction<br/>V3 ADD-only 主路径"]:::process
+    select["search / get / get_all<br/>选择条目与可见性"]:::process
+    mutate["update / delete / reset<br/>显式修订入口"]:::process
+    results["返回条目 / 操作回执<br/>不代替最终回答"]:::output
+  end
+  subgraph region_providers["模型与辅助依赖"]
+    llm[["LLM provider<br/>事实抽取 / 摘要"]]:::model
+    embedder[["Embedding provider<br/>文本 → 向量"]]:::model
+    nlp["spaCy 辅助处理<br/>词形 / entity"]:::process
+    telemetry["PostHog telemetry<br/>可配置诊断出站"]:::external
+  end
+  subgraph region_storage["配置的持久化层"]
+    vector_store[("Vector store<br/>当前事实与检索索引")]:::store
+    messages[("SQLite messages<br/>每 scope 最近10条")]:::store
+    history[("SQLite history<br/>ADD / UPDATE / DELETE")]:::store
+    entity_store[("Entity store<br/>实体 → memory IDs")]:::store
+  end
+  subgraph region_managed["另一路托管产品"]
+    client["MemoryClient<br/>托管 HTTP client"]:::entry
+    managed_service["Managed platform<br/>远端实现未检查<br/>〔未知〕"]:::external
+    class managed_service unknown
+  end
+  app -->|"messages / scope / query"| api
+  api -->|"add 调用"| extract
+  extract -->|"提交抽取上下文"| llm
+  llm -->|"返回事实 JSON"| extract
+  extract -->|"query / facts / entities"| embedder
+  extract -->|"追加事实 payload + vectors"| vector_store
+  vector_store -->|"scope 内相关10条"| extract
+  messages -->|"同 scope 最近10条"| extract
+  extract -->|"保留新消息并裁至10条"| messages
+  extract -->|"分步记录 ADD"| history
+  extract -->|"抽取实体与词形"| nlp
+  nlp -->|"由 add 持久化实体关联"| entity_store
+  api -->|"search / get / get_all"| select
+  vector_store -->|"候选事实 / 按 ID 读取"| select
+  entity_store -->|"linked IDs 加分"| select
+  select -->|"条目 / score / metadata"| results
+  results -->|"交还调用者"| app
+  api -->|"显式 ID / scope 操作"| mutate
+  mutate -->|"更新 / 删除 / 重置"| vector_store
+  mutate -->|"变更记录；reset 清表"| history
+  mutate -->|"条件清理 / 重建 / reset"| entity_store
+  api -->|"capture_event 诊断事件"| telemetry
+  app -->|"另一种 SDK 选择"| client
+  client -->|"HTTP + API key"| managed_service
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

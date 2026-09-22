@@ -1,0 +1,58 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_native["OpenViking service"]
+    edit["修订 / 删除 / restore<br/>显式 API 请求"]:::entry
+    write["ContentWriteCoordinator<br/>写入后刷新派生数据"]:::process
+    extract["ExtractLoop + updater<br/>提取、合并与应用"]:::process
+    rm["VikingFS.rm<br/>锁内先索引后文件"]:::process
+    freshness{"FreshnessAction<br/>刷新或累计 pending"}:::decision
+    resource_links["ResourceMemoryLinkService<br/>更新与清除资源引用"]:::process
+    restore["snapshot restore<br/>恢复已选文件版本"]:::process
+    reindex["ReindexExecutor<br/>按 URI / level 更新"]:::process
+    session["Session.commit_async<br/>归档与保留 live tail"]:::process
+  end
+  subgraph region_durable["持久状态与索引"]
+    files[("VikingFS / RAGFS<br/>资源与 memory 文件")]:::store
+    summary[(".abstract / .overview<br/>L0 / L1 派生摘要")]:::store
+    vector[("VikingDBManager<br/>向量与检索 metadata")]:::store
+    archive[("messages.jsonl + meta<br/>会话历史与完成标记")]:::store
+    queue[("QueueFS / workers<br/>持久化异步任务")]:::store
+  end
+  subgraph region_caller["调用方与上下文使用"]
+    receipt["task / semantic status<br/>回执需按阶段解释"]:::output
+  end
+  edit -->|"create / replace / append"| write
+  write -->|"受权限与路径锁约束写入"| files
+  write -->|"变更触发后处理策略"| freshness
+  freshness -->|"REFRESH_NOW；否则 pending"| queue
+  queue -->|"消费后重生成摘要"| summary
+  queue -->|"异步 embedding / upsert"| vector
+  archive -->|"提取输入与过去 overview"| extract
+  extract -->|"merge_op、version、来源和 links"| files
+  extract -->|"更新已写记忆索引"| vector
+  extract -->|"受影响 memory directories"| summary
+  edit -->|"DELETE 请求"| rm
+  rm -->|"先清理目标及子树索引"| vector
+  rm -->|"再删除文件/目录"| files
+  rm -->|"高层随后清理相关 memory refs"| resource_links
+  resource_links -->|"重新提交 / literal unlink"| files
+  rm -->|"刷新现存父目录"| freshness
+  edit -->|"选定 snapshot / 路径"| restore
+  restore -->|"应用文件恢复"| files
+  restore -->|"后台逐路径索引维护"| reindex
+  reindex -->|"reindex marker/file 或 delete"| vector
+  reindex -->|"completed 可掩盖子项日志错误"| receipt
+  write -->|"内容与派生处理状态分离"| receipt
+  session -->|"转移历史；保留 live tail"| archive
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

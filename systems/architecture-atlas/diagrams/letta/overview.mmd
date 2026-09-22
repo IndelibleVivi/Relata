@@ -1,0 +1,60 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_harness["Letta Code harness"]
+    entry["Turn 输入<br/>agent / conversation"]:::entry
+    backend["LocalBackend<br/>组织 turn 与状态"]:::process
+    compiler["compileLocalSystemPrompt<br/>编译已提交 memory"]:::process
+    bridge["PiStreamAdapter<br/>装配 model context"]:::process
+    edit["memory tool<br/>编辑／删除／提交"]:::process
+    recall["messages search<br/>CLI→FTS-lite / API"]:::process
+    sync["Remote MemFS sync<br/>post-turn push／rebase"]:::process
+    search_result["Search JSON 结果<br/>消息／scope／时间"]:::output
+  end
+  subgraph region_storage["本地持久状态"]
+    messages[("messages.jsonl<br/>保留消息与压缩事件")]:::store
+    active[("活动 conversation<br/>摘要＋保留尾部")]:::store
+    memfs[("MemFS Git HEAD<br/>agent 的提交记忆")]:::store
+    compiled[("system-prompt.json<br/>conversation 编译状态")]:::store
+  end
+  subgraph region_provider["模型／provider 边界"]
+    model[["模型／provider<br/>生成文本与调用<br/>〔未知〕"]]:::model
+    class model unknown
+  end
+  subgraph region_background["后台 reflection 支路"]
+    reflection["Reflection subagent<br/>后台候选改写"]:::process
+  end
+  subgraph region_remote["Cloud／API 后端"]
+    cloud["Cloud／API 状态<br/>存储与索引未知<br/>〔未知〕"]:::external
+    class cloud unknown
+  end
+  entry -->|"输入＋agent/conversation ID"| backend
+  backend -->|"持久消息与 stream 结果"| messages
+  backend -->|"输入加入当前消息列表"| active
+  active -->|"取当前 in-context 消息"| backend
+  backend -->|"送历史＋已解析 prompt"| bridge
+  memfs -->|"读取 git HEAD 内容"| compiler
+  compiler -->|"保存编译内容与 revision"| compiled
+  compiled -->|"system prompt／memory update"| bridge
+  bridge -->|"context＋tools＋model options"| model
+  model -->|"返回生成 stream"| bridge
+  edit -->|"按路径提交 reason／author"| memfs
+  messages -->|"按 scope 筛选历史文本"| recall
+  reflection -->|"仅 integration 成功后合并"| memfs
+  memfs -->|"remote 模式待推送 commits"| sync
+  sync -->|"push；非快进尝试 rebase"| cloud
+  recall -->|"API backend 改走远程查询"| cloud
+  recall -->|"返回并输出命中 JSON"| search_result
+  model -.->|"若选择 memory 工具调用"| edit
+  search_result -.->|"若被 recall 调用则供阅读"| model
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

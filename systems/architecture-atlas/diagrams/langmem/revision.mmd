@@ -1,0 +1,62 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_app["调用方 / agent harness"]
+    input["messages + config<br/>调用方输入"]:::entry
+    policy{"Schemas + flags<br/>动作与对象边界"}:::decision
+    promptout["Updated prompt<br/>由调用方采用"]:::output
+    derivatives["History / 已用 context<br/>应用持有的衍生物<br/>〔推断〕"]:::external
+    class derivatives inferred
+  end
+  subgraph region_lib["LangMem library"]
+    manage["manage_memory<br/>创建 / 覆盖 / 删除"]:::process
+    manager["MemoryStoreManager<br/>检索后整理并写回"]:::process
+    select["Candidate selection<br/>去重 / score / top-k"]:::process
+    extractor["MemoryManager<br/>生成对象变更"]:::process
+    phases["MemoryPhase[]<br/>可选逐阶段整理"]:::process
+    delta["final_puts / deletes<br/>映射回原 key"]:::process
+    optimizer["Prompt optimizer<br/>行为指令改写"]:::process
+    stateful["update_general<br/>可选 prompt 存储图"]:::process
+  end
+  subgraph region_storage["外部 Store / runtime"]
+    store[("BaseStore<br/>namespace / key / value")]:::store
+    backend["Store adapter<br/>索引 / TTL / 耐久性"]:::external
+    promptstore[("Stored prompt<br/>独立 key 的 data")]:::store
+  end
+  subgraph region_models["模型 / Trustcall 依赖"]
+    llm[["Chat model + Trustcall<br/>推断 / 结构化输出"]]:::model
+  end
+  input -->|"应用选择 schema / scope / flags"| policy
+  policy -->|"actions_permitted + 类型约束"| manage
+  input -->|"显式 ID + update/delete"| manage
+  manage -->|"同 key 覆盖 / 删除"| store
+  policy -->|"factory defaults / phase 配置"| manager
+  input -->|"新事实 / 更正 conversation"| manager
+  manager -->|"搜索有限 relevant existing"| select
+  store -->|"返回候选及旧内容"| select
+  select -->|"仅选中对象参与修订"| extractor
+  extractor -->|"提示判定过时 / enrichment"| llm
+  extractor -->|"可选局部 consolidation"| phases
+  extractor -->|"新对象 / 改写 / RemoveDoc"| delta
+  phases -->|"合并后的变化与删除 IDs"| delta
+  delta -->|"改变内容才 put；映射 ID delete"| store
+  store -->|"删除 / TTL 实际语义委托"| backend
+  input -->|"原 prompt + feedback + trajectories"| optimizer
+  optimizer -->|"模型改写的 prompt 候选"| promptout
+  input -->|"另一入口：messages + feedback"| stateful
+  promptstore -->|"读取当前 prompt data"| stateful
+  stateful -->|"判断 update_prompt 与新文本"| llm
+  stateful -->|"有条件覆盖 data；index=False"| promptstore
+  store -.->|"未见事实删除→prompt 失效传播"| promptstore
+  store -.->|"未见 memory delete→history 清除"| derivatives
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

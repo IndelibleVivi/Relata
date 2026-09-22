@@ -1,0 +1,53 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_harness["Evaluation harness"]
+    harness["Evaluation harness<br/>每 sample 一个实例"]:::entry
+    prompt["answer_question<br/>构造 QA context"]:::process
+    output["Prediction + metrics<br/>日志与结果 JSON"]:::output
+  end
+  subgraph region_native["Robust memory layer"]
+    construct["RobustMemoryNote<br/>构造与 metadata"]:::process
+    evolve["process_memory<br/>决策与条件演化"]:::process
+    notes[("memories<br/>UUID → MemoryNote")]:::store
+    index[("SimpleEmbeddingRetriever<br/>corpus + embeddings")]:::store
+    expand["find_related_memories_raw<br/>top-k + 单跳链接"]:::process
+  end
+  subgraph region_models["模型执行边界"]
+    encoder[["SentenceTransformer<br/>编码与 cosine search"]]:::model
+    controller["RobustLLMController<br/>同步模型调用"]:::process
+    backend["模型后端<br/>语义判断与生成<br/>〔未知〕"]:::external
+    class backend unknown
+  end
+  subgraph region_disk["Harness 本地派生文件"]
+    cache[("三文件 cache<br/>notes / index / vectors")]:::store
+  end
+  harness -->|"逐 turn content + session time"| construct
+  construct -->|"请求 keywords / context / tags"| controller
+  construct -->|"新 note + metadata"| evolve
+  evolve -->|"以 content 找 5 个邻居"| index
+  evolve -->|"演化决策及条件更新请求"| controller
+  controller -->|"prompt / API call"| backend
+  backend -.->|"生成 response"| controller
+  evolve -->|"新 note 入库及改写邻居"| notes
+  notes -->|"append；threshold 时重建"| index
+  index -->|"文本和 query 编码"| encoder
+  prompt -->|"生成 keywords 后检索"| expand
+  index -->|"cosine top-k 行号"| expand
+  notes -->|"当前对象 + links 单跳展开"| expand
+  expand -->|"拼接 raw_context"| prompt
+  prompt -->|"category-specific QA prompt"| controller
+  controller -->|"response 解析和评估"| output
+  notes -->|"harness pickle save / restore"| cache
+  index -->|"pickle + npy save / load"| cache
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

@@ -20,22 +20,6 @@ A bounded source study of Tideline Memory identity injection, narratives, amendm
 
 **INFERRED**：它适合研究“过去如何变成当前 agent 状态”，比单一向量库多出了身份、人物画像、开放线索和理解演进。但该 commit 的主动搜索、自动注入、维护扫描并未消费完全相同的记忆状态；“存过”与“下次会用到”仍有明显距离。README 的“任意规模准确检索、无压缩、不遗忘”仅是 **SOURCE-CLAIMED**，不能当成结果。[E1]
 
-```mermaid
-flowchart TD
-    H[运行时对话 hooks] --> C[context 原始文本片段]
-    C --> L[LLM 固化 / session epilogue]
-    L --> N[narratives + source_links]
-    N -->|memory_amend| A[append-only amendments]
-    A -->|重建 / 升格| T[机械轨迹 → DREAM 自然语言轨迹]
-    N -. 维护工作流 .-> P[画像 / self-concept / snapshot / threads]
-    P --> I[会话身份注入]
-    N --> R[逐轮 provider 唤起]
-    T -->|T1 命中后显示| R
-    A --> S[MCP 主动搜索与回显]
-    C --> S
-    N --> S
-```
-
 **写入与保留 — SOURCE-OBSERVED。** `memory_write` 接收 gesture、背景、moment、cognition_direction、tags、entities_role 和 source_links；模型或调用者选择内容与 importance/emotional/unresolved，代码按 tag 频次算 recurrence，生成向量并写 SQLite。source_links 是可选 JSON ID 数组，未核验指向的证据是否支持叙述。一般写入按四维加权，并传播旧条目的 recurrence；这是频次机制，不是事实确认。[E2]
 
 provider 的 `sync_turn` 保存 USER/ASSISTANT 前缀与 session metadata，但每条正文截至 2000 字符、向量只取前 500；压缩前及会话结束补录也截断。`_extract_conversation` 按正文前 200 字去重、丢弃少于 10 字的消息；虽然注释说过滤 tool，实际只明确排除 system。因此短促纠正、长消息尾部、相同开头的不同发言都可能损失，工具文本也可能进入补录。[E3] 批量导入另走按周挑选片段的 summary 路径，并非无损日志导入。[E4]
@@ -46,7 +30,9 @@ provider 的 `sync_turn` 保存 USER/ASSISTANT 前缀与 session metadata，但�
 
 逐轮 T1 取 query 前 500 字，对最近最多 2000 条原 narrative 向量做 cosine，阈值 0.25，按会话去重后取 3 条。若 embedding 失败或无可扫描 narrative，直接返回，未进入 T4；只有 top 少于 2 时才做原 narrative FTS fallback。README 所说 T1 最近 100 条、无 embedding 时退化搜索，需要区分 MCP 与 provider。[E7] MCP `memory_search` 确实合并 context、narrative、amendment 的关键词与向量命中，按 narrative ID 收敛；返回材料后是否核查来源、适用范围与矛盾，由当前模型决定。[E8]
 
-**修订与维护 — SOURCE-OBSERVED。** narrative 语义本体不改，`memory_amend` 追加修订，另存修订向量，再重建机械轨迹；新修订使已升格轨迹回到 mech。MCP 回显按时序展示全部修订；所谓 effective text 是原文加修订串接，不是确定性裁决后的唯一事实。轨迹存最近 12 段、自动注入最多 6 段；DREAM 被提示保留原事件时间，但写入校验只要求非空 ts/text，不能保证模型没改时间或含义。[E9]
+图集补读还定位一个限定条件的静态缺口：provider 模块定义 `_EMBED_KEY/_EMBED_MODEL`，远程 embedding 请求却引用 `_EMB_KEY/_EMB_MODEL`。在非本地 endpoint、模块未修改且没有外部注入这些 globals 的条件下，该路径会触发被捕获的 NameError，返回空向量，再使 T1 提前退出。MCP server 自己定义了正确的 `_EMB_*`，不能把这项判断扩大到 MCP 或所有部署；本研究没有运行复现。[provider 配置](https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L58-L64)；[远程调用与异常](https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L166-L202)；[T1 退出](https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L434-L442)；[MCP 独立配置](https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L776-L782)。
+
+**修订与维护 — SOURCE-OBSERVED。** narrative 语义本体不改；`memory_amend` 先 INSERT 并 commit 修订，再 best-effort 写修订向量、重建机械轨迹，相关异常会被捕获。这不是跨派生状态的原子提交；仅在轨迹重建成功时，新修订才使已升格轨迹回到 mech。返回的修订行数不能证明向量与轨迹都已更新。MCP 回显按时序展示全部修订；所谓 effective text 是原文加修订串接，不是确定性裁决后的唯一事实。轨迹存最近 12 段、自动注入最多 6 段；DREAM 被提示保留原事件时间，但写入校验只要求非空 ts/text，不能保证模型没改时间或含义。[E9]
 
 维护由独立脚本和 LLM prompt 配合：重建主题/软聚类、刷新权重、查冲突候选、改画像、写线索和梦。prompt 要求画像“更新不叠加”，代码通过覆盖保存最新版，旧版最多留 30 份。**SOURCE-OBSERVED** 的 anti-inflation 是最近 20 条平均权重超 0.7 后同比缩放至约 0.6；它控制排名幅度，不控制总存储量或叙事偏差。梦的 importance=1 也没有形成检索隔离区。[E10]
 
@@ -74,7 +60,7 @@ provider 的 `sync_turn` 保存 USER/ASSISTANT 前缀与 session metadata，但�
 
 实际完成：只 clone 公开上游、用 git 记录 HEAD/时间、用 rg/sed/nl 阅读和交叉追踪。**未执行任何仓库脚本、fixtures、provider 或服务，未安装依赖、未访问真实 DB、未调用模型/embedding。** 因而以上 SOURCE-OBSERVED 均为静态源码观察；性能、安装可用性、harness 实际触发、长期回答质量均 **UNVERIFIED**。
 
-主要阅读路径：README → server schema/tool dispatch/search/amend/trajectory → provider 的 identity/prefetch/bridge/sync/end → epilogue → DREAM 三份 prompts → scan_unindexed/scan_conflicts → import_sessions、memory_mirror、Kimi hook。server 向量重试/cache 内部、soft_clusters 数学实现、实体图所有解析分支、backfill 及 fixture 全文未完整精读；仅搜索 fixture 的相关入口，未将其当成通过的测试。Dockerfile、LICENSE、外部 Hermes/Kimi runtime、历史 commit、私有 persona、生产记录均未研究。早期一次大块命令输出有截断，核心 lifecycle 区域随后按较小段重读；未读部分不支持运行结论。
+主要阅读路径：README → server schema/tool dispatch/search/amend/trajectory → provider 的 identity/prefetch/bridge/sync/end → epilogue → DREAM 三份 prompts → scan_unindexed/scan_conflicts → import_sessions、memory_mirror、Kimi hook。图集补读 provider embedding 配置/调用和 amendment commit/异常路径，另核对 backfill 的入口跳过条件；完整引用见[图模型](../architecture-atlas/models/tideline-memory.json)。server 向量重试/cache 内部、soft_clusters 数学实现、实体图所有解析分支、backfill 及 fixture 全文未完整精读；仅搜索 fixture 的相关入口，未将其当成通过的测试。Dockerfile、LICENSE、外部 Hermes/Kimi runtime、历史 commit、私有 persona、生产记录均未研究。早期一次大块命令输出有截断，核心 lifecycle 区域随后按较小段重读；未读部分不支持运行结论。
 
 ## Pinned evidence
 
@@ -107,3 +93,11 @@ provider 的 `sync_turn` 保存 USER/ASSISTANT 前缀与 session metadata，但�
 [E11]: https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/scripts/scan_unindexed.py#L39-L137
 [E12]: https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L1078-L1466
 [E13]: https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/prompts/dream_solidify.md#L74-L141
+
+## 架构三视图
+
+[打开交互图集](../architecture-atlas/index.html#tideline-memory/overview) · [总览 SVG](../architecture-atlas/diagrams/tideline-memory/overview.svg) · [写入到使用 SVG](../architecture-atlas/diagrams/tideline-memory/flow.svg) · [修订与控制 SVG](../architecture-atlas/diagrams/tideline-memory/revision.svg) · [可编辑模型与源码证据](../architecture-atlas/models/tideline-memory.json)
+
+![tideline-memory 全景与边界](../architecture-atlas/diagrams/tideline-memory/overview.svg)
+
+图中“已读”表示固定版本的静态源码观察；“推断”和“未知”分别保留条件与未检查边界。三幅图覆盖不同问题，不等于全仓审计。[图例与阅读方法](../architecture-atlas/README.md)。

@@ -16,6 +16,8 @@ jobs:
           persist-credentials: false
       - name: Public repository checks
         run: python3 -B tools/check_repo.py
+      - name: Architecture atlas source and generated-artifact consistency
+        run: node systems/architecture-atlas/build.cjs --check
       - name: Standard-library regression tests
         run: python3 -B -m unittest discover -s tests -v
       - name: Offline end-to-end rehearsal and evidence verification

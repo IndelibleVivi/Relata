@@ -1,0 +1,1399 @@
+{
+  "id": "a-mem",
+  "name": "A-Mem (paper reproduction)",
+  "repository": "https://github.com/WujiangXu/A-mem",
+  "commit": "0c8039f28fdcc08189a23c07a3437d9d2482f9c2",
+  "study_date": "2026-09-22",
+  "boundary": "固定 commit 的论文复现仓库；三图主路径为 README 推荐的 RobustAgenticMemorySystem + test_advanced_robust.py，共享 SimpleEmbeddingRetriever。original JSON-schema 路径在报告对照。静态源码，不含 A-mem-sys、商业同名项目或模型运行证据。",
+  "summary": "A-Mem 将每个输入构造为带 context、keywords、tags 的 note，以 embedding 找邻居，再让 LLM 决定新 note 的 links 和旧 note 的 metadata 演化。当前复现代码把 canonical UUID 字典、基于列表位置的 links、派生向量索引和 harness 三文件 cache 分开管理；演化改对象与重建索引并不同步。",
+  "mechanisms": [
+    "LLM note metadata",
+    "近邻触发 metadata 演化",
+    "embedding seeds + 单跳 links",
+    "计数触发全量重建",
+    "harness 管理 cache 与 QA"
+  ],
+  "strengths": [
+    "若模型能抽出有用概念，metadata 可提供原文之外的检索线索",
+    "若新事件能被近邻检索定位，旧 metadata 可随新语境更新",
+    "保留原 content 与时间，可区分输入文字与当前生成 context",
+    "小型研究流程可直接检查 notes、corpus 和 harness prompt"
+  ],
+  "limits": [
+    "旧 note metadata 与向量索引可在 threshold 前分离",
+    "UUID 对象与 positional links 缺少稳定引用统一",
+    "没有专用纠错、撤回、TTL、审计或跨派生删除路径",
+    "无运行验证；不能把论文结果或 robust 命名当作本 commit 的效果保证"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/README.md#L1-L7",
+      "note": "论文复现仓库与另一个 A-mem-sys 的明确边界"
+    },
+    {
+      "id": "S2",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/README.md#L82-L122",
+      "note": "original 与 robust 两条 evaluation 入口；缓存和 k-sweep 宣称"
+    },
+    {
+      "id": "S3",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L273-L345",
+      "note": "笔记 UUID、字段、metadata 提取、解析及启发式降级"
+    },
+    {
+      "id": "S4",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L352-L409",
+      "note": "canonical memories、写入顺序、evolution counter 与全量重建"
+    },
+    {
+      "id": "S5",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L411-L459",
+      "note": "embedding 索引位置映射与单跳 links 扩展"
+    },
+    {
+      "id": "S6",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L463-L540",
+      "note": "至多三次演化调用及直接写邻居 metadata"
+    },
+    {
+      "id": "S7",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer.py#L554-L610",
+      "note": "实际使用的 SimpleEmbeddingRetriever；拼接 corpus 与 cosine top-k"
+    },
+    {
+      "id": "S8",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer.py#L612-L664",
+      "note": "索引双文件 persistence 与从 notes 重建"
+    },
+    {
+      "id": "S9",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/test_advanced_robust.py#L53-L114",
+      "note": "harness 包装、question→keywords→raw_context；筛选 helper 未接入"
+    },
+    {
+      "id": "S10",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/test_advanced_robust.py#L115-L153",
+      "note": "按 QA category 造 prompt；category 5 有给定选项；模型返回"
+    },
+    {
+      "id": "S11",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/test_advanced_robust.py#L204-L250",
+      "note": "每 sample 实例、三文件 cache 与逐 turn 摄入"
+    },
+    {
+      "id": "S12",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/test_advanced_robust.py#L254-L313",
+      "note": "reference metrics、日志、结果 JSON"
+    },
+    {
+      "id": "S13",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L44-L66",
+      "note": "同步重试，至多三次尝试与指数 sleep"
+    },
+    {
+      "id": "S14",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L98-L206",
+      "note": "OpenAI/Ollama/SGLang/vLLM 调用边界"
+    },
+    {
+      "id": "S15",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L243-L266",
+      "note": "factory 与默认关闭的 connectivity check"
+    },
+    {
+      "id": "S16",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/llm_text_parsers.py#L128-L206",
+      "note": "分析、演化、连接和邻居更新的 prompt 合约"
+    },
+    {
+      "id": "S17",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/llm_text_parsers.py#L292-L377",
+      "note": "连接整数解析及邻居 ordinal block 解析"
+    },
+    {
+      "id": "S18",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/llm_text_parsers.py#L430-L511",
+      "note": "metadata repair 与偏英文 heuristic"
+    },
+    {
+      "id": "S19",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer.py#L666-L757",
+      "note": "original 同样选择 embedding-only；写入和重建"
+    },
+    {
+      "id": "S20",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer.py#L807-L898",
+      "note": "original 演化 JSON 和 positional links 读取"
+    },
+    {
+      "id": "S21",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer.py#L278-L401",
+      "note": "original metadata 分析与未绑定 re/e 异常路径"
+    },
+    {
+      "id": "S22",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/load_dataset.py#L8-L96",
+      "note": "QA、Turn IDs、session 时间和 caption 文本化"
+    },
+    {
+      "id": "S23",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/run_k_sweep.sh#L63-L100",
+      "note": "k-sweep 是外部实验进程并行；不是后台记忆任务"
+    },
+    {
+      "id": "S24",
+      "url": "https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer.py#L1-L29",
+      "note": "original imports 中没有 re"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": "全景与系统边界",
+      "question": "论文复现 harness、内存机制、模型和持久化分别负责什么？",
+      "reading_guide": "沿 harness→笔记构造→演化→canonical notes→检索→QA 读主链；注意模型往返与索引、磁盘 cache 都不等同于 canonical 内存对象。",
+      "omissions": [
+        "A-mem-sys 与同名商业产品不在边界内",
+        "模型内部、托管服务 retention、论文效果复现未检查",
+        "原始 JSON-schema 路径只在报告对照，不叠成一个运行时"
+      ],
+      "regions": [
+        {
+          "id": "harness",
+          "label": "Evaluation harness",
+          "responsibility": "sample 隔离、turn 选择、缓存和 QA 评估由调用方拥有",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10",
+            "S11",
+            "S12"
+          ]
+        },
+        {
+          "id": "native",
+          "label": "Robust memory layer",
+          "responsibility": "同步 notes、演化及索引读写",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "模型执行边界",
+          "responsibility": "源码可见 client/encoder 调用；模型内部未检查",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S14",
+            "S15"
+          ]
+        },
+        {
+          "id": "disk",
+          "label": "Harness 本地派生文件",
+          "responsibility": "notes pickle、index pickle、embedding npy 和评估结果",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S11",
+            "S12"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "harness",
+          "label": "Evaluation harness\n每 sample 一个实例",
+          "kind": "entry",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S11"
+          ],
+          "note": "当前图以 README 推荐 robust 路径为主。original 单独在报告比较。"
+        },
+        {
+          "id": "construct",
+          "label": "RobustMemoryNote\n构造与 metadata",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S16"
+          ],
+          "note": "content 原文保留；UUID；timestamp 来自 session 或当前时间。"
+        },
+        {
+          "id": "evolve",
+          "label": "process_memory\n决策与条件演化",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ],
+          "note": "先用新 note.content 找 5 个邻居；至多 3 次顺序 LLM 调用。无邻居直接返回。"
+        },
+        {
+          "id": "notes",
+          "label": "memories\nUUID → MemoryNote",
+          "kind": "store",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4",
+            "S6"
+          ],
+          "note": "canonical 内存对象；content、context、keywords、tags、links。无数据库事务或 event log。"
+        },
+        {
+          "id": "index",
+          "label": "SimpleEmbeddingRetriever\ncorpus + embeddings",
+          "kind": "store",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S7"
+          ],
+          "note": "派生索引。行号映射 list(memories.values())，不是 UUID 查询。document_ids 是全文→行号。"
+        },
+        {
+          "id": "encoder",
+          "label": "SentenceTransformer\n编码与 cosine search",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S7"
+          ],
+          "note": "默认 all-MiniLM-L6-v2；仅调用接口静态可见，未运行或下载权重。"
+        },
+        {
+          "id": "controller",
+          "label": "RobustLLMController\n同步模型调用",
+          "kind": "process",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S15"
+          ],
+          "note": "factory 选择 OpenAI/Ollama/SGLang/vLLM；具体模型行为未知。"
+        },
+        {
+          "id": "backend",
+          "label": "模型后端\n语义判断与生成",
+          "kind": "external",
+          "region": "models",
+          "status": "unknown",
+          "evidence": [],
+          "note": "模型推理与服务内存、保留策略在本次源码边界外。"
+        },
+        {
+          "id": "expand",
+          "label": "find_related_memories_raw\ntop-k + 单跳链接",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ],
+          "note": "拼接当前 canonical content/metadata；没有去重或全局 token budget；links 直接当列表位置。"
+        },
+        {
+          "id": "prompt",
+          "label": "answer_question\n构造 QA context",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ],
+          "note": "question 先生成 keywords；raw_context 直接使用，retrieve_memory_llm helper 不在 active path。"
+        },
+        {
+          "id": "cache",
+          "label": "三文件 cache\nnotes / index / vectors",
+          "kind": "store",
+          "region": "disk",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S11"
+          ],
+          "note": "harness 逐文件保存，不是原子快照；目录依赖 backend/model，文件按 sample index。"
+        },
+        {
+          "id": "output",
+          "label": "Prediction + metrics\n日志与结果 JSON",
+          "kind": "output",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S12"
+          ],
+          "note": "这是评估输出，不是已验证的 production agent 行为。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "harness",
+          "to": "construct",
+          "label": "逐 turn content + session time",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ]
+        },
+        {
+          "from": "construct",
+          "to": "controller",
+          "label": "请求 keywords / context / tags",
+          "status": "observed",
+          "evidence": [
+            "S3"
+          ]
+        },
+        {
+          "from": "construct",
+          "to": "evolve",
+          "label": "新 note + metadata",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "evolve",
+          "to": "index",
+          "label": "以 content 找 5 个邻居",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S7"
+          ]
+        },
+        {
+          "from": "evolve",
+          "to": "controller",
+          "label": "演化决策及条件更新请求",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ]
+        },
+        {
+          "from": "controller",
+          "to": "backend",
+          "label": "prompt / API call",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ]
+        },
+        {
+          "from": "backend",
+          "to": "controller",
+          "label": "生成 response",
+          "status": "unknown",
+          "evidence": [
+            "S14"
+          ]
+        },
+        {
+          "from": "evolve",
+          "to": "notes",
+          "label": "新 note 入库及改写邻居",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S6"
+          ]
+        },
+        {
+          "from": "notes",
+          "to": "index",
+          "label": "append；threshold 时重建",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "index",
+          "to": "encoder",
+          "label": "文本和 query 编码",
+          "status": "observed",
+          "evidence": [
+            "S7"
+          ]
+        },
+        {
+          "from": "prompt",
+          "to": "expand",
+          "label": "生成 keywords 后检索",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "index",
+          "to": "expand",
+          "label": "cosine top-k 行号",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S7"
+          ]
+        },
+        {
+          "from": "notes",
+          "to": "expand",
+          "label": "当前对象 + links 单跳展开",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ]
+        },
+        {
+          "from": "expand",
+          "to": "prompt",
+          "label": "拼接 raw_context",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "prompt",
+          "to": "controller",
+          "label": "category-specific QA prompt",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "controller",
+          "to": "output",
+          "label": "response 解析和评估",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S12"
+          ]
+        },
+        {
+          "from": "notes",
+          "to": "cache",
+          "label": "harness pickle save / restore",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ]
+        },
+        {
+          "from": "index",
+          "to": "cache",
+          "label": "pickle + npy save / load",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S11"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "RobustAgenticMemorySystem.memories",
+          "writers": "add_note 与 process_memory；harness 可整体 restore",
+          "changes": "UUID 对象为 canonical；向量行号与 link 整数依赖字典顺序",
+          "limits": "没有 transaction、版本化或删除传播合约",
+          "evidence": [
+            "S3",
+            "S4",
+            "S5",
+            "S6",
+            "S11"
+          ]
+        },
+        {
+          "owner": "Evaluation harness",
+          "writers": "evaluate_dataset",
+          "changes": "每 sample 独立实例；摄入结束缓存，再 QA",
+          "limits": "不是多用户 scope enforcement；结果只证明执行路径的输出，当前研究未执行",
+          "evidence": [
+            "S11",
+            "S12"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "写入、选择与回答链路",
+      "question": "一次 turn 如何成为可检索上下文，一道 QA 如何消费它？",
+      "reading_guide": "先走同步 add_note 分支，再走 question→keywords→top-k→单跳扩展→QA。threshold 是写入栈内的计数判断，不是后台 consolidation worker。",
+      "omissions": [
+        "外部 k-sweep 可并行启动实验进程，但不是内存队列/调度器",
+        "模型具体 tokenization、权重和响应不可由静态源码验证"
+      ],
+      "regions": [
+        {
+          "id": "harness",
+          "label": "Evaluation harness",
+          "responsibility": "sample 隔离、turn 选择、缓存和 QA 评估由调用方拥有",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10",
+            "S11",
+            "S12"
+          ]
+        },
+        {
+          "id": "native",
+          "label": "Robust memory layer",
+          "responsibility": "同步 notes、演化及索引读写",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "模型执行边界",
+          "responsibility": "源码可见 client/encoder 调用；模型内部未检查",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S14",
+            "S15"
+          ]
+        },
+        {
+          "id": "disk",
+          "label": "Harness 本地派生文件",
+          "responsibility": "notes pickle、index pickle、embedding npy 和评估结果",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S11",
+            "S12"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "harness",
+          "label": "Evaluation harness\n每 sample 一个实例",
+          "kind": "entry",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S11"
+          ],
+          "note": "当前图以 README 推荐 robust 路径为主。original 单独在报告比较。"
+        },
+        {
+          "id": "add",
+          "label": "add_note\n同步写入入口",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "note": "construct → evolve → store UUID object → append vector row → 可选 rebuild。"
+        },
+        {
+          "id": "construct",
+          "label": "RobustMemoryNote\n构造与 metadata",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S16"
+          ],
+          "note": "content 原文保留；UUID；timestamp 来自 session 或当前时间。"
+        },
+        {
+          "id": "evolve",
+          "label": "process_memory\n决策与条件演化",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ],
+          "note": "先用新 note.content 找 5 个邻居；至多 3 次顺序 LLM 调用。无邻居直接返回。"
+        },
+        {
+          "id": "notes",
+          "label": "memories\nUUID → MemoryNote",
+          "kind": "store",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4",
+            "S6"
+          ],
+          "note": "canonical 内存对象；content、context、keywords、tags、links。无数据库事务或 event log。"
+        },
+        {
+          "id": "index",
+          "label": "SimpleEmbeddingRetriever\ncorpus + embeddings",
+          "kind": "store",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S7"
+          ],
+          "note": "派生索引。行号映射 list(memories.values())，不是 UUID 查询。document_ids 是全文→行号。"
+        },
+        {
+          "id": "gate",
+          "label": "evo_cnt % threshold\n默认每 100 次演化",
+          "kind": "decision",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "note": "只在 process_memory 返回 True 时递增；不是每 100 笔、时间调度或异步任务。"
+        },
+        {
+          "id": "rebuild",
+          "label": "consolidate_memories\n全量重建索引",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S8"
+          ],
+          "note": "不是合并/删除 notes；从当前 content+metadata 重新编码，回退模型名是 all-MiniLM-L6-v2。"
+        },
+        {
+          "id": "question",
+          "label": "QA question\ncategory + reference",
+          "kind": "entry",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S12"
+          ],
+          "note": "category 5 传入 final_answer 作为候选；不能把所有 category 当无候选 free recall。"
+        },
+        {
+          "id": "query",
+          "label": "generate_query_llm\nquestion → keywords",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ],
+          "note": "由 harness 单独的 retriever_llm 发起生成。"
+        },
+        {
+          "id": "expand",
+          "label": "find_related_memories_raw\ntop-k + 单跳链接",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ],
+          "note": "拼接当前 canonical content/metadata；没有去重或全局 token budget；links 直接当列表位置。"
+        },
+        {
+          "id": "prompt",
+          "label": "answer_question\n构造 QA context",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ],
+          "note": "question 先生成 keywords；raw_context 直接使用，retrieve_memory_llm helper 不在 active path。"
+        },
+        {
+          "id": "controller",
+          "label": "RobustLLMController\n同步模型调用",
+          "kind": "process",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S15"
+          ],
+          "note": "factory 选择 OpenAI/Ollama/SGLang/vLLM；具体模型行为未知。"
+        },
+        {
+          "id": "output",
+          "label": "Prediction + metrics\n日志与结果 JSON",
+          "kind": "output",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S12"
+          ],
+          "note": "这是评估输出，不是已验证的 production agent 行为。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "harness",
+          "to": "add",
+          "label": "Speaker + turn.text；session 时间",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ]
+        },
+        {
+          "from": "add",
+          "to": "construct",
+          "label": "创建 UUID note",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4"
+          ]
+        },
+        {
+          "from": "construct",
+          "to": "controller",
+          "label": "metadata 分析；异常 heuristic",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S18"
+          ]
+        },
+        {
+          "from": "construct",
+          "to": "evolve",
+          "label": "已构造 note",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "evolve",
+          "to": "index",
+          "label": "content cosine search，k=5",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S7"
+          ]
+        },
+        {
+          "from": "evolve",
+          "to": "controller",
+          "label": "顺序 decision / strengthen / update",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ]
+        },
+        {
+          "from": "evolve",
+          "to": "notes",
+          "label": "邻居原位更新；新 note 保存",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S6"
+          ]
+        },
+        {
+          "from": "notes",
+          "to": "index",
+          "label": "追加新 note 拼接文档",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "evolve",
+          "to": "gate",
+          "label": "True 时 evo_cnt += 1",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "gate",
+          "to": "rebuild",
+          "label": "每 threshold 次演化触发",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "notes",
+          "to": "rebuild",
+          "label": "读取当前所有 note metadata",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "rebuild",
+          "to": "index",
+          "label": "替换 corpus 和 embeddings",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "question",
+          "to": "query",
+          "label": "原始 question",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "query",
+          "to": "controller",
+          "label": "请求关键词字符串",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "query",
+          "to": "expand",
+          "label": "keywords，k=retrieve_k",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "index",
+          "to": "expand",
+          "label": "cosine top-k 行号",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S7"
+          ]
+        },
+        {
+          "from": "notes",
+          "to": "expand",
+          "label": "按行号取正文 + 跟 links",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ]
+        },
+        {
+          "from": "expand",
+          "to": "prompt",
+          "label": "raw_context，无二次筛选",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "question",
+          "to": "prompt",
+          "label": "category；C5 候选值",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "prompt",
+          "to": "controller",
+          "label": "拼上下文并发 QA 请求",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "controller",
+          "to": "output",
+          "label": "prediction + 与 reference 比较",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S12"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "同步调用栈",
+          "writers": "harness/add_note/process_memory",
+          "changes": "模型调用和 retry sleep 都阻塞当前处理；每个 sample 先摄入全部 sessions 再 QA",
+          "limits": "无 active async memory worker；无邻居时跳过 robust evolution",
+          "evidence": [
+            "S6",
+            "S11",
+            "S13",
+            "S23"
+          ]
+        },
+        {
+          "owner": "上下文选择",
+          "writers": "SimpleEmbeddingRetriever 和 find_related_memories_raw",
+          "changes": "检索旧/当前向量后读当前 note；链接只单跳追加",
+          "limits": "k 仅限制 seed 数，不是最终 note/token 数；重复和越界 links 未验证",
+          "evidence": [
+            "S5",
+            "S7"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revision",
+      "title": "演化、派生状态与保留边界",
+      "question": "谁能改变笔记，改变后哪些索引、链接和缓存同步更新？",
+      "reading_guide": "新 note 触发模型建议，代码直接改对象。跟随 threshold 才到索引重建，再单独观察 harness cache；右侧缺口是源码没有给出的专用修正/删除路径。",
+      "omissions": [
+        "外部调用方自行修改 dict 或删除文件不是已实现的受支持生命周期",
+        "未运行 fault injection、cache mismatch 或纠错探针"
+      ],
+      "regions": [
+        {
+          "id": "harness",
+          "label": "Evaluation harness",
+          "responsibility": "sample 隔离、turn 选择、缓存和 QA 评估由调用方拥有",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10",
+            "S11",
+            "S12"
+          ]
+        },
+        {
+          "id": "native",
+          "label": "Robust memory layer",
+          "responsibility": "同步 notes、演化及索引读写",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "模型执行边界",
+          "responsibility": "源码可见 client/encoder 调用；模型内部未检查",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S14",
+            "S15"
+          ]
+        },
+        {
+          "id": "disk",
+          "label": "Harness 本地派生文件",
+          "responsibility": "notes pickle、index pickle、embedding npy 和评估结果",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S11",
+            "S12"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "add",
+          "label": "add_note\n同步写入入口",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "note": "construct → evolve → store UUID object → append vector row → 可选 rebuild。"
+        },
+        {
+          "id": "evolve",
+          "label": "process_memory\n决策与条件演化",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ],
+          "note": "先用新 note.content 找 5 个邻居；至多 3 次顺序 LLM 调用。无邻居直接返回。"
+        },
+        {
+          "id": "controller",
+          "label": "RobustLLMController\n同步模型调用",
+          "kind": "process",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S15"
+          ],
+          "note": "factory 选择 OpenAI/Ollama/SGLang/vLLM；具体模型行为未知。"
+        },
+        {
+          "id": "strengthen",
+          "label": "STRENGTHEN\n新 note 链接与 tags",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S17"
+          ],
+          "note": "写的是新 note.links；没有自动反向边；整数未做范围/去重校验。"
+        },
+        {
+          "id": "update",
+          "label": "UPDATE_NEIGHBOR\n改 context / tags",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S17"
+          ],
+          "note": "保持原 content/keywords；按选中邻居的 ordinal 更新，不记录演化历史。"
+        },
+        {
+          "id": "notes",
+          "label": "memories\nUUID → MemoryNote",
+          "kind": "store",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4",
+            "S6"
+          ],
+          "note": "canonical 内存对象；content、context、keywords、tags、links。无数据库事务或 event log。"
+        },
+        {
+          "id": "history",
+          "label": "evolution_history 等\n构造字段未推进",
+          "kind": "store",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "note": "evolution_history、retrieval_count、last_accessed、importance_score 在已读 active path 无更新/排序/保留作用。"
+        },
+        {
+          "id": "gate",
+          "label": "evo_cnt % threshold\n默认每 100 次演化",
+          "kind": "decision",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "note": "只在 process_memory 返回 True 时递增；不是每 100 笔、时间调度或异步任务。"
+        },
+        {
+          "id": "rebuild",
+          "label": "consolidate_memories\n全量重建索引",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S8"
+          ],
+          "note": "不是合并/删除 notes；从当前 content+metadata 重新编码，回退模型名是 all-MiniLM-L6-v2。"
+        },
+        {
+          "id": "index",
+          "label": "SimpleEmbeddingRetriever\ncorpus + embeddings",
+          "kind": "store",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S7"
+          ],
+          "note": "派生索引。行号映射 list(memories.values())，不是 UUID 查询。document_ids 是全文→行号。"
+        },
+        {
+          "id": "cache",
+          "label": "三文件 cache\nnotes / index / vectors",
+          "kind": "store",
+          "region": "disk",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S11"
+          ],
+          "note": "harness 逐文件保存，不是原子快照；目录依赖 backend/model，文件按 sample index。"
+        },
+        {
+          "id": "policy",
+          "label": "修正 / 删除 / TTL\n未实现专用路径",
+          "kind": "output",
+          "region": "native",
+          "status": "inferred",
+          "evidence": [
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ],
+          "note": "在所读内存实现中无专用 correction/delete/retention API；字段存在不等于政策。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "add",
+          "to": "evolve",
+          "label": "新 content 作为演化触发",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "evolve",
+          "to": "controller",
+          "label": "邻居内容与 metadata 送模型",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ]
+        },
+        {
+          "from": "controller",
+          "to": "strengthen",
+          "label": "选 STRENGTHEN 的连接/tag 结果",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ]
+        },
+        {
+          "from": "controller",
+          "to": "update",
+          "label": "选 UPDATE 的逐邻居结果",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ]
+        },
+        {
+          "from": "strengthen",
+          "to": "notes",
+          "label": "新 note.links += int；改 tags",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S6",
+            "S17"
+          ]
+        },
+        {
+          "from": "update",
+          "to": "notes",
+          "label": "旧 note.context/tags 原位覆盖",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ]
+        },
+        {
+          "from": "notes",
+          "to": "history",
+          "label": "字段仍保留初始化值",
+          "status": "inferred",
+          "evidence": [
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
+        },
+        {
+          "from": "evolve",
+          "to": "gate",
+          "label": "仅演化成功标记计数",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "gate",
+          "to": "rebuild",
+          "label": "达到 threshold 才全量重编",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "notes",
+          "to": "rebuild",
+          "label": "当前 content / metadata",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "rebuild",
+          "to": "index",
+          "label": "新索引替换旧索引",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "notes",
+          "to": "cache",
+          "label": "摄入结束 pickle notes",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ]
+        },
+        {
+          "from": "index",
+          "to": "cache",
+          "label": "分别 save index 与 npy",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S11"
+          ]
+        },
+        {
+          "from": "cache",
+          "to": "notes",
+          "label": "下次运行 restore notes",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ]
+        },
+        {
+          "from": "cache",
+          "to": "index",
+          "label": "load 索引；缺 index 时从 notes 重建",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S11"
+          ]
+        },
+        {
+          "from": "notes",
+          "to": "policy",
+          "label": "未提供更正/删除/TTL 合约",
+          "status": "inferred",
+          "evidence": [
+            "S3",
+            "S4",
+            "S5",
+            "S6"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "canonical note metadata",
+          "writers": "模型建议经 process_memory 直接应用",
+          "changes": "context/tags 被替换；content、keywords 与历史字段不随之修正",
+          "limits": "没有人审、provenance、revision ID、rollback；LLM reason 未保存成审计",
+          "evidence": [
+            "S3",
+            "S6",
+            "S16",
+            "S17"
+          ]
+        },
+        {
+          "owner": "派生 embeddings",
+          "writers": "add_note/consolidate_memories",
+          "changes": "新 note 即时编码；旧 note metadata 改动不即时重编",
+          "limits": "阈值前 corpus 与 canonical note 可不同；保存 cache 会保留该差异",
+          "evidence": [
+            "S4",
+            "S7",
+            "S8",
+            "S11"
+          ]
+        },
+        {
+          "owner": "links 的引用完整性",
+          "writers": "strengthen",
+          "changes": "存整数，读取时直接 list(memories.values())[neighbor]",
+          "limits": "并非 UUID edge；无去重/范围检查/反向传播。若外部改顺序或删 note，未定义修复",
+          "evidence": [
+            "S5",
+            "S6",
+            "S17"
+          ]
+        },
+        {
+          "owner": "磁盘派生文件",
+          "writers": "evaluate_dataset / retriever.save/load",
+          "changes": "notes pickle 与 index pickle、npy 独立保存和加载",
+          "limits": "无原子提交、dataset/commit schema identity 或清除 cascade；evo_cnt 不随 cache 保存",
+          "evidence": [
+            "S4",
+            "S8",
+            "S11"
+          ]
+        }
+      ]
+    }
+  ]
+}

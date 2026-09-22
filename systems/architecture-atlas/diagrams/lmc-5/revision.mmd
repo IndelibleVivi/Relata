@@ -1,0 +1,66 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_harness["调用方与部署接线"]
+    runtime["Agent runtime<br/>调用、使用返回上下文<br/>〔未知〕"]:::external
+    class runtime unknown
+    erasure["端到端遗忘协调<br/>本次未确认<br/>〔未知〕"]:::external
+    class erasure unknown
+  end
+  subgraph region_minimal["Minimal · SQLite core"]
+    min_curated[("memories<br/>X / Z / E / M 字段")]:::store
+    min_audit["run_z_audit()<br/>登记待审冲突"]:::process
+    min_pending[("z_conflict_audits<br/>pending 审计记录")]:::store
+    min_patrol["patrol()<br/>只读生命周期建议"]:::process
+    min_gate{"metabolic_gate()<br/>current / 冷热 / 隔离"}:::decision
+    current_state[("current_state_items<br/>显式刷新、TTL 投影")]:::store
+  end
+  subgraph region_production["Production reference · PostgreSQL"]
+    pg_curated[("lmc5_curated_memories<br/>XYZEM 主记录")]:::store
+    e_guard{"E authorship guard<br/>首写完整、修改拒绝"}:::decision
+    e_proposals[("lmc5_e_axis_proposals<br/>非权威建议队列")]:::store
+    pg_audit[("lmc5_z_audit<br/>判决与证据待审")]:::store
+    pg_rel[("lmc5_memory_relations<br/>类型、强度、有效期")]:::store
+    pg_patrol["run_patrol()<br/>可注销坏关系"]:::process
+    pg_vectors[("lmc5_vectors<br/>halfvec + text_preview")]:::store
+    nap["run_nap()<br/>补向量、连接孤岛"]:::process
+    vector_delete["delete_vector()<br/>按 owner 删所有版本"]:::process
+    narrative["NarrativeTimeline<br/>种子 → 叙事索引"]:::process
+    archive[("lmc5_cold_storage<br/>保留归档内容")]:::store
+  end
+  runtime -->|"同 fact_key current 写入替代旧值"| min_curated
+  min_curated -->|"当前/review 冲突候选"| min_audit
+  min_audit -->|"apply 仅登记 pending"| min_pending
+  min_curated -->|"读取 facts / 生命周期状态"| min_patrol
+  min_patrol -->|"返回建议；不改数据库"| runtime
+  min_curated -->|"status / age / hits / 保护条件"| min_gate
+  min_gate -->|"允许/降分/排除；非删除"| runtime
+  min_curated -->|"显式 refresh_current_state 投影"| current_state
+  runtime -->|"首写 E 作者与初始 priority"| e_guard
+  e_guard -->|"允许完整 INSERT；拒绝 E 修改"| pg_curated
+  runtime -.->|"dispatcher → submit callback"| e_proposals
+  e_proposals -.->|"交主 agent 阅读、决定 successor"| runtime
+  pg_audit -.->|"pending 判决待部署方 review"| runtime
+  runtime -.->|"部署 z_audit callback 写判决"| pg_audit
+  runtime -.->|"批准与应用事实：实现待部署"| pg_curated
+  pg_rel -->|"检查重复/孤儿/dead contradiction"| pg_patrol
+  pg_patrol -->|"apply 令有效期结束"| pg_rel
+  pg_curated -->|"仅 current 中找缺向量/无活边"| nap
+  nap -.->|"经 callback 补缺失向量"| pg_vectors
+  nap -.->|"经 callback 补 same_topic 0.45"| pg_rel
+  runtime -->|"显式指定 owner_type / ID"| vector_delete
+  vector_delete -->|"删除该 owner 所有 model/dim"| pg_vectors
+  pg_curated -.->|"loader 供种子；输出 seed IDs"| narrative
+  runtime -.->|"部署方选择归档并落库"| archive
+  runtime -.->|"跨 raw / 派生 / 缓存清除请求"| erasure
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

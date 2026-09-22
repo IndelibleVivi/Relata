@@ -11,7 +11,7 @@
 
 通用 agent memory 与成人长期人机亲密关系都有独立研究地位。亲密与浪漫关系继续是 founding focus；现有 Case Lab 将普通生活、共同关系经历、项目决策与材料，以及跨模型和实例的 companion/system continuity 作为长期混合领域记忆生态研究。普通事件无需被加工成浪漫象征才有研究价值。
 
-[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 确立了这次定位扩展。定义、架构研究、综合文章与批评和 cases 一样，都是研究产出。[Agent-memory inquiry](research/agent-memory-inquiry.md) 连接独立文章方向、选定的公开 AMS 研究与[五份有界源码研究](systems/source-studies/README.md)。这些是研究 drafts，尚不是穷尽综述或比较性能结果。
+[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 确立了这次定位扩展。定义、架构研究、综合文章与批评和 cases 一样，都是研究产出。[Agent-memory inquiry](research/agent-memory-inquiry.md) 连接独立文章方向、选定的公开 AMS 研究与[十份有界源码研究](systems/source-studies/README.md)。[架构图集](systems/architecture-atlas/README.md) 提供三十幅绑定源码的 SVG 与离线交互 reader。这些是研究 drafts，尚不是穷尽综述或比较性能结果。
 
 Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或适当地保持沉默。事实回忆、时间推理、来源忠实、抗干扰、scope isolation 和 full-history/full-search controls 继续有价值，但需要说明各自的观察边界。
 

@@ -1,0 +1,59 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_caller["调用应用与官方示例"]
+    revision_input["新 episode / 删除 UUID<br/>调用者发起修订"]:::entry
+    projection["Context projection<br/>示例仅取 edge.fact"]:::process
+  end
+  subgraph region_core["Graphiti OSS 异步库"]
+    edge_resolve["extract / resolve edges<br/>候选与语义解析"]:::process
+    exact{"Exact fact shortcut<br/>同文 + 同端点"}:::decision
+    temporal["Temporal resolution<br/>裁剪有效区间"]:::process
+    hydrate["Entity hydration<br/>属性 / 摘要更新"]:::process
+    removal["remove_episode()<br/>按 UUID 读取关联"]:::process
+    removal_decision{"首次来源 / 独占提及<br/>选择删除集合"}:::decision
+    delete_calls["Edge / Node delete<br/>随后删除 episode"]:::process
+    derivative_gap["派生撤回边界<br/>该入口未重建<br/>〔推断〕"]:::output
+    class derivative_gap inferred
+    filter{"SearchFilters<br/>调用者选择时间语义"}:::decision
+    search["search() / search_()<br/>边或多层对象"]:::process
+  end
+  subgraph region_models["可注入模型客户端"]
+    conflict_llm[["LLM duplicate / conflict<br/>候选索引裁决"]]:::model
+  end
+  subgraph region_storage["调用方部署的图数据库"]
+    facts[("EntityEdge<br/>事实 / 来源 / 双时间")]:::store
+    entities[("EntityNode<br/>摘要 / 属性 / 向量")]:::store
+    episodes[("EpisodicNode<br/>正文与来源记录")]:::store
+  end
+  revision_input -->|"新 episode 走原生解析"| edge_resolve
+  facts -->|"召回重复 / 矛盾候选"| edge_resolve
+  edge_resolve -->|"比较规范化事实与两端 UUID"| exact
+  exact -->|"命中：复用边、仅追加来源"| facts
+  exact -->|"有候选且非 exact：请求裁决"| conflict_llm
+  conflict_llm -->|"返回重复与矛盾候选索引"| temporal
+  temporal -->|"保留旧边，写 invalid_at / expired_at"| facts
+  edge_resolve -->|"仅 new_edges 参与摘要生成"| hydrate
+  hydrate -->|"追加事实或 LLM 更新摘要"| entities
+  revision_input -->|"显式 episode_uuid"| removal
+  episodes -->|"entity_edges 与 MENTIONS"| removal
+  removal -->|"边来源顺序与实体提及计数"| removal_decision
+  removal_decision -->|"首来源边 / 仅一次提及实体"| delete_calls
+  delete_calls -->|"删除选中边（可有其他来源）"| facts
+  delete_calls -->|"删除仅该 episode 提及的实体"| entities
+  delete_calls -->|"最后删除原 episode"| episodes
+  removal -.->|"未安排重算 / 恢复（边界）"| derivative_gap
+  facts -->|"历史与当前边均可能供检索"| search
+  filter -->|"调用者显式选择时间条件"| search
+  search -->|"投影决定时间/来源是否交给 agent"| projection
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

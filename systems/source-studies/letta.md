@@ -26,20 +26,6 @@ A bounded source study of current Letta local memory: transcripts, Git-backed Me
 
 ## 一条写入、保留、使用与修订路径
 
-```mermaid
-flowchart TD
-  U[输入与工具结果] --> T[conversation transcript JSONL]
-  T --> C[近期消息＋compaction summary]
-  T --> R[按需消息搜索]
-  C --> M[模型调用]
-  R --> M
-  M --> W[memory tool／文件编辑]
-  W --> G[agent MemFS Git commit]
-  G -->|后续 turn 检查| P[按 revision 编译 memory context]
-  P -->|system 消息| M
-  G -. Cloud 模式提交后同步 .-> S[远程 MemFS／托管状态]
-```
-
 **SOURCE-OBSERVED**：本地输入转成含 `id/role/timestamp/agent_id/conversation_id` 的消息；持久化路径写 `conversation.json` 与 `messages.jsonl`，追加记录有 `parentId` 和 timestamp。消息不必先被模型选为“值得记忆”才被保留。[消息写入][E4][持久化][E5]
 
 模型要形成长期规则时可调用 `memory`：create、str_replace、insert、delete、rename、update_description。工具要求非空 reason，解析当前 agent 身份和目录，先检查工作区，执行文件变更，再按受影响路径 commit，记录 agent author。local commit 与远程 commit 有分支；远程返回信息明确等待 turn 后同步。[编辑入口][E6] 因而“是否抽取、怎样概括、把偏好提升为规则”主要交给模型，harness 负责路径、格式、提交与编译时序。reflection 也非必然每轮学习：源码按 off、compaction-event、step-count 判断是否启动。[触发条件][E7]
@@ -95,3 +81,15 @@ flowchart TD
 [E16]: https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/message-search.ts#L18-L37
 [E17]: https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/tools/impl/memory.ts#L289-L350
 [E18]: https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/agent/memory-git.ts#L1930-L2058
+
+## 三视图补读：独立反思与消费边界
+
+当前 CLI turn 后的 memory reflection 另读 `transcript.jsonl/state.json`，与 backend 的 `messages.jsonl` 分开。它选未反思范围，在候选 Git worktree 内启动后台子 agent，再由父流程整合；`merged` 与 `no_changes` 都消费该范围，只有 `merged` 要求重新编译 memory，checkpoint 仅在成功时推进。图中 CLI search JSON → 应用 context 的箭头保留为调用方条件，不能从搜索返回值推定模型实际使用。当前本地 FTS-lite 也不能因为通用 recall prompt 提及 hybrid 就提升成另一实现。精确来源、失败/取消与状态归属见[三视图模型](../architecture-atlas/models/letta.json)。本段为补充源码阅读，未执行 CLI、reflection 子 agent 或模型。
+
+## 架构三视图
+
+[打开交互图集](../architecture-atlas/index.html#letta/overview) · [总览 SVG](../architecture-atlas/diagrams/letta/overview.svg) · [写入到使用 SVG](../architecture-atlas/diagrams/letta/flow.svg) · [修订与控制 SVG](../architecture-atlas/diagrams/letta/revision.svg) · [可编辑模型与源码证据](../architecture-atlas/models/letta.json)
+
+![letta 全景与边界](../architecture-atlas/diagrams/letta/overview.svg)
+
+图中“已读”表示固定版本的静态源码观察；“推断”和“未知”分别保留条件与未检查边界。三幅图覆盖不同问题，不等于全仓审计。[图例与阅读方法](../architecture-atlas/README.md)。

@@ -1,0 +1,66 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_host["外部 harness / 会话"]
+    runtime["Agent runtime<br/>生命周期与工具调用<br/>〔未知〕"]:::external
+    class runtime unknown
+    current_model[["当前 agent 模型<br/>解释证据并回答<br/>〔未知〕"]]:::model
+    class current_model unknown
+    scheduler["外部 scheduler / 人<br/>触发 DREAM<br/>〔未知〕"]:::external
+    class scheduler unknown
+    context_frame["模型上下文材料<br/>自动块 / 工具返回"]:::output
+  end
+  subgraph region_native["Tideline 原生执行层"]
+    hooks["Kimi hook dispatcher<br/>分发会话事件"]:::process
+    provider["TidelineMemoryProvider<br/>注入、唤起、对话采集"]:::process
+    mcp["server.py / MCP stdio<br/>显式读写工具"]:::process
+    epilogue["session_epilogue<br/>关闭窗口生成叙事"]:::process
+    dream_prompts["DREAM prompts<br/>固化、整理、轨迹升格"]:::process
+    maintenance_scripts["维护脚本<br/>重建、权重、补铸"]:::process
+  end
+  subgraph region_storage["共享 SQLite"]
+    sqlite[("SQLite canonical tables<br/>上下文与当前记忆状态")]:::store
+    derived_indexes[("FTS / clusters / graph<br/>缓存与检索派生物")]:::store
+    attention[("attention_log / stats<br/>记录检索命中")]:::store
+  end
+  subgraph region_services["外部模型服务"]
+    embedding["Embedding endpoint<br/>本地 / 远端向量服务<br/>〔未知〕"]:::external
+    class embedding unknown
+    epilogue_llm[["Epilogue completion<br/>叙事 JSON 生成<br/>〔未知〕"]]:::model
+    class epilogue_llm unknown
+  end
+  runtime -.->|"提交生命周期事件"| hooks
+  hooks -->|"初始化并调用对应方法"| provider
+  runtime -.->|"显式 MCP tool call"| mcp
+  sqlite -->|"读取身份与候选记忆"| provider
+  provider -->|"保存角色对话片段"| sqlite
+  mcp -->|"工具读写与修订事务"| sqlite
+  provider -->|"返回自动注入块"| context_frame
+  mcp -->|"返回显式查询结果"| context_frame
+  context_frame -.->|"host 交付当前上下文"| current_model
+  provider -->|"本地 query/片段向量请求"| embedding
+  mcp -->|"缓存 miss 后向量请求"| embedding
+  provider -->|"primary 结束时 daemon 启动"| epilogue
+  sqlite -->|"读取 session chunks / 锚点"| epilogue
+  epilogue -->|"请求 1–2 条叙事 JSON"| epilogue_llm
+  epilogue -->|"成功写 narrative；失败写 seal"| sqlite
+  scheduler -.->|"按部署配置发起维护"| dream_prompts
+  dream_prompts -.->|"模型按 prompt 读写记忆"| mcp
+  dream_prompts -.->|"指令要求调用脚本"| maintenance_scripts
+  maintenance_scripts -->|"重建聚类与实体图"| derived_indexes
+  sqlite -->|"FTS 触发与原文索引材料"| derived_indexes
+  provider -->|"记录 T1 命中"| attention
+  attention -->|"heatmap 读取命中分布"| mcp
+  mcp -->|"记录显式搜索命中"| attention
+  maintenance_scripts -->|"刷新权重与 recurrence"| sqlite
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

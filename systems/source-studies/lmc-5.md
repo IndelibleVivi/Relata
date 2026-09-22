@@ -23,12 +23,12 @@ A bounded source study of the lmc-5 upstream, separating minimal storage, produc
 | 轴 | 真实数据与操作 | 限制 |
 |---|---|---|
 | X timeline | minimal 的 `thread`、创建/更新时间、chunk/event 顺序；production 的叙事索引、时间字段及按线程 sweep callback | 线程名称由调用方选择；创建时间不等于事件发生时间，叙事也不是完整历史 |
-| Y relations | typed edges；安全类型可自动写，contradiction/cause/support 分流 review；召回允许双向两跳 | 写记忆本身不连图；边需要 nightly 写入和可检索端点 |
+| Y relations | typed edges；安全类型可自动写，contradiction/cause/support 分流 review；召回允许双向两跳 | `add_memory` 本身不连图；边可由显式 add_relation、hippocampus、NightDream、nap 或部署接线写入，召回仍需可检索端点 |
 | Z fact evolution | `fact_key`、current/review/superseded、active 标志；production 另有 valid/invalid time、superseded_by 和 audit | 审计与事实应用分离，但 minimal 直接 add 同 key 的 current fact 会自动替代旧值 |
 | E experience | 风险/紧迫/回应倾向；valence/arousal/tension、growth、作者和初始优先级 | 是主 agent 的显式书写策略；字段不能证明主体体验或关系真实性 |
 | M metabolism | 命中次数、排序、冷热/隔离 gate、重复检测、巡检与维护建议 | 不是统一自动删除器；不同实现的 gate、公式和执行能力不同 |
 
-这些字段与不可变 E 的数据库约束可以直接检查。[minimal 模型][models] [production schema][schema] 最值得保留的设计是：原始事件与 curated 记录分开、事实状态与历史留存分开、主动 surface 比显式 recall 更严格、命中包含理由/trace。这些设计适合研究“为什么这个上下文现在有资格进入窗口”，并不限于亲密关系。
+这些字段与不可变 E 的数据库约束可以直接检查。[minimal 模型][models] [production schema][schema] [nap 建边][nap-relations] 最值得保留的设计是：原始事件与 curated 记录分开、事实状态与历史留存分开、命中包含理由/trace，主动 surface 对 curated 记录的 gate 比显式 recall 更严格。同一输出包中的 raw events/current-state 项另走规则。这些设计适合研究“为什么这个上下文现在有资格进入窗口”，并不限于亲密关系。
 
 ## 一条完整生命周期及接线责任
 
@@ -49,7 +49,9 @@ A bounded source study of the lmc-5 upstream, separating minimal storage, produc
 
 一个更重要的跨层落差是：production vector adapter 直接回传向量 `text_preview`；底层 search 仅按 model/dimension/owner_type 过滤，没有 join curated 当前状态。**INFERRED**：若部署在 supersede/archive 后保留旧 embedding，又没包装额外过滤，旧事实仍可能进入标为 main 的 vector 通道。图/FTS 的 current 过滤不能补救这一入口；这是部署条件下的风险，不是已观察的线上失败。[向量 adapter][fts] [向量 SQL][vectors]
 
-删除应拆开看：仓库主张保留 raw、旧事实、cold archive，存在删除单个向量接口，但本次读取范围未发现覆盖 raw/chunks/curated/relations/向量/缓存/快照的统一遗忘请求。redaction 是输出和远程 embedding 输入的 pattern scrub，不等于原文删除，也不是普遍匿名化。minimal `surface` 默认 redact，`recall` API 默认不 redact。[surface 与 recall][surface] [redaction][redact]
+图集补读进一步区分三个 minimal 状态入口：`recall_hits` 不自动合并独立的 `search_vectors`；向量 hydration 不按当前 owner 状态过滤；current-state 项由显式 refresh 创建、默认 TTL 24 小时，并未在 fact supersede 时自动失效。因而“当前事实改了”不保证所有启动/检索材料立即相同。[minimal 向量入口][minimal-vectors] [recall 与 hydration][minimal-recall] [current state][current-state] [surface][surface]
+
+删除应拆开看：仓库主张保留 raw、旧事实、cold archive，存在删除单个向量接口，但本次读取范围未发现覆盖 raw/chunks/curated/relations/向量/缓存/快照的统一遗忘请求。redaction 是输出和远程 embedding 输入的 pattern scrub，不等于原文删除，也不是普遍匿名化。minimal `surface` 默认 redact，`recall` API 默认不 redact。[surface][surface] [recall 默认参数][recall-default] [redaction][redact]
 
 **INFERRED**：可恢复连续性依赖稳定的采集、review、fact_key 命名、维护和窗口注入，而非模型天然拥有连续自我。Forge/Swap 文档主要是部署 reference pattern，不能当已执行恢复；仓库另有具体 refined carryover helper，但它还依赖 Claude transcript/resume 机制。本次未审计该 helper 全算法或实际 resume。远程 embedding/reranker/LLM proposer 是可选接入，SQLite core 可无模型运行；无模型路径可证明工程链路存在，不能代替语义质量验证。
 
@@ -70,7 +72,7 @@ A bounded source study of the lmc-5 upstream, separating minimal storage, produc
 
 ## 阅读覆盖
 
-完整或围绕相关函数逐段读：`src/lmc5/{models,store,consolidation,hippocampus,fact_evolution,scoring,redact}.py`；`extras/pgvector_backend/{README.md,schema.sql,night_dream.py,recall_pipeline.py,vector_pgvector.py,dream_runner.py,patrol.py,embedders.py}`；三种 hooks；`docs/{AUTOMATION_BOUNDARIES,M_METABOLISM,FORGE_AND_SWAP,project_hypothesis}.md`。根 README 阅读定位的 model、implementation、automation 段与目录索引，网页也核对项目入口；README 其余长篇、全部测试、其它 docs、nap/perception/narrative 的完整实现及 carryover 全算法未读。一次过宽组合输出被截断，关键 hook/recall/hippocampus 之后用窄范围重读；上述未读部分不作验证依据。
+完整或围绕相关函数逐段读：`src/lmc5/{models,store,consolidation,hippocampus,fact_evolution,scoring,redact}.py`；`extras/pgvector_backend/{README.md,schema.sql,night_dream.py,recall_pipeline.py,vector_pgvector.py,dream_runner.py,patrol.py,embedders.py}`；三种 hooks；`docs/{AUTOMATION_BOUNDARIES,M_METABOLISM,FORGE_AND_SWAP,project_hypothesis}.md`。根 README 阅读定位的 model、implementation、automation 段与目录索引，网页也核对项目入口；图集补读了 nap 建边、current-state refresh/surface、minimal vector/hydration、recall 默认参数及输出入口；精确区间见[图模型](../architecture-atlas/models/lmc-5.json)。README 其余长篇、全部测试、其它 docs、nap/perception/narrative 的其余实现及 carryover 全算法未读。一次过宽组合输出被截断，关键 hook/recall/hippocampus 之后用窄范围重读；上述未读部分不作验证依据。
 
 [hypothesis]: https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/docs/project_hypothesis.md#L1-L119
 [models]: https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/models.py#L104-L193
@@ -89,3 +91,17 @@ A bounded source study of the lmc-5 upstream, separating minimal storage, produc
 [surface]: https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L1488-L1508
 [redact]: https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/redact.py#L9-L82
 [alpha]: https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/README.md#L6-L45
+
+[recall-default]: https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L2170-L2194
+[minimal-vectors]: https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L1724-L1768
+[minimal-recall]: https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L2045-L2168
+[current-state]: https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L1239-L1284
+[nap-relations]: https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/nap.py#L89-L173
+
+## 架构三视图
+
+[打开交互图集](../architecture-atlas/index.html#lmc-5/overview) · [总览 SVG](../architecture-atlas/diagrams/lmc-5/overview.svg) · [写入到使用 SVG](../architecture-atlas/diagrams/lmc-5/flow.svg) · [修订与控制 SVG](../architecture-atlas/diagrams/lmc-5/revision.svg) · [可编辑模型与源码证据](../architecture-atlas/models/lmc-5.json)
+
+![lmc-5 全景与边界](../architecture-atlas/diagrams/lmc-5/overview.svg)
+
+图中“已读”表示固定版本的静态源码观察；“推断”和“未知”分别保留条件与未检查边界。三幅图覆盖不同问题，不等于全仓审计。[图例与阅读方法](../architecture-atlas/README.md)。

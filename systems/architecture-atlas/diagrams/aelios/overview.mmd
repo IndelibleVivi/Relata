@@ -1,0 +1,61 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_client["客户端与管理者"]
+    client["Client Harness<br/>三协议／工具循环"]:::entry
+    admin["Admin · MCP · REST<br/>管理／显式读写"]:::entry
+  end
+  subgraph region_worker["Aelios Worker"]
+    gateway["handleGateway<br/>认身份与主模型"]:::process
+    recall["runRecall · recallPatch<br/>跨空间合并候选"]:::process
+    night["Cron · Dream<br/>每日抽取与整理"]:::process
+    judge["Candidate Judge<br/>自动核据与裁决"]:::process
+  end
+  subgraph region_storage["Cloudflare 存储"]
+    queue["MEMORY_QUEUE<br/>响应后投递与重试"]:::process
+    raw[("messages · exchanges<br/>原话、结果与状态")]:::store
+    memories[("memories · lifecycle<br/>事实、版本、来源")]:::store
+    curated[("precious · glossary<br/>珍贵原文与术语")]:::store
+    vectors[("Vectorize · FTS<br/>向量／词面候选索引")]:::store
+    candidates[("memory_candidates<br/>待审／通过／丢弃")]:::store
+    diary[("daily／weekly／monthly<br/>印象摘要阶梯")]:::store
+    extensions[("relations · triggers<br/>可选联想索引")]:::store
+  end
+  subgraph region_models["模型服务边界"]
+    ai[["Workers AI<br/>embedding／rerank／Dream"]]:::model
+    upstream["AI Gateway／自定义上游<br/>聊天模型响应"]:::external
+  end
+  client -->|"发送三协议请求"| gateway
+  gateway -->|"召回前写 human 原话"| raw
+  gateway -->|"主模型新用户文本"| recall
+  memories -->|"D1 状态与事实内容"| recall
+  curated -->|"术语／相关珍贵候选"| recall
+  vectors -->|"向量＋词面命中"| recall
+  extensions -->|"开关启用时扩展候选"| recall
+  recall -->|"原文片段重排"| ai
+  recall -->|"受预算约束的原文补丁"| gateway
+  gateway -->|"追加末轮 user 后转发"| upstream
+  upstream -->|"流式响应与结束状态"| gateway
+  gateway -->|"响应后调度 exchange"| queue
+  queue -->|"幂等记录；失败重试"| raw
+  raw -->|"日期／cursor 分批读取"| night
+  night -->|"抽取／整理模型调用"| ai
+  night -->|"新增与普通更新提案"| candidates
+  candidates -->|"pending 候选＋来源"| judge
+  judge -->|"approve 新增／supersede"| memories
+  admin -->|"显式直写／修订／删除"| memories
+  admin -->|"审核与 merge／supersede"| candidates
+  night -->|"日记／周月印象整理"| diary
+  night -->|"可选关系／触发器建期"| extensions
+  memories -->|"embedding 与 FTS 同步"| vectors
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

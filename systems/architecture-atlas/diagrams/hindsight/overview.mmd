@@ -1,0 +1,67 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_app["调用应用／集成"]
+    app["调用应用<br/>内容与最终动作<br/>〔未知〕"]:::external
+    class app unknown
+    integration["LiteLLM callback<br/>可选 context 注入"]:::process
+  end
+  subgraph region_api["Hindsight API"]
+    api["REST／MemoryEngine<br/>retain · recall · reflect"]:::entry
+    auth{"Tenant／validator<br/>schema · bank · tags"}:::decision
+    retain["retain pipeline<br/>抽取／embedding／关联"]:::process
+    recall["recall<br/>四路检索→融合→预算"]:::process
+    reflect["reflect agent<br/>只读 tools 推理"]:::process
+  end
+  subgraph region_bg["后台执行"]
+    worker["Worker poller<br/>claim／execute／retry"]:::process
+    consolidator["consolidation<br/>检索旧观察→LLM actions"]:::process
+    mmrefresh["mental-model refresh<br/>full／delta／retraction"]:::process
+    maintenance["Maintenance loop<br/>cron／reconcile"]:::process
+  end
+  subgraph region_db["默认 SQL 状态"]
+    facts[("documents／memory_units<br/>原文 · facts · links")]:::store
+    queue[("async_operations<br/>状态与任务 payload")]:::store
+    observations[("observations<br/>来源关联的推断")]:::store
+    mentalmodels[("mental_models<br/>显式问题驱动文档")]:::store
+  end
+  subgraph region_model["模型边界"]
+    models[["LLM／embed／rerank<br/>可本地或远端配置"]]:::model
+  end
+  app -->|"选择 bank 与消息"| integration
+  integration -->|"retain／recall／reflect 请求"| api
+  api -->|"认证与 operation 校验"| auth
+  auth -->|"接受写入上下文"| retain
+  retain -->|"内容→抽取与 embedding"| models
+  retain -->|"持久化文本、事实与 links"| facts
+  retain -->|"按配置 enqueue consolidation"| queue
+  queue -->|"claim pending task"| worker
+  worker -->|"执行 consolidation"| consolidator
+  facts -->|"未 consolidated 来源事实"| consolidator
+  consolidator -->|"事实＋旧 observations→actions"| models
+  consolidator -->|"事务提交派生观察"| observations
+  consolidator -->|"合格 mental-model refresh"| queue
+  maintenance -->|"到期且 stale 才 enqueue"| queue
+  worker -->|"执行 refresh task"| mmrefresh
+  mmrefresh -->|"scope＋source_query 排除自身"| reflect
+  mmrefresh -->|"提交结果与 watermark"| mentalmodels
+  auth -->|"bank／tags 约束"| recall
+  facts -->|"四路候选与来源"| recall
+  observations -->|"observation 候选"| recall
+  reflect -->|"只读 recall／expand"| recall
+  mentalmodels -->|"lookup/search 文档"| reflect
+  reflect -->|"证据＋tools→答案"| models
+  recall -->|"结构化检索结果"| integration
+  reflect -->|"生成的记忆答案"| integration
+  integration -->|"messages context 与后续 retain"| app
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

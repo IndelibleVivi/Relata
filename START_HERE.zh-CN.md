@@ -3,7 +3,7 @@
 
 # Relata 从这里开始：Research Foundation 执行路径
 
-Relata 是前沿记忆研究室。概念定义、开源架构研究与比较文章方向，从 [agent-memory inquiry](research/agent-memory-inquiry.md) 开始。[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 将通用 agent 与成人长期亲密关系都纳入研究；源码研究与写作可以独立于 case evaluation 推进。
+Relata 是前沿记忆研究室。概念定义、开源架构研究与比较文章方向，从 [agent-memory inquiry](research/agent-memory-inquiry.md) 开始。[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 将通用 agent 与成人长期亲密关系都纳入研究；源码研究与写作可以独立于 case evaluation 推进。[十项目架构图集](systems/architecture-atlas/README.md) 提供三十幅绑定源码的 SVG 与离线 reader；[源码研究](systems/source-studies/README.md) 展开解释判断与限制。
 
 下方基础工作也保留了从 non-normative Target Architecture Draft 0.1，走向有 source provenance、architecture pressure、community authority 与 case evidence 的执行路径。
 

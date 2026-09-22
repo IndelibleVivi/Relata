@@ -1,0 +1,1885 @@
+{
+  "id": "aelios",
+  "name": "Aelios",
+  "repository": "https://github.com/wusaki0723/Aelios",
+  "commit": "9e65c802ec1c13a68d22a68c5c9d7cdce385e041",
+  "study_date": "2026-09-22",
+  "boundary": "Aelios public main 9e65c80 的默认 v2 lifecycle＋v3 gateway 静态源码。aelios-v3 65dd845 是较早单次导入，仅作版本判定，不与主图拼接。不代表任何作者/用户部署。",
+  "summary": "Aelios 将跨客户端的聊天协议网关与 D1 记忆库结合：主模型人类输入先同步记原话，显式 remember 规则可直写；响应再异步记录。夜间 Dream 从原话生成候选，默认自动 judge 或人工裁决后形成长期条目；多空间混合检索经原文片段重排后只在当前 user 尾部给少量关联。日记、珍贵与感知为独立状态，修订和删除没有统一的全派生遗忘事务。",
+  "mechanisms": [
+    "主模型白名单＋一写多读 namespace",
+    "即时原话／remember-now＋夜间候选",
+    "D1 主记录＋Vectorize/FTS 镜像",
+    "跨来源原文窗口重排",
+    "fact_key／supersede＋亲笔保护",
+    "工程否决的关系倾向抽取"
+  ],
+  "strengths": [
+    "若客户端正确标记主模型与会话，网关可统一跨客户端记录与召回，工具循环仍由客户端持有。",
+    "原文窗口、说话人和来源 ID 可降低整条摘要直接注入的含混；精度仍依赖提名和模型。",
+    "显式版本链、候选状态与审核面板使修订可检查；同键 upsert 并不保留每次旧文本。",
+    "珍贵、术语、亲笔署名及印象阶梯为关系连续性提供不同表达面。"
+  ],
+  "limits": [
+    "默认 Dream 普通抽取排除工程主体，不能当作混合项目记忆通用保留器。",
+    "自动 judge 默认启用，候选并非全人工审核；LLM 评分不等于事实核验。",
+    "多个删除入口与派生缓存未统一清理；不能把 memory_delete 等同端到端遗忘。",
+    "仅静态源码；Cloudflare 实际部署、性能、模型行为、provider 留存均未验证。"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/gateway/handler.ts#L204-L304",
+      "note": "网关鉴权、主模型门限、同步 human 写入、召回注入、响应后记录"
+    },
+    {
+      "id": "S2",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/gateway/config.ts#L15-L35",
+      "note": "身份、写入空间、召回空间与主模型配置"
+    },
+    {
+      "id": "S3",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/gateway/config.ts#L95-L125",
+      "note": "D1 配置优先级、key 授权与 readNamespaces"
+    },
+    {
+      "id": "S4",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/gateway/record.ts#L30-L144",
+      "note": "稳定指纹、原话与 exchange 持久化、Queue 回退、remember-now"
+    },
+    {
+      "id": "S5",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/rememberNow.ts#L13-L82",
+      "note": "显式记住的规则捕获与 verbatim fact_key"
+    },
+    {
+      "id": "S6",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/gateway/handler.ts#L30-L143",
+      "note": "跨空间、多来源候选合并、最终选择与注入记账"
+    },
+    {
+      "id": "S7",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/recallSelector.ts#L49-L97",
+      "note": "Workers AI 片段 reranker 与超时"
+    },
+    {
+      "id": "S8",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/recallSelector.ts#L100-L249",
+      "note": "原文窗口、重复过滤、条数预算、词面回退与最新事件拒绝"
+    },
+    {
+      "id": "S9",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/v2/recall.ts#L395-L573",
+      "note": "hybrid 候选、可选 trigger/relation、降权及 longtail 兜底"
+    },
+    {
+      "id": "S10",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/search.ts#L300-L363",
+      "note": "D1 状态复核与默认保留的 legacy 向量兜底"
+    },
+    {
+      "id": "S11",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/embedding.ts#L50-L125",
+      "note": "Workers AI/自定义 embedding 与 Vectorize 镜像"
+    },
+    {
+      "id": "S12",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/gateway/upstream.ts#L50-L115",
+      "note": "Cloudflare BYOK 或自定义地址的三协议路由"
+    },
+    {
+      "id": "S13",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/wrangler.toml#L23-L101",
+      "note": "单个夜间 cron、模型/留存默认值与 Cloudflare 绑定"
+    },
+    {
+      "id": "S14",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/index.ts#L244-L327",
+      "note": "夜间按写入空间执行 Dream、judge、diary、retention、rollup"
+    },
+    {
+      "id": "S15",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/dream/orchestrator.ts#L96-L176",
+      "note": "Dream 以日期/cursor 分批消费 messages"
+    },
+    {
+      "id": "S16",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/dream/lifecyclePhase.ts#L21-L169",
+      "note": "候选提案、world_fact 例外直接 supersede、daily_log"
+    },
+    {
+      "id": "S17",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/candidateJudge.ts#L265-L425",
+      "note": "默认自动 judge：读取原始证据、approve/discard/keep、归档/版本更新"
+    },
+    {
+      "id": "S18",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/db/v2/memories.ts#L173-L287",
+      "note": "同 fact_key 原地 upsert、亲笔保护、D1 与镜像同步"
+    },
+    {
+      "id": "S19",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/db/v2/memories.ts#L385-L586",
+      "note": "supersede 创建新版本、旧向量下架、双向版本指针与关系边"
+    },
+    {
+      "id": "S20",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/db/v2/memories.ts#L628-L687",
+      "note": "archive 与 MCP v2 hard-delete 的确切清理范围"
+    },
+    {
+      "id": "S21",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/api/memories.ts#L992-L1052",
+      "note": "REST patch 原地编辑、soft-delete 与向量 best-effort"
+    },
+    {
+      "id": "S22",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/retention.ts#L18-L170",
+      "note": "7/180/30 天窗口、24 小时节流与先删向量的硬清理"
+    },
+    {
+      "id": "S23",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/db/retention.ts#L101-L196",
+      "note": "过期豁免、终态列表、硬删 SQL 不级联派生状态"
+    },
+    {
+      "id": "S24",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/weeklyRollup.ts#L339-L419",
+      "note": "周记落库默认保留 daily，人工 approve 才删 daily"
+    },
+    {
+      "id": "S25",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/monthlyRollup.ts#L237-L299",
+      "note": "月记模型汇总后同 batch 写月记并删除输入周记"
+    },
+    {
+      "id": "S26",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/v2/recall.ts#L202-L270",
+      "note": "显式 boot 包读 precious/glossary/印象/感知缓存"
+    },
+    {
+      "id": "S27",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/perception.ts#L36-L111",
+      "note": "夜间感知文本快照；boot 读取未复查当前 memories"
+    },
+    {
+      "id": "S28",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/dreamExtract.ts#L95-L161",
+      "note": "工程主体否决、关系/亲密例外、来源与事实状态提示"
+    },
+    {
+      "id": "S29",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/canonicalTypes.ts#L1-L31",
+      "note": "8 种普通长期记忆写入类型"
+    },
+    {
+      "id": "S30",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/diaryWriter.ts#L74-L115",
+      "note": "日记提示定位为印象并要求来源消息"
+    },
+    {
+      "id": "S31",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/triggers/build.ts#L81-L145",
+      "note": "可选增量 trigger 建期，已有 trigger 默认跳过"
+    },
+    {
+      "id": "S32",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/triggers/store.ts#L16-L82",
+      "note": "concept/bridge/joint 三向量与 trg: namespace"
+    },
+    {
+      "id": "S33",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/triggers/recall.ts#L26-L101",
+      "note": "trigger 检索与 D1 active 背书"
+    },
+    {
+      "id": "S34",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/vectorStore.ts#L410-L436",
+      "note": "legacy 删除路径清理 trigger，不能泛化到全部删除入口"
+    },
+    {
+      "id": "S35",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/dream/orchestrator.ts#L303-L401",
+      "note": "relation/trigger/Z audit/perception 夜间支路"
+    },
+    {
+      "id": "S36",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/api/mcp.ts#L475-L497",
+      "note": "MCP 默认调用 deleteMemoryV2"
+    },
+    {
+      "id": "S37",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/api/mcp.ts#L565-L659",
+      "note": "MCP pin/glossary/upsert/supersede/archive 的写权限"
+    },
+    {
+      "id": "S38",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/api/memories.ts#L762-L974",
+      "note": "候选人工 approve/discard/merge/supersede"
+    },
+    {
+      "id": "S39",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/search.ts#L37-L54",
+      "note": "active/current/under_review 与显式历史查询语义"
+    },
+    {
+      "id": "S40",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/migrations/0003_v2_memory_lifecycle.sql#L1-L111",
+      "note": "历史六层 schema；不能把残留表当当前管线"
+    },
+    {
+      "id": "S41",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/docs/specs/v3-slim.md#L1-L59",
+      "note": "历史改造记录：去掉 4h 抽取与 digest 写入"
+    },
+    {
+      "id": "S42",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/memory/relations.ts#L19-L77",
+      "note": "relation 扩展默认 off、种子后的两跳扩展"
+    },
+    {
+      "id": "S43",
+      "url": "https://github.com/wusaki0723/Aelios/blob/9e65c802ec1c13a68d22a68c5c9d7cdce385e041/src/index.ts#L231-L241",
+      "note": "Queue 消费成功 ack、异常 retry"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": "全景与系统边界",
+      "question": "Aelios 如何把客户端、主要记录、派生索引、整理器与模型服务连接起来？",
+      "reading_guide": "从 Client 到网关、召回、上游读取主路径；下方夜间支路把原话变成候选及派生记忆。客户端 Harness 仍负责工具循环，D1 与 Vectorize 不是同一事实源。",
+      "omissions": [
+        "不代表作者部署或模型真实行为；不混入 aelios-v3 import、旧 assembler 和 4h 写入。",
+        "可选 GitHub archive pull、导盲犬与 Hook 脚本只确认入口，未展开；不执行或访问其运行数据。"
+      ],
+      "regions": [
+        {
+          "id": "client",
+          "label": "客户端与管理者",
+          "responsibility": "Harness、最终工具循环和显式管理操作",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S37",
+            "S38"
+          ]
+        },
+        {
+          "id": "worker",
+          "label": "Aelios Worker",
+          "responsibility": "路由、写入、召回、后台整理代码",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S14"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "Cloudflare 存储",
+          "responsibility": "D1 为主要记录源，Vectorize 为派生索引，Queue 为投递边界",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S11",
+            "S13"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "模型服务边界",
+          "responsibility": "Workers AI 处理记忆模型请求；聊天上游可为 CF AI Gateway/BYOK 或自定义服务",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S11",
+            "S12"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "client",
+          "label": "Client Harness\n三协议／工具循环",
+          "kind": "entry",
+          "region": "client",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S12"
+          ],
+          "note": "不在源码边界内执行或观察客户端；这里只表示受支持的调用契约。"
+        },
+        {
+          "id": "admin",
+          "label": "Admin · MCP · REST\n管理／显式读写",
+          "kind": "entry",
+          "region": "client",
+          "status": "observed",
+          "evidence": [
+            "S37",
+            "S38",
+            "S21"
+          ],
+          "note": "管理者与持有 memory:write 的调用者均可改写。MCP 不是纯人工通道。"
+        },
+        {
+          "id": "gateway",
+          "label": "handleGateway\n认身份与主模型",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S3"
+          ],
+          "note": "非主模型透传，不记不召；工具续轮与 auxiliary 跳过自动召回。"
+        },
+        {
+          "id": "queue",
+          "label": "MEMORY_QUEUE\n响应后投递与重试",
+          "kind": "process",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S43"
+          ],
+          "note": "assistant/exchange 在响应观察结束后调度；Queue 发送失败直接写 D1。"
+        },
+        {
+          "id": "raw",
+          "label": "messages · exchanges\n原话、结果与状态",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S22"
+          ],
+          "note": "不把注入补丁写回原话；不完整 assistant 不成为 Dream 消息。"
+        },
+        {
+          "id": "memories",
+          "label": "memories · lifecycle\n事实、版本、来源",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19",
+            "S39"
+          ],
+          "note": "普通写入八 types；同 fact_key upsert 可以原地更新，supersede 才显式保留版本。"
+        },
+        {
+          "id": "curated",
+          "label": "precious · glossary\n珍贵原文与术语",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S26",
+            "S37"
+          ],
+          "note": "独立 D1 表；在网关内作为相关候选统一竞争预算，不固定占位。"
+        },
+        {
+          "id": "vectors",
+          "label": "Vectorize · FTS\n向量／词面候选索引",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11",
+            "S18"
+          ],
+          "note": "Vectorize 包含内容 metadata；默认仍可回退到无 D1 背书的 legacy 向量。"
+        },
+        {
+          "id": "recall",
+          "label": "runRecall · recallPatch\n跨空间合并候选",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S9"
+          ],
+          "note": "每空间独立检索，统一跨空间预算；trigger 与 relation 默认 off。"
+        },
+        {
+          "id": "ai",
+          "label": "Workers AI\nembedding／rerank／Dream",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S11",
+            "S13"
+          ],
+          "note": "表示实际模型调用代码和部署默认值；模型质量、计费、托管留存未运行验证。"
+        },
+        {
+          "id": "upstream",
+          "label": "AI Gateway／自定义上游\n聊天模型响应",
+          "kind": "external",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S12"
+          ],
+          "note": "网关只执行路由与 HTTP 调用；上游配置、fallback、日志和模型内部状态不在本研究证据边界。"
+        },
+        {
+          "id": "night",
+          "label": "Cron · Dream\n每日抽取与整理",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S15",
+            "S16",
+            "S35"
+          ],
+          "note": "当前只有 20:10 UTC 夜批，没有 4h 调度。默认工程主体普通抽取被提示词排除。"
+        },
+        {
+          "id": "candidates",
+          "label": "memory_candidates\n待审／通过／丢弃",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17",
+            "S38"
+          ],
+          "note": "新抽取进入候选，但不等于全部等待人工。"
+        },
+        {
+          "id": "judge",
+          "label": "Candidate Judge\n自动核据与裁决",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "note": "默认启用；无可核对源消息直接 ungrounded；高分 approve，中间 keep。"
+        },
+        {
+          "id": "diary",
+          "label": "daily／weekly／monthly\n印象摘要阶梯",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S24",
+            "S25",
+            "S26",
+            "S30"
+          ],
+          "note": "不走 memory embedding；显式 boot 可取摘要，网关可带相关周印象但不得作为事实答案。"
+        },
+        {
+          "id": "extensions",
+          "label": "relations · triggers\n可选联想索引",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S31",
+            "S32",
+            "S33",
+            "S35",
+            "S42"
+          ],
+          "note": "relation 从种子扩展，trigger 在入口 union；trigger 建期不自动重建已有项。"
+        }
+      ],
+      "edges": [
+        {
+          "to": "gateway",
+          "label": "发送三协议请求",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "client"
+        },
+        {
+          "to": "raw",
+          "label": "召回前写 human 原话",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4"
+          ],
+          "from": "gateway"
+        },
+        {
+          "to": "recall",
+          "label": "主模型新用户文本",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S6"
+          ],
+          "from": "gateway"
+        },
+        {
+          "to": "recall",
+          "label": "D1 状态与事实内容",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ],
+          "from": "memories"
+        },
+        {
+          "to": "recall",
+          "label": "术语／相关珍贵候选",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ],
+          "from": "curated"
+        },
+        {
+          "to": "recall",
+          "label": "向量＋词面命中",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ],
+          "from": "vectors"
+        },
+        {
+          "to": "recall",
+          "label": "开关启用时扩展候选",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S33",
+            "S42"
+          ],
+          "from": "extensions"
+        },
+        {
+          "to": "ai",
+          "label": "原文片段重排",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S7"
+          ],
+          "from": "recall"
+        },
+        {
+          "to": "gateway",
+          "label": "受预算约束的原文补丁",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S8"
+          ],
+          "from": "recall"
+        },
+        {
+          "to": "upstream",
+          "label": "追加末轮 user 后转发",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S12"
+          ],
+          "from": "gateway"
+        },
+        {
+          "to": "gateway",
+          "label": "流式响应与结束状态",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "upstream"
+        },
+        {
+          "to": "queue",
+          "label": "响应后调度 exchange",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4"
+          ],
+          "from": "gateway"
+        },
+        {
+          "to": "raw",
+          "label": "幂等记录；失败重试",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S43"
+          ],
+          "from": "queue"
+        },
+        {
+          "to": "night",
+          "label": "日期／cursor 分批读取",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ],
+          "from": "raw"
+        },
+        {
+          "to": "ai",
+          "label": "抽取／整理模型调用",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S28"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "candidates",
+          "label": "新增与普通更新提案",
+          "status": "observed",
+          "evidence": [
+            "S16"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "judge",
+          "label": "pending 候选＋来源",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "candidates"
+        },
+        {
+          "to": "memories",
+          "label": "approve 新增／supersede",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "judge"
+        },
+        {
+          "to": "memories",
+          "label": "显式直写／修订／删除",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S20",
+            "S21",
+            "S37"
+          ],
+          "from": "admin"
+        },
+        {
+          "to": "candidates",
+          "label": "审核与 merge／supersede",
+          "status": "observed",
+          "evidence": [
+            "S38"
+          ],
+          "from": "admin"
+        },
+        {
+          "to": "diary",
+          "label": "日记／周月印象整理",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S24",
+            "S25"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "extensions",
+          "label": "可选关系／触发器建期",
+          "status": "observed",
+          "evidence": [
+            "S35"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "vectors",
+          "label": "embedding 与 FTS 同步",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S11"
+          ],
+          "from": "memories"
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "D1 memories / lifecycle",
+          "writers": "MCP/REST、remember-now、judge、特定 Dream 更新",
+          "changes": "upsert 原地更新；supersede 明确留旧版本",
+          "limits": "主要记录源不等于无 D1 时绝不召回：默认 legacy fallback 仍在",
+          "evidence": [
+            "S4",
+            "S18",
+            "S19",
+            "S10"
+          ]
+        },
+        {
+          "owner": "D1 messages / gateway_exchanges",
+          "writers": "同步人类输入路径与异步响应记录",
+          "changes": "fingerprint 去重，complete assistant 才入 messages",
+          "limits": "响应返回不证明异步 assistant 已持久化；默认 7 天后删除",
+          "evidence": [
+            "S1",
+            "S4",
+            "S22"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "写入、选择与使用",
+      "question": "一次消息如何即时保存、召回和使用，夜间又如何形成后续可召回的记忆？",
+      "reading_guide": "沿左侧即时请求追到临时补丁和聊天上游；再沿 raw → Dream → 候选 → judge → memories 闭环。显式 API 写入是独立可信入口，不经过夜间候选。",
+      "omissions": [
+        "Gateway 自动召回与 MCP/REST 显式 recall 的返回预算不同；本图的 0–1/0–2 是 gateway 最终选择。",
+        "模型打分、提示遵循、真实延迟未验证；图中 observed 仅是已读静态实现。"
+      ],
+      "regions": [
+        {
+          "id": "client",
+          "label": "客户端与管理者",
+          "responsibility": "Harness、最终工具循环和显式管理操作",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S37",
+            "S38"
+          ]
+        },
+        {
+          "id": "worker",
+          "label": "Aelios Worker",
+          "responsibility": "路由、写入、召回、后台整理代码",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S14"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "Cloudflare 存储",
+          "responsibility": "D1 为主要记录源，Vectorize 为派生索引，Queue 为投递边界",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S11",
+            "S13"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "模型服务边界",
+          "responsibility": "Workers AI 处理记忆模型请求；聊天上游可为 CF AI Gateway/BYOK 或自定义服务",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S11",
+            "S12"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "client",
+          "label": "Client Harness\n三协议／工具循环",
+          "kind": "entry",
+          "region": "client",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S12"
+          ],
+          "note": "不在源码边界内执行或观察客户端；这里只表示受支持的调用契约。"
+        },
+        {
+          "id": "admin",
+          "label": "Admin · MCP · REST\n管理／显式读写",
+          "kind": "entry",
+          "region": "client",
+          "status": "observed",
+          "evidence": [
+            "S37",
+            "S38",
+            "S21"
+          ],
+          "note": "管理者与持有 memory:write 的调用者均可改写。MCP 不是纯人工通道。"
+        },
+        {
+          "id": "gateway",
+          "label": "handleGateway\n认身份与主模型",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S3"
+          ],
+          "note": "非主模型透传，不记不召；工具续轮与 auxiliary 跳过自动召回。"
+        },
+        {
+          "id": "capture",
+          "label": "persistHumanUtterance\n先存原话＋显式记住",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S5"
+          ],
+          "note": "主模型人类文本在召回前 await 保存；失败记录状态但仍继续聊天。"
+        },
+        {
+          "id": "raw",
+          "label": "messages · exchanges\n原话、结果与状态",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S22"
+          ],
+          "note": "不把注入补丁写回原话；不完整 assistant 不成为 Dream 消息。"
+        },
+        {
+          "id": "memories",
+          "label": "memories · lifecycle\n事实、版本、来源",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19",
+            "S39"
+          ],
+          "note": "普通写入八 types；同 fact_key upsert 可以原地更新，supersede 才显式保留版本。"
+        },
+        {
+          "id": "curated",
+          "label": "precious · glossary\n珍贵原文与术语",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S26",
+            "S37"
+          ],
+          "note": "独立 D1 表；在网关内作为相关候选统一竞争预算，不固定占位。"
+        },
+        {
+          "id": "vectors",
+          "label": "Vectorize · FTS\n向量／词面候选索引",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11",
+            "S18"
+          ],
+          "note": "Vectorize 包含内容 metadata；默认仍可回退到无 D1 背书的 legacy 向量。"
+        },
+        {
+          "id": "recall",
+          "label": "runRecall · recallPatch\n跨空间合并候选",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S9"
+          ],
+          "note": "每空间独立检索，统一跨空间预算；trigger 与 relation 默认 off。"
+        },
+        {
+          "id": "selector",
+          "label": "selectRecall\n原文窗口重排与规则",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ],
+          "note": "每日常 0–1，证据问答 0–2；最新时间排序类问题不自动注入。"
+        },
+        {
+          "id": "patch",
+          "label": "appendMemory\n临时追加 user 尾部",
+          "kind": "output",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S6",
+            "S8"
+          ],
+          "note": "下一轮重新选择；不是清除模型影响或上游日志的机制。"
+        },
+        {
+          "id": "upstream",
+          "label": "AI Gateway／自定义上游\n聊天模型响应",
+          "kind": "external",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S12"
+          ],
+          "note": "网关只执行路由与 HTTP 调用；上游配置、fallback、日志和模型内部状态不在本研究证据边界。"
+        },
+        {
+          "id": "queue",
+          "label": "MEMORY_QUEUE\n响应后投递与重试",
+          "kind": "process",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S43"
+          ],
+          "note": "assistant/exchange 在响应观察结束后调度；Queue 发送失败直接写 D1。"
+        },
+        {
+          "id": "night",
+          "label": "Cron · Dream\n每日抽取与整理",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S15",
+            "S16",
+            "S35"
+          ],
+          "note": "当前只有 20:10 UTC 夜批，没有 4h 调度。默认工程主体普通抽取被提示词排除。"
+        },
+        {
+          "id": "candidates",
+          "label": "memory_candidates\n待审／通过／丢弃",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17",
+            "S38"
+          ],
+          "note": "新抽取进入候选，但不等于全部等待人工。"
+        },
+        {
+          "id": "judge",
+          "label": "Candidate Judge\n自动核据与裁决",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "note": "默认启用；无可核对源消息直接 ungrounded；高分 approve，中间 keep。"
+        },
+        {
+          "id": "ai",
+          "label": "Workers AI\nembedding／rerank／Dream",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S11",
+            "S13"
+          ],
+          "note": "表示实际模型调用代码和部署默认值；模型质量、计费、托管留存未运行验证。"
+        },
+        {
+          "id": "diary",
+          "label": "daily／weekly／monthly\n印象摘要阶梯",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S24",
+            "S25",
+            "S26",
+            "S30"
+          ],
+          "note": "不走 memory embedding；显式 boot 可取摘要，网关可带相关周印象但不得作为事实答案。"
+        },
+        {
+          "id": "extensions",
+          "label": "relations · triggers\n可选联想索引",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S31",
+            "S32",
+            "S33",
+            "S35",
+            "S42"
+          ],
+          "note": "relation 从种子扩展，trigger 在入口 union；trigger 建期不自动重建已有项。"
+        }
+      ],
+      "edges": [
+        {
+          "to": "gateway",
+          "label": "请求＋显式可见历史",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "client"
+        },
+        {
+          "to": "capture",
+          "label": "主模型、人类新输入",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "gateway"
+        },
+        {
+          "to": "raw",
+          "label": "await 原话与 FTS 保存",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "from": "capture"
+        },
+        {
+          "to": "memories",
+          "label": "显式 remember 规则直写",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ],
+          "from": "capture"
+        },
+        {
+          "to": "memories",
+          "label": "memory_upsert 直写",
+          "status": "observed",
+          "evidence": [
+            "S37",
+            "S18"
+          ],
+          "from": "admin"
+        },
+        {
+          "to": "vectors",
+          "label": "正文→embedding／FTS",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S11"
+          ],
+          "from": "memories"
+        },
+        {
+          "to": "recall",
+          "label": "最后用户话＋少量 recent",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S6"
+          ],
+          "from": "gateway"
+        },
+        {
+          "to": "recall",
+          "label": "向量／词面混合命中",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ],
+          "from": "vectors"
+        },
+        {
+          "to": "recall",
+          "label": "词面术语／相关 precious",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ],
+          "from": "curated"
+        },
+        {
+          "to": "recall",
+          "label": "仅证据问题搜索原话",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ],
+          "from": "raw"
+        },
+        {
+          "to": "recall",
+          "label": "可选 trigger union／2-hop",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S33",
+            "S42"
+          ],
+          "from": "extensions"
+        },
+        {
+          "to": "selector",
+          "label": "各空间/来源轮流合并",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ],
+          "from": "recall"
+        },
+        {
+          "to": "ai",
+          "label": "最多 64 个原文窗口打分",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ],
+          "from": "selector"
+        },
+        {
+          "to": "patch",
+          "label": "去重、地板、0–1／0–2",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ],
+          "from": "selector"
+        },
+        {
+          "to": "upstream",
+          "label": "user 尾部临时补丁",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "patch"
+        },
+        {
+          "to": "queue",
+          "label": "观察响应结束后调度",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4"
+          ],
+          "from": "upstream"
+        },
+        {
+          "to": "raw",
+          "label": "完整 assistant＋exchange",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "from": "queue"
+        },
+        {
+          "to": "night",
+          "label": "夜间日期批次＋cursor",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ],
+          "from": "raw"
+        },
+        {
+          "to": "ai",
+          "label": "工程否决／关系优先提示",
+          "status": "observed",
+          "evidence": [
+            "S28"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "candidates",
+          "label": "提取与普通变更候选",
+          "status": "observed",
+          "evidence": [
+            "S16"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "judge",
+          "label": "pending＋来源消息",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "candidates"
+        },
+        {
+          "to": "ai",
+          "label": "判 grounded／durable",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "judge"
+        },
+        {
+          "to": "memories",
+          "label": "approve 后落库或新版本",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "judge"
+        },
+        {
+          "to": "memories",
+          "label": "特定 world_fact 直接 supersede",
+          "status": "observed",
+          "evidence": [
+            "S16"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "diary",
+          "label": "摘要／印象阶梯",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S24",
+            "S25"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "extensions",
+          "label": "开关启用的夜间建期",
+          "status": "observed",
+          "evidence": [
+            "S35"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "memories",
+          "label": "异步 last_injected_at",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ],
+          "from": "selector"
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "Immediate capture",
+          "writers": "persistHumanUtterance / captureRememberNow",
+          "changes": "先保存原话；显式请记住生成 verbatim fact_key",
+          "limits": "规则捕获按字面幂等，不是主题级修订；保存失败聊天仍继续",
+          "evidence": [
+            "S1",
+            "S4",
+            "S5"
+          ]
+        },
+        {
+          "owner": "Dream candidates",
+          "writers": "夜间模型提案与自动/人工 judge",
+          "changes": "日期 cursor 批次；候选 approve/discard/keep",
+          "limits": "默认自动 judge，不是所有候选都等待人工；工程主体普通抽取提示为跳过",
+          "evidence": [
+            "S15",
+            "S16",
+            "S17",
+            "S28"
+          ]
+        },
+        {
+          "owner": "Recall surface",
+          "writers": "recallPatch / selectRecall",
+          "changes": "跨空间统一排序；记入实际注入时间",
+          "limits": "不存在通用检索完整性保证；未入候选池无法由 reranker 找回",
+          "evidence": [
+            "S6",
+            "S8",
+            "S9"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revision",
+      "title": "修订、整理与遗忘边界",
+      "question": "谁能修改记忆，版本如何留下，删除又能清到哪些派生状态？",
+      "reading_guide": "从显式管理和候选裁决进入 mutate/delete；中部区分 current/旧版本、索引与清理。右侧日志和感知快照独立存在，单条删除未形成全局级联。",
+      "omissions": [
+        "未观察 Cloudflare 物理删除完成、缓存服务与上游日志保留；没有外部服务遗忘证据。",
+        "不将“亲笔来源”当成人类身份认证；MCP 调用者也能写该来源。"
+      ],
+      "regions": [
+        {
+          "id": "client",
+          "label": "客户端与管理者",
+          "responsibility": "Harness、最终工具循环和显式管理操作",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S37",
+            "S38"
+          ]
+        },
+        {
+          "id": "worker",
+          "label": "Aelios Worker",
+          "responsibility": "路由、写入、召回、后台整理代码",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S14"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "Cloudflare 存储",
+          "responsibility": "D1 为主要记录源，Vectorize 为派生索引，Queue 为投递边界",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S11",
+            "S13"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "模型服务边界",
+          "responsibility": "Workers AI 处理记忆模型请求；聊天上游可为 CF AI Gateway/BYOK 或自定义服务",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S11",
+            "S12"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "admin",
+          "label": "Admin · MCP · REST\n管理／显式读写",
+          "kind": "entry",
+          "region": "client",
+          "status": "observed",
+          "evidence": [
+            "S37",
+            "S38",
+            "S21"
+          ],
+          "note": "管理者与持有 memory:write 的调用者均可改写。MCP 不是纯人工通道。"
+        },
+        {
+          "id": "candidates",
+          "label": "memory_candidates\n待审／通过／丢弃",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17",
+            "S38"
+          ],
+          "note": "新抽取进入候选，但不等于全部等待人工。"
+        },
+        {
+          "id": "judge",
+          "label": "Candidate Judge\n自动核据与裁决",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "note": "默认启用；无可核对源消息直接 ungrounded；高分 approve，中间 keep。"
+        },
+        {
+          "id": "mutate",
+          "label": "upsert／supersede\n更新或创建版本",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19"
+          ],
+          "note": "署名亲笔保护针对非手写来源的 upsert/supersede；不能推成全入口或保留期豁免。"
+        },
+        {
+          "id": "memories",
+          "label": "memories · lifecycle\n事实、版本、来源",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19",
+            "S39"
+          ],
+          "note": "普通写入八 types；同 fact_key upsert 可以原地更新，supersede 才显式保留版本。"
+        },
+        {
+          "id": "delete",
+          "label": "删除／归档入口\nREST soft · MCP hard",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21",
+            "S36",
+            "S34"
+          ],
+          "note": "不同入口清理范围不同；MCP v2 硬删失败返回 false；不能声称统一级联遗忘。"
+        },
+        {
+          "id": "vectors",
+          "label": "Vectorize · FTS\n向量／词面候选索引",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11",
+            "S18"
+          ],
+          "note": "Vectorize 包含内容 metadata；默认仍可回退到无 D1 背书的 legacy 向量。"
+        },
+        {
+          "id": "extensions",
+          "label": "relations · triggers\n可选联想索引",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S31",
+            "S32",
+            "S33",
+            "S35",
+            "S42"
+          ],
+          "note": "relation 从种子扩展，trigger 在入口 union；trigger 建期不自动重建已有项。"
+        },
+        {
+          "id": "raw",
+          "label": "messages · exchanges\n原话、结果与状态",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S22"
+          ],
+          "note": "不把注入补丁写回原话；不完整 assistant 不成为 Dream 消息。"
+        },
+        {
+          "id": "retention",
+          "label": "runMemoryRetention\n7／180／30 天",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S23"
+          ],
+          "note": "raw 默认 7 天；非 pinned/identity/persona active 180 天未更新过期；deleted/superseded/expired 再 30 天硬删；archived 不在硬删清单。"
+        },
+        {
+          "id": "night",
+          "label": "Cron · Dream\n每日抽取与整理",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S15",
+            "S16",
+            "S35"
+          ],
+          "note": "当前只有 20:10 UTC 夜批，没有 4h 调度。默认工程主体普通抽取被提示词排除。"
+        },
+        {
+          "id": "rollup",
+          "label": "Weekly／Monthly Rollup\n摘要压缩与源层删除",
+          "kind": "process",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S24",
+            "S25"
+          ],
+          "note": "周摘要默认保留 daily 等人工 approve；月摘要写入会同批删输入 weekly。"
+        },
+        {
+          "id": "diary",
+          "label": "daily／weekly／monthly\n印象摘要阶梯",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S24",
+            "S25",
+            "S26",
+            "S30"
+          ],
+          "note": "不走 memory embedding；显式 boot 可取摘要，网关可带相关周印象但不得作为事实答案。"
+        },
+        {
+          "id": "perception",
+          "label": "perception_cache\n夜选文本快照",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S27"
+          ],
+          "note": "删除或更新 memories 不同步重写该正文快照；boot 未逐条复核。"
+        },
+        {
+          "id": "boot",
+          "label": "memory_boot\n印象／珍贵／感知",
+          "kind": "output",
+          "region": "worker",
+          "status": "observed",
+          "evidence": [
+            "S26",
+            "S27"
+          ],
+          "note": "显式调用消费；感知为含正文快照，有 isolate boot cache。"
+        },
+        {
+          "id": "upstream",
+          "label": "AI Gateway／自定义上游\n聊天模型响应",
+          "kind": "external",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S12"
+          ],
+          "note": "网关只执行路由与 HTTP 调用；上游配置、fallback、日志和模型内部状态不在本研究证据边界。"
+        }
+      ],
+      "edges": [
+        {
+          "to": "mutate",
+          "label": "upsert／supersede／patch",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19",
+            "S21",
+            "S37"
+          ],
+          "from": "admin"
+        },
+        {
+          "to": "judge",
+          "label": "模型或人工处理提案",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S38"
+          ],
+          "from": "candidates"
+        },
+        {
+          "to": "mutate",
+          "label": "approve add／update",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "judge"
+        },
+        {
+          "to": "memories",
+          "label": "同键原改／新旧版本链",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19"
+          ],
+          "from": "mutate"
+        },
+        {
+          "to": "vectors",
+          "label": "新内容索引；旧版本下架",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19"
+          ],
+          "from": "mutate"
+        },
+        {
+          "to": "extensions",
+          "label": "supersedes 关系边",
+          "status": "observed",
+          "evidence": [
+            "S19"
+          ],
+          "from": "mutate"
+        },
+        {
+          "to": "delete",
+          "label": "REST 删除／MCP 删除归档",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21",
+            "S36"
+          ],
+          "from": "admin"
+        },
+        {
+          "to": "delete",
+          "label": "dream_delete 批准→archive",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "judge"
+        },
+        {
+          "to": "memories",
+          "label": "REST soft／MCP hard／archive",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21"
+          ],
+          "from": "delete"
+        },
+        {
+          "to": "vectors",
+          "label": "下架向量；FTS 范围依路径",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21"
+          ],
+          "from": "delete"
+        },
+        {
+          "to": "extensions",
+          "label": "仅 legacy 路径显式清 trigger",
+          "status": "observed",
+          "evidence": [
+            "S34"
+          ],
+          "from": "delete"
+        },
+        {
+          "to": "retention",
+          "label": "每日调用、每空间节流",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S22"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "raw",
+          "label": "默认 7 天删原话/exchange",
+          "status": "observed",
+          "evidence": [
+            "S22"
+          ],
+          "from": "retention"
+        },
+        {
+          "to": "memories",
+          "label": "180 天过期→终态30天硬删",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S23"
+          ],
+          "from": "retention"
+        },
+        {
+          "to": "vectors",
+          "label": "先向量删除，再硬删记录",
+          "status": "observed",
+          "evidence": [
+            "S22"
+          ],
+          "from": "retention"
+        },
+        {
+          "to": "rollup",
+          "label": "日／周／月调度",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "diary",
+          "label": "周留 daily；月替换 weekly",
+          "status": "observed",
+          "evidence": [
+            "S24",
+            "S25"
+          ],
+          "from": "rollup"
+        },
+        {
+          "to": "rollup",
+          "label": "weekly approve 才删 daily",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ],
+          "from": "admin"
+        },
+        {
+          "to": "perception",
+          "label": "挑选高重要度正文快照",
+          "status": "observed",
+          "evidence": [
+            "S27",
+            "S35"
+          ],
+          "from": "night"
+        },
+        {
+          "to": "boot",
+          "label": "按日读快照，不复查原条目",
+          "status": "observed",
+          "evidence": [
+            "S26",
+            "S27"
+          ],
+          "from": "perception"
+        },
+        {
+          "to": "boot",
+          "label": "日／周／月印象显式返回",
+          "status": "observed",
+          "evidence": [
+            "S26"
+          ],
+          "from": "diary"
+        },
+        {
+          "to": "upstream",
+          "label": "此前已注入的文本影响",
+          "status": "inferred",
+          "evidence": [
+            "S1"
+          ],
+          "from": "memories"
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "memories + lifecycle",
+          "writers": "显式 API、自动 judge、Dream world_fact 例外",
+          "changes": "同 fact_key upsert 为原地覆盖；supersede 才建立新旧关联",
+          "limits": "under_review 仍可被召回；亲笔保护不是所有删除/过期路径豁免",
+          "evidence": [
+            "S18",
+            "S19",
+            "S39",
+            "S23"
+          ]
+        },
+        {
+          "owner": "Deletion and derived indexes",
+          "writers": "REST、MCP、legacy vector delete、retention",
+          "changes": "入口分别 soft-delete / hard-delete / archive；Vectorize 失败处理不同",
+          "limits": "MCP v2 与 retention 未调用 trigger cleanup；既有 trigger 默认跳过重建，可能保留旧索引；源状态复核能挡删除条目但不等于清除副本",
+          "evidence": [
+            "S20",
+            "S21",
+            "S22",
+            "S23",
+            "S31",
+            "S33",
+            "S34"
+          ]
+        },
+        {
+          "owner": "diary + perception + boot",
+          "writers": "Dream/rollup/perception writer",
+          "changes": "摘要阶梯与感知文本是独立派生记录",
+          "limits": "单条 memories 删除不回写日记、原消息、感知快照或上游；boot 可能读旧快照，未运行验证",
+          "evidence": [
+            "S24",
+            "S25",
+            "S26",
+            "S27",
+            "S20",
+            "S21"
+          ]
+        },
+        {
+          "owner": "Retention",
+          "writers": "runMemoryRetention",
+          "changes": "raw 7天；未更新 active 180天；终态再30天硬删",
+          "limits": "pinned、identity/persona 豁免过期；archived 不在硬删清单；源消息先删除会缩短候选证据可核对窗口",
+          "evidence": [
+            "S22",
+            "S23",
+            "S17"
+          ]
+        }
+      ]
+    }
+  ]
+}

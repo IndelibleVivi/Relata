@@ -1,0 +1,60 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_app["调用应用／集成"]
+    app["调用应用<br/>内容与最终动作<br/>〔未知〕"]:::external
+    class app unknown
+  end
+  subgraph region_api["Hindsight API"]
+    curator["调用者／curation API<br/>改写 · invalidation · 删除"]:::entry
+    auth{"Tenant／validator<br/>schema · bank · tags"}:::decision
+    edit["document／fact edit<br/>重抽取或重 embedding"]:::process
+    cleanup["stale observation sweep<br/>删派生物／重排来源"]:::process
+  end
+  subgraph region_bg["后台执行"]
+    worker["Worker poller<br/>claim／execute／retry"]:::process
+    consolidator["consolidation<br/>检索旧观察→LLM actions"]:::process
+    mmrefresh["mental-model refresh<br/>full／delta／retraction"]:::process
+    maintenance["Maintenance loop<br/>cron／reconcile"]:::process
+  end
+  subgraph region_db["默认 SQL 状态"]
+    facts[("documents／memory_units<br/>原文 · facts · links")]:::store
+    archive[("invalidated_memory_units<br/>可审查的失效归档")]:::store
+    observations[("observations<br/>来源关联的推断")]:::store
+    queue[("async_operations<br/>状态与任务 payload")]:::store
+    mentalmodels[("mental_models<br/>显式问题驱动文档")]:::store
+    history[("mental_model_history<br/>旧内容与 grounding")]:::store
+  end
+  curator -->|"请求 delete／edit／invalidate"| auth
+  auth -->|"允许后改写／重留"| edit
+  edit -->|"更新文本／embedding／chunks"| facts
+  auth -->|"document delete 级联"| facts
+  auth -->|"invalidation 留存原事实"| archive
+  auth -->|"删除／编辑受影响来源"| cleanup
+  edit -->|"变化 chunks 的来源失效"| cleanup
+  cleanup -->|"删受影响 observation＋history"| observations
+  cleanup -->|"幸存来源 consolidated_at=NULL"| facts
+  cleanup -->|"配置允许时重排 consolidation"| queue
+  queue -->|"claim／retry"| worker
+  worker -->|"重做派生观察"| consolidator
+  consolidator -->|"从剩余来源重新归纳"| observations
+  consolidator -->|"触发 scope 合格自动刷新"| queue
+  maintenance -->|"cron 到期且 stale 才刷新"| queue
+  auth -->|"显式手动 refresh"| mmrefresh
+  worker -->|"执行自动 refresh"| mmrefresh
+  facts -->|"检查 cited grounding 是否仍 live"| mmrefresh
+  mmrefresh -->|"full／delta edits 与 watermark"| mentalmodels
+  mentalmodels -->|"按配置保存旧内容／grounding"| history
+  mentalmodels -.->|"手动或未完成刷新可仍读旧内容"| app
+  auth -->|"best-effort retracted-grounding nudge"| queue
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

@@ -3,7 +3,7 @@
 
 # Relata Research Foundation: Start Here
 
-Relata is a frontier memory research lab. Begin with the [agent-memory inquiry](research/agent-memory-inquiry.md) for definitions, open-source architecture studies and a comparative article direction. General agent use and adult long-term intimacy are both in scope under [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md). Source research and writing can proceed independently of case evaluation.
+Relata is a frontier memory research lab. Begin with the [agent-memory inquiry](research/agent-memory-inquiry.md) for definitions, open-source architecture studies and a comparative article direction. General agent use and adult long-term intimacy are both in scope under [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md). Source research and writing can proceed independently of case evaluation. The [ten-project architecture atlas](systems/architecture-atlas/README.md) offers thirty source-linked SVGs and an offline reader; the [source studies](systems/source-studies/README.md) explain their findings and limits.
 
 The foundation work below also preserves the operational path from the non-normative Target Architecture Draft 0.1 to evidence-backed cases.
 

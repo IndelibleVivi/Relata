@@ -1,0 +1,63 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_app["调用方 / agent harness"]
+    input["messages + config<br/>调用方输入"]:::entry
+    agent["Agent harness<br/>工具调用与响应<br/>〔推断〕"]:::external
+    class agent inferred
+    context["Context assembly<br/>工具结果或 prompt<br/>〔推断〕"]:::process
+    class context inferred
+    promptout["Updated prompt<br/>由调用方采用"]:::output
+  end
+  subgraph region_lib["LangMem library"]
+    scope["NamespaceTemplate<br/>配置生成 tuple"]:::process
+    manage["manage_memory<br/>创建 / 覆盖 / 删除"]:::process
+    search["search_memory<br/>query / filter / limit"]:::process
+    executor["ReflectionExecutor<br/>延迟与 pending 取消"]:::process
+    manager["MemoryStoreManager<br/>检索后整理并写回"]:::process
+    extractor["MemoryManager<br/>生成对象变更"]:::process
+    phases["MemoryPhase[]<br/>可选逐阶段整理"]:::process
+    optimizer["Prompt optimizer<br/>行为指令改写"]:::process
+  end
+  subgraph region_storage["外部 Store / runtime"]
+    store[("BaseStore<br/>namespace / key / value")]:::store
+    runtime["LangGraph runtime<br/>checkpoint / remote runs"]:::external
+    backend["Store adapter<br/>索引 / TTL / 耐久性"]:::external
+  end
+  subgraph region_models["模型 / Trustcall 依赖"]
+    llm[["Chat model + Trustcall<br/>推断 / 结构化输出"]]:::model
+  end
+  input -.->|"messages / configurable"| agent
+  agent -->|"模型决定 action + content + id"| manage
+  agent -->|"按需 query / filter"| search
+  scope -->|"解析 namespace"| manage
+  scope -->|"解析 namespace"| manager
+  manage -->|"put 或 delete：{content}"| store
+  search -->|"search(namespace, query)"| store
+  search -->|"序列化命中 / artifact"| context
+  context -.->|"注入 system 或工具上下文"| agent
+  input -->|"submit(payload, after_seconds)"| executor
+  executor -->|"本地延迟 invoke(payload)"| manager
+  executor -->|"remote：runs.create"| runtime
+  manager -->|"候选读取 + {kind,content} 写回"| store
+  manager -->|"messages + selected existing"| extractor
+  extractor -->|"schema / 指令 / existing"| llm
+  extractor -->|"可选：已整理对象继续处理"| phases
+  extractor -->|"无 phase 时返回对象变化"| manager
+  phases -->|"最终对象与移除 IDs"| manager
+  store -->|"委托搜索 / 存储 / TTL"| backend
+  input -->|"trajectories / feedback / prompt"| optimizer
+  optimizer -->|"反思与 prompt 改写"| llm
+  optimizer -->|"返回新 prompt 或原 prompt"| promptout
+  promptout -.->|"调用方选择启用"| agent
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

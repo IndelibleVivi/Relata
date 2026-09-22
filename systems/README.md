@@ -7,7 +7,7 @@ The System Census studies how actual memory and agent systems work, what their a
 
 A census object may be a memory engine, context compiler, complete companion agent, local personal stack, manually curated archive, agent framework, or mixed architecture. A system need not expose discrete memories, retrieval candidates, or a write/search API to be represented.
 
-The first [five source studies](source-studies/README.md) cover Mem0, current Letta, Graphiti, lmc-5 and Tideline Memory at pinned public commits. They include conditional architecture comparisons and two isolated offline observations. They remain source-study drafts, separate from reviewed or accepted System Cards.
+The [ten source studies](source-studies/README.md) cover Mem0, current Letta, Graphiti, lmc-5, Tideline Memory, Aelios, Hindsight, OpenViking, LangMem and A-MEM at pinned public commits. The [architecture atlas](architecture-atlas/README.md) provides three source-linked views per project, with standalone SVGs and an offline interactive reader. They include conditional architecture comparisons and two isolated offline observations. They remain source-study drafts, separate from reviewed or accepted System Cards.
 
 ## Classification
 

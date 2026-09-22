@@ -1,0 +1,57 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_harness["Letta Code harness"]
+    change["Memory command<br/>修订／删除请求"]:::entry
+    edit["memory tool<br/>编辑／删除／提交"]:::process
+    check{"Revision 检查<br/>复用／update／recompile"}:::decision
+    compiler["compileLocalSystemPrompt<br/>编译已提交 memory"]:::process
+    compact["Local compaction<br/>规划＋模型摘要"]:::process
+    sync["Remote MemFS sync<br/>post-turn push／rebase"]:::process
+  end
+  subgraph region_storage["本地持久状态"]
+    working[("MemFS working tree<br/>已编辑未必提交")]:::store
+    memfs[("MemFS Git HEAD<br/>agent 的提交记忆")]:::store
+    compiled[("system-prompt.json<br/>conversation 编译状态")]:::store
+    messages[("messages.jsonl<br/>保留消息与压缩事件")]:::store
+    active[("活动 conversation<br/>摘要＋保留尾部")]:::store
+  end
+  subgraph region_background["后台 reflection 支路"]
+    refl_log[("transcript.jsonl + state<br/>reflection 独立进度")]:::store
+    reflection["Reflection subagent<br/>后台候选改写"]:::process
+    worktree[("Reflection worktree<br/>候选 branch／commits")]:::store
+    merge{"Reflection integration<br/>合并／冲突／重试"}:::decision
+  end
+  subgraph region_remote["Cloud／API 后端"]
+    cloud["Cloud／API 状态<br/>存储与索引未知<br/>〔未知〕"]:::external
+    class cloud unknown
+  end
+  change -->|"command＋reason＋target"| edit
+  edit -->|"replace／delete／rename"| working
+  working -->|"stage 受影响路径并 commit"| memfs
+  memfs -->|"读取 committed revision"| check
+  check -->|"变更后编译；未变可复用"| compiler
+  compiler -->|"更新 coreMemory／revision"| compiled
+  active -->|"已有消息的压缩输入"| compact
+  compact -->|"另行追加摘要事件"| messages
+  compact -->|"另行更新当前摘要与尾部"| active
+  refl_log -->|"未消费消息范围"| reflection
+  memfs -->|"基于 HEAD 分出候选"| worktree
+  reflection -->|"候选更正／整合"| worktree
+  worktree -->|"完成后合并或冲突"| merge
+  merge -->|"merged 更新父版本"| memfs
+  merge -->|"仅 merged 请求 recompile"| compiler
+  merge -->|"merged/no_changes 消费范围"| refl_log
+  memfs -->|"仅 remote backend 待同步提交"| sync
+  sync -->|"push/rebase；失败有状态"| cloud
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

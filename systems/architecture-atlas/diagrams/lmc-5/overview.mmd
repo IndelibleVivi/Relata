@@ -1,0 +1,66 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_harness["调用方与部署接线"]
+    runtime["Agent runtime<br/>调用、使用返回上下文<br/>〔未知〕"]:::external
+    class runtime unknown
+    callbacks["Injected callbacks<br/>持久化与接线责任<br/>〔推断〕"]:::external
+    class callbacks inferred
+  end
+  subgraph region_minimal["Minimal · SQLite core"]
+    min_raw[("events + events_fts<br/>角色、channel、原始事件")]:::store
+    min_curated[("memories<br/>X / Z / E / M 字段")]:::store
+    min_rel[("relations<br/>Y typed edges")]:::store
+    min_read["recall_hits()<br/>词法、entity、graph、M"]:::process
+    min_vectors[("vectors / search_vectors<br/>独立 cosine API")]:::store
+  end
+  subgraph region_production["Production reference · PostgreSQL"]
+    hooks["Claude Code hooks<br/>SessionEnd / Start / Prompt"]:::process
+    pg_raw[("lmc5_raw_events<br/>session / role / FTS")]:::store
+    pg_curated[("lmc5_curated_memories<br/>XYZEM 主记录")]:::store
+    pg_rel[("lmc5_memory_relations<br/>类型、强度、有效期")]:::store
+    pg_vectors[("lmc5_vectors<br/>halfvec + text_preview")]:::store
+    pipeline["RecallPipeline<br/>分层召回、去重、注入"]:::process
+    runner["DreamRunner<br/>顺序调度 callbacks"]:::process
+    nightdream["NightDream<br/>propose → gate → write"]:::process
+  end
+  subgraph region_providers["可选模型服务"]
+    optional_models[["可选模型服务<br/>embedding / proposal<br/>〔未知〕"]]:::model
+    class optional_models unknown
+  end
+  runtime -->|"log_event(role, channel, content)"| min_raw
+  runtime -->|"显式 add_memory"| min_curated
+  runtime -->|"显式 recall(query)"| min_read
+  min_curated -->|"live FTS / entity / M 候选"| min_read
+  min_rel -->|"safe 图关系扩展"| min_read
+  min_read -->|"命中计数与 last_hit 回写"| min_curated
+  min_read -->|"显式 recall 结果"| runtime
+  runtime -->|"独立 upsert / search_vectors"| min_vectors
+  runtime -->|"宿主 hook 输入"| hooks
+  hooks -->|"SessionEnd 写原始事件"| pg_raw
+  pg_curated -->|"SessionStart identity / current facts"| hooks
+  hooks -->|"启动 pack；另读叙事与 cache"| runtime
+  hooks -->|"UserPromptSubmit 查询"| pipeline
+  pg_curated -->|"curated FTS / emotion 候选"| pipeline
+  pg_rel -->|"safe graph 扩展"| pipeline
+  pg_vectors -->|"ANN 命中与 preview"| pipeline
+  pg_raw -->|"FTS / literal 原始证据"| pipeline
+  pipeline -->|"带来源层级的注入文本"| runtime
+  runtime -.->|"部署方调用 / 调度 run"| runner
+  runner -.->|"hippocampus callback 接线"| nightdream
+  nightdream -->|"候选 writer / safe relation / review"| callbacks
+  callbacks -.->|"部署方持久化候选"| pg_curated
+  callbacks -.->|"部署方写安全边"| pg_rel
+  optional_models -.->|"可选 proposer 结果"| nightdream
+  pipeline -.->|"条件调用 embedder / rerank"| optional_models
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

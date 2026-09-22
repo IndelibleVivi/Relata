@@ -1,0 +1,64 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_host["外部会话与模型"]
+    runtime["Agent runtime<br/>轮次 / 结束 / 压缩<br/>〔未知〕"]:::external
+    class runtime unknown
+    context_frame["模型上下文材料<br/>身份块 / 召回 / 工具结果"]:::output
+    current_model[["当前 agent 模型<br/>核查与使用<br/>〔未知〕"]]:::model
+    class current_model unknown
+  end
+  subgraph region_ingest["采集与固化执行"]
+    capture["sync_turn / 补录<br/>角色前缀 + 截断"]:::process
+    epilogue["session_epilogue<br/>关闭窗口写 1–2 条"]:::process
+    scan_unindexed["scan_unindexed<br/>时间 watermark 分块"]:::process
+    dream_prompts["DREAM prompts<br/>模型判断值得固化的内容"]:::process
+    memory_write["memory_write<br/>结构化叙事与权重"]:::process
+  end
+  subgraph region_storage["SQLite 主状态"]
+    context[("context<br/>文本片段 + metadata")]:::store
+    narratives[("narratives<br/>结构文本 + 原向量")]:::store
+    identity_state[("profiles / self_concept<br/>snapshot / threads")]:::store
+    amendments[("amendments<br/>追加修订与原因")]:::store
+    trajectories[("trajectories<br/>mech / llm 演进链")]:::store
+  end
+  subgraph region_read["读取与注入执行"]
+    identity_inject["system_prompt_block<br/>T0 / T2 / T2b / T3"]:::process
+    auto_recall["prefetch：T1 → T4<br/>自动选原 narrative"]:::process
+    explicit_search["memory_search / recall<br/>显式查询与修订回显"]:::process
+  end
+  runtime -.->|"轮次同步或边界补录"| capture
+  capture -->|"保存截断文本与角色标记"| context
+  context -->|"结束时选部分 session 材料"| epilogue
+  epilogue -->|"成功时直接 INSERT"| narratives
+  epilogue -->|"LLM 失败追加 seal"| context
+  context -->|"取 watermark 后对话片段"| scan_unindexed
+  narratives -->|"取 MAX(created_at)"| scan_unindexed
+  scan_unindexed -.->|"输出分块及 context IDs"| dream_prompts
+  dream_prompts -.->|"模型选内容并发工具请求"| memory_write
+  runtime -.->|"当前模型显式写入"| memory_write
+  memory_write -->|"写结构 / links / 原向量"| narratives
+  identity_state -->|"读当前身份与人物状态"| identity_inject
+  context -->|"T2b 近期对话桥"| identity_inject
+  narratives -->|"T2 高权重原始摘要"| identity_inject
+  narratives -->|"原向量候选 / 原文 FTS"| auto_recall
+  trajectories -->|"仅 T1 命中后附演进链"| auto_recall
+  runtime -.->|"显式调用 query / recall"| explicit_search
+  context -->|"关键词 / 向量原文预览"| explicit_search
+  narratives -->|"匹配本体并绑定 ID"| explicit_search
+  amendments -->|"修订检索并按时序回显"| explicit_search
+  identity_inject -->|"返回会话身份块"| context_frame
+  auto_recall -->|"返回自动召回文本"| context_frame
+  explicit_search -->|"返回可供查证的文本"| context_frame
+  context_frame -.->|"host 交付后由模型解释"| current_model
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

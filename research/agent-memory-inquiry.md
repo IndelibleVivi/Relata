@@ -6,11 +6,11 @@
 
 ## 中文摘要
 
-这条研究线追问：GitHub 上以 memory 为名的项目分别让什么过去、通过什么机制、在什么条件下影响 agent 的现在？它把概念辨析、源码结构、架构取舍与长期使用情境放在一起研究；通用任务和成人长期人机亲密关系可以各自成立，也可以互相照亮。现有[首轮五项目源码研究](../systems/source-studies/README.md)，但独立人类 review、端到端效果比较与定稿文章尚未完成。
+这条研究线追问：GitHub 上以 memory 为名的项目分别让什么过去、通过什么机制、在什么条件下影响 agent 的现在？它把概念辨析、源码结构、架构取舍与长期使用情境放在一起研究；通用任务和成人长期人机亲密关系可以各自成立，也可以互相照亮。现有[十项目源码研究与架构图集](../systems/source-studies/README.md)，但独立人类 review、端到端效果比较与定稿文章尚未完成。
 
 ## English summary
 
-This inquiry asks what different memory projects preserve from the past, how that material influences present agent behavior, and under which conditions their architectural choices help or fail. It connects conceptual analysis, public-source inspection, tradeoffs and longitudinal use inside and outside adult human–AI intimacy. Five bounded source-study drafts now support the inquiry; independent human review, end-to-end comparison and the article manuscript remain unfinished. No taxonomy or performance ranking is accepted.
+This inquiry asks what different memory projects preserve from the past, how that material influences present agent behavior, and under which conditions their architectural choices help or fail. It connects conceptual analysis, public-source inspection, tradeoffs and longitudinal use inside and outside adult human–AI intimacy. Ten bounded source-study drafts and thirty source-linked architecture views now support the inquiry; independent human review, end-to-end comparison and the article manuscript remain unfinished. No taxonomy or performance ranking is accepted.
 
 ## 文章可以抓住的主问题
 
@@ -48,7 +48,7 @@ This inquiry asks what different memory projects preserve from the past, how tha
 
 ## 初步 GitHub 线索与后续源码研究
 
-下表保留最初从 2026-09-22 官方 README 读到的选择线索，不能单独作为实现证据。随后完成的[五份源码研究](../systems/source-studies/README.md)固定了 Mem0、Letta、Graphiti、lmc-5 与 Tideline Memory 各自的公开 commit，并声明实际覆盖；其中两份有窄范围离线观察。它们仍是 source-study drafts，不是 reviewed System Cards，也不构成代表性样本。
+下表保留最初从 2026-09-22 官方 README 读到的选择线索，不能单独作为实现证据。随后完成的[十份源码研究](../systems/source-studies/README.md)固定了 Mem0、Letta、Graphiti、lmc-5、Tideline Memory、Aelios、Hindsight、OpenViking、LangMem 与 A-MEM 各自的公开 commit，并声明实际覆盖；其中两份有窄范围离线观察。它们仍是 source-study drafts，不是 reviewed System Cards，也不构成代表性样本。
 
 | 官方入口 | 当前来源声明 / 线索 | 值得继续查的问题 |
 |---|---|---|
@@ -57,6 +57,19 @@ This inquiry asks what different memory projects preserve from the past, how tha
 | [Graphiti](https://github.com/getzep/graphiti#graphiti-and-zep) | README 将 temporal graph framework 与 Zep managed infrastructure 区分，列出各自提供的功能（`SOURCE-CLAIMED`） | 图框架本身承担哪些更新、时间和来源职责？应用还需补上哪些用户、对话与使用流程？ |
 
 由此得到的初步编辑判断（`INFERRED`）：跨项目文章首先需要对齐被比较的对象。名称相同的开源仓库、托管产品、历史论文实现和完整 agent，不能仅凭品牌一起接受或否定。首批精读按机制差异和可检查性选取；文件/完整历史等较简单的机制也应作为候选对照，不能只按 stars 选“复杂系统”。
+
+## 让架构图承担论证
+
+[三十幅架构图与离线 reader](../systems/architecture-atlas/README.md) 将每个项目分成全景、写入到使用、修订与控制三视图。节点、关系、区域和状态归属绑定 exact commit 的源码；静态观察、编辑推断和未读边界分别标识。图应当让读者检查一条论断经过了哪些状态和责任边界，而非仅为文字附一张泛化的 RAG 示意图。
+
+新增样本带来四个可深化的论点：
+
+- **保留什么本身就是选择。** [Aelios](../systems/source-studies/aelios.md) 的默认 Dream 排除工程主体、保留重大关系/亲密例外，体现一个具体产品目标；Relata 的 mixed-domain 用例则要求普通共享工作也能构成连续性。需要比较不同目标和入口，不能直接把前者判为通用 memory 失败。
+- **理解有自己的更新周期。** [Hindsight](../systems/source-studies/hindsight.md) 的 observation 与 mental model、[OpenViking](../systems/source-studies/openviking.md) 的原文/摘要/向量、[A-MEM](../systems/source-studies/a-mem.md) 的 note metadata/embedding，都要求追踪派生状态。一次成功修改与后续所有影响一致，是不同主张。
+- **“后台”不指向同一种保障。** OpenViking 的持久 QueueFS、Hindsight 的 operation worker、[LangMem](../systems/source-studies/langmem.md) 的进程内 executor、A-MEM 的同步演化，持久性与失败语义不同。不能将函数名 async/reflection 当成同一类学习机制。
+- **memory 与 policy 的边界可用具体对象论证。** LangMem 的 prompt optimizer 返回可被应用采用的新 prompt；Hindsight 的 reflect 是只读，而 refresh 写派生文档。这些能与 AMS 的 experience-to-capability / experience-becomes-policy 问题连接，仍需分别验证使用和效果。
+
+以上是跨报告的编辑推断，图和静态实现不建立 runtime 效果。
 
 ## 与 AMS 的连接
 
@@ -70,6 +83,6 @@ This inquiry asks what different memory projects preserve from the past, how tha
 
 ## 下一次会推进认识的工作
 
-利用首轮报告中的跨入口状态差异、来源与作用域反例，收敛文章的中心论点，并完成 source-fidelity review。需要正式进入 census 的项目再按 [System Card](../systems/system-card-template.zh-CN.md) 补齐 review；需要 runtime 证据的结论另行设计具体试验。文件/完整历史基线与学习机制的对照仍是样本缺口，不能把五项目归纳写成全部 agent memory 的边界。
+利用首轮报告中的跨入口状态差异、来源与作用域反例，收敛文章的中心论点，并完成 source-fidelity review。需要正式进入 census 的项目再按 [System Card](../systems/system-card-template.zh-CN.md) 补齐 review；需要 runtime 证据的结论另行设计具体试验。文件/目录实现已纳入研究，但简单文件/全文搜索、完整历史基线与学习机制的对照仍是样本缺口，不能把十项目归纳写成全部 agent memory 的边界。
 
 文章可以先贡献清晰的问题、机制比较和有限度的批评；不把未运行的试验写成结论，也不以 Case Lab 的完整 promotion gate 作为写作前提。

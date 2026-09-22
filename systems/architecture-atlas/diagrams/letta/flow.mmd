@@ -1,0 +1,67 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_harness["Letta Code harness"]
+    entry["Turn 输入<br/>agent / conversation"]:::entry
+    backend["LocalBackend<br/>组织 turn 与状态"]:::process
+    compact["Local compaction<br/>规划＋模型摘要"]:::process
+    compiler["compileLocalSystemPrompt<br/>编译已提交 memory"]:::process
+    bridge["PiStreamAdapter<br/>装配 model context"]:::process
+    edit["memory tool<br/>编辑／删除／提交"]:::process
+    recall["messages search<br/>CLI→FTS-lite / API"]:::process
+    search_result["Search JSON 结果<br/>消息／scope／时间"]:::output
+  end
+  subgraph region_storage["本地持久状态"]
+    messages[("messages.jsonl<br/>保留消息与压缩事件")]:::store
+    active[("活动 conversation<br/>摘要＋保留尾部")]:::store
+    compiled[("system-prompt.json<br/>conversation 编译状态")]:::store
+    memfs[("MemFS Git HEAD<br/>agent 的提交记忆")]:::store
+  end
+  subgraph region_provider["模型／provider 边界"]
+    model[["模型／provider<br/>生成文本与调用<br/>〔未知〕"]]:::model
+    class model unknown
+  end
+  subgraph region_background["后台 reflection 支路"]
+    refl_log[("transcript.jsonl + state<br/>reflection 独立进度")]:::store
+    refl_gate{"Post-turn trigger<br/>off／event／step-count"}:::decision
+    reflection["Reflection subagent<br/>后台候选改写"]:::process
+    worktree[("Reflection worktree<br/>候选 branch／commits")]:::store
+    merge{"Reflection integration<br/>合并／冲突／重试"}:::decision
+  end
+  entry -->|"进入 local turn"| backend
+  backend -->|"写消息与返回 stream"| messages
+  backend -->|"输入加入当前消息列表"| active
+  active -->|"需要压缩的当前消息"| compact
+  compact -->|"摘要＋保留尾部"| active
+  compact -->|"追加 compaction 事件"| messages
+  active -->|"当前 conversation 消息"| bridge
+  messages -->|"筛 scope／日期，匹配词句"| recall
+  memfs -->|"HEAD 的 core 正文／目录"| compiler
+  compiler -->|"生成与持久 prompt"| compiled
+  compiled -->|"prompt＋可选 revision update"| bridge
+  bridge -->|"发送本次 context"| model
+  edit -->|"memory 命令→commit"| memfs
+  entry -->|"CLI turn 完成后追加行 delta"| refl_log
+  refl_log -->|"已完成 step 与未反思状态"| refl_gate
+  refl_gate -->|"条件满足才后台启动"| reflection
+  refl_log -->|"选择未反思范围为 payload"| reflection
+  memfs -->|"从父 HEAD 创建候选分支"| worktree
+  reflection -->|"通过 memoryScope 改写候选"| worktree
+  worktree -->|"完成后评估候选 commits"| merge
+  merge -->|"成功才更新父 HEAD"| memfs
+  merge -->|"merged 时请求重编译"| compiler
+  merge -->|"成功消费后推进 checkpoint"| refl_log
+  recall -->|"返回并输出命中 JSON"| search_result
+  model -.->|"若选择 memory 工具调用"| edit
+  search_result -.->|"若被 recall 调用则供阅读"| model
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

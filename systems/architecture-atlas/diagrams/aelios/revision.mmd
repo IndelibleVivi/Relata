@@ -1,0 +1,60 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_client["客户端与管理者"]
+    admin["Admin · MCP · REST<br/>管理／显式读写"]:::entry
+  end
+  subgraph region_worker["Aelios Worker"]
+    judge["Candidate Judge<br/>自动核据与裁决"]:::process
+    mutate["upsert／supersede<br/>更新或创建版本"]:::process
+    delete["删除／归档入口<br/>REST soft · MCP hard"]:::process
+    retention["runMemoryRetention<br/>7／180／30 天"]:::process
+    night["Cron · Dream<br/>每日抽取与整理"]:::process
+    rollup["Weekly／Monthly Rollup<br/>摘要压缩与源层删除"]:::process
+    boot["memory_boot<br/>印象／珍贵／感知"]:::output
+  end
+  subgraph region_storage["Cloudflare 存储"]
+    candidates[("memory_candidates<br/>待审／通过／丢弃")]:::store
+    memories[("memories · lifecycle<br/>事实、版本、来源")]:::store
+    vectors[("Vectorize · FTS<br/>向量／词面候选索引")]:::store
+    extensions[("relations · triggers<br/>可选联想索引")]:::store
+    raw[("messages · exchanges<br/>原话、结果与状态")]:::store
+    diary[("daily／weekly／monthly<br/>印象摘要阶梯")]:::store
+    perception[("perception_cache<br/>夜选文本快照")]:::store
+  end
+  subgraph region_models["模型服务边界"]
+    upstream["AI Gateway／自定义上游<br/>聊天模型响应"]:::external
+  end
+  admin -->|"upsert／supersede／patch"| mutate
+  candidates -->|"模型或人工处理提案"| judge
+  judge -->|"approve add／update"| mutate
+  mutate -->|"同键原改／新旧版本链"| memories
+  mutate -->|"新内容索引；旧版本下架"| vectors
+  mutate -->|"supersedes 关系边"| extensions
+  admin -->|"REST 删除／MCP 删除归档"| delete
+  judge -->|"dream_delete 批准→archive"| delete
+  delete -->|"REST soft／MCP hard／archive"| memories
+  delete -->|"下架向量；FTS 范围依路径"| vectors
+  delete -->|"仅 legacy 路径显式清 trigger"| extensions
+  night -->|"每日调用、每空间节流"| retention
+  retention -->|"默认 7 天删原话/exchange"| raw
+  retention -->|"180 天过期→终态30天硬删"| memories
+  retention -->|"先向量删除，再硬删记录"| vectors
+  night -->|"日／周／月调度"| rollup
+  rollup -->|"周留 daily；月替换 weekly"| diary
+  admin -->|"weekly approve 才删 daily"| rollup
+  night -->|"挑选高重要度正文快照"| perception
+  perception -->|"按日读快照，不复查原条目"| boot
+  diary -->|"日／周／月印象显式返回"| boot
+  memories -.->|"此前已注入的文本影响"| upstream
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

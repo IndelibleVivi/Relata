@@ -1,0 +1,1788 @@
+{
+  "id": "graphiti",
+  "name": "Graphiti",
+  "repository": "https://github.com/getzep/graphiti",
+  "commit": "16cdf7045378c8d53ae01f94e2fa60d238cb0f68",
+  "study_date": "2026-09-22",
+  "boundary": "官方 OSS commit 的单 episode add_episode、通用图持久化/搜索路径和 remove_episode；含已读 Neo4j 初始化与可选 community 更新分支，以及明确标注的 LangGraph 示例消费/异步回写。排除 Zep managed infrastructure、MCP/server、bulk/dense、saga 全流程及全部 provider 等价性；observed 为静态源码，不是部署运行。",
+  "summary": "Graphiti 通过模型辅助抽取和候选冲突判断，把 episode 转为带来源与时间窗的事实图，再以可配置混合检索返回对象；当前性、来源投影和撤回后的派生状态闭合仍有调用者边界。",
+  "mechanisms": [
+    "Episode → entity / temporal fact",
+    "候选召回 + LLM 冲突裁决",
+    "事实时间与图处理时间",
+    "BM25 / cosine / 可选 BFS",
+    "调用者 context projection",
+    "首来源 episode 删除选择"
+  ],
+  "strengths": [
+    "在调用者保留时间/来源投影时，图对象可支持追溯与历史视图。",
+    "增量写入能保留失效边；按需配置 recipe，不强制所有查询使用图遍历或 LLM 重排。",
+    "模型客户端与 backend 可注入，适合分别研究抽取、选择与消费环节。"
+  ],
+  "limits": [
+    "默认 search 不自动筛当前有效事实；默认 fact 字符串投影来自示例而非库强制契约。",
+    "冲突依赖召回候选、LLM 判定及可用时间；exact shortcut 可保留已失效边的旧时间窗。",
+    "remove_episode 的有界入口未闭合共享摘要、来源数组和旧边复活的派生撤回。",
+    "无端到端/性能证据；既有 AST 观察只验证给定分支，不能替代模型与数据库测试。"
+  ],
+  "sources": [
+    {
+      "id": "S01",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/graphiti.py#L1043-L1062",
+      "note": "add_episode 公共参数：正文、来源、时间、group、类型、community/saga 选项。"
+    },
+    {
+      "id": "S02",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/graphiti.py#L1133-L1242",
+      "note": "单 episode：scope、历史上下文、实体抽取/解析、边解析、属性/摘要、保存的 awaited 顺序。"
+    },
+    {
+      "id": "S03",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/graphiti.py#L1013-L1041",
+      "note": "request-scoped driver/clients 路由；clone 具体效果仍依 provider。"
+    },
+    {
+      "id": "S04",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/graphiti.py#L207-L241",
+      "note": "可注入 graph driver、LLM、embedder、cross encoder；默认 Neo4j/OpenAI 客户端。"
+    },
+    {
+      "id": "S05",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/node_operations.py#L70-L132",
+      "note": "实体抽取准备正文、时间、历史、来源描述、类型与自定义提示。"
+    },
+    {
+      "id": "S06",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/node_operations.py#L627-L708",
+      "note": "实体候选解析：确定性相似规则和 LLM 分支，返回 UUID 映射。"
+    },
+    {
+      "id": "S07",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/edge_operations.py#L185-L238",
+      "note": "边抽取调用 LLM；检查实体名称并丢弃自边。"
+    },
+    {
+      "id": "S08",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/edge_operations.py#L361-L428",
+      "note": "边向量、同端点候选、组内 hybrid 检索矛盾候选。"
+    },
+    {
+      "id": "S09",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/edge_operations.py#L684-L778",
+      "note": "exact shortcut；否则 LLM duplicate/contradicted 索引选择与来源追加。"
+    },
+    {
+      "id": "S10",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/edge_operations.py#L538-L572",
+      "note": "不重叠跳过；较早事实 invalid_at 被设置为新事实 valid_at，并记录 expired_at。"
+    },
+    {
+      "id": "S11",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/edge_operations.py#L815-L845",
+      "note": "新事实时间补全、已失效标记及迟到事实被更晚候选截断。"
+    },
+    {
+      "id": "S12",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/node_operations.py#L726-L775",
+      "note": "实体自定义属性更新与摘要批处理。"
+    },
+    {
+      "id": "S13",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/node_operations.py#L847-L910",
+      "note": "较短摘要直接追加边事实，较长摘要路由 LLM；按字符长度分支。"
+    },
+    {
+      "id": "S14",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/node_operations.py#L934-L1002",
+      "note": "LLM 摘要上下文与写回实体 summary。"
+    },
+    {
+      "id": "S15",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/graphiti.py#L744-L759",
+      "note": "MENTIONS、episode.entity_edges、可选正文清空与批量保存调用。"
+    },
+    {
+      "id": "S16",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/bulk_utils.py#L128-L208",
+      "note": "session.execute_write；实体/边向量和字段打包。"
+    },
+    {
+      "id": "S17",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/bulk_utils.py#L225-L260",
+      "note": "图接口或 provider 查询分别保存 episode、entity、MENTIONS、facts。"
+    },
+    {
+      "id": "S18",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/nodes.py#L318-L331",
+      "note": "EpisodicNode 原始内容、来源、参考时间及事实 UUID。"
+    },
+    {
+      "id": "S19",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/nodes.py#L499-L515",
+      "note": "EntityNode 可变摘要、属性、name embedding。"
+    },
+    {
+      "id": "S20",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/edges.py#L263-L299",
+      "note": "EntityEdge 事实、来源列表、有效/失效时间、参考时间、fact embedding。"
+    },
+    {
+      "id": "S21",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/edges.py#L49-L54",
+      "note": "Edge 基础 identity、group、端点与 created_at。"
+    },
+    {
+      "id": "S22",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/graphiti.py#L1586-L1691",
+      "note": "基本 search 返回边、高级 search_ 返回多层 SearchResults；默认空时间过滤。"
+    },
+    {
+      "id": "S23",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/search/search_config_recipes.py#L80-L116",
+      "note": "高级组合含 BFS/cross encoder；基本 edge recipe 为 BM25+cosine+RRF。"
+    },
+    {
+      "id": "S24",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/search/search.py#L108-L225",
+      "note": "按配置生成查询向量；空 group 规范化；多层搜索 semaphore_gather。"
+    },
+    {
+      "id": "S25",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/search/search.py#L282-L353",
+      "note": "选择 BM25/cosine/BFS；配置内并行检索，BFS 可由首轮结果扩展。"
+    },
+    {
+      "id": "S26",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/search/search.py#L355-L438",
+      "note": "RRF、MMR、cross encoder shortlist 与 node-distance reranker 的配置分支。"
+    },
+    {
+      "id": "S27",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/search/search_filters.py#L55-L67",
+      "note": "四类时间过滤默认为 None。"
+    },
+    {
+      "id": "S28",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/search/search_utils.py#L185-L234",
+      "note": "可委托 search_interface；通用全文检索仅在提供时加入 group/time 条件。"
+    },
+    {
+      "id": "S29",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/examples/langgraph-agent/agent.ipynb#L230-L234",
+      "note": "示例只把 edge.fact 投影成字符串。"
+    },
+    {
+      "id": "S30",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/examples/langgraph-agent/agent.ipynb#L328-L371",
+      "note": "示例检索、system message、生成以及 asyncio.create_task 回写完整路径。"
+    },
+    {
+      "id": "S31",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/graphiti.py#L1824-L1852",
+      "note": "remove_episode 完整入口；首来源边、独占实体及 episode 删除，不重算保留派生状态。"
+    },
+    {
+      "id": "S32",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/graphiti.py#L1241-L1251",
+      "note": "community 更新默认关闭；启用时保存后 awaited semaphore_gather。"
+    },
+    {
+      "id": "S33",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/utils/maintenance/community_operations.py#L340-L367",
+      "note": "可选 community 更新会 LLM 合并摘要、命名、embedding 并保存。"
+    },
+    {
+      "id": "S34",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/driver/neo4j_driver.py#L61-L98",
+      "note": "默认 Neo4j 外部客户端与运行事件循环内索引初始化 task。"
+    },
+    {
+      "id": "S35",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/driver/neo4j_driver.py#L215-L225",
+      "note": "range/fulltext 索引构建并行调用。"
+    },
+    {
+      "id": "S36",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/graphiti.py#L1115-L1128",
+      "note": "文档要求相继 await ingestion；队列/background task 只是调用者建议/示例。"
+    },
+    {
+      "id": "S37",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/graphiti.py#L1276-L1283",
+      "note": "AddEpisodeResults 是保存和可选 community 更新后的对象返回。"
+    },
+    {
+      "id": "S38",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/edges.py#L410-L444",
+      "note": "通用同端点候选读取未自动排除已失效边。"
+    },
+    {
+      "id": "S39",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/graphiti_core/driver/driver.py#L131-L133",
+      "note": "基类 clone 默认返回 self；不能把 request scope 推成所有 backend 均独立数据库。"
+    },
+    {
+      "id": "S40",
+      "url": "https://github.com/getzep/graphiti/blob/16cdf7045378c8d53ae01f94e2fa60d238cb0f68/README.md#L79-L112",
+      "note": "SOURCE-CLAIMED 对象边界：OSS framework 与 Zep managed infrastructure 不同；不是托管行为的观测。"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": "全景与系统边界",
+      "question": "Graphiti 怎样连接调用者、模型接口和持久图；记忆如何回到 agent？",
+      "reading_guide": "从 Application 经 add_episode 到图状态，再沿 search 与 Context projection 回到生成模型。右侧模型客户端和底部图数据库为不同执行/存储边界；反馈属于官方应用示例。",
+      "omissions": [
+        "未全面审计 MCP/server、全部 provider、事务恢复与服务级权限。",
+        "bulk/dense 与 saga 不在主路径；community 只显示已读可选更新分支。",
+        "没有模型、数据库或端到端运行；observed 仅指固定源码。"
+      ],
+      "regions": [
+        {
+          "id": "caller",
+          "label": "调用应用与官方示例",
+          "responsibility": "输入、查询契约、权限绑定与上下文消费由应用组织；示例不等于框架强制路径。",
+          "status": "observed",
+          "evidence": [
+            "S01",
+            "S30"
+          ]
+        },
+        {
+          "id": "core",
+          "label": "Graphiti OSS 异步库",
+          "responsibility": "抽取、解析、图持久化编排与检索；无此图声称的内建持久任务队列。",
+          "status": "observed",
+          "evidence": [
+            "S02",
+            "S22",
+            "S36"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "可注入模型客户端",
+          "responsibility": "LLM、embedding 与可选 reranker/生成模型在客户端接口之外执行；部署与模型效果未验证。",
+          "status": "observed",
+          "evidence": [
+            "S04",
+            "S07",
+            "S26",
+            "S30"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "调用方部署的图数据库",
+          "responsibility": "episode、entity、fact 与可选 community 的持久状态；默认 Neo4j，其他 provider 未全面审计。",
+          "status": "observed",
+          "evidence": [
+            "S04",
+            "S17",
+            "S34"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "caller",
+          "label": "Application\n来源 / scope / 时间",
+          "kind": "entry",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S01",
+            "S03",
+            "S30"
+          ],
+          "note": "绑定输入来源、身份与 group、reference_time；图分区不等于完整权限/同意产品。"
+        },
+        {
+          "id": "ingest",
+          "label": "add_episode()\n异步写入编排",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S01",
+            "S02",
+            "S36"
+          ],
+          "note": "函数内部 await；调用者需安排相继写入。未见这个入口提供持久队列。"
+        },
+        {
+          "id": "mediation",
+          "label": "抽取与解析\n实体 / 事实 / 派生摘要",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S02",
+            "S06",
+            "S07",
+            "S12"
+          ],
+          "note": "包含确定性匹配、候选召回与 LLM 判断，不能整体等同模型黑盒。"
+        },
+        {
+          "id": "llm",
+          "label": "LLMClient\n抽取与语义判断",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S04",
+            "S07",
+            "S09",
+            "S14"
+          ],
+          "note": "外部可注入客户端；解析真假/重复/矛盾的效果未经运行。"
+        },
+        {
+          "id": "embedder",
+          "label": "EmbedderClient\n名称 / 事实 / query",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S20",
+            "S24"
+          ],
+          "note": "向量生成需客户端调用；基本 hybrid 检索也包含 query embedding。"
+        },
+        {
+          "id": "graph_driver",
+          "label": "GraphDriver\nsession / provider 路由",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S03",
+            "S16",
+            "S17",
+            "S39"
+          ],
+          "note": "后端 clone 能力不同；execute_write 编排不能证明所有 provider 相同事务/隔离保证。"
+        },
+        {
+          "id": "episodes",
+          "label": "EpisodicNode\n正文与来源记录",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S15"
+          ],
+          "note": "本次保存可选择 content 为空；MENTIONS 与 entity_edges/edge.episodes 保存关联。"
+        },
+        {
+          "id": "entities",
+          "label": "EntityNode\n摘要 / 属性 / 向量",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S19",
+            "S13",
+            "S14"
+          ],
+          "note": "summary 与 attributes 可变；摘要没有逐句时间区间。"
+        },
+        {
+          "id": "facts",
+          "label": "EntityEdge\n事实 / 来源 / 双时间",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21"
+          ],
+          "note": "created_at/expired_at 与 valid_at/invalid_at 区分图处理和事实有效时间；非全状态版本日志。"
+        },
+        {
+          "id": "community",
+          "label": "CommunityNode\n可选聚合摘要",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S01",
+            "S32",
+            "S33"
+          ],
+          "note": "update_communities=False 为默认；已读更新分支，未完整审计建群与聚类。"
+        },
+        {
+          "id": "indexes",
+          "label": "DB indexes\nrange / fulltext",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S34",
+            "S35"
+          ],
+          "note": "Neo4jDriver 在活动事件循环中安排初始化 task；无索引完成时延测量。"
+        },
+        {
+          "id": "search",
+          "label": "search() / search_()\n边或多层对象",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S23",
+            "S24"
+          ],
+          "note": "基本返回事实边；高级可查实体、episode、community。默认不会自动筛掉失效边。"
+        },
+        {
+          "id": "reranker",
+          "label": "CrossEncoderClient\n可选候选重排",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S04",
+            "S26"
+          ],
+          "note": "只有所选 recipe 使用 cross encoder 时调用；RRF 并不调用此客户端。"
+        },
+        {
+          "id": "projection",
+          "label": "Context projection\n示例仅取 edge.fact",
+          "kind": "process",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ],
+          "note": "官方示例投影不保留时间/来源字段；其他应用可采用不同投影，不是库的强制行为。"
+        },
+        {
+          "id": "generation",
+          "label": "Agent LLM\n消费 system context",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "note": "官方 LangGraph 示例消费上下文产生回复；不是 Graphiti 内建答题器。"
+        },
+        {
+          "id": "feedback",
+          "label": "asyncio.create_task\n示例回写人机对话",
+          "kind": "process",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "note": "示例非阻塞安排 add_episode；任务创建不证明已持久化，也不等于框架持久队列。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "caller",
+          "to": "ingest",
+          "label": "正文、来源、group、reference_time",
+          "status": "observed",
+          "evidence": [
+            "S01"
+          ]
+        },
+        {
+          "from": "ingest",
+          "to": "mediation",
+          "label": "await 抽取、解析和派生更新",
+          "status": "observed",
+          "evidence": [
+            "S02"
+          ]
+        },
+        {
+          "from": "mediation",
+          "to": "llm",
+          "label": "提示与结构化判断请求",
+          "status": "observed",
+          "evidence": [
+            "S07",
+            "S09",
+            "S14"
+          ]
+        },
+        {
+          "from": "llm",
+          "to": "mediation",
+          "label": "实体、事实、矛盾索引、摘要",
+          "status": "observed",
+          "evidence": [
+            "S06",
+            "S07",
+            "S09",
+            "S14"
+          ]
+        },
+        {
+          "from": "mediation",
+          "to": "embedder",
+          "label": "名称 / 事实 embedding",
+          "status": "observed",
+          "evidence": [
+            "S08",
+            "S16"
+          ]
+        },
+        {
+          "from": "mediation",
+          "to": "graph_driver",
+          "label": "解析后 nodes、edges、episodes",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S16"
+          ]
+        },
+        {
+          "from": "graph_driver",
+          "to": "episodes",
+          "label": "保存 episode 与 MENTIONS",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ]
+        },
+        {
+          "from": "graph_driver",
+          "to": "entities",
+          "label": "保存属性、摘要、名称向量",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ]
+        },
+        {
+          "from": "graph_driver",
+          "to": "facts",
+          "label": "保存事实、来源与时间窗",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ]
+        },
+        {
+          "from": "ingest",
+          "to": "community",
+          "label": "可选：LLM 合并后保存",
+          "status": "observed",
+          "evidence": [
+            "S32",
+            "S33"
+          ]
+        },
+        {
+          "from": "graph_driver",
+          "to": "indexes",
+          "label": "Neo4j 启动时安排构建 task",
+          "status": "observed",
+          "evidence": [
+            "S34",
+            "S35"
+          ]
+        },
+        {
+          "from": "caller",
+          "to": "search",
+          "label": "query、group、recipe、filter",
+          "status": "observed",
+          "evidence": [
+            "S22"
+          ]
+        },
+        {
+          "from": "episodes",
+          "to": "search",
+          "label": "高级检索可返回 episode",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ]
+        },
+        {
+          "from": "entities",
+          "to": "search",
+          "label": "高级检索可返回实体",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ]
+        },
+        {
+          "from": "facts",
+          "to": "search",
+          "label": "BM25 / cosine / 可选 BFS",
+          "status": "observed",
+          "evidence": [
+            "S23",
+            "S25"
+          ]
+        },
+        {
+          "from": "community",
+          "to": "search",
+          "label": "高级检索可返回 community",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ]
+        },
+        {
+          "from": "search",
+          "to": "embedder",
+          "label": "按 recipe 请求 query 向量",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ]
+        },
+        {
+          "from": "search",
+          "to": "reranker",
+          "label": "配置可选：候选事实重排",
+          "status": "observed",
+          "evidence": [
+            "S26"
+          ]
+        },
+        {
+          "from": "search",
+          "to": "projection",
+          "label": "EntityEdge / SearchResults",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S30"
+          ]
+        },
+        {
+          "from": "projection",
+          "to": "generation",
+          "label": "示例 system message 事实串",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ]
+        },
+        {
+          "from": "generation",
+          "to": "feedback",
+          "label": "示例回复与最后一条人类消息",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ]
+        },
+        {
+          "from": "feedback",
+          "to": "ingest",
+          "label": "示例 create_task(add_episode)",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "图数据库内四类对象",
+          "writers": "Graphiti 写入/更新/删除方法经 driver",
+          "changes": "episode 关联 entity 与 fact；实体及可选 community 摘要会覆盖更新",
+          "limits": "这是源码持久化调用与数据模型，不是已观测 DB 提交/恢复保证。",
+          "evidence": [
+            "S15",
+            "S17",
+            "S20",
+            "S33"
+          ]
+        },
+        {
+          "owner": "调用应用的上下文与对话状态",
+          "writers": "示例 chatbot / projection",
+          "changes": "检索对象投影为 facts，回复与输入再被异步回写",
+          "limits": "示例仅投影事实；任何“当前有效、权限、认可来源”保障都不能从字段存在直接推出。",
+          "evidence": [
+            "S29",
+            "S30",
+            "S27"
+          ]
+        },
+        {
+          "owner": "模型部署 / 图 backend",
+          "writers": "调用者提供客户端与 driver",
+          "changes": "Graphiti 默认使用 Neo4j 和 OpenAI 客户端，但均可注入",
+          "limits": "Zep managed infrastructure 不在图内；README 产品主张不是本图运行证据。",
+          "evidence": [
+            "S04",
+            "S40"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "一次写入、选择与使用",
+      "question": "一段输入怎样被保存、被查询并影响下一轮回复；哪些步骤是 await，哪些只是安排任务？",
+      "reading_guide": "上半沿单 episode 的 awaited 写入顺序；下半从搜索入口到 recipe/filter 再到调用者投影。回路明确标作示例 create_task，不能视为已提交的写入回执。",
+      "omissions": [
+        "为保持主路径，此图折叠 embedding 为保存/检索步骤说明；全景明确其外部模型边界。",
+        "高级多层实体/episode/community 路由在全景展示，流图聚焦边检索。",
+        "没有内建持久队列、任务重试或已完成异步回写的运行证明；仅绘已读入口与示例。"
+      ],
+      "regions": [
+        {
+          "id": "caller",
+          "label": "调用应用与官方示例",
+          "responsibility": "输入、查询契约、权限绑定与上下文消费由应用组织；示例不等于框架强制路径。",
+          "status": "observed",
+          "evidence": [
+            "S01",
+            "S30"
+          ]
+        },
+        {
+          "id": "core",
+          "label": "Graphiti OSS 异步库",
+          "responsibility": "抽取、解析、图持久化编排与检索；无此图声称的内建持久任务队列。",
+          "status": "observed",
+          "evidence": [
+            "S02",
+            "S22",
+            "S36"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "可注入模型客户端",
+          "responsibility": "LLM、embedding 与可选 reranker/生成模型在客户端接口之外执行；部署与模型效果未验证。",
+          "status": "observed",
+          "evidence": [
+            "S04",
+            "S07",
+            "S26",
+            "S30"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "调用方部署的图数据库",
+          "responsibility": "episode、entity、fact 与可选 community 的持久状态；默认 Neo4j，其他 provider 未全面审计。",
+          "status": "observed",
+          "evidence": [
+            "S04",
+            "S17",
+            "S34"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "caller",
+          "label": "Application\n来源 / scope / 时间",
+          "kind": "entry",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S01",
+            "S03",
+            "S30"
+          ],
+          "note": "绑定输入来源、身份与 group、reference_time；图分区不等于完整权限/同意产品。"
+        },
+        {
+          "id": "ingest",
+          "label": "add_episode()\n异步写入编排",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S01",
+            "S02",
+            "S36"
+          ],
+          "note": "函数内部 await；调用者需安排相继写入。未见这个入口提供持久队列。"
+        },
+        {
+          "id": "previous",
+          "label": "Previous episodes\n同组参考时间上下文",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S02",
+            "S05"
+          ],
+          "note": "单 episode 默认 retrieve_episodes(reference_time, group_ids, source)；可显式传历史 UUID。"
+        },
+        {
+          "id": "node_extract",
+          "label": "extract / resolve nodes\n实体识别与合并",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S05",
+            "S06"
+          ],
+          "note": "类型/来源/历史辅助抽取；相似规则与 LLM 解析产生 UUID 映射。"
+        },
+        {
+          "id": "edge_resolve",
+          "label": "extract / resolve edges\n候选与语义解析",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S07",
+            "S08",
+            "S09"
+          ],
+          "note": "同端点重复候选与组内更广矛盾候选分别召回；不是全库两两真值检查。"
+        },
+        {
+          "id": "llm",
+          "label": "LLMClient\n抽取与语义判断",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S04",
+            "S07",
+            "S09",
+            "S14"
+          ],
+          "note": "外部可注入客户端；解析真假/重复/矛盾的效果未经运行。"
+        },
+        {
+          "id": "hydrate",
+          "label": "Entity hydration\n属性 / 摘要更新",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13",
+            "S14"
+          ],
+          "note": "短摘要按字符长度直接追加新边事实，较长时 LLM 压缩；不是按记忆年龄分支。"
+        },
+        {
+          "id": "graph_driver",
+          "label": "GraphDriver\nsession / provider 路由",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S03",
+            "S16",
+            "S17",
+            "S39"
+          ],
+          "note": "后端 clone 能力不同；execute_write 编排不能证明所有 provider 相同事务/隔离保证。"
+        },
+        {
+          "id": "episodes",
+          "label": "EpisodicNode\n正文与来源记录",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S15"
+          ],
+          "note": "本次保存可选择 content 为空；MENTIONS 与 entity_edges/edge.episodes 保存关联。"
+        },
+        {
+          "id": "entities",
+          "label": "EntityNode\n摘要 / 属性 / 向量",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S19",
+            "S13",
+            "S14"
+          ],
+          "note": "summary 与 attributes 可变；摘要没有逐句时间区间。"
+        },
+        {
+          "id": "facts",
+          "label": "EntityEdge\n事实 / 来源 / 双时间",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21"
+          ],
+          "note": "created_at/expired_at 与 valid_at/invalid_at 区分图处理和事实有效时间；非全状态版本日志。"
+        },
+        {
+          "id": "search",
+          "label": "search() / search_()\n边或多层对象",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S23",
+            "S24"
+          ],
+          "note": "基本返回事实边；高级可查实体、episode、community。默认不会自动筛掉失效边。"
+        },
+        {
+          "id": "filter",
+          "label": "SearchFilters\n调用者选择时间语义",
+          "kind": "decision",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S27",
+            "S28"
+          ],
+          "note": "valid_at / invalid_at / created_at / expired_at 默认为 None；group 条件也可选。"
+        },
+        {
+          "id": "search_methods",
+          "label": "BM25 / cosine / BFS\n按 recipe 召回",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S23",
+            "S25"
+          ],
+          "note": "基本 BM25+cosine；高级可 BFS，并行执行配置方法；无起点时可由首轮结果扩展。"
+        },
+        {
+          "id": "rank",
+          "label": "RRF / MMR / distance\n或 cross encoder",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S26"
+          ],
+          "note": "按配置排序并截取；不是所有方法同时强制执行。"
+        },
+        {
+          "id": "projection",
+          "label": "Context projection\n示例仅取 edge.fact",
+          "kind": "process",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ],
+          "note": "官方示例投影不保留时间/来源字段；其他应用可采用不同投影，不是库的强制行为。"
+        },
+        {
+          "id": "generation",
+          "label": "Agent LLM\n消费 system context",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "note": "官方 LangGraph 示例消费上下文产生回复；不是 Graphiti 内建答题器。"
+        },
+        {
+          "id": "feedback",
+          "label": "asyncio.create_task\n示例回写人机对话",
+          "kind": "process",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "note": "示例非阻塞安排 add_episode；任务创建不证明已持久化，也不等于框架持久队列。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "caller",
+          "to": "ingest",
+          "label": "提供输入、schema 与参考时间",
+          "status": "observed",
+          "evidence": [
+            "S01"
+          ]
+        },
+        {
+          "from": "ingest",
+          "to": "previous",
+          "label": "await 同组历史检索 / 显式 UUID",
+          "status": "observed",
+          "evidence": [
+            "S02"
+          ]
+        },
+        {
+          "from": "episodes",
+          "to": "previous",
+          "label": "已存 episode 正文与时间",
+          "status": "observed",
+          "evidence": [
+            "S02",
+            "S05"
+          ]
+        },
+        {
+          "from": "previous",
+          "to": "node_extract",
+          "label": "历史帮助消歧；当前正文抽取",
+          "status": "observed",
+          "evidence": [
+            "S05"
+          ]
+        },
+        {
+          "from": "node_extract",
+          "to": "llm",
+          "label": "必要时抽取 / 消歧调用",
+          "status": "observed",
+          "evidence": [
+            "S05",
+            "S06"
+          ]
+        },
+        {
+          "from": "node_extract",
+          "to": "edge_resolve",
+          "label": "实体与 UUID 映射",
+          "status": "observed",
+          "evidence": [
+            "S02",
+            "S06"
+          ]
+        },
+        {
+          "from": "facts",
+          "to": "edge_resolve",
+          "label": "同端点重复候选与组内矛盾候选",
+          "status": "observed",
+          "evidence": [
+            "S08"
+          ]
+        },
+        {
+          "from": "edge_resolve",
+          "to": "llm",
+          "label": "抽取事实 / 裁决候选索引",
+          "status": "observed",
+          "evidence": [
+            "S07",
+            "S09"
+          ]
+        },
+        {
+          "from": "edge_resolve",
+          "to": "hydrate",
+          "label": "新事实更新属性与摘要",
+          "status": "observed",
+          "evidence": [
+            "S02",
+            "S12"
+          ]
+        },
+        {
+          "from": "hydrate",
+          "to": "llm",
+          "label": "属性与必要的摘要压缩",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S14"
+          ]
+        },
+        {
+          "from": "hydrate",
+          "to": "graph_driver",
+          "label": "await 批量保存对象",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S16"
+          ]
+        },
+        {
+          "from": "graph_driver",
+          "to": "episodes",
+          "label": "写内容、关联；可选清空本次正文",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S17"
+          ]
+        },
+        {
+          "from": "graph_driver",
+          "to": "entities",
+          "label": "写摘要 / 属性 / 名称 embedding",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ]
+        },
+        {
+          "from": "graph_driver",
+          "to": "facts",
+          "label": "写来源 UUID、时间、fact embedding",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ]
+        },
+        {
+          "from": "caller",
+          "to": "search",
+          "label": "另一次 query 请求",
+          "status": "observed",
+          "evidence": [
+            "S22"
+          ]
+        },
+        {
+          "from": "search",
+          "to": "filter",
+          "label": "无提供则空 SearchFilters",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S27"
+          ]
+        },
+        {
+          "from": "filter",
+          "to": "search_methods",
+          "label": "group / 时间条件 + recipe",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S28"
+          ]
+        },
+        {
+          "from": "facts",
+          "to": "search_methods",
+          "label": "图中事实候选",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S28"
+          ]
+        },
+        {
+          "from": "search_methods",
+          "to": "rank",
+          "label": "并行方法结果；可选 BFS 扩展",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S26"
+          ]
+        },
+        {
+          "from": "rank",
+          "to": "projection",
+          "label": "排序后的边；高级含其他层",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S26"
+          ]
+        },
+        {
+          "from": "projection",
+          "to": "generation",
+          "label": "示例仅 fact 文本 + 对话",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ]
+        },
+        {
+          "from": "generation",
+          "to": "feedback",
+          "label": "回复与最近输入组成新 episode",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ]
+        },
+        {
+          "from": "feedback",
+          "to": "ingest",
+          "label": "示例：create_task，未 await 回写",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "add_episode 调用结果",
+          "writers": "入口按顺序 await，各步骤内可有并发",
+          "changes": "保存后可选 await community 更新，随后返回 AddEpisodeResults",
+          "limits": "此返回是库对象；示例 create_task 并未等待该回执。",
+          "evidence": [
+            "S02",
+            "S32",
+            "S37",
+            "S30"
+          ]
+        },
+        {
+          "owner": "查询选择契约",
+          "writers": "调用者提供 SearchFilters / recipe / group",
+          "changes": "默认 basic recipe BM25+cosine+RRF；高级可 BFS/cross encoder，多层并行",
+          "limits": "默认无当前有效过滤；模型 query embedding 与可选 reranker 不等于无模型搜索。",
+          "evidence": [
+            "S22",
+            "S23",
+            "S24",
+            "S25",
+            "S27"
+          ]
+        },
+        {
+          "owner": "图状态的模型输入材料",
+          "writers": "抽取和解析函数",
+          "changes": "正文、历史、事实候选、类型与摘要被传给客户端",
+          "limits": "具体 provider 数据处理与中文抽取正确率未验证。",
+          "evidence": [
+            "S05",
+            "S07",
+            "S09",
+            "S14"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revision",
+      "title": "修订、时效与撤回传播",
+      "question": "新的矛盾事实与 episode 删除怎样改变图，哪些派生状态仍需调用者判断？",
+      "reading_guide": "上路是新的 episode 触发重复/冲突解析并调整时间窗；下路是显式 remove_episode 选择硬删除。派生撤回边界是源码范围内未见的调用，使用 inferred 标记，不应画成实际执行中的重算。",
+      "omissions": [
+        "未检查所有 namespace 直接编辑/删除 API 或外部部署补偿作业。",
+        "未执行纠正/删除自然语言 probe、provider 或 DB；isolated observations 仅是既有指定函数分支结果。",
+        "community/saga 全量重建、保留策略和正式隐私删除保证未被此图验证。"
+      ],
+      "regions": [
+        {
+          "id": "caller",
+          "label": "调用应用与官方示例",
+          "responsibility": "输入、查询契约、权限绑定与上下文消费由应用组织；示例不等于框架强制路径。",
+          "status": "observed",
+          "evidence": [
+            "S01",
+            "S30"
+          ]
+        },
+        {
+          "id": "core",
+          "label": "Graphiti OSS 异步库",
+          "responsibility": "抽取、解析、图持久化编排与检索；无此图声称的内建持久任务队列。",
+          "status": "observed",
+          "evidence": [
+            "S02",
+            "S22",
+            "S36"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "可注入模型客户端",
+          "responsibility": "LLM、embedding 与可选 reranker/生成模型在客户端接口之外执行；部署与模型效果未验证。",
+          "status": "observed",
+          "evidence": [
+            "S04",
+            "S07",
+            "S26",
+            "S30"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "调用方部署的图数据库",
+          "responsibility": "episode、entity、fact 与可选 community 的持久状态；默认 Neo4j，其他 provider 未全面审计。",
+          "status": "observed",
+          "evidence": [
+            "S04",
+            "S17",
+            "S34"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "revision_input",
+          "label": "新 episode / 删除 UUID\n调用者发起修订",
+          "kind": "entry",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S01",
+            "S31"
+          ],
+          "note": "纠正通过新事实路径；remove_episode 是显式入口，不把自然语言撤回自动等同删除 API。"
+        },
+        {
+          "id": "edge_resolve",
+          "label": "extract / resolve edges\n候选与语义解析",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S07",
+            "S08",
+            "S09"
+          ],
+          "note": "同端点重复候选与组内更广矛盾候选分别召回；不是全库两两真值检查。"
+        },
+        {
+          "id": "exact",
+          "label": "Exact fact shortcut\n同文 + 同端点",
+          "kind": "decision",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S09"
+          ],
+          "note": "命中则复用旧边并追加 episode；无有效期重新判定。既有隔离观察仅给定此候选验证分支。"
+        },
+        {
+          "id": "conflict_llm",
+          "label": "LLM duplicate / conflict\n候选索引裁决",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S09"
+          ],
+          "note": "仅给 LLM 已召回的事实文本；未知自然语言在真实流程下的错误率。"
+        },
+        {
+          "id": "temporal",
+          "label": "Temporal resolution\n裁剪有效区间",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11"
+          ],
+          "note": "跳过不重叠，严格时间先后裁剪；保留历史边。相同或缺失时间并非自动闭合。"
+        },
+        {
+          "id": "facts",
+          "label": "EntityEdge\n事实 / 来源 / 双时间",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21"
+          ],
+          "note": "created_at/expired_at 与 valid_at/invalid_at 区分图处理和事实有效时间；非全状态版本日志。"
+        },
+        {
+          "id": "hydrate",
+          "label": "Entity hydration\n属性 / 摘要更新",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13",
+            "S14"
+          ],
+          "note": "短摘要按字符长度直接追加新边事实，较长时 LLM 压缩；不是按记忆年龄分支。"
+        },
+        {
+          "id": "entities",
+          "label": "EntityNode\n摘要 / 属性 / 向量",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S19",
+            "S13",
+            "S14"
+          ],
+          "note": "summary 与 attributes 可变；摘要没有逐句时间区间。"
+        },
+        {
+          "id": "episodes",
+          "label": "EpisodicNode\n正文与来源记录",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S15"
+          ],
+          "note": "本次保存可选择 content 为空；MENTIONS 与 entity_edges/edge.episodes 保存关联。"
+        },
+        {
+          "id": "removal",
+          "label": "remove_episode()\n按 UUID 读取关联",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ],
+          "note": "使用 episode.entity_edges 与 MENTIONS；本视图只描绘该完整入口。"
+        },
+        {
+          "id": "removal_decision",
+          "label": "首次来源 / 独占提及\n选择删除集合",
+          "kind": "decision",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ],
+          "note": "edge.episodes[0] 等于所删 episode 才删边；entity 提及计数为 1 才删实体。"
+        },
+        {
+          "id": "delete_calls",
+          "label": "Edge / Node delete\n随后删除 episode",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ],
+          "note": "删除调用分开发出；未将这段入口描绘为所有后端的原子撤回事务。"
+        },
+        {
+          "id": "derivative_gap",
+          "label": "派生撤回边界\n该入口未重建",
+          "kind": "output",
+          "region": "core",
+          "status": "inferred",
+          "evidence": [
+            "S31",
+            "S13",
+            "S33"
+          ],
+          "note": "删除入口未清理存活边来源数组、重算保留实体/社区摘要或恢复旧边；是有界源码缺席，不是全系统运行结论。"
+        },
+        {
+          "id": "filter",
+          "label": "SearchFilters\n调用者选择时间语义",
+          "kind": "decision",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S27",
+            "S28"
+          ],
+          "note": "valid_at / invalid_at / created_at / expired_at 默认为 None；group 条件也可选。"
+        },
+        {
+          "id": "search",
+          "label": "search() / search_()\n边或多层对象",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S23",
+            "S24"
+          ],
+          "note": "基本返回事实边；高级可查实体、episode、community。默认不会自动筛掉失效边。"
+        },
+        {
+          "id": "projection",
+          "label": "Context projection\n示例仅取 edge.fact",
+          "kind": "process",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ],
+          "note": "官方示例投影不保留时间/来源字段；其他应用可采用不同投影，不是库的强制行为。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "revision_input",
+          "to": "edge_resolve",
+          "label": "新 episode 走原生解析",
+          "status": "observed",
+          "evidence": [
+            "S01",
+            "S02"
+          ]
+        },
+        {
+          "from": "facts",
+          "to": "edge_resolve",
+          "label": "召回重复 / 矛盾候选",
+          "status": "observed",
+          "evidence": [
+            "S08",
+            "S38"
+          ]
+        },
+        {
+          "from": "edge_resolve",
+          "to": "exact",
+          "label": "比较规范化事实与两端 UUID",
+          "status": "observed",
+          "evidence": [
+            "S09"
+          ]
+        },
+        {
+          "from": "exact",
+          "to": "facts",
+          "label": "命中：复用边、仅追加来源",
+          "status": "observed",
+          "evidence": [
+            "S09"
+          ]
+        },
+        {
+          "from": "exact",
+          "to": "conflict_llm",
+          "label": "有候选且非 exact：请求裁决",
+          "status": "observed",
+          "evidence": [
+            "S09"
+          ]
+        },
+        {
+          "from": "conflict_llm",
+          "to": "temporal",
+          "label": "返回重复与矛盾候选索引",
+          "status": "observed",
+          "evidence": [
+            "S09",
+            "S11"
+          ]
+        },
+        {
+          "from": "temporal",
+          "to": "facts",
+          "label": "保留旧边，写 invalid_at / expired_at",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11"
+          ]
+        },
+        {
+          "from": "edge_resolve",
+          "to": "hydrate",
+          "label": "仅 new_edges 参与摘要生成",
+          "status": "observed",
+          "evidence": [
+            "S02"
+          ]
+        },
+        {
+          "from": "hydrate",
+          "to": "entities",
+          "label": "追加事实或 LLM 更新摘要",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14"
+          ]
+        },
+        {
+          "from": "revision_input",
+          "to": "removal",
+          "label": "显式 episode_uuid",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "episodes",
+          "to": "removal",
+          "label": "entity_edges 与 MENTIONS",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "removal",
+          "to": "removal_decision",
+          "label": "边来源顺序与实体提及计数",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "removal_decision",
+          "to": "delete_calls",
+          "label": "首来源边 / 仅一次提及实体",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "delete_calls",
+          "to": "facts",
+          "label": "删除选中边（可有其他来源）",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "delete_calls",
+          "to": "entities",
+          "label": "删除仅该 episode 提及的实体",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "delete_calls",
+          "to": "episodes",
+          "label": "最后删除原 episode",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "removal",
+          "to": "derivative_gap",
+          "label": "未安排重算 / 恢复（边界）",
+          "status": "inferred",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "facts",
+          "to": "search",
+          "label": "历史与当前边均可能供检索",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S27"
+          ]
+        },
+        {
+          "from": "filter",
+          "to": "search",
+          "label": "调用者显式选择时间条件",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S27"
+          ]
+        },
+        {
+          "from": "search",
+          "to": "projection",
+          "label": "投影决定时间/来源是否交给 agent",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S29",
+            "S30"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "EntityEdge 的时间与来源",
+          "writers": "解析器对已召回并判矛盾的边更新",
+          "changes": "不重叠跳过；较早有效区间被较晚事实截断；迟到旧事实也可先过期",
+          "limits": "相等/缺时间不保证消解；四字段不是所有图派生状态的不可变版本历史。",
+          "evidence": [
+            "S10",
+            "S11",
+            "S20",
+            "S21"
+          ]
+        },
+        {
+          "owner": "Exact match 分支",
+          "writers": "resolve_extracted_edge",
+          "changes": "同文同端点复用旧边，追加来源，不重新判有效期",
+          "limits": "已有 AST 隔离观察给定已失效候选验证这条分支；未证明真实抽取/检索会到达，非 E2E 结果。",
+          "evidence": [
+            "S09",
+            "S38"
+          ]
+        },
+        {
+          "owner": "episode 删除选择",
+          "writers": "remove_episode",
+          "changes": "首来源条件选边，MENTIONS 计数为 1 选实体，之后删除 episode",
+          "limits": "已有隔离观察：删首来源仍选多来源边；删次来源保留原来源数组；共享摘要不变。未运行数据库删除。",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "owner": "存活实体 / community 摘要及旧边状态",
+          "writers": "各自写入更新路径；删除入口未调用重建",
+          "changes": "删除入口未清理存活边来源数组、重算共享摘要或重新激活被撤回事实曾失效的旧边",
+          "limits": "这是该入口的传播缺口；不能推断所有部署外部作业均无补偿。",
+          "evidence": [
+            "S31",
+            "S13",
+            "S33"
+          ]
+        },
+        {
+          "owner": "当前性与权威性",
+          "writers": "调用者的过滤与 context projection",
+          "changes": "检索过滤可选；示例只拼事实字符串",
+          "limits": "source UUID 不证明话语为真；group 不自动证明权限；成人关系与项目事实可用同机制，无需预设关系产品。",
+          "evidence": [
+            "S22",
+            "S27",
+            "S29",
+            "S30"
+          ]
+        }
+      ]
+    }
+  ]
+}

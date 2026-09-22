@@ -1,0 +1,1830 @@
+{
+  "id": "lmc-5",
+  "name": "lmc-5",
+  "repository": "https://github.com/wuxuyun0606-collab/lmc-5",
+  "commit": "fb3e72c9ee7357c8b17311097b0750082a8a1237",
+  "study_date": "2026-09-22",
+  "boundary": "固定公开 upstream commit 的静态架构：src/lmc5 SQLite minimal 与 extras/pgvector_backend PostgreSQL production reference 分立呈现。未确认任何具体部署、provider、真实记忆、运行效果或统一拓扑。",
+  "summary": "XYZEM 把时间组织、类型关系、事实状态、主 agent 体验书写和记忆维护安排在同一生命周期中；SQLite core 给显式 API，PostgreSQL reference 另以 hooks、分层召回和可注入后台步骤拼装。图中保留原始证据、review/current 权限差异，以及派生向量与叙事不能自动视作同步真相的边界。",
+  "mechanisms": [
+    "raw / curated 分离",
+    "XYZEM 生命周期字段与操作",
+    "recall / surface 差异",
+    "callback 后台维护",
+    "safe / review 关系分流",
+    "E 主书写与不可变记录"
+  ],
+  "strengths": [
+    "当来源与接线正确时，原始证据、当前事实和关联证据可分层呈现。",
+    "局部数据库 E 约束与独立 audit/proposal 队列，使修改责任可检查。",
+    "minimal 可不调用模型运行；production 提供实际 graph/emotion/hook adapters 供部署扩展。"
+  ],
+  "limits": [
+    "没有已验证的完整生产 topology；DreamRunner CLI 默认是空 callbacks。",
+    "同 fact_key 的 minimal 替代跨 thread；thread/session 不是访问控制 scope。",
+    "surface 的 strict M gate 不覆盖 raw/current-state 支路；minimal vector 是独立 API。",
+    "production vector 预览未 join current 状态；派生失效、删除与主记录变化需额外协调。",
+    "NightDream 结构 gate 不等于证据蕴含验证；默认弱边不保证第二跳。"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L1047-L1088",
+      "note": "minimal log_event 写 events 与 FTS，role/channel/metadata 随记录保存。"
+    },
+    {
+      "id": "S2",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L805-L941",
+      "note": "minimal add_memory：E 必填作者/初始优先级、同 fact_key current 自动 supersede、写 FTS/entity index。"
+    },
+    {
+      "id": "S3",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/models.py#L104-L193",
+      "note": "minimal memories、relations、events 字段；X/Z/E/M 共存记录中。"
+    },
+    {
+      "id": "S4",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/consolidation.py#L130-L227",
+      "note": "consolidate_events：raw events 到 event_chunks/chunk_events，默认另建 review observation。"
+    },
+    {
+      "id": "S5",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/hippocampus.py#L232-L282",
+      "note": "默认 atomic_memory_proposer 从每个非 tool event 构建带角色与 event/chunk IDs 的 review 候选。"
+    },
+    {
+      "id": "S6",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/hippocampus.py#L445-L565",
+      "note": "run_hippocampus apply 写候选和 safe 关系；review relation plans 单独返回。"
+    },
+    {
+      "id": "S7",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L1770-L1831",
+      "note": "minimal recall 候选来自当前有效 FTS/LIKE。"
+    },
+    {
+      "id": "S8",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L2045-L2194",
+      "note": "minimal recall_hits：entity/temporal/graph + metabolic_gate，选中后 hit/trace 回写；recall 默认不 redact。"
+    },
+    {
+      "id": "S9",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L1433-L1508",
+      "note": "current state TTL 读与 surface：严格 gate 只用在 curated，另加入 state 和 raw event search，默认 redact。"
+    },
+    {
+      "id": "S10",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/scoring.py#L123-L226",
+      "note": "M gate 按 status/保护类别/噪声/年龄/命中分 retain/cold/quarantine；surface 更严格。"
+    },
+    {
+      "id": "S11",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L1647-L1768",
+      "note": "minimal 向量 upsert/search 是单独 API：调用方传向量，Python cosine，hydration 无 current 状态过滤。"
+    },
+    {
+      "id": "S12",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/hooks/session_end.py#L30-L118",
+      "note": "SessionEnd JSONL 归档 raw_events；可选 express dream 仅返回未接线。"
+    },
+    {
+      "id": "S13",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/hooks/user_prompt_submit.py#L117-L240",
+      "note": "实际 builder 已接 graph/emotion adapters、向量与 rerank 条件接入、history 和可选 raw/cold 通道。"
+    },
+    {
+      "id": "S14",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/schema.sql#L9-L123",
+      "note": "production curated XYZEM 字段；E CHECK/不可变 trigger；独立 E proposals。"
+    },
+    {
+      "id": "S15",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/schema.sql#L130-L224",
+      "note": "production owner-keyed vectors、有效期 relation edges、Z audit、raw session/role/content。"
+    },
+    {
+      "id": "S16",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/night_dream.py#L267-L407",
+      "note": "NightDream callbacks、提议校验与阈值/risk/source gate；未做原文蕴含验证。"
+    },
+    {
+      "id": "S17",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/night_dream.py#L409-L556",
+      "note": "writer 成功返回 ID 后建边；safe/review 分流，safe strength 0.5，semantic dedup 可选。"
+    },
+    {
+      "id": "S18",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/dream_runner.py#L209-L302",
+      "note": "DreamRunner 步序和可选 callbacks；consolidate/nap/hippocampus/X narrative/Z/patrol。"
+    },
+    {
+      "id": "S19",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/dream_runner.py#L348-L426",
+      "note": "缺 callback 跳过；runner 顺序执行；CLI 构建空 runner，不等于生产接线。"
+    },
+    {
+      "id": "S20",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/recall_pipeline.py#L911-L1189",
+      "note": "vector-first 召回、FTS/raw 阈值、独立 side channels、融合去重、session history、rerank、输出。"
+    },
+    {
+      "id": "S21",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/recall_pipeline.py#L1195-L1292",
+      "note": "vector adapter 直接使用 preview；curated FTS 要额外 content_tsv；raw FTS 跨 session，带 role metadata。"
+    },
+    {
+      "id": "S22",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/recall_pipeline.py#L1454-L1655",
+      "note": "graph 双向安全边，两跳阈值；emotion adapter 候选与 resonance 分数。"
+    },
+    {
+      "id": "S23",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/vector_pgvector.py#L153-L245",
+      "note": "向量写覆盖/按 owner 删除/按 model-dim-owner 检索；检索不 join curated status。"
+    },
+    {
+      "id": "S24",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/hooks/session_start.py#L32-L145",
+      "note": "启动时读取 identity/current facts/narrative/open threads/perception 并构造有限 context。"
+    },
+    {
+      "id": "S25",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/fact_evolution.py#L188-L216",
+      "note": "minimal run_z_audit apply 仅登记 pending，不改写事实。"
+    },
+    {
+      "id": "S26",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/metabolism.py#L78-L110",
+      "note": "minimal patrol 返回只读 lifecycle suggestions。"
+    },
+    {
+      "id": "S27",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/patrol.py#L228-L313",
+      "note": "production patrol 可在 apply 时注销重复/孤儿/dead contradiction 关系。"
+    },
+    {
+      "id": "S28",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/e_axis_trigger.py#L98-L175",
+      "note": "E proposal dispatcher 经 injected submit_proposal 提建议；自动 backfill 抛错。"
+    },
+    {
+      "id": "S29",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/nap.py#L59-L173",
+      "note": "nap 查 current 缺失向量与无活边节点，通过 callbacks 补向量/关系，默认关系强度 0.45。"
+    },
+    {
+      "id": "S30",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/narrative_timeline.py#L120-L182",
+      "note": "NarrativeTimeline loader/reflector 输出带 seed_memory_ids 的周期索引；不自行持久化。"
+    },
+    {
+      "id": "S31",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/schema.sql#L232-L256",
+      "note": "冷归档和叙事索引表；叙事种子 IDs 保存，不是自动纠正传播实现。"
+    },
+    {
+      "id": "S32",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L1239-L1284",
+      "note": "refresh_current_state 独立刷新并清空重建 current_state_items；默认 TTL 24 小时。"
+    },
+    {
+      "id": "S33",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L719-L756",
+      "note": "minimal E 数据库 trigger 要求作者/初始次序并禁止已写 E 变更。"
+    },
+    {
+      "id": "S34",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/embedders.py#L30-L78",
+      "note": "remote embedding adapter 先 pattern scrub，再按被选 provider 发请求；调用方接入可选。"
+    },
+    {
+      "id": "S35",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/recall_history.py#L80-L143",
+      "note": "session 级 hash-only 注入历史，默认两天 TTL；不是数据访问授权。"
+    },
+    {
+      "id": "S36",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/redact.py#L48-L82",
+      "note": "redact 输出和 embedding 的不同 pattern scrub，不删除原文。"
+    },
+    {
+      "id": "S37",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/extras/pgvector_backend/hooks/user_prompt_submit.py#L247-L280",
+      "note": "hook 读取 prompt/session，跳过 trivial，调用 pipeline.recall 并 stdout 注入文本。"
+    },
+    {
+      "id": "S38",
+      "url": "https://github.com/wuxuyun0606-collab/lmc-5/blob/fb3e72c9ee7357c8b17311097b0750082a8a1237/src/lmc5/store.py#L1875-L1937",
+      "note": "minimal 两跳 safe graph：两端 current/active、强度门槛与扩展理由。"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": "全景与系统边界",
+      "question": "同一五轴概念在 SQLite minimal 与 PostgreSQL reference 中分别如何落地，哪些责任留给宿主？",
+      "reading_guide": "两种实现并排阅读，均由外部 runtime 调用；不要把跨区的 callback 合约理解为现成部署。先看各自的持久状态与读取入口，再看 production 的后台接线。",
+      "omissions": [
+        "宿主 agent 的实际 prompt 拼装、回答与工具行为未验证。",
+        "未将两种数据库画成复制/迁移或同时运行的统一拓扑。",
+        "Forge/Swap 与 refined carryover 属于另外的运行时恢复机制，本视图不推断部署连接。"
+      ],
+      "regions": [
+        {
+          "id": "harness",
+          "label": "调用方与部署接线",
+          "responsibility": "agent runtime、时钟、reviewer 与自定义持久化处于实例部署边界之外",
+          "status": "inferred",
+          "evidence": [
+            "S16",
+            "S18",
+            "S19"
+          ]
+        },
+        {
+          "id": "minimal",
+          "label": "Minimal · SQLite core",
+          "responsibility": "src/lmc5 的 provider-free 本地 API；本图不将其与 PostgreSQL 合并成同一个实例",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S11"
+          ]
+        },
+        {
+          "id": "production",
+          "label": "Production reference · PostgreSQL",
+          "responsibility": "extras 的 hooks/适配器/DDL/callback 合约；静态实现存在，不声称正在运行",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S18"
+          ]
+        },
+        {
+          "id": "providers",
+          "label": "可选模型服务",
+          "responsibility": "embedder/proposer/reflector/reranker 的实现可由部署者替换；服务运行未验证",
+          "status": "inferred",
+          "evidence": [
+            "S16",
+            "S30",
+            "S34"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "runtime",
+          "label": "Agent runtime\n调用、使用返回上下文",
+          "kind": "external",
+          "region": "harness",
+          "status": "unknown",
+          "evidence": [],
+          "note": "具体 agent、最终回答与工具动作未验证；不是数据库内的常驻模型。"
+        },
+        {
+          "id": "min_raw",
+          "label": "events + events_fts\n角色、channel、原始事件",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "note": "log_event 写入；没有自动调用模型。"
+        },
+        {
+          "id": "min_curated",
+          "label": "memories\nX / Z / E / M 字段",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3"
+          ],
+          "note": "thread 为组织字段；fact_key 替代不按 thread 隔离；主记录与原始事件不同。"
+        },
+        {
+          "id": "min_rel",
+          "label": "relations\nY typed edges",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S6"
+          ],
+          "note": "add_relation 或 hippocampus safe write；review 类型不是自动图扩展授权。"
+        },
+        {
+          "id": "min_read",
+          "label": "recall_hits()\n词法、entity、graph、M",
+          "kind": "process",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ],
+          "note": "本方法没有调用 search_vectors；命中回写 hit_count/last_hit/trace。"
+        },
+        {
+          "id": "min_vectors",
+          "label": "vectors / search_vectors\n独立 cosine API",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ],
+          "note": "调用方提供向量；结果 hydration 不等于 recall_hits 的 current/M gate。"
+        },
+        {
+          "id": "hooks",
+          "label": "Claude Code hooks\nSessionEnd / Start / Prompt",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13",
+            "S24"
+          ],
+          "note": "有实际 entrypoints；宿主事件格式、配置、运行状态未验证。"
+        },
+        {
+          "id": "pg_raw",
+          "label": "lmc5_raw_events\nsession / role / FTS",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S15"
+          ],
+          "note": "归档 INSERT 使用数据库默认 created_at；不把 session_id 当访问隔离。"
+        },
+        {
+          "id": "pg_curated",
+          "label": "lmc5_curated_memories\nXYZEM 主记录",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ],
+          "note": "含 valid/invalid、superseded_by、protected 等字段；DDL 不等于完整审核应用器。"
+        },
+        {
+          "id": "pg_rel",
+          "label": "lmc5_memory_relations\n类型、强度、有效期",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S17",
+            "S22"
+          ],
+          "note": "NightDream 默认新边 0.5；graph 二跳要求 >0.7，默认新边单独不能保证二跳可达。"
+        },
+        {
+          "id": "pg_vectors",
+          "label": "lmc5_vectors\nhalfvec + text_preview",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S23"
+          ],
+          "note": "独立 owner-keyed 派生状态；search 不 join curated status。"
+        },
+        {
+          "id": "pipeline",
+          "label": "RecallPipeline\n分层召回、去重、注入",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21",
+            "S22"
+          ],
+          "note": "vector 主路；FTS/raw 按 top vector score 门控，literal/graph/emotion/perception 另路；session 去重非授权。"
+        },
+        {
+          "id": "runner",
+          "label": "DreamRunner\n顺序调度 callbacks",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19"
+          ],
+          "note": "源码可编排，但 CLI 创建空 runner；缺 callback 为 skipped。"
+        },
+        {
+          "id": "nightdream",
+          "label": "NightDream\npropose → gate → write",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ],
+          "note": "默认 proposer 不晋升 risk=review；apply 要 writer；校验有 source/evidence 不代表核对原文。"
+        },
+        {
+          "id": "callbacks",
+          "label": "Injected callbacks\n持久化与接线责任",
+          "kind": "external",
+          "region": "harness",
+          "status": "inferred",
+          "evidence": [
+            "S16",
+            "S17",
+            "S18"
+          ],
+          "note": "callback 合约确实存在；其数据库事务、幂等、source 验证和错误恢复实现由部署提供。"
+        },
+        {
+          "id": "optional_models",
+          "label": "可选模型服务\nembedding / proposal",
+          "kind": "model",
+          "region": "providers",
+          "status": "unknown",
+          "evidence": [
+            "S16",
+            "S30",
+            "S34"
+          ],
+          "note": "适配器/Callable 可见，但 provider 的语义质量与可用性不在证据范围。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "runtime",
+          "to": "min_raw",
+          "label": "log_event(role, channel, content)",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "min_curated",
+          "label": "显式 add_memory",
+          "status": "observed",
+          "evidence": [
+            "S2"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "min_read",
+          "label": "显式 recall(query)",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "min_curated",
+          "to": "min_read",
+          "label": "live FTS / entity / M 候选",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ]
+        },
+        {
+          "from": "min_rel",
+          "to": "min_read",
+          "label": "safe 图关系扩展",
+          "status": "observed",
+          "evidence": [
+            "S38"
+          ]
+        },
+        {
+          "from": "min_read",
+          "to": "min_curated",
+          "label": "命中计数与 last_hit 回写",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "min_read",
+          "to": "runtime",
+          "label": "显式 recall 结果",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "min_vectors",
+          "label": "独立 upsert / search_vectors",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "hooks",
+          "label": "宿主 hook 输入",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13"
+          ]
+        },
+        {
+          "from": "hooks",
+          "to": "pg_raw",
+          "label": "SessionEnd 写原始事件",
+          "status": "observed",
+          "evidence": [
+            "S12"
+          ]
+        },
+        {
+          "from": "pg_curated",
+          "to": "hooks",
+          "label": "SessionStart identity / current facts",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ]
+        },
+        {
+          "from": "hooks",
+          "to": "runtime",
+          "label": "启动 pack；另读叙事与 cache",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ]
+        },
+        {
+          "from": "hooks",
+          "to": "pipeline",
+          "label": "UserPromptSubmit 查询",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S37"
+          ]
+        },
+        {
+          "from": "pg_curated",
+          "to": "pipeline",
+          "label": "curated FTS / emotion 候选",
+          "status": "observed",
+          "evidence": [
+            "S21",
+            "S22"
+          ]
+        },
+        {
+          "from": "pg_rel",
+          "to": "pipeline",
+          "label": "safe graph 扩展",
+          "status": "observed",
+          "evidence": [
+            "S22"
+          ]
+        },
+        {
+          "from": "pg_vectors",
+          "to": "pipeline",
+          "label": "ANN 命中与 preview",
+          "status": "observed",
+          "evidence": [
+            "S21",
+            "S23"
+          ]
+        },
+        {
+          "from": "pg_raw",
+          "to": "pipeline",
+          "label": "FTS / literal 原始证据",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21"
+          ]
+        },
+        {
+          "from": "pipeline",
+          "to": "runtime",
+          "label": "带来源层级的注入文本",
+          "status": "observed",
+          "evidence": [
+            "S20"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "runner",
+          "label": "部署方调用 / 调度 run",
+          "status": "inferred",
+          "evidence": [
+            "S19"
+          ]
+        },
+        {
+          "from": "runner",
+          "to": "nightdream",
+          "label": "hippocampus callback 接线",
+          "status": "inferred",
+          "evidence": [
+            "S18"
+          ]
+        },
+        {
+          "from": "nightdream",
+          "to": "callbacks",
+          "label": "候选 writer / safe relation / review",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ]
+        },
+        {
+          "from": "callbacks",
+          "to": "pg_curated",
+          "label": "部署方持久化候选",
+          "status": "inferred",
+          "evidence": [
+            "S14",
+            "S17"
+          ]
+        },
+        {
+          "from": "callbacks",
+          "to": "pg_rel",
+          "label": "部署方写安全边",
+          "status": "inferred",
+          "evidence": [
+            "S15",
+            "S17"
+          ]
+        },
+        {
+          "from": "optional_models",
+          "to": "nightdream",
+          "label": "可选 proposer 结果",
+          "status": "inferred",
+          "evidence": [
+            "S16"
+          ]
+        },
+        {
+          "from": "pipeline",
+          "to": "optional_models",
+          "label": "条件调用 embedder / rerank",
+          "status": "inferred",
+          "evidence": [
+            "S13",
+            "S34"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "minimal MemoryStore",
+          "writers": "调用方 API；hippocampus 在 apply 时写入",
+          "changes": "raw、curated、Y graph、向量为不同表；X/Z/E/M 字段共同存在于 memories",
+          "limits": "独立向量 API 没有自动接入 recall_hits；core 没有内置常驻 agent",
+          "evidence": [
+            "S1",
+            "S2",
+            "S3",
+            "S6",
+            "S11"
+          ]
+        },
+        {
+          "owner": "production reference 数据与调度",
+          "writers": "hook + 注入的 writers；数据库约束处理局部合法性",
+          "changes": "raw 入库后，候选生成/维护需显式装配；read hook 已接图与 emotion",
+          "limits": "实物 graph/emotion adapters 已接，不能继续引用 README 的旧 None 说法；状态运行未验证",
+          "evidence": [
+            "S12",
+            "S13",
+            "S18",
+            "S19"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "写入、保留、选择与使用",
+      "question": "输入如何变为可召回记录，又如何进入当前窗口；哪一步只是 proposal 或外部调度？",
+      "reading_guide": "SQLite 上路从 raw 到 review atoms 再到显式读取；PostgreSQL 下路在 loader/writer 处留出部署边界。surface 的 raw 与 current-state 支路明确旁路 curated 的 M gate。",
+      "omissions": [
+        "Production Chunk loader / writer 的真实事务与 watermark 实现不在 upstream 的通用 callback 内。",
+        "候选生成默认、可选模型、关系类型/强度详见 overview 与 revision notes。",
+        "SessionStart 的 identity/current fact/narrative 启动注入在 overview 证据说明中；此图主线是逐轮召回。"
+      ],
+      "regions": [
+        {
+          "id": "harness",
+          "label": "调用方与部署接线",
+          "responsibility": "agent runtime、时钟、reviewer 与自定义持久化处于实例部署边界之外",
+          "status": "inferred",
+          "evidence": [
+            "S16",
+            "S18",
+            "S19"
+          ]
+        },
+        {
+          "id": "minimal",
+          "label": "Minimal · SQLite core",
+          "responsibility": "src/lmc5 的 provider-free 本地 API；本图不将其与 PostgreSQL 合并成同一个实例",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S11"
+          ]
+        },
+        {
+          "id": "production",
+          "label": "Production reference · PostgreSQL",
+          "responsibility": "extras 的 hooks/适配器/DDL/callback 合约；静态实现存在，不声称正在运行",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S18"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "runtime",
+          "label": "Agent runtime\n调用、使用返回上下文",
+          "kind": "external",
+          "region": "harness",
+          "status": "unknown",
+          "evidence": [],
+          "note": "具体 agent、最终回答与工具动作未验证；不是数据库内的常驻模型。"
+        },
+        {
+          "id": "min_raw",
+          "label": "events + events_fts\n角色、channel、原始事件",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "note": "log_event 写入；没有自动调用模型。"
+        },
+        {
+          "id": "min_consolidate",
+          "label": "consolidate_events()\n窗口与来源绑定",
+          "kind": "process",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "note": "默认写 chunks 与 review observations；无后台自动调度。"
+        },
+        {
+          "id": "min_chunks",
+          "label": "event_chunks\nchunk_events 来源关联",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "note": "canonical raw events 留存，chunks 是派生结构。"
+        },
+        {
+          "id": "min_hippo",
+          "label": "run_hippocampus()\n原子候选与安全关系",
+          "kind": "process",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S6"
+          ],
+          "note": "默认候选为 review；apply 是写 review 记录，不自动成为 live recall。"
+        },
+        {
+          "id": "min_curated",
+          "label": "memories\nX / Z / E / M 字段",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3"
+          ],
+          "note": "thread 为组织字段；fact_key 替代不按 thread 隔离；主记录与原始事件不同。"
+        },
+        {
+          "id": "min_read",
+          "label": "recall_hits()\n词法、entity、graph、M",
+          "kind": "process",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ],
+          "note": "本方法没有调用 search_vectors；命中回写 hit_count/last_hit/trace。"
+        },
+        {
+          "id": "min_surface",
+          "label": "surface()\ncurated 严格 gate + raw",
+          "kind": "process",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ],
+          "note": "strict gate 仅作用 curated；另外加入 raw search 与未过 TTL 的 current-state pack；默认 redact。"
+        },
+        {
+          "id": "current_state",
+          "label": "current_state_items\n显式刷新、TTL 投影",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S32"
+          ],
+          "note": "refresh_current_state 清空重建；基础事实改动不等于此表同步失效。"
+        },
+        {
+          "id": "hooks",
+          "label": "Claude Code hooks\nSessionEnd / Start / Prompt",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13",
+            "S24"
+          ],
+          "note": "有实际 entrypoints；宿主事件格式、配置、运行状态未验证。"
+        },
+        {
+          "id": "pg_raw",
+          "label": "lmc5_raw_events\nsession / role / FTS",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S15"
+          ],
+          "note": "归档 INSERT 使用数据库默认 created_at；不把 session_id 当访问隔离。"
+        },
+        {
+          "id": "loader",
+          "label": "Chunk loader\n由部署方组织来源",
+          "kind": "external",
+          "region": "harness",
+          "status": "unknown",
+          "evidence": [
+            "S16",
+            "S18"
+          ],
+          "note": "NightDream 接收 Chunk 列表；production raw 到 chunks 的实际装配由部署者提供。"
+        },
+        {
+          "id": "nightdream",
+          "label": "NightDream\npropose → gate → write",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ],
+          "note": "默认 proposer 不晋升 risk=review；apply 要 writer；校验有 source/evidence 不代表核对原文。"
+        },
+        {
+          "id": "callbacks",
+          "label": "Injected callbacks\n持久化与接线责任",
+          "kind": "external",
+          "region": "harness",
+          "status": "inferred",
+          "evidence": [
+            "S16",
+            "S17",
+            "S18"
+          ],
+          "note": "callback 合约确实存在；其数据库事务、幂等、source 验证和错误恢复实现由部署提供。"
+        },
+        {
+          "id": "pg_curated",
+          "label": "lmc5_curated_memories\nXYZEM 主记录",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ],
+          "note": "含 valid/invalid、superseded_by、protected 等字段；DDL 不等于完整审核应用器。"
+        },
+        {
+          "id": "pg_vectors",
+          "label": "lmc5_vectors\nhalfvec + text_preview",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S23"
+          ],
+          "note": "独立 owner-keyed 派生状态；search 不 join curated status。"
+        },
+        {
+          "id": "pipeline",
+          "label": "RecallPipeline\n分层召回、去重、注入",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21",
+            "S22"
+          ],
+          "note": "vector 主路；FTS/raw 按 top vector score 门控，literal/graph/emotion/perception 另路；session 去重非授权。"
+        },
+        {
+          "id": "runner",
+          "label": "DreamRunner\n顺序调度 callbacks",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19"
+          ],
+          "note": "源码可编排，但 CLI 创建空 runner；缺 callback 为 skipped。"
+        },
+        {
+          "id": "context",
+          "label": "返回 context\n调用方决定如何使用",
+          "kind": "output",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S20",
+            "S24"
+          ],
+          "note": "返回结构/文本不是最终回答质量或 agent 实际执行的证明。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "runtime",
+          "to": "min_raw",
+          "label": "log_event 留原始角色/内容",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ]
+        },
+        {
+          "from": "min_raw",
+          "to": "min_consolidate",
+          "label": "未整理 events",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "min_consolidate",
+          "to": "min_chunks",
+          "label": "摘要与 chunk_events 绑定",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "min_consolidate",
+          "to": "min_curated",
+          "label": "默认另写 review observation",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "min_chunks",
+          "to": "min_hippo",
+          "label": "关联 event → attributed atoms",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ]
+        },
+        {
+          "from": "min_hippo",
+          "to": "min_curated",
+          "label": "apply 写 review 候选",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ]
+        },
+        {
+          "from": "min_curated",
+          "to": "min_read",
+          "label": "仅 live 进入候选 + M gate",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ]
+        },
+        {
+          "from": "min_read",
+          "to": "context",
+          "label": "recall 结果；默认不 redact",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "min_surface",
+          "to": "min_read",
+          "label": "gate_mode=surface",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "min_read",
+          "to": "min_surface",
+          "label": "经严格 gate 的 curated hits",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ]
+        },
+        {
+          "from": "min_raw",
+          "to": "min_surface",
+          "label": "独立 search_events 支路",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "current_state",
+          "to": "min_surface",
+          "label": "TTL 内的物化 pack",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "min_surface",
+          "to": "context",
+          "label": "state + memories + events；redact",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "hooks",
+          "label": "session 或每轮 prompt",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13"
+          ]
+        },
+        {
+          "from": "hooks",
+          "to": "pg_raw",
+          "label": "结束时归档 raw",
+          "status": "observed",
+          "evidence": [
+            "S12"
+          ]
+        },
+        {
+          "from": "pg_raw",
+          "to": "loader",
+          "label": "部署方读取并构建 chunks",
+          "status": "inferred",
+          "evidence": [
+            "S15",
+            "S18"
+          ]
+        },
+        {
+          "from": "loader",
+          "to": "nightdream",
+          "label": "传入 Chunk 列表",
+          "status": "observed",
+          "evidence": [
+            "S16"
+          ]
+        },
+        {
+          "from": "runner",
+          "to": "nightdream",
+          "label": "配置后的 hippocampus callback",
+          "status": "inferred",
+          "evidence": [
+            "S18"
+          ]
+        },
+        {
+          "from": "nightdream",
+          "to": "callbacks",
+          "label": "apply：candidate → durable ID",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ]
+        },
+        {
+          "from": "callbacks",
+          "to": "pg_curated",
+          "label": "按部署策略持久化",
+          "status": "inferred",
+          "evidence": [
+            "S14",
+            "S17"
+          ]
+        },
+        {
+          "from": "pg_curated",
+          "to": "pipeline",
+          "label": "current FTS 等适配器候选",
+          "status": "observed",
+          "evidence": [
+            "S21"
+          ]
+        },
+        {
+          "from": "pg_vectors",
+          "to": "pipeline",
+          "label": "向量主路；独立存储状态",
+          "status": "observed",
+          "evidence": [
+            "S21",
+            "S23"
+          ]
+        },
+        {
+          "from": "pg_raw",
+          "to": "pipeline",
+          "label": "低 vector 分 FTS / literal",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21"
+          ]
+        },
+        {
+          "from": "hooks",
+          "to": "pipeline",
+          "label": "每轮 query + session_id",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S37"
+          ]
+        },
+        {
+          "from": "pipeline",
+          "to": "context",
+          "label": "融合、去重、可选 rerank 后注入",
+          "status": "observed",
+          "evidence": [
+            "S20"
+          ]
+        },
+        {
+          "from": "context",
+          "to": "runtime",
+          "label": "交给宿主使用；实际行为未验证",
+          "status": "inferred",
+          "evidence": [
+            "S9",
+            "S20"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "minimal review 与 live 候选",
+          "writers": "consolidation/hippocampus 写 review；调用方另定审核动作",
+          "changes": "default review atoms 不通过 current-only recall；add_memory 可直接写 current",
+          "limits": "没有在图里虚构从 review 自动变 current 的批准机制",
+          "evidence": [
+            "S2",
+            "S4",
+            "S5",
+            "S7"
+          ]
+        },
+        {
+          "owner": "surface context",
+          "writers": "surface 调用 recall_hits、search_events、list_current_state",
+          "changes": "curated 用 strict surface gate；raw 与 materialized state 各走独立读取，输出可 redacted",
+          "limits": "严格 surface 并不表示 raw 或 current-state 自动经过同一个 M gate",
+          "evidence": [
+            "S9",
+            "S10"
+          ]
+        },
+        {
+          "owner": "production 查询与注入历史",
+          "writers": "RecallPipeline 和 hook builder",
+          "changes": "vector 置信触发 FTS/raw；side channels 汇合；按 session 过滤已注入 IDs 后排序",
+          "limits": "raw fallback 由 top vector 分控制，不等 curated FTS 空；两天 history TTL 不是授权 scope",
+          "evidence": [
+            "S13",
+            "S20",
+            "S35"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revision",
+      "title": "纠正、维护与派生状态",
+      "question": "谁能改事实、体验或关系；归档/删除会不会自动传播到向量、叙事与其他副本？",
+      "reading_guide": "先分开 minimal 的自动 fact_key 替代与独立审计，再看 production 的数据库 E 约束、callback 审核和边注销。右侧派生状态没有被画成自动同步删除链。",
+      "omissions": [
+        "未验证任何生产数据库执行、故障恢复、实际批准权限或端到端删除效果。",
+        "retention/decay 的运行时策略与备份/Swap 清除不在已核验实例边界。",
+        "E scorer 的模型推断质量及 narrative reflector 的生成质量不由表或 prompt 证明。"
+      ],
+      "regions": [
+        {
+          "id": "harness",
+          "label": "调用方与部署接线",
+          "responsibility": "agent runtime、时钟、reviewer 与自定义持久化处于实例部署边界之外",
+          "status": "inferred",
+          "evidence": [
+            "S16",
+            "S18",
+            "S19"
+          ]
+        },
+        {
+          "id": "minimal",
+          "label": "Minimal · SQLite core",
+          "responsibility": "src/lmc5 的 provider-free 本地 API；本图不将其与 PostgreSQL 合并成同一个实例",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S11"
+          ]
+        },
+        {
+          "id": "production",
+          "label": "Production reference · PostgreSQL",
+          "responsibility": "extras 的 hooks/适配器/DDL/callback 合约；静态实现存在，不声称正在运行",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S18"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "runtime",
+          "label": "Agent runtime\n调用、使用返回上下文",
+          "kind": "external",
+          "region": "harness",
+          "status": "unknown",
+          "evidence": [],
+          "note": "具体 agent、最终回答与工具动作未验证；不是数据库内的常驻模型。"
+        },
+        {
+          "id": "min_curated",
+          "label": "memories\nX / Z / E / M 字段",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3"
+          ],
+          "note": "thread 为组织字段；fact_key 替代不按 thread 隔离；主记录与原始事件不同。"
+        },
+        {
+          "id": "min_audit",
+          "label": "run_z_audit()\n登记待审冲突",
+          "kind": "process",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S25"
+          ],
+          "note": "apply 仅写 pending audit rows，不 supersede。"
+        },
+        {
+          "id": "min_pending",
+          "label": "z_conflict_audits\npending 审计记录",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S25"
+          ],
+          "note": "不是 live fact；人工或调用者 review/apply 另定。"
+        },
+        {
+          "id": "min_patrol",
+          "label": "patrol()\n只读生命周期建议",
+          "kind": "process",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S26"
+          ],
+          "note": "与 production run_patrol 的可写边注销模式区分。"
+        },
+        {
+          "id": "min_gate",
+          "label": "metabolic_gate()\ncurrent / 冷热 / 隔离",
+          "kind": "decision",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ],
+          "note": "recall 容许 cold 降分，surface 拦 cold；这不是物理删除。"
+        },
+        {
+          "id": "current_state",
+          "label": "current_state_items\n显式刷新、TTL 投影",
+          "kind": "store",
+          "region": "minimal",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S32"
+          ],
+          "note": "refresh_current_state 清空重建；基础事实改动不等于此表同步失效。"
+        },
+        {
+          "id": "pg_curated",
+          "label": "lmc5_curated_memories\nXYZEM 主记录",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ],
+          "note": "含 valid/invalid、superseded_by、protected 等字段；DDL 不等于完整审核应用器。"
+        },
+        {
+          "id": "e_guard",
+          "label": "E authorship guard\n首写完整、修改拒绝",
+          "kind": "decision",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ],
+          "note": "DB 校验作者字符串与初始 priority；不认证真实主 agent；更改需 successor。"
+        },
+        {
+          "id": "e_proposals",
+          "label": "lmc5_e_axis_proposals\n非权威建议队列",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S28"
+          ],
+          "note": "EAxisProposalDispatcher 调 submit callback；不得直接改 authoritative E。"
+        },
+        {
+          "id": "pg_audit",
+          "label": "lmc5_z_audit\n判决与证据待审",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S18"
+          ],
+          "note": "存在表与 z_audit callback；完整判决写入/批准实现不在已核验代码路径中。"
+        },
+        {
+          "id": "pg_rel",
+          "label": "lmc5_memory_relations\n类型、强度、有效期",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S17",
+            "S22"
+          ],
+          "note": "NightDream 默认新边 0.5；graph 二跳要求 >0.7，默认新边单独不能保证二跳可达。"
+        },
+        {
+          "id": "pg_patrol",
+          "label": "run_patrol()\n可注销坏关系",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S27"
+          ],
+          "note": "默认只读；apply 注销重复/孤儿/dead contradiction edges，不删除 curated。"
+        },
+        {
+          "id": "pg_vectors",
+          "label": "lmc5_vectors\nhalfvec + text_preview",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S23"
+          ],
+          "note": "独立 owner-keyed 派生状态；search 不 join curated status。"
+        },
+        {
+          "id": "nap",
+          "label": "run_nap()\n补向量、连接孤岛",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ],
+          "note": "通过 writer/finder callbacks；缺适配器跳过；不是旧向量清除器。"
+        },
+        {
+          "id": "vector_delete",
+          "label": "delete_vector()\n按 owner 删所有版本",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S23"
+          ],
+          "note": "仅删除 lmc5_vectors 中该 owner 的所有 model/dim，非端到端遗忘。"
+        },
+        {
+          "id": "narrative",
+          "label": "NarrativeTimeline\n种子 → 叙事索引",
+          "kind": "process",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S30",
+            "S31"
+          ],
+          "note": "返回 seed IDs 与摘要，由调用方落库；未发现自动追随来源纠正的传播机制。"
+        },
+        {
+          "id": "archive",
+          "label": "lmc5_cold_storage\n保留归档内容",
+          "kind": "store",
+          "region": "production",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ],
+          "note": "DDL 存在；归档决策与写入需部署实现，cold 搜索可选。"
+        },
+        {
+          "id": "erasure",
+          "label": "端到端遗忘协调\n本次未确认",
+          "kind": "external",
+          "region": "harness",
+          "status": "unknown",
+          "evidence": [],
+          "note": "未找到统一处理 raw/chunks/curated/vectors/graph/cache/narrative/snapshots 的删除事务；不等同声称任何部署都不可能实现。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "runtime",
+          "to": "min_curated",
+          "label": "同 fact_key current 写入替代旧值",
+          "status": "observed",
+          "evidence": [
+            "S2"
+          ]
+        },
+        {
+          "from": "min_curated",
+          "to": "min_audit",
+          "label": "当前/review 冲突候选",
+          "status": "observed",
+          "evidence": [
+            "S25"
+          ]
+        },
+        {
+          "from": "min_audit",
+          "to": "min_pending",
+          "label": "apply 仅登记 pending",
+          "status": "observed",
+          "evidence": [
+            "S25"
+          ]
+        },
+        {
+          "from": "min_curated",
+          "to": "min_patrol",
+          "label": "读取 facts / 生命周期状态",
+          "status": "observed",
+          "evidence": [
+            "S26"
+          ]
+        },
+        {
+          "from": "min_patrol",
+          "to": "runtime",
+          "label": "返回建议；不改数据库",
+          "status": "observed",
+          "evidence": [
+            "S26"
+          ]
+        },
+        {
+          "from": "min_curated",
+          "to": "min_gate",
+          "label": "status / age / hits / 保护条件",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "min_gate",
+          "to": "runtime",
+          "label": "允许/降分/排除；非删除",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "min_curated",
+          "to": "current_state",
+          "label": "显式 refresh_current_state 投影",
+          "status": "observed",
+          "evidence": [
+            "S32"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "e_guard",
+          "label": "首写 E 作者与初始 priority",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ]
+        },
+        {
+          "from": "e_guard",
+          "to": "pg_curated",
+          "label": "允许完整 INSERT；拒绝 E 修改",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "e_proposals",
+          "label": "dispatcher → submit callback",
+          "status": "inferred",
+          "evidence": [
+            "S28"
+          ]
+        },
+        {
+          "from": "e_proposals",
+          "to": "runtime",
+          "label": "交主 agent 阅读、决定 successor",
+          "status": "inferred",
+          "evidence": [
+            "S28"
+          ]
+        },
+        {
+          "from": "pg_audit",
+          "to": "runtime",
+          "label": "pending 判决待部署方 review",
+          "status": "inferred",
+          "evidence": [
+            "S15"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "pg_audit",
+          "label": "部署 z_audit callback 写判决",
+          "status": "inferred",
+          "evidence": [
+            "S15",
+            "S18"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "pg_curated",
+          "label": "批准与应用事实：实现待部署",
+          "status": "unknown",
+          "evidence": [
+            "S15"
+          ]
+        },
+        {
+          "from": "pg_rel",
+          "to": "pg_patrol",
+          "label": "检查重复/孤儿/dead contradiction",
+          "status": "observed",
+          "evidence": [
+            "S27"
+          ]
+        },
+        {
+          "from": "pg_patrol",
+          "to": "pg_rel",
+          "label": "apply 令有效期结束",
+          "status": "observed",
+          "evidence": [
+            "S27"
+          ]
+        },
+        {
+          "from": "pg_curated",
+          "to": "nap",
+          "label": "仅 current 中找缺向量/无活边",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "from": "nap",
+          "to": "pg_vectors",
+          "label": "经 callback 补缺失向量",
+          "status": "inferred",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "from": "nap",
+          "to": "pg_rel",
+          "label": "经 callback 补 same_topic 0.45",
+          "status": "inferred",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "vector_delete",
+          "label": "显式指定 owner_type / ID",
+          "status": "observed",
+          "evidence": [
+            "S23"
+          ]
+        },
+        {
+          "from": "vector_delete",
+          "to": "pg_vectors",
+          "label": "删除该 owner 所有 model/dim",
+          "status": "observed",
+          "evidence": [
+            "S23"
+          ]
+        },
+        {
+          "from": "pg_curated",
+          "to": "narrative",
+          "label": "loader 供种子；输出 seed IDs",
+          "status": "inferred",
+          "evidence": [
+            "S30"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "archive",
+          "label": "部署方选择归档并落库",
+          "status": "inferred",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "erasure",
+          "label": "跨 raw / 派生 / 缓存清除请求",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "minimal Z / E / M",
+          "writers": "add_memory；run_z_audit；E triggers；patrol",
+          "changes": "同 key current INSERT 自动 supersede，不检查 thread；audit apply 只建 pending；E 改写拒绝；gate 只控制可见性",
+          "limits": "事实状态变化不等于 current_state_items、独立向量 API 同步失效",
+          "evidence": [
+            "S2",
+            "S25",
+            "S33",
+            "S10",
+            "S11",
+            "S32"
+          ]
+        },
+        {
+          "owner": "production curated、Z audits 与 E proposals",
+          "writers": "部署 writer/reviewer；E DB constraints",
+          "changes": "E proposals 不得直接 UPDATE；Z 表保存 verdict/evidence，应用器需部署；patrol 只局部注销边",
+          "limits": "作者字符串不是身份认证；没有证据支持默认完成事实批准或全库清理",
+          "evidence": [
+            "S14",
+            "S15",
+            "S27",
+            "S28"
+          ]
+        },
+        {
+          "owner": "向量、叙事、归档等派生状态",
+          "writers": "vector_writer/delete_vector；narrative loader/持久化调用方；归档调用方",
+          "changes": "nap 补缺向量；delete_vector 只清该表；narrative 留 seed IDs；冷归档保留内容",
+          "limits": "vector 检索没有 current join；若旧向量留存可能回注；未确认叙事、raw、缓存、快照自动级联纠正/遗忘",
+          "evidence": [
+            "S21",
+            "S23",
+            "S29",
+            "S30",
+            "S31"
+          ]
+        },
+        {
+          "owner": "Y 关系状态",
+          "writers": "NightDream/nap relation callbacks；run_patrol apply",
+          "changes": "NightDream safe 0.5，nap 默认 0.45；graph 第二跳需 >0.7；注销 via valid_until",
+          "limits": "安全类型标签不证明关系成立；补边、强化、审核和两跳结果需分开验证",
+          "evidence": [
+            "S17",
+            "S22",
+            "S27",
+            "S29"
+          ]
+        }
+      ]
+    }
+  ]
+}

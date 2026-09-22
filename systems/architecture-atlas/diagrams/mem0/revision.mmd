@@ -1,0 +1,64 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_caller["调用应用边界"]
+    app["应用 / harness<br/>提交材料与查询<br/>〔未知〕"]:::external
+    class app unknown
+    downstream["其他派生事实 / 应用副本<br/>无自动撤回证据<br/>〔未知〕"]:::external
+    class downstream unknown
+  end
+  subgraph region_core["Python OSS runtime"]
+    identity_guard["身份字段不可迁移<br/>metadata keys 剥离"]:::process
+    update["update(memory_id)<br/>显式替换条目"]:::process
+    delete["delete(memory_id)<br/>删除主条目"]:::process
+    delete_all["delete_all(scope)<br/>sync 顺序 / async 并发"]:::process
+    expiry{"expiration_date<br/>读取可见性"}:::decision
+    reset["reset()<br/>重置主索引与 SQLite"]:::process
+    entity_cleanup["实体关联清理 / 重建<br/>best effort"]:::process
+    results["返回条目 / 操作回执<br/>不代替最终回答"]:::output
+    select["search / get / get_all<br/>选择条目与可见性"]:::process
+    extract["add extraction<br/>新说法继续追加"]:::process
+  end
+  subgraph region_storage["配置的持久化层"]
+    vector_store[("Vector store<br/>当前事实与检索索引")]:::store
+    entity_store[("Entity store<br/>实体 → memory IDs")]:::store
+    history[("SQLite history<br/>ADD / UPDATE / DELETE")]:::store
+    messages[("SQLite messages<br/>每 scope 最近10条")]:::store
+  end
+  app -->|"add scope / update metadata"| identity_guard
+  identity_guard -->|"过滤身份键后合并 metadata"| update
+  app -->|"指定 memory_id"| delete
+  app -->|"指定 user / agent / run scope"| delete_all
+  app -->|"add/update 设定或清除日期"| expiry
+  app -->|"显式 reset 调用"| reset
+  app -->|"新消息含更正/变化"| extract
+  extract -->|"仍作为新条目追加"| vector_store
+  update -->|"覆盖文本 / 向量 / metadata"| vector_store
+  update -->|"记录 old → new"| history
+  update -->|"text 变化时移除旧再建新"| entity_cleanup
+  delete_all -->|"sync 逐条；async gather"| delete
+  delete -->|"删除 ID"| vector_store
+  delete -->|"保留旧文本 DELETE 事件"| history
+  delete -->|"单条删除清 link"| entity_cleanup
+  delete_all -->|"async 后置 bulk clear"| entity_cleanup
+  entity_cleanup -->|"条件清理 / 删除空实体 / 重建"| entity_store
+  expiry -->|"默认隐藏，show_expired 可读"| select
+  vector_store -->|"按 ID / scope 读取当前条目"| select
+  select -->|"当前可见结果"| results
+  reset -->|"reset / delete collection"| vector_store
+  reset -->|"drop 与重建 SQLite"| history
+  reset -->|"drop 与重建 SQLite"| messages
+  reset -->|"仅已初始化时尝试 reset"| entity_store
+  messages -->|"非 reset 删除后仍可作上下文"| extract
+  results -.->|"调用者可保留 / 使用返回值"| downstream
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

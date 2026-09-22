@@ -1,0 +1,64 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_caller["调用应用边界"]
+    app["应用 / harness<br/>提交材料与查询<br/>〔未知〕"]:::external
+    class app unknown
+    use["应用上下文与行动<br/>是否采纳由调用者决定<br/>〔未知〕"]:::external
+    class use unknown
+  end
+  subgraph region_core["Python OSS runtime"]
+    api["Memory / AsyncMemory<br/>应用调用接口"]:::entry
+    scope["Scope 与输入规范化<br/>user / agent / run"]:::process
+    mode{"infer / memory_type<br/>选择写入路径"}:::decision
+    context["抽取上下文<br/>近期10条 + 相关10条"]:::process
+    batch["解析 / embedding / 去重<br/>批量事实与实体派生"]:::process
+    select["search / get / get_all<br/>选择条目与可见性"]:::process
+    rank["semantic 门槛 → 融合<br/>可选 reranker"]:::process
+    results["返回条目 / 操作回执<br/>不代替最终回答"]:::output
+  end
+  subgraph region_providers["模型与辅助依赖"]
+    llm[["LLM provider<br/>事实抽取 / 摘要"]]:::model
+    embedder[["Embedding provider<br/>文本 → 向量"]]:::model
+  end
+  subgraph region_storage["配置的持久化层"]
+    vector_store[("Vector store<br/>当前事实与检索索引")]:::store
+    messages[("SQLite messages<br/>每 scope 最近10条")]:::store
+    history[("SQLite history<br/>ADD / UPDATE / DELETE")]:::store
+    entity_store[("Entity store<br/>实体 → memory IDs")]:::store
+  end
+  app -->|"提交消息；同步或 await"| api
+  api -->|"规范化 scope + messages"| scope
+  scope -->|"选择 infer / procedural"| mode
+  mode -->|"默认 infer=True"| context
+  messages -->|"最近10条作指代上下文"| context
+  vector_store -->|"query embedding 检索相关10条"| context
+  context -->|"一次 extraction 请求"| llm
+  mode -->|"procedural：生成摘要"| llm
+  mode -->|"infer=False：raw message"| batch
+  llm -->|"JSON facts；或摘要文本"| batch
+  batch -->|"embedding facts / entities"| embedder
+  batch -->|"写入 text / vectors / metadata"| vector_store
+  batch -->|"随后记录 ADD"| history
+  batch -->|"默认分支：NLP 派生关联"| entity_store
+  batch -->|"默认分支：结束时存消息"| messages
+  batch -->|"records 回执；非原子提交证明"| results
+  api -->|"query + scope filters"| select
+  select -->|"生成 query embedding"| embedder
+  vector_store -->|"semantic 与 keyword hits"| select
+  select -->|"semantic 候选；默认隐去过期"| rank
+  entity_store -->|"entity boost"| rank
+  rank -->|"top_k；可解释分数"| results
+  results -.->|"交还记忆条目以供上下文"| use
+  use -.->|"应用可提交后续消息形成循环"| app
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

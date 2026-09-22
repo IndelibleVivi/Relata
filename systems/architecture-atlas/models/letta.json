@@ -1,0 +1,1766 @@
+{
+  "id": "letta",
+  "name": "Letta Code",
+  "repository": "https://github.com/letta-ai/letta-code",
+  "commit": "f5c5bbce6e9394b30c626909315c2b3acc665672",
+  "study_date": "2026-09-22",
+  "boundary": "0.32.17 源码快照；主图为当前 local backend 的 JSONL、MemFS v1、context 编译与 client-side reflection，Cloud/API 仅呈现公开客户端边界。排除 retired V1 API server、Cloud 内部、所有真实模型效果；MemFS v1/v2 不等于历史 API 代次。",
+  "summary": "Letta Code 把不可直接等同的三种状态连接起来：conversation 经验日志、agent 可提交 MemFS、每次调用的编译 context。模型决定记什么与如何使用；harness 负责保留、revision 检测和条件性后台 reflection。原始 transcript、reflection 派生日志、Git 候选分支及已编译 prompt 分属不同生命周期。",
+  "mechanisms": [
+    "JSONL 经验与压缩事件",
+    "agent Git MemFS",
+    "HEAD 驱动 context 编译",
+    "本地 FTS-lite recall",
+    "后台 reflection worktree integration"
+  ],
+  "strengths": [
+    "提交与编译版本可检查，有助于分离写入失败、投影失败与使用失败。",
+    "经验保留与活动摘要分开，可为遗漏提供再次检索机会。",
+    "reflection 提案与父 memory 分开，合并状态及进度 checkpoint 可追踪。"
+  ],
+  "limits": [
+    "静态源码不证明持续学习或关系连续性效果；模型如何抽象、归属和遵循记忆仍待测。",
+    "local vector/hybrid 参数按 FTS-lite；Cloud 检索实现未读，不能合并成统一召回能力。",
+    "memory delete 路径不是跨 transcript、summary、Git 历史与远端副本的清除事务。",
+    "client-side reflection 有条件和 server-side cutover；定时/托管反思完整路径未审阅。"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-store.ts#L1729-L1752",
+      "note": "LocalStore 输入消息标记 role、timestamp、agent_id、conversation_id。"
+    },
+    {
+      "id": "S2",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-store.ts#L3029-L3074",
+      "note": "持久 conversation.json、messages.jsonl，并持久编译 prompt。"
+    },
+    {
+      "id": "S3",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-store.ts#L3170-L3243",
+      "note": "消息与 compaction 作为带 parentId/timestamp 的 JSONL 记录追加。"
+    },
+    {
+      "id": "S4",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-store.ts#L1664-L1725",
+      "note": "compaction 将活动 context 改为摘要＋保留消息，同时追加 compaction 事件。"
+    },
+    {
+      "id": "S5",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-backend.ts#L818-L860",
+      "note": "读取活动消息，规划并调用摘要，再更新 LocalStore。"
+    },
+    {
+      "id": "S6",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/system-prompt-compilation.ts#L76-L115",
+      "note": "仅用 git HEAD 枚举并读取已提交 Markdown。"
+    },
+    {
+      "id": "S7",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/system-prompt-compilation.ts#L223-L264",
+      "note": "persona/self、system 正文与 external 目录投影。"
+    },
+    {
+      "id": "S8",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-backend.ts#L924-L1003",
+      "note": "按 raw system hash 与 MemFS revision 复用、重编译或返回 mid-conversation update。"
+    },
+    {
+      "id": "S9",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-backend.ts#L509-L532",
+      "note": "为 turn 解析已编译 prompt，追加 skills block。"
+    },
+    {
+      "id": "S10",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/dev/pi-stream-adapter.ts#L593-L606",
+      "note": "将活动消息、system prompt 与 memory update 装配成 provider context。"
+    },
+    {
+      "id": "S11",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/dev/pi-stream-adapter.ts#L688-L705",
+      "note": "把 model、context、options 交给 runStream，迭代返回结果。"
+    },
+    {
+      "id": "S12",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/tools/impl/memory.ts#L102-L159",
+      "note": "memory tool 校验 reason/agent/格式/clean repo，执行变更并提交；返回 local/remote 不同回执。"
+    },
+    {
+      "id": "S13",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/tools/impl/memory.ts#L289-L350",
+      "note": "删除和改名只处理选定 memory 文件/目录，未调用 transcript/摘要级联删除。"
+    },
+    {
+      "id": "S14",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/agent/memory-git.ts#L1191-L1223",
+      "note": "按 pathspec stage、commit reason/author、返回 HEAD。"
+    },
+    {
+      "id": "S15",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/agent/memory-git.ts#L1930-L2058",
+      "note": "post-turn remote push；local-only 跳过，dirty/conflict/push_failed 与 rebase 分支。"
+    },
+    {
+      "id": "S16",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/transcript-search.ts#L350-L394",
+      "note": "按 agent/conversation 筛 transcript 并投影、文本匹配、日期筛选。"
+    },
+    {
+      "id": "S17",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/transcript-search.ts#L409-L461",
+      "note": "本地 search_mode 不分支，vector/hybrid 按 FTS-lite；排序与 limit。"
+    },
+    {
+      "id": "S18",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/message-search.ts#L18-L37",
+      "note": "local search 与 API search 分发边界。"
+    },
+    {
+      "id": "S19",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/agent/memory-format.ts#L4-L47",
+      "note": "localMemfs 采用 v1；非本地根 MEMORY.md 才识别 v2，core/deferred 投影规则不同。"
+    },
+    {
+      "id": "S20",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-store.ts#L2783-L2821",
+      "note": "从 system-prompt.json 恢复每个 conversation 的已编译上下文。"
+    },
+    {
+      "id": "S21",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-store.ts#L3327-L3344",
+      "note": "每个 conversation 的编译 prompt 存盘。"
+    },
+    {
+      "id": "S22",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/helpers/post-turn-reflection.ts#L17-L79",
+      "note": "turn 后按 off/compaction-event/step-count 判断启动 reflection。"
+    },
+    {
+      "id": "S23",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/app/use-conversation-loop.ts#L1445-L1470",
+      "note": "CLI turn 完成后把行 delta 写 reflection transcript，再判断触发。"
+    },
+    {
+      "id": "S24",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/helpers/reflection-transcript.ts#L911-L950",
+      "note": "独立 transcript.jsonl/state.json，计 completed steps。"
+    },
+    {
+      "id": "S25",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/helpers/reflection-transcript.ts#L1644-L1677",
+      "note": "按 reflected_through_message_id 选择未反思范围，生成 payload。"
+    },
+    {
+      "id": "S26",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/helpers/reflection-launcher.ts#L745-L887",
+      "note": "检查 cutover、active、dirty、payload；准备 worktree 并 spawnBackgroundSubagentTask，完成后执行 integration。"
+    },
+    {
+      "id": "S27",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/agent/memory-worktree.ts#L122-L194",
+      "note": "从父 MemFS HEAD 新建 reflection branch/worktree，声明写范围。"
+    },
+    {
+      "id": "S28",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/helpers/reflection-launcher.ts#L597-L635",
+      "note": "成功后 auto/explicit integration，completion 依赖 integration 消费条件。"
+    },
+    {
+      "id": "S29",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/agent/memory-worktree.ts#L586-L650",
+      "note": "Git merge 候选分支；冲突 abort/cleanup/retry，成功返回 merged HEAD。"
+    },
+    {
+      "id": "S30",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/agent/memory-worktree.ts#L231-L240",
+      "note": "merged/no_changes 消费 transcript，只有 merged 要 recompile。"
+    },
+    {
+      "id": "S31",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/helpers/reflection-transcript.ts#L1870-L1901",
+      "note": "仅成功时推进 reflected_through_message_id 与 reflected steps。"
+    },
+    {
+      "id": "S32",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/helpers/memory-subagent-completion.ts#L39-L95",
+      "note": "成功且允许时排队/执行 parent conversation recompile，失败可见。"
+    },
+    {
+      "id": "S33",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/memory-frontmatter.ts#L63-L110",
+      "note": "格式字段约束不包含强制事实级 source/speaker/valid-time。"
+    },
+    {
+      "id": "S34",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/dev/fake-headless-backend.ts#L470-L529",
+      "note": "活动消息和解析 prompt 送 executor，返回 stream 经 persistExecutorStream。"
+    },
+    {
+      "id": "S35",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-backend.ts#L230-L247",
+      "note": "local memory update 文本与 LocalBackend 继承 HeadlessBackend，localMemfs capability。"
+    },
+    {
+      "id": "S36",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/paths.ts#L48-L52",
+      "note": "MemFS 按 agentId 绑定本地存储根。"
+    },
+    {
+      "id": "S37",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/tools/tool-definitions.ts#L227-L235",
+      "note": "memory schema 映射到 memory 实现；不证明模型必然选择调用。"
+    },
+    {
+      "id": "S38",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/subcommands/messages.ts#L410-L440",
+      "note": "CLI search 明确 scope、调用 backend search 并输出 JSON。"
+    },
+    {
+      "id": "S39",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/agent/prompts/recall_subagent.md#L1-L36",
+      "note": "源码 prompt 指示 recall 通过 CLI 查询；其 vector/hybrid 描述是提示宣称，本地实际行为以 S17 为准。"
+    },
+    {
+      "id": "S40",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/helpers/reflection-launcher.ts#L873-L896",
+      "note": "integration 的 completionSuccess 被传入 reflection progress finalizer。"
+    },
+    {
+      "id": "S41",
+      "url": "https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/cli/helpers/reflection-completion.ts#L106-L130",
+      "note": "完成 reflection 后先更新本地 payload checkpoint；成功时可另同步 Cloud progress。"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": "全景与系统边界",
+      "question": "当前 local backend 的经验、可编辑记忆、编译 context 与外部模型各由谁负责？",
+      "reading_guide": "沿输入→LocalBackend→context→模型读取主线，再看模型决策如何经 memory tool 改变 agent MemFS。右侧 Cloud 为另一 backend 的边界对照；remote sync 不是 local-only 的默认后继。",
+      "omissions": [
+        "未展开 UI/channels、共享 memory、权限 confinement、全部工具调度和恢复路径。",
+        "Reflection 在本视图聚合；flow/revision 展开 client-side 后台支路。",
+        "Cloud server、模型内部、retired V1 API server 未检查；MemFS v1/v2 是当前格式区别。"
+      ],
+      "regions": [
+        {
+          "id": "harness",
+          "label": "Letta Code harness",
+          "responsibility": "运行 turn、memory 工具、context 编译与检索路由；静态源码边界。",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S12",
+            "S18",
+            "S34"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "本地持久状态",
+          "responsibility": "agent MemFS 与 conversation transcript/prompt 各有状态 owner。",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S21",
+            "S36"
+          ]
+        },
+        {
+          "id": "provider",
+          "label": "模型／provider 边界",
+          "responsibility": "公开 adapter 可见；模型输出质量与托管推理内部未检查。",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11"
+          ]
+        },
+        {
+          "id": "background",
+          "label": "后台 reflection 支路",
+          "responsibility": "client-side turn 后触发、payload、独立 worktree 与 integration。",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S24",
+            "S26",
+            "S29"
+          ]
+        },
+        {
+          "id": "remote",
+          "label": "Cloud／API 后端",
+          "responsibility": "只读取公开客户端调用与 push；托管存储、索引和删除实现未知。",
+          "status": "unknown",
+          "evidence": [
+            "S15",
+            "S18"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "entry",
+          "label": "Turn 输入\nagent / conversation",
+          "kind": "entry",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S34"
+          ],
+          "note": "包括当前 turn 输入；图不展开 channels 与多用户身份转换。"
+        },
+        {
+          "id": "backend",
+          "label": "LocalBackend\n组织 turn 与状态",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S34",
+            "S35"
+          ],
+          "note": "继承的 HeadlessBackend 实现所在文件仍名 fake-headless-backend.ts；节点代表被 LocalBackend 使用的实际路径。"
+        },
+        {
+          "id": "messages",
+          "label": "messages.jsonl\n保留消息与压缩事件",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3"
+          ],
+          "note": "按 conversation 记录 ID、role、time、parentId；compaction 的追加保留不等于所有恢复/重写路径均 append-only。"
+        },
+        {
+          "id": "active",
+          "label": "活动 conversation\n摘要＋保留尾部",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S34"
+          ],
+          "note": "in_context_message_ids 与 LocalStore 当前消息列表；不是全部历史。"
+        },
+        {
+          "id": "memfs",
+          "label": "MemFS Git HEAD\nagent 的提交记忆",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S14",
+            "S36"
+          ],
+          "note": "本地主研究路径为 v1：system/*.md；Git HEAD 与工作区未提交编辑分开。"
+        },
+        {
+          "id": "compiler",
+          "label": "compileLocalSystemPrompt\n编译已提交 memory",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S7",
+            "S8"
+          ],
+          "note": "persona→self；system 正文注入；external 只投影目录，需要按需阅读。"
+        },
+        {
+          "id": "compiled",
+          "label": "system-prompt.json\nconversation 编译状态",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21",
+            "S8"
+          ],
+          "note": "持久 content/coreMemory/revision；revision 变化可产生 midConversationSystemPrompt，不能推断旧 text 已全局消除。"
+        },
+        {
+          "id": "bridge",
+          "label": "PiStreamAdapter\n装配 model context",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11"
+          ],
+          "note": "实际发送 systemPrompt、活动消息与可选 memory update；不等于模型行为遵循。"
+        },
+        {
+          "id": "model",
+          "label": "模型／provider\n生成文本与调用",
+          "kind": "model",
+          "region": "provider",
+          "status": "unknown",
+          "evidence": [],
+          "note": "外部推理内部及记忆使用效果未检查；本图只验证公开 adapter 的调用边界。"
+        },
+        {
+          "id": "edit",
+          "label": "memory tool\n编辑／删除／提交",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13",
+            "S14"
+          ],
+          "note": "非空 reason、agent author、受影响路径；更改文本内容由调用方决定。"
+        },
+        {
+          "id": "recall",
+          "label": "messages search\nCLI→FTS-lite / API",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17",
+            "S18",
+            "S38",
+            "S38"
+          ],
+          "note": "本地 vector/hybrid 也用文本词/短语匹配；agent/conversation/date/hidden 是查询 scope，不等于内容使用授权。"
+        },
+        {
+          "id": "reflection",
+          "label": "Reflection subagent\n后台候选改写",
+          "kind": "process",
+          "region": "background",
+          "status": "observed",
+          "evidence": [
+            "S26"
+          ],
+          "note": "client-side spawnBackgroundSubagentTask 路径；server-side reflection cutover 会跳过此路径；非每 turn 必然启动。"
+        },
+        {
+          "id": "sync",
+          "label": "Remote MemFS sync\npost-turn push／rebase",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ],
+          "note": "只在 remoteMemfs capability 路径执行；local-only 返回 skipped。节点不表示本地模式自动上传。"
+        },
+        {
+          "id": "cloud",
+          "label": "Cloud／API 状态\n存储与索引未知",
+          "kind": "external",
+          "region": "remote",
+          "status": "unknown",
+          "evidence": [],
+          "note": "当前固定仓库只验证客户端 API 分发和 Git sync；托管后端未读，不套用本地格式、检索或删除结论。"
+        },
+        {
+          "id": "search_result",
+          "label": "Search JSON 结果\n消息／scope／时间",
+          "kind": "output",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S38"
+          ],
+          "note": "可供 CLI 使用者或 recall 子代理读取；没有源码证据表明每 turn 自动注入全部搜索结果。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "entry",
+          "to": "backend",
+          "label": "输入＋agent/conversation ID",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S34"
+          ]
+        },
+        {
+          "from": "backend",
+          "to": "messages",
+          "label": "持久消息与 stream 结果",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3",
+            "S34"
+          ]
+        },
+        {
+          "from": "backend",
+          "to": "active",
+          "label": "输入加入当前消息列表",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S34"
+          ]
+        },
+        {
+          "from": "active",
+          "to": "backend",
+          "label": "取当前 in-context 消息",
+          "status": "observed",
+          "evidence": [
+            "S34"
+          ]
+        },
+        {
+          "from": "backend",
+          "to": "bridge",
+          "label": "送历史＋已解析 prompt",
+          "status": "observed",
+          "evidence": [
+            "S34"
+          ]
+        },
+        {
+          "from": "memfs",
+          "to": "compiler",
+          "label": "读取 git HEAD 内容",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S7"
+          ]
+        },
+        {
+          "from": "compiler",
+          "to": "compiled",
+          "label": "保存编译内容与 revision",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S21"
+          ]
+        },
+        {
+          "from": "compiled",
+          "to": "bridge",
+          "label": "system prompt／memory update",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ]
+        },
+        {
+          "from": "bridge",
+          "to": "model",
+          "label": "context＋tools＋model options",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11"
+          ]
+        },
+        {
+          "from": "model",
+          "to": "bridge",
+          "label": "返回生成 stream",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ]
+        },
+        {
+          "from": "edit",
+          "to": "memfs",
+          "label": "按路径提交 reason／author",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S14"
+          ]
+        },
+        {
+          "from": "messages",
+          "to": "recall",
+          "label": "按 scope 筛选历史文本",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ]
+        },
+        {
+          "from": "reflection",
+          "to": "memfs",
+          "label": "仅 integration 成功后合并",
+          "status": "observed",
+          "evidence": [
+            "S26",
+            "S28",
+            "S29"
+          ]
+        },
+        {
+          "from": "memfs",
+          "to": "sync",
+          "label": "remote 模式待推送 commits",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ]
+        },
+        {
+          "from": "sync",
+          "to": "cloud",
+          "label": "push；非快进尝试 rebase",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ]
+        },
+        {
+          "from": "recall",
+          "to": "cloud",
+          "label": "API backend 改走远程查询",
+          "status": "observed",
+          "evidence": [
+            "S18"
+          ]
+        },
+        {
+          "from": "recall",
+          "to": "search_result",
+          "label": "返回并输出命中 JSON",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S38"
+          ]
+        },
+        {
+          "from": "model",
+          "to": "edit",
+          "label": "若选择 memory 工具调用",
+          "status": "inferred",
+          "evidence": [
+            "S10",
+            "S12",
+            "S37"
+          ]
+        },
+        {
+          "from": "search_result",
+          "to": "model",
+          "label": "若被 recall 调用则供阅读",
+          "status": "inferred",
+          "evidence": [
+            "S38",
+            "S39"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "agent owns MemFS；conversation owns transcript 与 compiled prompt",
+          "writers": "LocalStore 写 transcript；memory tool 或 reflection integration 写 Git；compiler 写 compiled state",
+          "changes": "同一 agent 的 conversation 可共享 MemFS，但活动历史与编译状态分 conversation",
+          "limits": "Git/JSONL 可检查不等于事实来源完整或模型正确使用。",
+          "evidence": [
+            "S1",
+            "S2",
+            "S14",
+            "S21",
+            "S36"
+          ]
+        },
+        {
+          "owner": "local/Cloud backend 边界",
+          "writers": "公开 harness 使用 capability 选择 local search 或 API、local commit 或 remote push",
+          "changes": "localMemfs 按 v1；非本地且根 MEMORY.md 才识别 v2",
+          "limits": "不把 Cloud 当成本地存储的必经镜像；不将 MemFS v1 称作 retired V1 API。",
+          "evidence": [
+            "S15",
+            "S18",
+            "S19"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "写入、保留、选择与使用",
+      "question": "一次 turn 如何进入长期经验、context 与可提交记忆，后台反思何时参与？",
+      "reading_guide": "上方主线展示 local 消息保留与 context 装配，MemFS 只读取已提交版本。后台线从 CLI turn delta 开始，以独立 reflection 日志选取未消费内容，再生成候选 worktree 并有条件合并。",
+      "omissions": [
+        "没有 provider 行为实验；图中模型节点为外部未知。",
+        "未完整展开所有手动/多 conversation reflection 选择策略、server-side dreaming、cron 调度。",
+        "外部 memory 文件按需阅读的文件工具细节未展开；目录投影不是全文注入。"
+      ],
+      "regions": [
+        {
+          "id": "harness",
+          "label": "Letta Code harness",
+          "responsibility": "运行 turn、memory 工具、context 编译与检索路由；静态源码边界。",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S12",
+            "S18",
+            "S34"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "本地持久状态",
+          "responsibility": "agent MemFS 与 conversation transcript/prompt 各有状态 owner。",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S21",
+            "S36"
+          ]
+        },
+        {
+          "id": "provider",
+          "label": "模型／provider 边界",
+          "responsibility": "公开 adapter 可见；模型输出质量与托管推理内部未检查。",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11"
+          ]
+        },
+        {
+          "id": "background",
+          "label": "后台 reflection 支路",
+          "responsibility": "client-side turn 后触发、payload、独立 worktree 与 integration。",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S24",
+            "S26",
+            "S29"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "entry",
+          "label": "Turn 输入\nagent / conversation",
+          "kind": "entry",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S34"
+          ],
+          "note": "包括当前 turn 输入；图不展开 channels 与多用户身份转换。"
+        },
+        {
+          "id": "backend",
+          "label": "LocalBackend\n组织 turn 与状态",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S34",
+            "S35"
+          ],
+          "note": "继承的 HeadlessBackend 实现所在文件仍名 fake-headless-backend.ts；节点代表被 LocalBackend 使用的实际路径。"
+        },
+        {
+          "id": "messages",
+          "label": "messages.jsonl\n保留消息与压缩事件",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3"
+          ],
+          "note": "按 conversation 记录 ID、role、time、parentId；compaction 的追加保留不等于所有恢复/重写路径均 append-only。"
+        },
+        {
+          "id": "active",
+          "label": "活动 conversation\n摘要＋保留尾部",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S34"
+          ],
+          "note": "in_context_message_ids 与 LocalStore 当前消息列表；不是全部历史。"
+        },
+        {
+          "id": "compact",
+          "label": "Local compaction\n规划＋模型摘要",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S4"
+          ],
+          "note": "源码有 all 与 sliding window 路径；此节点聚合规划、摘要调用与状态更新，非独立服务。"
+        },
+        {
+          "id": "compiler",
+          "label": "compileLocalSystemPrompt\n编译已提交 memory",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S7",
+            "S8"
+          ],
+          "note": "persona→self；system 正文注入；external 只投影目录，需要按需阅读。"
+        },
+        {
+          "id": "compiled",
+          "label": "system-prompt.json\nconversation 编译状态",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21",
+            "S8"
+          ],
+          "note": "持久 content/coreMemory/revision；revision 变化可产生 midConversationSystemPrompt，不能推断旧 text 已全局消除。"
+        },
+        {
+          "id": "bridge",
+          "label": "PiStreamAdapter\n装配 model context",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11"
+          ],
+          "note": "实际发送 systemPrompt、活动消息与可选 memory update；不等于模型行为遵循。"
+        },
+        {
+          "id": "model",
+          "label": "模型／provider\n生成文本与调用",
+          "kind": "model",
+          "region": "provider",
+          "status": "unknown",
+          "evidence": [],
+          "note": "外部推理内部及记忆使用效果未检查；本图只验证公开 adapter 的调用边界。"
+        },
+        {
+          "id": "edit",
+          "label": "memory tool\n编辑／删除／提交",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13",
+            "S14"
+          ],
+          "note": "非空 reason、agent author、受影响路径；更改文本内容由调用方决定。"
+        },
+        {
+          "id": "memfs",
+          "label": "MemFS Git HEAD\nagent 的提交记忆",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S14",
+            "S36"
+          ],
+          "note": "本地主研究路径为 v1：system/*.md；Git HEAD 与工作区未提交编辑分开。"
+        },
+        {
+          "id": "recall",
+          "label": "messages search\nCLI→FTS-lite / API",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17",
+            "S18",
+            "S38",
+            "S38"
+          ],
+          "note": "本地 vector/hybrid 也用文本词/短语匹配；agent/conversation/date/hidden 是查询 scope，不等于内容使用授权。"
+        },
+        {
+          "id": "refl_log",
+          "label": "transcript.jsonl + state\nreflection 独立进度",
+          "kind": "store",
+          "region": "background",
+          "status": "observed",
+          "evidence": [
+            "S23",
+            "S24",
+            "S25",
+            "S31"
+          ],
+          "note": "来自 CLI turn 行 delta；不同于 LocalStore 的 messages.jsonl。记录已完成 steps 和 reflected_through_message_id。"
+        },
+        {
+          "id": "refl_gate",
+          "label": "Post-turn trigger\noff／event／step-count",
+          "kind": "decision",
+          "region": "background",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S26"
+          ],
+          "note": "触发后还检查 cutover、already_active、parent_dirty、未反思 payload；不画成无条件循环。"
+        },
+        {
+          "id": "reflection",
+          "label": "Reflection subagent\n后台候选改写",
+          "kind": "process",
+          "region": "background",
+          "status": "observed",
+          "evidence": [
+            "S26"
+          ],
+          "note": "client-side spawnBackgroundSubagentTask 路径；server-side reflection cutover 会跳过此路径；非每 turn 必然启动。"
+        },
+        {
+          "id": "worktree",
+          "label": "Reflection worktree\n候选 branch／commits",
+          "kind": "store",
+          "region": "background",
+          "status": "observed",
+          "evidence": [
+            "S27",
+            "S26"
+          ],
+          "note": "从父 MemFS HEAD 分出；作为 subagent memoryScope。它不是父 agent 当前 canonical memory。"
+        },
+        {
+          "id": "merge",
+          "label": "Reflection integration\n合并／冲突／重试",
+          "kind": "decision",
+          "region": "background",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S29",
+            "S30"
+          ],
+          "note": "auto merge 或 explicit integration 路径；explicit 指 primary-agent integration，不等同人类审批。"
+        },
+        {
+          "id": "search_result",
+          "label": "Search JSON 结果\n消息／scope／时间",
+          "kind": "output",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S38"
+          ],
+          "note": "可供 CLI 使用者或 recall 子代理读取；没有源码证据表明每 turn 自动注入全部搜索结果。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "entry",
+          "to": "backend",
+          "label": "进入 local turn",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S34"
+          ]
+        },
+        {
+          "from": "backend",
+          "to": "messages",
+          "label": "写消息与返回 stream",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3",
+            "S34"
+          ]
+        },
+        {
+          "from": "backend",
+          "to": "active",
+          "label": "输入加入当前消息列表",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S34"
+          ]
+        },
+        {
+          "from": "active",
+          "to": "compact",
+          "label": "需要压缩的当前消息",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ]
+        },
+        {
+          "from": "compact",
+          "to": "active",
+          "label": "摘要＋保留尾部",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5"
+          ]
+        },
+        {
+          "from": "compact",
+          "to": "messages",
+          "label": "追加 compaction 事件",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4"
+          ]
+        },
+        {
+          "from": "active",
+          "to": "bridge",
+          "label": "当前 conversation 消息",
+          "status": "observed",
+          "evidence": [
+            "S34",
+            "S10"
+          ]
+        },
+        {
+          "from": "messages",
+          "to": "recall",
+          "label": "筛 scope／日期，匹配词句",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ]
+        },
+        {
+          "from": "memfs",
+          "to": "compiler",
+          "label": "HEAD 的 core 正文／目录",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S7"
+          ]
+        },
+        {
+          "from": "compiler",
+          "to": "compiled",
+          "label": "生成与持久 prompt",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S21"
+          ]
+        },
+        {
+          "from": "compiled",
+          "to": "bridge",
+          "label": "prompt＋可选 revision update",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ]
+        },
+        {
+          "from": "bridge",
+          "to": "model",
+          "label": "发送本次 context",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11"
+          ]
+        },
+        {
+          "from": "edit",
+          "to": "memfs",
+          "label": "memory 命令→commit",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S14"
+          ]
+        },
+        {
+          "from": "entry",
+          "to": "refl_log",
+          "label": "CLI turn 完成后追加行 delta",
+          "status": "observed",
+          "evidence": [
+            "S23",
+            "S24"
+          ]
+        },
+        {
+          "from": "refl_log",
+          "to": "refl_gate",
+          "label": "已完成 step 与未反思状态",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S24"
+          ]
+        },
+        {
+          "from": "refl_gate",
+          "to": "reflection",
+          "label": "条件满足才后台启动",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S26"
+          ]
+        },
+        {
+          "from": "refl_log",
+          "to": "reflection",
+          "label": "选择未反思范围为 payload",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S26"
+          ]
+        },
+        {
+          "from": "memfs",
+          "to": "worktree",
+          "label": "从父 HEAD 创建候选分支",
+          "status": "observed",
+          "evidence": [
+            "S27"
+          ]
+        },
+        {
+          "from": "reflection",
+          "to": "worktree",
+          "label": "通过 memoryScope 改写候选",
+          "status": "observed",
+          "evidence": [
+            "S26",
+            "S27"
+          ]
+        },
+        {
+          "from": "worktree",
+          "to": "merge",
+          "label": "完成后评估候选 commits",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S29"
+          ]
+        },
+        {
+          "from": "merge",
+          "to": "memfs",
+          "label": "成功才更新父 HEAD",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "from": "merge",
+          "to": "compiler",
+          "label": "merged 时请求重编译",
+          "status": "observed",
+          "evidence": [
+            "S30",
+            "S32"
+          ]
+        },
+        {
+          "from": "merge",
+          "to": "refl_log",
+          "label": "成功消费后推进 checkpoint",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S30",
+            "S31",
+            "S40",
+            "S41"
+          ]
+        },
+        {
+          "from": "recall",
+          "to": "search_result",
+          "label": "返回并输出命中 JSON",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S38"
+          ]
+        },
+        {
+          "from": "model",
+          "to": "edit",
+          "label": "若选择 memory 工具调用",
+          "status": "inferred",
+          "evidence": [
+            "S10",
+            "S12",
+            "S37"
+          ]
+        },
+        {
+          "from": "search_result",
+          "to": "model",
+          "label": "若被 recall 调用则供阅读",
+          "status": "inferred",
+          "evidence": [
+            "S38",
+            "S39"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "LocalStore 的 messages.jsonl 与活动 context",
+          "writers": "LocalStore 追加消息/compaction，摘要函数生成压缩内容",
+          "changes": "compaction 改活动列表，并把摘要作为新事件追加",
+          "limits": "只证明该压缩操作保留早期 transcript；未证明所有维护/重写路径不可变。",
+          "evidence": [
+            "S3",
+            "S4",
+            "S5"
+          ]
+        },
+        {
+          "owner": "反思日志及 reflected_through_message_id",
+          "writers": "CLI 行 delta writer 与 reflection completion",
+          "changes": "turn 后检查触发；成功的 merged/no_changes 才消费该范围；merged 才要求 recompile",
+          "limits": "reflection 日志是独立派生记录，不应画成 messages.jsonl 的同一文件。",
+          "evidence": [
+            "S23",
+            "S24",
+            "S25",
+            "S30",
+            "S31"
+          ]
+        },
+        {
+          "owner": "父 agent 的 Git HEAD 与候选 reflection worktree",
+          "writers": "背景 subagent 写候选；integration 改父 HEAD",
+          "changes": "dirty/active/cutover 可跳过；merge_conflict abort 并清理候选，保留重试语义",
+          "limits": "触发或 subagent success 均不等于 canonical memory 已合并；explicit integration 也非人审保证。",
+          "evidence": [
+            "S26",
+            "S27",
+            "S28",
+            "S29"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revision",
+      "title": "修订、删除与派生状态",
+      "question": "改写或删除 memory 后，哪些状态进入新 context，哪些历史或派生内容不会由此路径自动清除？",
+      "reading_guide": "沿命令→工作区→Git HEAD→revision 检查→重编译读取生效边界。下方 reflection 用候选分支合并修订；历史 transcript、旧摘要及既存 Git 版本仍有各自生命周期，删除命令不是跨层清除事务。",
+      "omissions": [
+        "未审阅全产品删除/导出、备份清除、Cloud 保留策略，不能据此声称全系统做不到遗忘。",
+        "未展开所有 Git hook、read-only enforcement、权限保护或并发一致性实现。",
+        "Git 保留和文本依赖是可检查性；事实真伪、speaker/valid-time 需要额外 evidence contract。"
+      ],
+      "regions": [
+        {
+          "id": "harness",
+          "label": "Letta Code harness",
+          "responsibility": "运行 turn、memory 工具、context 编译与检索路由；静态源码边界。",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S12",
+            "S18",
+            "S34"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "本地持久状态",
+          "responsibility": "agent MemFS 与 conversation transcript/prompt 各有状态 owner。",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S21",
+            "S36"
+          ]
+        },
+        {
+          "id": "background",
+          "label": "后台 reflection 支路",
+          "responsibility": "client-side turn 后触发、payload、独立 worktree 与 integration。",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S24",
+            "S26",
+            "S29"
+          ]
+        },
+        {
+          "id": "remote",
+          "label": "Cloud／API 后端",
+          "responsibility": "只读取公开客户端调用与 push；托管存储、索引和删除实现未知。",
+          "status": "unknown",
+          "evidence": [
+            "S15",
+            "S18"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "change",
+          "label": "Memory command\n修订／删除请求",
+          "kind": "entry",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13"
+          ],
+          "note": "图仅表示工具明确收到的命令；自然语言纠错是否被转换为正确调用依赖模型。"
+        },
+        {
+          "id": "edit",
+          "label": "memory tool\n编辑／删除／提交",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13",
+            "S14"
+          ],
+          "note": "非空 reason、agent author、受影响路径；更改文本内容由调用方决定。"
+        },
+        {
+          "id": "working",
+          "label": "MemFS working tree\n已编辑未必提交",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13",
+            "S14"
+          ],
+          "note": "目标文件 edit/delete/rename；compile 读取 HEAD，因此未提交内容不直接成为编译 prompt。"
+        },
+        {
+          "id": "memfs",
+          "label": "MemFS Git HEAD\nagent 的提交记忆",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S14",
+            "S36"
+          ],
+          "note": "本地主研究路径为 v1：system/*.md；Git HEAD 与工作区未提交编辑分开。"
+        },
+        {
+          "id": "check",
+          "label": "Revision 检查\n复用／update／recompile",
+          "kind": "decision",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ],
+          "note": "旧 raw system hash 相同时，变更 revision 返回 mid-conversation update；其他情况重新编译。"
+        },
+        {
+          "id": "compiler",
+          "label": "compileLocalSystemPrompt\n编译已提交 memory",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S7",
+            "S8"
+          ],
+          "note": "persona→self；system 正文注入；external 只投影目录，需要按需阅读。"
+        },
+        {
+          "id": "compiled",
+          "label": "system-prompt.json\nconversation 编译状态",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S20",
+            "S21",
+            "S8"
+          ],
+          "note": "持久 content/coreMemory/revision；revision 变化可产生 midConversationSystemPrompt，不能推断旧 text 已全局消除。"
+        },
+        {
+          "id": "messages",
+          "label": "messages.jsonl\n保留消息与压缩事件",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3"
+          ],
+          "note": "按 conversation 记录 ID、role、time、parentId；compaction 的追加保留不等于所有恢复/重写路径均 append-only。"
+        },
+        {
+          "id": "active",
+          "label": "活动 conversation\n摘要＋保留尾部",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S34"
+          ],
+          "note": "in_context_message_ids 与 LocalStore 当前消息列表；不是全部历史。"
+        },
+        {
+          "id": "compact",
+          "label": "Local compaction\n规划＋模型摘要",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S4"
+          ],
+          "note": "源码有 all 与 sliding window 路径；此节点聚合规划、摘要调用与状态更新，非独立服务。"
+        },
+        {
+          "id": "refl_log",
+          "label": "transcript.jsonl + state\nreflection 独立进度",
+          "kind": "store",
+          "region": "background",
+          "status": "observed",
+          "evidence": [
+            "S23",
+            "S24",
+            "S25",
+            "S31"
+          ],
+          "note": "来自 CLI turn 行 delta；不同于 LocalStore 的 messages.jsonl。记录已完成 steps 和 reflected_through_message_id。"
+        },
+        {
+          "id": "reflection",
+          "label": "Reflection subagent\n后台候选改写",
+          "kind": "process",
+          "region": "background",
+          "status": "observed",
+          "evidence": [
+            "S26"
+          ],
+          "note": "client-side spawnBackgroundSubagentTask 路径；server-side reflection cutover 会跳过此路径；非每 turn 必然启动。"
+        },
+        {
+          "id": "worktree",
+          "label": "Reflection worktree\n候选 branch／commits",
+          "kind": "store",
+          "region": "background",
+          "status": "observed",
+          "evidence": [
+            "S27",
+            "S26"
+          ],
+          "note": "从父 MemFS HEAD 分出；作为 subagent memoryScope。它不是父 agent 当前 canonical memory。"
+        },
+        {
+          "id": "merge",
+          "label": "Reflection integration\n合并／冲突／重试",
+          "kind": "decision",
+          "region": "background",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S29",
+            "S30"
+          ],
+          "note": "auto merge 或 explicit integration 路径；explicit 指 primary-agent integration，不等同人类审批。"
+        },
+        {
+          "id": "sync",
+          "label": "Remote MemFS sync\npost-turn push／rebase",
+          "kind": "process",
+          "region": "harness",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ],
+          "note": "只在 remoteMemfs capability 路径执行；local-only 返回 skipped。节点不表示本地模式自动上传。"
+        },
+        {
+          "id": "cloud",
+          "label": "Cloud／API 状态\n存储与索引未知",
+          "kind": "external",
+          "region": "remote",
+          "status": "unknown",
+          "evidence": [],
+          "note": "当前固定仓库只验证客户端 API 分发和 Git sync；托管后端未读，不套用本地格式、检索或删除结论。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "change",
+          "to": "edit",
+          "label": "command＋reason＋target",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13"
+          ]
+        },
+        {
+          "from": "edit",
+          "to": "working",
+          "label": "replace／delete／rename",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13"
+          ]
+        },
+        {
+          "from": "working",
+          "to": "memfs",
+          "label": "stage 受影响路径并 commit",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ]
+        },
+        {
+          "from": "memfs",
+          "to": "check",
+          "label": "读取 committed revision",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "check",
+          "to": "compiler",
+          "label": "变更后编译；未变可复用",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "compiler",
+          "to": "compiled",
+          "label": "更新 coreMemory／revision",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S21"
+          ]
+        },
+        {
+          "from": "active",
+          "to": "compact",
+          "label": "已有消息的压缩输入",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ]
+        },
+        {
+          "from": "compact",
+          "to": "messages",
+          "label": "另行追加摘要事件",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4"
+          ]
+        },
+        {
+          "from": "compact",
+          "to": "active",
+          "label": "另行更新当前摘要与尾部",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "refl_log",
+          "to": "reflection",
+          "label": "未消费消息范围",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S26"
+          ]
+        },
+        {
+          "from": "memfs",
+          "to": "worktree",
+          "label": "基于 HEAD 分出候选",
+          "status": "observed",
+          "evidence": [
+            "S27"
+          ]
+        },
+        {
+          "from": "reflection",
+          "to": "worktree",
+          "label": "候选更正／整合",
+          "status": "observed",
+          "evidence": [
+            "S26",
+            "S27"
+          ]
+        },
+        {
+          "from": "worktree",
+          "to": "merge",
+          "label": "完成后合并或冲突",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S29"
+          ]
+        },
+        {
+          "from": "merge",
+          "to": "memfs",
+          "label": "merged 更新父版本",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "from": "merge",
+          "to": "compiler",
+          "label": "仅 merged 请求 recompile",
+          "status": "observed",
+          "evidence": [
+            "S30",
+            "S32"
+          ]
+        },
+        {
+          "from": "merge",
+          "to": "refl_log",
+          "label": "merged/no_changes 消费范围",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S30",
+            "S31",
+            "S40",
+            "S41"
+          ]
+        },
+        {
+          "from": "memfs",
+          "to": "sync",
+          "label": "仅 remote backend 待同步提交",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ]
+        },
+        {
+          "from": "sync",
+          "to": "cloud",
+          "label": "push/rebase；失败有状态",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "MemFS 工作区、Git HEAD、conversation compiled state",
+          "writers": "memory tool 改目标；Git commit 发布当前版本；compiler 读取 committed HEAD",
+          "changes": "删除文件形成新提交；下一次 revision 解析或显式 recompile 更新可用 memory context",
+          "limits": "该路径不重写 Git 历史，也不遍历 transcript、旧摘要、别处复述；是有界调用路径结论。",
+          "evidence": [
+            "S6",
+            "S8",
+            "S12",
+            "S13",
+            "S14"
+          ]
+        },
+        {
+          "owner": "transcript 与活动 summary 有独立 owner",
+          "writers": "LocalStore/compaction 修改其各自状态",
+          "changes": "memory 命令未对这些状态发起清除；compaction 继续按自身路径追加事件和替换活动列表",
+          "limits": "旧内容可能仍可检索、留在摘要或其他文件；是否再次影响回答是待测推断，不是运行发现。",
+          "evidence": [
+            "S3",
+            "S4",
+            "S13",
+            "S16"
+          ]
+        },
+        {
+          "owner": "reflection 提案、父 memory、进度 checkpoint",
+          "writers": "subagent、integration、completion 各写一层",
+          "changes": "仅合并更新父 HEAD；合并冲突中止并清理候选；成功消费才推进进度",
+          "limits": "候选产生、subagent 完成、合并、重编译和模型使用必须分开。",
+          "evidence": [
+            "S26",
+            "S28",
+            "S29",
+            "S30",
+            "S31",
+            "S32"
+          ]
+        },
+        {
+          "owner": "语义来源与修订适用性",
+          "writers": "记忆作者在正文表达来源；schema 不强制事实级 provenance",
+          "changes": "Git reason/author 标明编辑操作；不能自动推出被记录事实的 speaker、有效期与证据",
+          "limits": "应以 synthetic probe 验证修订传播、scope 与行为；Cloud 清除保证未知。",
+          "evidence": [
+            "S12",
+            "S14",
+            "S33"
+          ]
+        }
+      ]
+    }
+  ]
+}

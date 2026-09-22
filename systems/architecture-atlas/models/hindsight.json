@@ -1,0 +1,1769 @@
+{
+  "id": "hindsight",
+  "name": "Hindsight",
+  "repository": "https://github.com/vectorize-io/hindsight",
+  "commit": "9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55",
+  "study_date": "2026-09-22",
+  "boundary": "固定公开 commit 的默认 PostgreSQL/PostgresMemories OSS retain/recall/reflect、后台 consolidation/mental-model refresh 与一个可选 LiteLLM callback；静态源码研究。排除 Cloud 服务、Oracle、替代 stores、provider 实际调用与性能验证。",
+  "summary": "Hindsight 将输入原文与抽取的 world/experience facts 分开保存，以多路检索支撑 recall，再由后台 consolidation 把事实归纳为有来源的 observations；只读 reflect 用工具查询这些材料，显式 mental models 则有独立 scope、trigger 与刷新水位。它的学习表现为持久记忆材料及派生文档的变化，不是模型权重训练。",
+  "mechanisms": [
+    "raw→observation consolidation",
+    "多路 recall＋RRF/rerank",
+    "只读 agentic reflect",
+    "问题驱动 mental-model refresh",
+    "scope-aware 派生失效传播"
+  ],
+  "strengths": [
+    "当来源 ID 和 scope 配置正确时，observation→source facts 能使派生推断可回查，并支持删除后的再归纳。",
+    "当任务兼具实体、关键词与时间线索时，多路召回提供不同入口；收益依赖候选预算、模型及检索配置。",
+    "需要长期维护知识页面时，full/delta 刷新、水位与失败保留机制让修改过程可检查。"
+  ],
+  "limits": [
+    "默认 tenant 无认证；bank ID 与 tags 并不自动建立终端用户授权。",
+    "LLM 抽取／consolidation／reflect 可能改变语义；静态实现不能证明记忆真实或 benchmark 优越性。",
+    "异步派生会滞后；删除推动自动模型刷新是 best effort，手动模型和历史仍需单独处理。",
+    "tags any/all 包含 untagged；shared consolidation scope 的可见性必须由应用明确选择。",
+    "未验证 Cloud、provider、替代 store、实际并发行为或成人亲密关系场景。"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/api/http.py#L9653-L9730",
+      "note": "HTTP retain 的 async operation receipt 与同步 retain 路径不同。"
+    },
+    {
+      "id": "S2",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/extensions/builtin/tenant.py#L8-L90",
+      "note": "默认无认证；可选共享 API key；schema 选择与自定义多租户边界。"
+    },
+    {
+      "id": "S3",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L5757-L5800",
+      "note": "retain authentication、可选 operation validator、bank 创建。"
+    },
+    {
+      "id": "S4",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/retain/orchestrator.py#L1129-L1185",
+      "note": "抽取事实、日期增强 embedding；context 由调用者提供，bank 显示名不当 narrator。"
+    },
+    {
+      "id": "S5",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/retain/orchestrator.py#L608-L700",
+      "note": "事实、entity postings 与 temporal/semantic/causal links 的事务写路径。"
+    },
+    {
+      "id": "S6",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memories/__init__.py#L1-L54",
+      "note": "默认 PostgresMemories；MEMORIES extension 可替换，因此本图明确只画默认 SQL 路径。"
+    },
+    {
+      "id": "S7",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L6073-L6111",
+      "note": "retain 后按配置提交 consolidation 与 graph/index maintenance；后续提交失败不撤销已成功 retain。"
+    },
+    {
+      "id": "S8",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L22184-L22249",
+      "note": "consolidation 异步任务，按 bank 去重；scope 指定路径例外。"
+    },
+    {
+      "id": "S9",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/worker/poller.py#L679-L716",
+      "note": "worker claim_tasks 后读取 type、task payload、retry 次数。"
+    },
+    {
+      "id": "S10",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/worker/poller.py#L1006-L1030",
+      "note": "失败任务按 next_retry_at 回到 pending；取消／删除任务不重排。"
+    },
+    {
+      "id": "S11",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/consolidation/consolidator.py#L2166-L2345",
+      "note": "每事实 recall 同 scope observations，LLM 生成 actions，预备后一次事务；ID/scope 校验。"
+    },
+    {
+      "id": "S12",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/consolidation/consolidator.py#L593-L660",
+      "note": "observation_scopes combined/per_tag/shared 等含义；shared 产生 untagged 派生物。"
+    },
+    {
+      "id": "S13",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/consolidation/consolidator.py#L2062-L2163",
+      "note": "consolidation 后仅为 scope 匹配且 stale 的 opt-in mental models 安排刷新。"
+    },
+    {
+      "id": "S14",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L7893-L7988",
+      "note": "recall 参数、时间窗口非全局硬过滤、可选 source facts/chunks 与独立 token budgets。"
+    },
+    {
+      "id": "S15",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L8550-L8668",
+      "note": "按 fact type 执行 semantic/text/graph/temporal retrieval，收集候选。"
+    },
+    {
+      "id": "S16",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L8849-L9210",
+      "note": "实际 RRF/interleave、cross encoder/passthrough、combined scoring、provenance dedup 与裁剪。"
+    },
+    {
+      "id": "S17",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L15004-L15135",
+      "note": "reflect 是只读 tool loop；查询 mental models、observations、raw facts、expand。"
+    },
+    {
+      "id": "S18",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L17129-L17335",
+      "note": "mental model refresh scope/full vs delta/snapshot watermark 与调用 reflect，排除自身。"
+    },
+    {
+      "id": "S19",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L18010-L18208",
+      "note": "refresh 失败保留内容；成功调用 update_mental_model 持久化内容／watermark。"
+    },
+    {
+      "id": "S20",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L18300-L18480",
+      "note": "mental model 手动更新、重新 embedding 与可配置 history snapshot。"
+    },
+    {
+      "id": "S21",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/maintenance.py#L469-L566",
+      "note": "cron 到期且 stale 才 enqueue mental-model refresh，并限定 worker 可见 tenant schemas。"
+    },
+    {
+      "id": "S22",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/search/tags.py#L1-L88",
+      "note": "any/all 包含 untagged；strict 排除；exact 空集合仅看 untagged。"
+    },
+    {
+      "id": "S23",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L10151-L10365",
+      "note": "document delete 的权限 hook、级联、stale observation 清除、graph maintenance 与刷新派生内容。"
+    },
+    {
+      "id": "S24",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memories/pg/writes.py#L240-L338",
+      "note": "删除受影响 observations/history；幸存来源 consolidated_at 归空以重新 consolidation。"
+    },
+    {
+      "id": "S25",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memories/pg/writes.py#L409-L445",
+      "note": "invalidate 将原事实与关系描述归档到 invalidated_memory_units，再移除 live 行。"
+    },
+    {
+      "id": "S26",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L19970-L20065",
+      "note": "retracted grounding 只推动自动刷新 mental models；best effort；手动模型由 owner 决定。"
+    },
+    {
+      "id": "S27",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L17595-L17685",
+      "note": "delta retraction 的 structured edits、失败保留及延后条件；不是同步彻底擦除。"
+    },
+    {
+      "id": "S28",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/retain/orchestrator.py#L3887-L4107",
+      "note": "同 document 重留的 delta 路径：新增抽取、事务删除变化 chunks、更新 metadata/tags。"
+    },
+    {
+      "id": "S29",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-integrations/litellm/hindsight_litellm/callbacks.py#L364-L403",
+      "note": "可选 integration 将 context 注入 system message 或用户消息。"
+    },
+    {
+      "id": "S30",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-integrations/litellm/hindsight_litellm/callbacks.py#L820-L995",
+      "note": "recall/reflect 在应用模型调用前进入 messages；成功调用后配置开启才 retain conversation。"
+    },
+    {
+      "id": "S31",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L2612-L2654",
+      "note": "独立 consolidation LLM 配置／fallback，模型边界可配置。"
+    },
+    {
+      "id": "S32",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/maintenance.py#L237-L249",
+      "note": "已检查 retention sweeps 针对 audit_log/llm_requests，不应当成全体记忆自动遗忘。"
+    },
+    {
+      "id": "S33",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/README.md#L20-L48",
+      "note": "作者身份与 benchmark 声明，仅作来源主张，不是本研究运行证据。"
+    },
+    {
+      "id": "S34",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/README.md#L348-L387",
+      "note": "作者对 observations、mental models、banks 与一般用途的说明。"
+    },
+    {
+      "id": "S35",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/retain/chunk_storage.py#L1-L55",
+      "note": "原文 chunks 与 delta 对比所用持久结构。"
+    },
+    {
+      "id": "S36",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L11697-L11780",
+      "note": "memory unit 更新契约：text/date/entity re-embedding、context、invalidation/revert 与 observations invalidation。"
+    },
+    {
+      "id": "S37",
+      "url": "https://github.com/vectorize-io/hindsight/blob/9c7f6c68c4ad26be5af5d5deef63b4873d1fbc55/hindsight-api-slim/hindsight_api/engine/memory_engine.py#L12065-L12225",
+      "note": "memory edit invalidates dependent observations, updates live fact and schedules post-edit derivative work。"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": "全景与系统边界",
+      "question": "哪些状态由 OSS 持有，哪些推理、后台执行与应用使用在不同边界？",
+      "reading_guide": "先沿应用→API→retain→SQL 看写入，再看后台派生与 recall/reflect 返回应用的两个回路。模型配置和真实应用效果分别保留边界。",
+      "omissions": [
+        "不覆盖 Cloud 控制面、Oracle 或替代 memories extension 的完整实现。",
+        "模型 provider 和最终应用为未运行边界；没有性能、隔离或任务成功实测。"
+      ],
+      "regions": [
+        {
+          "id": "app",
+          "label": "调用应用／集成",
+          "responsibility": "应用自行决定采集、bank、授权以及最终动作；只检查一个可选 integration",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ]
+        },
+        {
+          "id": "api",
+          "label": "Hindsight API",
+          "responsibility": "请求认证／operation hook 与 engine 协调",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "id": "bg",
+          "label": "后台执行",
+          "responsibility": "worker 与 maintenance；完成时间独立于请求",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9",
+            "S21"
+          ]
+        },
+        {
+          "id": "db",
+          "label": "默认 SQL 状态",
+          "responsibility": "PostgresMemories 持久存储；不涵盖替代 memories extension",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S24"
+          ]
+        },
+        {
+          "id": "model",
+          "label": "模型边界",
+          "responsibility": "可配置 LLM/embedding/reranking；具体 provider 与部署未运行",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S16",
+            "S31"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "app",
+          "label": "调用应用\n内容与最终动作",
+          "kind": "external",
+          "region": "app",
+          "status": "unknown",
+          "evidence": [],
+          "note": "真实应用的采集政策、身份映射和执行未检查。"
+        },
+        {
+          "id": "integration",
+          "label": "LiteLLM callback\n可选 context 注入",
+          "kind": "process",
+          "region": "app",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ],
+          "note": "不是核心 API 自动将结果放进所有应用。"
+        },
+        {
+          "id": "api",
+          "label": "REST／MemoryEngine\nretain · recall · reflect",
+          "kind": "entry",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S14",
+            "S17"
+          ],
+          "note": ""
+        },
+        {
+          "id": "auth",
+          "label": "Tenant／validator\nschema · bank · tags",
+          "kind": "decision",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3",
+            "S22"
+          ],
+          "note": "默认无认证；bank routing 与 tag visibility 不等于用户访问权。"
+        },
+        {
+          "id": "retain",
+          "label": "retain pipeline\n抽取／embedding／关联",
+          "kind": "process",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5"
+          ],
+          "note": ""
+        },
+        {
+          "id": "facts",
+          "label": "documents／memory_units\n原文 · facts · links",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S6",
+            "S28",
+            "S35"
+          ],
+          "note": "raw facts 是抽取产物，并非 verbatim 原文；documents/chunks 是另一层。"
+        },
+        {
+          "id": "queue",
+          "label": "async_operations\n状态与任务 payload",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S8",
+            "S9",
+            "S10"
+          ],
+          "note": "operation_id 仅是异步入队 receipt。"
+        },
+        {
+          "id": "worker",
+          "label": "Worker poller\nclaim／execute／retry",
+          "kind": "process",
+          "region": "bg",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ],
+          "note": ""
+        },
+        {
+          "id": "consolidator",
+          "label": "consolidation\n检索旧观察→LLM actions",
+          "kind": "process",
+          "region": "bg",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ],
+          "note": "按 scope 处理事实；派生观察生成/修改/删除都需模型与执行校验。"
+        },
+        {
+          "id": "observations",
+          "label": "observations\n来源关联的推断",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S24"
+          ],
+          "note": "同 memory_units 的 observation 类型；source_memory_ids 关联支持事实。"
+        },
+        {
+          "id": "mmrefresh",
+          "label": "mental-model refresh\nfull／delta／retraction",
+          "kind": "process",
+          "region": "bg",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19",
+            "S27"
+          ],
+          "note": "独立于只读 reflect；执行结果另行提交写入。"
+        },
+        {
+          "id": "mentalmodels",
+          "label": "mental_models\n显式问题驱动文档",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S20"
+          ],
+          "note": "source_query、scope、trigger、水位、结构化文档；手动／定时／consolidation 后刷新。"
+        },
+        {
+          "id": "recall",
+          "label": "recall\n四路检索→融合→预算",
+          "kind": "process",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S15",
+            "S16"
+          ],
+          "note": "四路可配置关闭；结果预算不等于所有 chunks/source facts 的总上限。"
+        },
+        {
+          "id": "reflect",
+          "label": "reflect agent\n只读 tools 推理",
+          "kind": "process",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "note": "读取 mental models/observations/raw facts 并 expand；调用本身不持久化记忆。"
+        },
+        {
+          "id": "models",
+          "label": "LLM／embed／rerank\n可本地或远端配置",
+          "kind": "model",
+          "region": "model",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S16",
+            "S31"
+          ],
+          "note": "部署位置和 provider 行为未知；网络与成本由配置决定。"
+        },
+        {
+          "id": "maintenance",
+          "label": "Maintenance loop\ncron／reconcile",
+          "kind": "process",
+          "region": "bg",
+          "status": "observed",
+          "evidence": [
+            "S21",
+            "S32"
+          ],
+          "note": "已检查 retention 是日志清理；不能据此声称记忆 TTL。"
+        }
+      ],
+      "edges": [
+        {
+          "to": "integration",
+          "label": "选择 bank 与消息",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "from": "app"
+        },
+        {
+          "to": "api",
+          "label": "retain／recall／reflect 请求",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "from": "integration"
+        },
+        {
+          "to": "auth",
+          "label": "认证与 operation 校验",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3"
+          ],
+          "from": "api"
+        },
+        {
+          "to": "retain",
+          "label": "接受写入上下文",
+          "status": "observed",
+          "evidence": [
+            "S3"
+          ],
+          "from": "auth"
+        },
+        {
+          "to": "models",
+          "label": "内容→抽取与 embedding",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "from": "retain"
+        },
+        {
+          "to": "facts",
+          "label": "持久化文本、事实与 links",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S28"
+          ],
+          "from": "retain"
+        },
+        {
+          "to": "queue",
+          "label": "按配置 enqueue consolidation",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ],
+          "from": "retain"
+        },
+        {
+          "to": "worker",
+          "label": "claim pending task",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ],
+          "from": "queue"
+        },
+        {
+          "to": "consolidator",
+          "label": "执行 consolidation",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S11"
+          ],
+          "from": "worker"
+        },
+        {
+          "to": "consolidator",
+          "label": "未 consolidated 来源事实",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ],
+          "from": "facts"
+        },
+        {
+          "to": "models",
+          "label": "事实＋旧 observations→actions",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ],
+          "from": "consolidator"
+        },
+        {
+          "to": "observations",
+          "label": "事务提交派生观察",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ],
+          "from": "consolidator"
+        },
+        {
+          "to": "queue",
+          "label": "合格 mental-model refresh",
+          "status": "observed",
+          "evidence": [
+            "S13"
+          ],
+          "from": "consolidator"
+        },
+        {
+          "to": "queue",
+          "label": "到期且 stale 才 enqueue",
+          "status": "observed",
+          "evidence": [
+            "S21"
+          ],
+          "from": "maintenance"
+        },
+        {
+          "to": "mmrefresh",
+          "label": "执行 refresh task",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S21"
+          ],
+          "from": "worker"
+        },
+        {
+          "to": "reflect",
+          "label": "scope＋source_query 排除自身",
+          "status": "observed",
+          "evidence": [
+            "S18"
+          ],
+          "from": "mmrefresh"
+        },
+        {
+          "to": "mentalmodels",
+          "label": "提交结果与 watermark",
+          "status": "observed",
+          "evidence": [
+            "S19"
+          ],
+          "from": "mmrefresh"
+        },
+        {
+          "to": "recall",
+          "label": "bank／tags 约束",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S22"
+          ],
+          "from": "auth"
+        },
+        {
+          "to": "recall",
+          "label": "四路候选与来源",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ],
+          "from": "facts"
+        },
+        {
+          "to": "recall",
+          "label": "observation 候选",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S16"
+          ],
+          "from": "observations"
+        },
+        {
+          "to": "recall",
+          "label": "只读 recall／expand",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "reflect"
+        },
+        {
+          "to": "reflect",
+          "label": "lookup/search 文档",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "mentalmodels"
+        },
+        {
+          "to": "models",
+          "label": "证据＋tools→答案",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "reflect"
+        },
+        {
+          "to": "integration",
+          "label": "结构化检索结果",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "from": "recall"
+        },
+        {
+          "to": "integration",
+          "label": "生成的记忆答案",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "from": "reflect"
+        },
+        {
+          "to": "app",
+          "label": "messages context 与后续 retain",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ],
+          "from": "integration"
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "PostgresMemories 持有当前文档／facts／links",
+          "writers": "retain、curation、consolidation",
+          "changes": "原文→抽取事实→派生 observation；mental models 是独立文档状态",
+          "limits": "SQL 默认路径；模型生成的 fact 仍需语义验证。",
+          "evidence": [
+            "S4",
+            "S5",
+            "S6",
+            "S11"
+          ]
+        },
+        {
+          "owner": "async_operations 与 worker 持有进度",
+          "writers": "请求提交、worker、maintenance",
+          "changes": "pending→processing→完成或重试；派生工作晚于 retain",
+          "limits": "入队成功不证明 consolidation/refresh 完成。",
+          "evidence": [
+            "S1",
+            "S8",
+            "S9",
+            "S10"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "写入、选择、返回与使用",
+      "question": "输入怎样成为可检索材料，什么时候才进入应用模型的上下文？",
+      "reading_guide": "上半是同步／异步 retain 与后台 consolidation；下半从查询出发，经 recall 或 reflect 到可选 LiteLLM callback。最终应用效果不是 API 返回的同义词。",
+      "omissions": [
+        "没有执行外部模型，回调后行为只标记 unknown。",
+        "其他 SDK、MCP、框架 integrations 未逐一追踪。",
+        "mental-model 刷新详情见 revision 视图。"
+      ],
+      "regions": [
+        {
+          "id": "app",
+          "label": "调用应用／集成",
+          "responsibility": "应用自行决定采集、bank、授权以及最终动作；只检查一个可选 integration",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ]
+        },
+        {
+          "id": "api",
+          "label": "Hindsight API",
+          "responsibility": "请求认证／operation hook 与 engine 协调",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "id": "bg",
+          "label": "后台执行",
+          "responsibility": "worker 与 maintenance；完成时间独立于请求",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9",
+            "S21"
+          ]
+        },
+        {
+          "id": "db",
+          "label": "默认 SQL 状态",
+          "responsibility": "PostgresMemories 持久存储；不涵盖替代 memories extension",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S24"
+          ]
+        },
+        {
+          "id": "model",
+          "label": "模型边界",
+          "responsibility": "可配置 LLM/embedding/reranking；具体 provider 与部署未运行",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S16",
+            "S31"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "app",
+          "label": "调用应用\n内容与最终动作",
+          "kind": "external",
+          "region": "app",
+          "status": "unknown",
+          "evidence": [],
+          "note": "真实应用的采集政策、身份映射和执行未检查。"
+        },
+        {
+          "id": "api",
+          "label": "REST／MemoryEngine\nretain · recall · reflect",
+          "kind": "entry",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S14",
+            "S17"
+          ],
+          "note": ""
+        },
+        {
+          "id": "auth",
+          "label": "Tenant／validator\nschema · bank · tags",
+          "kind": "decision",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3",
+            "S22"
+          ],
+          "note": "默认无认证；bank routing 与 tag visibility 不等于用户访问权。"
+        },
+        {
+          "id": "retain",
+          "label": "retain pipeline\n抽取／embedding／关联",
+          "kind": "process",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5"
+          ],
+          "note": ""
+        },
+        {
+          "id": "models",
+          "label": "LLM／embed／rerank\n可本地或远端配置",
+          "kind": "model",
+          "region": "model",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S16",
+            "S31"
+          ],
+          "note": "部署位置和 provider 行为未知；网络与成本由配置决定。"
+        },
+        {
+          "id": "facts",
+          "label": "documents／memory_units\n原文 · facts · links",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S6",
+            "S28",
+            "S35"
+          ],
+          "note": "raw facts 是抽取产物，并非 verbatim 原文；documents/chunks 是另一层。"
+        },
+        {
+          "id": "queue",
+          "label": "async_operations\n状态与任务 payload",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S8",
+            "S9",
+            "S10"
+          ],
+          "note": "operation_id 仅是异步入队 receipt。"
+        },
+        {
+          "id": "worker",
+          "label": "Worker poller\nclaim／execute／retry",
+          "kind": "process",
+          "region": "bg",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ],
+          "note": ""
+        },
+        {
+          "id": "consolidator",
+          "label": "consolidation\n检索旧观察→LLM actions",
+          "kind": "process",
+          "region": "bg",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ],
+          "note": "按 scope 处理事实；派生观察生成/修改/删除都需模型与执行校验。"
+        },
+        {
+          "id": "observations",
+          "label": "observations\n来源关联的推断",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S24"
+          ],
+          "note": "同 memory_units 的 observation 类型；source_memory_ids 关联支持事实。"
+        },
+        {
+          "id": "recall",
+          "label": "recall\n四路检索→融合→预算",
+          "kind": "process",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S15",
+            "S16"
+          ],
+          "note": "四路可配置关闭；结果预算不等于所有 chunks/source facts 的总上限。"
+        },
+        {
+          "id": "reflect",
+          "label": "reflect agent\n只读 tools 推理",
+          "kind": "process",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "note": "读取 mental models/observations/raw facts 并 expand；调用本身不持久化记忆。"
+        },
+        {
+          "id": "mentalmodels",
+          "label": "mental_models\n显式问题驱动文档",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S20"
+          ],
+          "note": "source_query、scope、trigger、水位、结构化文档；手动／定时／consolidation 后刷新。"
+        },
+        {
+          "id": "integration",
+          "label": "LiteLLM callback\n可选 context 注入",
+          "kind": "process",
+          "region": "app",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ],
+          "note": "不是核心 API 自动将结果放进所有应用。"
+        },
+        {
+          "id": "appmodel",
+          "label": "应用模型\n生成后续回复／动作",
+          "kind": "model",
+          "region": "app",
+          "status": "unknown",
+          "evidence": [],
+          "note": "callback 构造消息可观察，外部模型是否遵从及动作效果未观测。"
+        },
+        {
+          "id": "output",
+          "label": "回复／动作结果\n应用负责交付",
+          "kind": "output",
+          "region": "app",
+          "status": "unknown",
+          "evidence": [],
+          "note": "没有运行真实应用，返回记忆不构成已使用或成功行为证据。"
+        }
+      ],
+      "edges": [
+        {
+          "to": "api",
+          "label": "文本／context／date／document_id",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4"
+          ],
+          "from": "app"
+        },
+        {
+          "to": "auth",
+          "label": "tenant schema＋可选 validator",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3"
+          ],
+          "from": "api"
+        },
+        {
+          "to": "queue",
+          "label": "async=true 时返回 operation_id",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "auth"
+        },
+        {
+          "to": "worker",
+          "label": "claim 已持久任务",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ],
+          "from": "queue"
+        },
+        {
+          "to": "retain",
+          "label": "执行 retain task",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S9"
+          ],
+          "from": "worker"
+        },
+        {
+          "to": "retain",
+          "label": "同步请求等待 retain",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "auth"
+        },
+        {
+          "to": "models",
+          "label": "LLM 抽取→date-augmented embedding",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "from": "retain"
+        },
+        {
+          "to": "facts",
+          "label": "写原文／chunks／fact／links",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S28",
+            "S35"
+          ],
+          "from": "retain"
+        },
+        {
+          "to": "queue",
+          "label": "按配置安排后台 consolidation",
+          "status": "observed",
+          "evidence": [
+            "S7"
+          ],
+          "from": "retain"
+        },
+        {
+          "to": "consolidator",
+          "label": "消费 consolidation job",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S9"
+          ],
+          "from": "worker"
+        },
+        {
+          "to": "consolidator",
+          "label": "新事实＋相同 observation scope",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ],
+          "from": "facts"
+        },
+        {
+          "to": "consolidator",
+          "label": "recall 相关旧观察",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ],
+          "from": "observations"
+        },
+        {
+          "to": "observations",
+          "label": "验证并提交 create/update/delete",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ],
+          "from": "consolidator"
+        },
+        {
+          "to": "recall",
+          "label": "bank＋query＋tags＋budget",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ],
+          "from": "app"
+        },
+        {
+          "to": "recall",
+          "label": "semantic/text/graph/temporal 候选",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ],
+          "from": "facts"
+        },
+        {
+          "to": "recall",
+          "label": "可选观察与 source_facts",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ],
+          "from": "observations"
+        },
+        {
+          "to": "models",
+          "label": "embedding／可选 reranking",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S16"
+          ],
+          "from": "recall"
+        },
+        {
+          "to": "integration",
+          "label": "融合／裁剪的结果",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S30"
+          ],
+          "from": "recall"
+        },
+        {
+          "to": "reflect",
+          "label": "问题＋context＋scope",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "app"
+        },
+        {
+          "to": "recall",
+          "label": "iterative tools 检索",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "reflect"
+        },
+        {
+          "to": "reflect",
+          "label": "lookup/search 当前文档",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "mentalmodels"
+        },
+        {
+          "to": "models",
+          "label": "证据推理，不写记忆",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ],
+          "from": "reflect"
+        },
+        {
+          "to": "integration",
+          "label": "可选以 reflect text 作为 context",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "from": "reflect"
+        },
+        {
+          "to": "appmodel",
+          "label": "改写 system／user messages",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ],
+          "from": "integration"
+        },
+        {
+          "to": "output",
+          "label": "生成应用回复或动作",
+          "status": "unknown",
+          "evidence": [],
+          "from": "appmodel"
+        },
+        {
+          "to": "integration",
+          "label": "成功调用回调",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "from": "appmodel"
+        },
+        {
+          "to": "api",
+          "label": "配置允许时 retain 对话",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ],
+          "from": "integration"
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "调用应用持有身份映射、采集政策和消息上下文",
+          "writers": "应用与已启用 callback",
+          "changes": "callback 在模型调用前注入，成功后可 retain，构成反馈回路",
+          "limits": "反复写入模型回复可能改变后续记忆；语义质量未测。",
+          "evidence": [
+            "S29",
+            "S30"
+          ]
+        },
+        {
+          "owner": "recall 持有一次请求的候选与预算",
+          "writers": "MemoryEngine 检索/融合/评分",
+          "changes": "RRF 默认，部分内部 dedup 用 interleave；cross encoder 可跳过；再裁剪",
+          "limits": "chunks/source facts 有独立预算；temporal_window 不是全局硬排除。",
+          "evidence": [
+            "S14",
+            "S16"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revision",
+      "title": "更正、删除与派生状态传播",
+      "question": "原始事实更正或删除后，observations、mental models 和历史会怎样变化？",
+      "reading_guide": "先区分 delete、edit 与 invalidation archive，再追踪 observation 的事务删除／重新 consolidation，以及 mental models 的异步、受 trigger 限制的刷新。",
+      "omissions": [
+        "未建立 logs、backups、mental-model history、导出副本及应用已注入 context 的全链路擦除保证。",
+        "批量删除、bank 全量删除与 restore/import 并发未逐个审查。",
+        "日志 retention 已读；通用 memory TTL 未由该路径证明。"
+      ],
+      "regions": [
+        {
+          "id": "app",
+          "label": "调用应用／集成",
+          "responsibility": "应用自行决定采集、bank、授权以及最终动作；只检查一个可选 integration",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ]
+        },
+        {
+          "id": "api",
+          "label": "Hindsight API",
+          "responsibility": "请求认证／operation hook 与 engine 协调",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "id": "bg",
+          "label": "后台执行",
+          "responsibility": "worker 与 maintenance；完成时间独立于请求",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9",
+            "S21"
+          ]
+        },
+        {
+          "id": "db",
+          "label": "默认 SQL 状态",
+          "responsibility": "PostgresMemories 持久存储；不涵盖替代 memories extension",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S24"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "curator",
+          "label": "调用者／curation API\n改写 · invalidation · 删除",
+          "kind": "entry",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S23",
+            "S25",
+            "S36"
+          ],
+          "note": "哪个人具有写权由部署的认证／validator 决定。"
+        },
+        {
+          "id": "auth",
+          "label": "Tenant／validator\nschema · bank · tags",
+          "kind": "decision",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3",
+            "S22"
+          ],
+          "note": "默认无认证；bank routing 与 tag visibility 不等于用户访问权。"
+        },
+        {
+          "id": "edit",
+          "label": "document／fact edit\n重抽取或重 embedding",
+          "kind": "process",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S36",
+            "S37"
+          ],
+          "note": ""
+        },
+        {
+          "id": "facts",
+          "label": "documents／memory_units\n原文 · facts · links",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S6",
+            "S28",
+            "S35"
+          ],
+          "note": "raw facts 是抽取产物，并非 verbatim 原文；documents/chunks 是另一层。"
+        },
+        {
+          "id": "cleanup",
+          "label": "stale observation sweep\n删派生物／重排来源",
+          "kind": "process",
+          "region": "api",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ],
+          "note": ""
+        },
+        {
+          "id": "archive",
+          "label": "invalidated_memory_units\n可审查的失效归档",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S25"
+          ],
+          "note": "invalidation 不等于 erasure；原事实内容仍在 archive。"
+        },
+        {
+          "id": "observations",
+          "label": "observations\n来源关联的推断",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S24"
+          ],
+          "note": "同 memory_units 的 observation 类型；source_memory_ids 关联支持事实。"
+        },
+        {
+          "id": "queue",
+          "label": "async_operations\n状态与任务 payload",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S8",
+            "S9",
+            "S10"
+          ],
+          "note": "operation_id 仅是异步入队 receipt。"
+        },
+        {
+          "id": "worker",
+          "label": "Worker poller\nclaim／execute／retry",
+          "kind": "process",
+          "region": "bg",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ],
+          "note": ""
+        },
+        {
+          "id": "consolidator",
+          "label": "consolidation\n检索旧观察→LLM actions",
+          "kind": "process",
+          "region": "bg",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ],
+          "note": "按 scope 处理事实；派生观察生成/修改/删除都需模型与执行校验。"
+        },
+        {
+          "id": "mmrefresh",
+          "label": "mental-model refresh\nfull／delta／retraction",
+          "kind": "process",
+          "region": "bg",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19",
+            "S27"
+          ],
+          "note": "独立于只读 reflect；执行结果另行提交写入。"
+        },
+        {
+          "id": "mentalmodels",
+          "label": "mental_models\n显式问题驱动文档",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S20"
+          ],
+          "note": "source_query、scope、trigger、水位、结构化文档；手动／定时／consolidation 后刷新。"
+        },
+        {
+          "id": "history",
+          "label": "mental_model_history\n旧内容与 grounding",
+          "kind": "store",
+          "region": "db",
+          "status": "observed",
+          "evidence": [
+            "S20"
+          ],
+          "note": "按配置保留旧版本；本研究未建立跨历史／日志／外部副本的擦除证明。"
+        },
+        {
+          "id": "maintenance",
+          "label": "Maintenance loop\ncron／reconcile",
+          "kind": "process",
+          "region": "bg",
+          "status": "observed",
+          "evidence": [
+            "S21",
+            "S32"
+          ],
+          "note": "已检查 retention 是日志清理；不能据此声称记忆 TTL。"
+        },
+        {
+          "id": "app",
+          "label": "调用应用\n内容与最终动作",
+          "kind": "external",
+          "region": "app",
+          "status": "unknown",
+          "evidence": [],
+          "note": "真实应用的采集政策、身份映射和执行未检查。"
+        }
+      ],
+      "edges": [
+        {
+          "to": "auth",
+          "label": "请求 delete／edit／invalidate",
+          "status": "observed",
+          "evidence": [
+            "S23",
+            "S36"
+          ],
+          "from": "curator"
+        },
+        {
+          "to": "edit",
+          "label": "允许后改写／重留",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S36"
+          ],
+          "from": "auth"
+        },
+        {
+          "to": "facts",
+          "label": "更新文本／embedding／chunks",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S37"
+          ],
+          "from": "edit"
+        },
+        {
+          "to": "facts",
+          "label": "document delete 级联",
+          "status": "observed",
+          "evidence": [
+            "S23"
+          ],
+          "from": "auth"
+        },
+        {
+          "to": "archive",
+          "label": "invalidation 留存原事实",
+          "status": "observed",
+          "evidence": [
+            "S25"
+          ],
+          "from": "auth"
+        },
+        {
+          "to": "cleanup",
+          "label": "删除／编辑受影响来源",
+          "status": "observed",
+          "evidence": [
+            "S23",
+            "S37"
+          ],
+          "from": "auth"
+        },
+        {
+          "to": "cleanup",
+          "label": "变化 chunks 的来源失效",
+          "status": "observed",
+          "evidence": [
+            "S28"
+          ],
+          "from": "edit"
+        },
+        {
+          "to": "observations",
+          "label": "删受影响 observation＋history",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ],
+          "from": "cleanup"
+        },
+        {
+          "to": "facts",
+          "label": "幸存来源 consolidated_at=NULL",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ],
+          "from": "cleanup"
+        },
+        {
+          "to": "queue",
+          "label": "配置允许时重排 consolidation",
+          "status": "observed",
+          "evidence": [
+            "S23"
+          ],
+          "from": "cleanup"
+        },
+        {
+          "to": "worker",
+          "label": "claim／retry",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S10"
+          ],
+          "from": "queue"
+        },
+        {
+          "to": "consolidator",
+          "label": "重做派生观察",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ],
+          "from": "worker"
+        },
+        {
+          "to": "observations",
+          "label": "从剩余来源重新归纳",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S24"
+          ],
+          "from": "consolidator"
+        },
+        {
+          "to": "queue",
+          "label": "触发 scope 合格自动刷新",
+          "status": "observed",
+          "evidence": [
+            "S13"
+          ],
+          "from": "consolidator"
+        },
+        {
+          "to": "queue",
+          "label": "cron 到期且 stale 才刷新",
+          "status": "observed",
+          "evidence": [
+            "S21"
+          ],
+          "from": "maintenance"
+        },
+        {
+          "to": "mmrefresh",
+          "label": "显式手动 refresh",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19"
+          ],
+          "from": "auth"
+        },
+        {
+          "to": "mmrefresh",
+          "label": "执行自动 refresh",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S21"
+          ],
+          "from": "worker"
+        },
+        {
+          "to": "mmrefresh",
+          "label": "检查 cited grounding 是否仍 live",
+          "status": "observed",
+          "evidence": [
+            "S26",
+            "S27"
+          ],
+          "from": "facts"
+        },
+        {
+          "to": "mentalmodels",
+          "label": "full／delta edits 与 watermark",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19"
+          ],
+          "from": "mmrefresh"
+        },
+        {
+          "to": "history",
+          "label": "按配置保存旧内容／grounding",
+          "status": "observed",
+          "evidence": [
+            "S20"
+          ],
+          "from": "mentalmodels"
+        },
+        {
+          "to": "app",
+          "label": "手动或未完成刷新可仍读旧内容",
+          "status": "inferred",
+          "evidence": [
+            "S20",
+            "S26",
+            "S27"
+          ],
+          "from": "mentalmodels"
+        },
+        {
+          "to": "queue",
+          "label": "best-effort retracted-grounding nudge",
+          "status": "observed",
+          "evidence": [
+            "S26"
+          ],
+          "from": "auth"
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "live facts 与 invalidated archive 是不同状态",
+          "writers": "curation edit/delete/invalidate",
+          "changes": "invalidate 归档后移出 live；delete 清当前文档/事实并处理派生观察",
+          "limits": "invalidation 是可审查失效，不能称永久删除。",
+          "evidence": [
+            "S23",
+            "S25"
+          ]
+        },
+        {
+          "owner": "observation 依赖 source_memory_ids",
+          "writers": "consolidation 与 stale-observation sweep",
+          "changes": "任一来源被移除，旧 observation 删除；幸存来源重排 consolidation",
+          "limits": "派生观察暂缺窗口与模型再归纳效果没有运行测量。",
+          "evidence": [
+            "S11",
+            "S24"
+          ]
+        },
+        {
+          "owner": "mental model 由显式 owner/trigger 管理",
+          "writers": "手动编辑、refresh worker",
+          "changes": "自动刷新模型有 retraction nudge；手动模型不被自动排队；失败保留旧内容",
+          "limits": "best effort 且需要 LLM；history 和已交付应用副本不由本路径证明擦除。",
+          "evidence": [
+            "S19",
+            "S20",
+            "S26",
+            "S27"
+          ]
+        }
+      ]
+    }
+  ]
+}

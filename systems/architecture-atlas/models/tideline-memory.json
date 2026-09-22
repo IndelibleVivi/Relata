@@ -1,0 +1,1800 @@
+{
+  "id": "tideline-memory",
+  "name": "Tideline Memory",
+  "repository": "https://github.com/ennisaaaaaaaa-stack/tideline-memory",
+  "commit": "76490fe2c422f1213e735e63c289fef5ae8044f6",
+  "study_date": "2026-09-22",
+  "boundary": "仅固定公开 commit 的静态实现、Kimi 接入方、provider、MCP、SQLite schema、维护脚本与 DREAM prompt 合同；外部 runtime、模型/embedding 服务、调度及实际部署均未运行或验证。",
+  "summary": "Tideline 将对话片段提炼为 narrative，再以身份块、逐轮自动召回和显式 MCP 查询三种方式带入当前上下文；修订保留原文并派生演进轨迹，但不同读取入口不共享同一修订选择逻辑。",
+  "mechanisms": [
+    "身份状态先于 query 注入",
+    "结构 narrative 与 source_links",
+    "原文保留 + append-only 修订",
+    "MCP / provider 检索分路",
+    "DREAM 外部模型维护",
+    "局部上下文预算与命中反馈"
+  ],
+  "strengths": [
+    "source_links 和修订层次提供进一步查证入口，前提是采集材料完整且模型主动核查。",
+    "身份、近期对话与显式搜索分离，有利于避免所有连续性都依赖单次相似度匹配。",
+    "修订先提交、派生尽力更新，降低 embedding 服务失败导致修订丢失的可能；不承诺派生同步。"
+  ],
+  "limits": [
+    "SOURCE-OBSERVED 仅指静态源码，未运行 runtime/provider/模型/embedding、未读取真实 DB。",
+    "T1 仅按最近2000原 narrative 向量选候选；T4 未检索 amendments；无 embedding 时 T1 提前退出。",
+    "provider 远端 embedding 分支变量名错配；不能将 MCP 的远端支持画成 provider 已可用。",
+    "共享 SQLite 未提供按 tenant/project 的原生检索隔离；删除动作镜像不等于全派生遗忘。",
+    "DREAM 是外部触发的模型工作流；prompt 与写接口存在版本错位，不能把指令视为运行效果。"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L61-L180",
+      "note": "SQLite WAL；context/narratives/画像/身份/快照/线索以及覆盖历史 schema。"
+    },
+    {
+      "id": "S2",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L181-L310",
+      "note": "amendments、amendment_vectors、trajectories、embedding_cache、主题和实体图派生表。"
+    },
+    {
+      "id": "S3",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L1078-L1466",
+      "note": "19 个 MCP tool 声明，未列出删除或语义遗忘工具。"
+    },
+    {
+      "id": "S4",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L1468-L1607",
+      "note": "MCP dispatch；memory_write 组合内容、embedding、插入、传播 recurrence 和归一化。"
+    },
+    {
+      "id": "S5",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L1608-L1687",
+      "note": "修订先提交，再分别尝试向量和机械轨迹；trajectory list/write 入口。"
+    },
+    {
+      "id": "S6",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L404-L485",
+      "note": "机械轨迹重建回 mech，最多保留 12 段；LLM 升格仅校验非空字段。"
+    },
+    {
+      "id": "S7",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L938-L1061",
+      "note": "effective_text 按时序拼接本体与修订；MCP 格式化回显全部修订。"
+    },
+    {
+      "id": "S8",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L2051-L2220",
+      "note": "主动 memory_search 融合 context、narrative、amendment 关键词及向量；按 narrative ID 合并。"
+    },
+    {
+      "id": "S9",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L2222-L2283",
+      "note": "context_record 原文写入；context_search 和 timeline 回显截断预览。"
+    },
+    {
+      "id": "S10",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L252-L430",
+      "note": "provider 会话状态及 T0/T2/T2b/T3 注入；画像 pin 与默认摘要。"
+    },
+    {
+      "id": "S11",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L434-L542",
+      "note": "T1 最新 2000 条原向量检索、会话去重、top3；无 embedding 提前返回。"
+    },
+    {
+      "id": "S12",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L624-L682",
+      "note": "T4 仅查 narratives FTS；queue_prefetch 用 daemon thread。"
+    },
+    {
+      "id": "S13",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L686-L778",
+      "note": "context bridge 选会话和截断；sync_turn 持久化角色文本与 session metadata。"
+    },
+    {
+      "id": "S14",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L782-L911",
+      "note": "压缩前/结束补录；结束时启动 primary session 的后台 epilogue。"
+    },
+    {
+      "id": "S15",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L58-L202",
+      "note": "provider 自己的 embedding 请求与轨迹渲染；远端分支变量名与定义不一致。"
+    },
+    {
+      "id": "S16",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L206-L247",
+      "note": "补录抽取：排除 system、短消息、正文前200字去重。"
+    },
+    {
+      "id": "S17",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/session_epilogue.py#L131-L215",
+      "note": "epilogue 第一人称 prompt、一次可配置 chat-completion 请求与JSON解析。"
+    },
+    {
+      "id": "S18",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/session_epilogue.py#L235-L413",
+      "note": "epilogue 独立插入 narrative、source IDs；材料选择、数量门槛、失败 seal。"
+    },
+    {
+      "id": "S19",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/session_epilogue.py#L45-L70",
+      "note": "DB、embedding、epilogue LLM 配置与数量上限；服务由部署者提供。"
+    },
+    {
+      "id": "S20",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/kimi-code/hooks/tideline_hook.py#L121-L178",
+      "note": "Kimi hook dispatcher：首次 UserPromptSubmit 发 T0+T1，PreCompact/SessionEnd 委托 provider。"
+    },
+    {
+      "id": "S21",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/prompts/dream_solidify.md#L65-L141",
+      "note": "DREAM 固化与重建、补铸、轨迹升格的指令合同；不是内置调度器。"
+    },
+    {
+      "id": "S22",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/prompts/dream_digest.md#L6-L55",
+      "note": "画像/自我概念、冲突观察、attention heatmap 与开放线索维护指令。"
+    },
+    {
+      "id": "S23",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/prompts/dream_sleep.md#L7-L27",
+      "note": "探索 thread 与带 dream tag 的象征梦写入指令；非独立隔离库。"
+    },
+    {
+      "id": "S24",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/scripts/scan_unindexed.py#L39-L137",
+      "note": "时间分块至少3行，默认 MAX narrative.created_at watermark，每条输出300字。"
+    },
+    {
+      "id": "S25",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L1717-L1744",
+      "note": "memory_write_profile/self_concept 拒绝空白、旧值归档、UPSERT 最新值。"
+    },
+    {
+      "id": "S26",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L38-L58",
+      "note": "归档辅助函数；history 表不可用时归档异常被忽略。"
+    },
+    {
+      "id": "S27",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L748-L772",
+      "note": "加权与最近20条平均值超0.7时同比缩放。"
+    },
+    {
+      "id": "S28",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/scripts/dream_scripts.py#L194-L214",
+      "note": "主题聚类读原 narrative content/gesture/context/cognition。"
+    },
+    {
+      "id": "S29",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/scripts/dream_scripts.py#L314-L366",
+      "note": "主题聚类重建写入 topic_clusters。"
+    },
+    {
+      "id": "S30",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/scripts/dream_scripts.py#L414-L461",
+      "note": "全量 tag 频次刷新 recurrence 与 weight。"
+    },
+    {
+      "id": "S31",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/scripts/dream_scripts.py#L482-L522",
+      "note": "DREAM 向量补铸借用 server；前置 count 只检测有无向量，未按模型 namespace。"
+    },
+    {
+      "id": "S32",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/scripts/soft_clusters.py#L87-L101",
+      "note": "软聚类加载原 narratives.embedding，不读取 amendment_vectors。"
+    },
+    {
+      "id": "S33",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/scripts/soft_clusters.py#L184-L275",
+      "note": "soft top3 分配、重建成员/邻接表。"
+    },
+    {
+      "id": "S34",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/scripts/build_entity_graph.py#L139-L208",
+      "note": "从原 entities_role 重建实体图。"
+    },
+    {
+      "id": "S35",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/scripts/scan_conflicts.py#L85-L145",
+      "note": "冲突扫描基于原叙事字段、实体/tag 重叠与时间/正则；非事实裁决。"
+    },
+    {
+      "id": "S36",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/tideline_provider.py#L544-L622",
+      "note": "provider 自身记录 T1 attention hits，读主题与软聚类成员。"
+    },
+    {
+      "id": "S37",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L1815-L1898",
+      "note": "attention heatmap 读取日志；计数口径不是模型使用或用户重要性。"
+    },
+    {
+      "id": "S38",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/plugins/memory_mirror.py#L75-L127",
+      "note": "内置 memory remove/replace/add 都被追加为 context 镜像。"
+    },
+    {
+      "id": "S39",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L317-L374",
+      "note": "context/narrative/amendment FTS 的 SQL 同步触发器；非完整语义删除流程。"
+    },
+    {
+      "id": "S40",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L614-L721",
+      "note": "当前模型 namespace 的 amendment vector 查询、写后/命中后/批量补铸与失败冷却。"
+    },
+    {
+      "id": "S41",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L776-L874",
+      "note": "MCP embedding 的本地/远端服务请求、缓存、重试；每 namespace 约2万条容量帽。"
+    },
+    {
+      "id": "S42",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/server.py#L2288-L2297",
+      "note": "MCP stdio 入口，仅证明服务接入形态，不证明外部 host 安装运行。"
+    },
+    {
+      "id": "S43",
+      "url": "https://github.com/ennisaaaaaaaa-stack/tideline-memory/blob/76490fe2c422f1213e735e63c289fef5ae8044f6/docs/configuration-guide.md#L144-L153",
+      "note": "DREAM 调度由外部 agent 框架、timer 或人工承担的文档主张；实际调度未检查。"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": "全景与系统边界",
+      "question": "谁负责触发、保存、检索和生成；哪些行为必须由外部 runtime 与服务兑现？",
+      "reading_guide": "先沿 runtime→hooks/provider 或 MCP→SQLite→context 返回读主线。下方 epilogue 与 DREAM 是不同触发方式；模型服务边界不表示已部署或运行。",
+      "omissions": [
+        "不研究 Hermes/Kimi runtime 实现、安装状态及真实 hooks 投递。",
+        "未读取任何真实 DB、私有 persona 或宿主身份文件；SOUL.md 不画成仓库内读取实现。",
+        "SQLite 内表的修订细节见 revision；导入工具与外部项目集成不是本图主线。"
+      ],
+      "regions": [
+        {
+          "id": "host",
+          "label": "外部 harness / 会话",
+          "responsibility": "决定触发、模型上下文及定时调度；未检查运行时源码",
+          "status": "unknown",
+          "evidence": [
+            "S20",
+            "S42",
+            "S43"
+          ]
+        },
+        {
+          "id": "native",
+          "label": "Tideline 原生执行层",
+          "responsibility": "公开仓库的 provider、MCP、脚本和 prompt 合同",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S14",
+            "S21"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "共享 SQLite",
+          "responsibility": "MEMORY_MCP_DB 指向的本地持久状态与派生索引",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2"
+          ]
+        },
+        {
+          "id": "services",
+          "label": "外部模型服务",
+          "responsibility": "embedding 与 epilogue completion 服务实现未纳入研究",
+          "status": "unknown",
+          "evidence": [
+            "S17",
+            "S19",
+            "S41"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "runtime",
+          "label": "Agent runtime\n生命周期与工具调用",
+          "kind": "external",
+          "region": "host",
+          "status": "unknown",
+          "evidence": [
+            "S20",
+            "S42"
+          ],
+          "note": "仅本仓库的接入方代码可见；实际 host 行为未知。"
+        },
+        {
+          "id": "current_model",
+          "label": "当前 agent 模型\n解释证据并回答",
+          "kind": "model",
+          "region": "host",
+          "status": "unknown",
+          "evidence": [],
+          "note": "模型提示执行、来源判断与最终使用未运行验证。"
+        },
+        {
+          "id": "scheduler",
+          "label": "外部 scheduler / 人\n触发 DREAM",
+          "kind": "external",
+          "region": "host",
+          "status": "unknown",
+          "evidence": [
+            "S43"
+          ],
+          "note": "仓库没有被验证正在运行的内置日调度器。"
+        },
+        {
+          "id": "hooks",
+          "label": "Kimi hook dispatcher\n分发会话事件",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S20"
+          ],
+          "note": "Hermes provider 接口独立存在；Kimi 接入在首次 UserPromptSubmit 输出 T0。"
+        },
+        {
+          "id": "provider",
+          "label": "TidelineMemoryProvider\n注入、唤起、对话采集",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11",
+            "S13",
+            "S14"
+          ],
+          "note": "虽类注释称 read-only，sync_turn 与维护回调实际写 context/attention。"
+        },
+        {
+          "id": "mcp",
+          "label": "server.py / MCP stdio\n显式读写工具",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4",
+            "S8",
+            "S42"
+          ],
+          "note": "工具由模型/host 显式调用；不等同于自动注入。"
+        },
+        {
+          "id": "epilogue",
+          "label": "session_epilogue\n关闭窗口生成叙事",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S18"
+          ],
+          "note": "primary session 结束启动 daemon thread；进程存活与成功完成不由源码保证。"
+        },
+        {
+          "id": "dream_prompts",
+          "label": "DREAM prompts\n固化、整理、轨迹升格",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S21",
+            "S22",
+            "S23"
+          ],
+          "note": "这里是已观察的 prompt 合同；由外部模型执行属于条件性路径。"
+        },
+        {
+          "id": "maintenance_scripts",
+          "label": "维护脚本\n重建、权重、补铸",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30",
+            "S31",
+            "S33",
+            "S34",
+            "S35"
+          ],
+          "note": "确定性处理为主；amend-backfill 仍可能请求 embedding。"
+        },
+        {
+          "id": "sqlite",
+          "label": "SQLite canonical tables\n上下文与当前记忆状态",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2"
+          ],
+          "note": "context/narratives/amendments/profiles/self_concept/snapshots/threads；单 DB 未提供 tenant scope。"
+        },
+        {
+          "id": "derived_indexes",
+          "label": "FTS / clusters / graph\n缓存与检索派生物",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S29",
+            "S33",
+            "S34",
+            "S39",
+            "S41"
+          ],
+          "note": "FTS 跟写入触发；其他索引靠单独重建。软聚类没有接入 provider 候选路由。"
+        },
+        {
+          "id": "attention",
+          "label": "attention_log / stats\n记录检索命中",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S36",
+            "S37"
+          ],
+          "note": "不证明模型实际用了哪条记忆。"
+        },
+        {
+          "id": "embedding",
+          "label": "Embedding endpoint\n本地 / 远端向量服务",
+          "kind": "external",
+          "region": "services",
+          "status": "unknown",
+          "evidence": [
+            "S15",
+            "S41"
+          ],
+          "note": "MCP 有独立本地/远端实现；provider 远端分支存在变量名错配，不能推定可用。"
+        },
+        {
+          "id": "epilogue_llm",
+          "label": "Epilogue completion\n叙事 JSON 生成",
+          "kind": "model",
+          "region": "services",
+          "status": "unknown",
+          "evidence": [
+            "S17",
+            "S19"
+          ],
+          "note": "可配置 LLM endpoint，服务效果与完成率未验证。"
+        },
+        {
+          "id": "context_frame",
+          "label": "模型上下文材料\n自动块 / 工具返回",
+          "kind": "output",
+          "region": "host",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11",
+            "S20",
+            "S8"
+          ],
+          "note": "代码返回文本与 stdout 可观察，host 实際投递与采用未验证。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "runtime",
+          "to": "hooks",
+          "label": "提交生命周期事件",
+          "status": "unknown",
+          "evidence": [
+            "S20"
+          ]
+        },
+        {
+          "from": "hooks",
+          "to": "provider",
+          "label": "初始化并调用对应方法",
+          "status": "observed",
+          "evidence": [
+            "S20"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "mcp",
+          "label": "显式 MCP tool call",
+          "status": "unknown",
+          "evidence": [
+            "S42"
+          ]
+        },
+        {
+          "from": "sqlite",
+          "to": "provider",
+          "label": "读取身份与候选记忆",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11"
+          ]
+        },
+        {
+          "from": "provider",
+          "to": "sqlite",
+          "label": "保存角色对话片段",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14"
+          ]
+        },
+        {
+          "from": "mcp",
+          "to": "sqlite",
+          "label": "工具读写与修订事务",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5",
+            "S8"
+          ]
+        },
+        {
+          "from": "provider",
+          "to": "context_frame",
+          "label": "返回自动注入块",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11",
+            "S20"
+          ]
+        },
+        {
+          "from": "mcp",
+          "to": "context_frame",
+          "label": "返回显式查询结果",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "context_frame",
+          "to": "current_model",
+          "label": "host 交付当前上下文",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "from": "provider",
+          "to": "embedding",
+          "label": "本地 query/片段向量请求",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ]
+        },
+        {
+          "from": "mcp",
+          "to": "embedding",
+          "label": "缓存 miss 后向量请求",
+          "status": "observed",
+          "evidence": [
+            "S41"
+          ]
+        },
+        {
+          "from": "provider",
+          "to": "epilogue",
+          "label": "primary 结束时 daemon 启动",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ]
+        },
+        {
+          "from": "sqlite",
+          "to": "epilogue",
+          "label": "读取 session chunks / 锚点",
+          "status": "observed",
+          "evidence": [
+            "S18"
+          ]
+        },
+        {
+          "from": "epilogue",
+          "to": "epilogue_llm",
+          "label": "请求 1–2 条叙事 JSON",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ]
+        },
+        {
+          "from": "epilogue",
+          "to": "sqlite",
+          "label": "成功写 narrative；失败写 seal",
+          "status": "observed",
+          "evidence": [
+            "S18"
+          ]
+        },
+        {
+          "from": "scheduler",
+          "to": "dream_prompts",
+          "label": "按部署配置发起维护",
+          "status": "unknown",
+          "evidence": [
+            "S43"
+          ]
+        },
+        {
+          "from": "dream_prompts",
+          "to": "mcp",
+          "label": "模型按 prompt 读写记忆",
+          "status": "inferred",
+          "evidence": [
+            "S21",
+            "S22"
+          ]
+        },
+        {
+          "from": "dream_prompts",
+          "to": "maintenance_scripts",
+          "label": "指令要求调用脚本",
+          "status": "inferred",
+          "evidence": [
+            "S21"
+          ]
+        },
+        {
+          "from": "maintenance_scripts",
+          "to": "derived_indexes",
+          "label": "重建聚类与实体图",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S33",
+            "S34"
+          ]
+        },
+        {
+          "from": "sqlite",
+          "to": "derived_indexes",
+          "label": "FTS 触发与原文索引材料",
+          "status": "observed",
+          "evidence": [
+            "S39",
+            "S28",
+            "S32",
+            "S34"
+          ]
+        },
+        {
+          "from": "provider",
+          "to": "attention",
+          "label": "记录 T1 命中",
+          "status": "observed",
+          "evidence": [
+            "S36"
+          ]
+        },
+        {
+          "from": "attention",
+          "to": "mcp",
+          "label": "heatmap 读取命中分布",
+          "status": "observed",
+          "evidence": [
+            "S37"
+          ]
+        },
+        {
+          "from": "mcp",
+          "to": "attention",
+          "label": "记录显式搜索命中",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "maintenance_scripts",
+          "to": "sqlite",
+          "label": "刷新权重与 recurrence",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "SQLite canonical tables",
+          "writers": "MCP dispatch、provider 采集、epilogue；部分维护脚本直写",
+          "changes": "同一 DB 被多条入口共享；provider 不是只读服务",
+          "limits": "单 DB 路径是部署边界，不含租户权限；source_links 是 JSON ID 线索而非证据校验。",
+          "evidence": [
+            "S1",
+            "S4",
+            "S13",
+            "S18"
+          ]
+        },
+        {
+          "owner": "运行时会话与模型上下文",
+          "writers": "外部 host；Kimi dispatcher 只产生输出",
+          "changes": "host 负责事件投递和把工具/注入文本交给模型",
+          "limits": "SOURCE-OBSERVED 只指静态接线；未检查 host 或实际模型使用。",
+          "evidence": [
+            "S20",
+            "S42"
+          ]
+        },
+        {
+          "owner": "embedding / epilogue 服务",
+          "writers": "部署者配置 endpoint；远端服务自身持有执行状态",
+          "changes": "本地存储可将文本送至配置的服务",
+          "limits": "不能把 SQLite 本地解释为所有文本永不离机；provider 远端分支变量错配见限制。",
+          "evidence": [
+            "S15",
+            "S17",
+            "S41"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "从对话到当前使用",
+      "question": "对话如何成为 narrative，又通过哪些不同入口进入下一次回答？",
+      "reading_guide": "沿采集→context→epilogue 或固化→narratives 看写入；再分辨身份注入、T1/T4 与 MCP search 三条读取路径。箭头指材料或调用，虚线语义由 inferred/unknown 状态表达。",
+      "omissions": [
+        "embedding 服务边界在 overview 展示，此图折叠为写入/检索内部请求。",
+        "主动 context_record 与批量导入的替代采集入口在说明中保留，未扩展额外节点。",
+        "不模拟向量相似度、检索成功率或模型实际回答。"
+      ],
+      "regions": [
+        {
+          "id": "host",
+          "label": "外部会话与模型",
+          "responsibility": "对话输入、工具选择和最终使用",
+          "status": "unknown",
+          "evidence": [
+            "S20",
+            "S42"
+          ]
+        },
+        {
+          "id": "ingest",
+          "label": "采集与固化执行",
+          "responsibility": "原生 capture/epilogue/scanner 和外部执行的 prompt 合同",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S18",
+            "S21",
+            "S24"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "SQLite 主状态",
+          "responsibility": "保存原始片段、结构叙事、修订与身份",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2"
+          ]
+        },
+        {
+          "id": "read",
+          "label": "读取与注入执行",
+          "responsibility": "身份块、provider 自动召回、MCP 显式搜索",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11",
+            "S12",
+            "S8"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "runtime",
+          "label": "Agent runtime\n轮次 / 结束 / 压缩",
+          "kind": "external",
+          "region": "host",
+          "status": "unknown",
+          "evidence": [
+            "S20"
+          ],
+          "note": "投递事件的 host 行为未研究。"
+        },
+        {
+          "id": "capture",
+          "label": "sync_turn / 补录\n角色前缀 + 截断",
+          "kind": "process",
+          "region": "ingest",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S16"
+          ],
+          "note": "sync_turn 保存前2000字符、前500字符向量；补录去短句和前缀去重。"
+        },
+        {
+          "id": "context",
+          "label": "context\n文本片段 + metadata",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S13"
+          ],
+          "note": "sync_turn 可带 session；压缩/结束补录不自动补相同 session metadata。"
+        },
+        {
+          "id": "epilogue",
+          "label": "session_epilogue\n关闭窗口写 1–2 条",
+          "kind": "process",
+          "region": "ingest",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S18"
+          ],
+          "note": "daemon 后台；选择部分 session 片段，直接插入，不走 memory_write 的 recurrence 传播。"
+        },
+        {
+          "id": "scan_unindexed",
+          "label": "scan_unindexed\n时间 watermark 分块",
+          "kind": "process",
+          "region": "ingest",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ],
+          "note": "以最新 narrative 时间作默认 watermark；至少3行，输出每行前300字符。"
+        },
+        {
+          "id": "dream_prompts",
+          "label": "DREAM prompts\n模型判断值得固化的内容",
+          "kind": "process",
+          "region": "ingest",
+          "status": "observed",
+          "evidence": [
+            "S21",
+            "S22"
+          ],
+          "note": "外部调度/模型执行未观察；图中 prompt→写入是条件性路径。"
+        },
+        {
+          "id": "memory_write",
+          "label": "memory_write\n结构化叙事与权重",
+          "kind": "process",
+          "region": "ingest",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S27"
+          ],
+          "note": "source_links 可选，计算 recurrence，产生向量，插入后更新关联权重。"
+        },
+        {
+          "id": "narratives",
+          "label": "narratives\n结构文本 + 原向量",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4"
+          ],
+          "note": "本体语义保持；moment 自由字段与 created_at 写入时间不同。"
+        },
+        {
+          "id": "identity_state",
+          "label": "profiles / self_concept\nsnapshot / threads",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S25"
+          ],
+          "note": "画像和自我概念覆盖；snapshot 追加；threads 可更新状态。"
+        },
+        {
+          "id": "identity_inject",
+          "label": "system_prompt_block\nT0 / T2 / T2b / T3",
+          "kind": "process",
+          "region": "read",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S13"
+          ],
+          "note": "身份/最新快照/开放线索/高权重原文/对话桥/主题与画像；未统一全局 token 预算。"
+        },
+        {
+          "id": "auto_recall",
+          "label": "prefetch：T1 → T4\n自动选原 narrative",
+          "kind": "process",
+          "region": "read",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ],
+          "note": "T1 最近2000原向量、阈值0.25、会话去重top3；有向量后且top<2才T4。"
+        },
+        {
+          "id": "explicit_search",
+          "label": "memory_search / recall\n显式查询与修订回显",
+          "kind": "process",
+          "region": "read",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S7"
+          ],
+          "note": "search 查 context+原文+修订；recall 按时间/type/tag 取 narrative 并显示修订。"
+        },
+        {
+          "id": "amendments",
+          "label": "amendments\n追加修订与原因",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S5"
+          ],
+          "note": "修订不改变原 narrative embedding。"
+        },
+        {
+          "id": "trajectories",
+          "label": "trajectories\nmech / llm 演进链",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S15"
+          ],
+          "note": "存最多12段；T1 命中后注入最多6段，T2/T4 不消费同样轨迹。"
+        },
+        {
+          "id": "context_frame",
+          "label": "模型上下文材料\n身份块 / 召回 / 工具结果",
+          "kind": "output",
+          "region": "host",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11",
+            "S8"
+          ],
+          "note": "三路结果不同；并不意味着模型把它们视为一致或可信。"
+        },
+        {
+          "id": "current_model",
+          "label": "当前 agent 模型\n核查与使用",
+          "kind": "model",
+          "region": "host",
+          "status": "unknown",
+          "evidence": [],
+          "note": "是否追 source_links、处理冲突与生成正确回答没有运行证据。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "runtime",
+          "to": "capture",
+          "label": "轮次同步或边界补录",
+          "status": "unknown",
+          "evidence": [
+            "S13",
+            "S14"
+          ]
+        },
+        {
+          "from": "capture",
+          "to": "context",
+          "label": "保存截断文本与角色标记",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14"
+          ]
+        },
+        {
+          "from": "context",
+          "to": "epilogue",
+          "label": "结束时选部分 session 材料",
+          "status": "observed",
+          "evidence": [
+            "S18"
+          ]
+        },
+        {
+          "from": "epilogue",
+          "to": "narratives",
+          "label": "成功时直接 INSERT",
+          "status": "observed",
+          "evidence": [
+            "S18"
+          ]
+        },
+        {
+          "from": "epilogue",
+          "to": "context",
+          "label": "LLM 失败追加 seal",
+          "status": "observed",
+          "evidence": [
+            "S18"
+          ]
+        },
+        {
+          "from": "context",
+          "to": "scan_unindexed",
+          "label": "取 watermark 后对话片段",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ]
+        },
+        {
+          "from": "narratives",
+          "to": "scan_unindexed",
+          "label": "取 MAX(created_at)",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ]
+        },
+        {
+          "from": "scan_unindexed",
+          "to": "dream_prompts",
+          "label": "输出分块及 context IDs",
+          "status": "inferred",
+          "evidence": [
+            "S24",
+            "S21"
+          ]
+        },
+        {
+          "from": "dream_prompts",
+          "to": "memory_write",
+          "label": "模型选内容并发工具请求",
+          "status": "inferred",
+          "evidence": [
+            "S21"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "memory_write",
+          "label": "当前模型显式写入",
+          "status": "unknown",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "memory_write",
+          "to": "narratives",
+          "label": "写结构 / links / 原向量",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "identity_state",
+          "to": "identity_inject",
+          "label": "读当前身份与人物状态",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "context",
+          "to": "identity_inject",
+          "label": "T2b 近期对话桥",
+          "status": "observed",
+          "evidence": [
+            "S13"
+          ]
+        },
+        {
+          "from": "narratives",
+          "to": "identity_inject",
+          "label": "T2 高权重原始摘要",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "narratives",
+          "to": "auto_recall",
+          "label": "原向量候选 / 原文 FTS",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ]
+        },
+        {
+          "from": "trajectories",
+          "to": "auto_recall",
+          "label": "仅 T1 命中后附演进链",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S15"
+          ]
+        },
+        {
+          "from": "runtime",
+          "to": "explicit_search",
+          "label": "显式调用 query / recall",
+          "status": "unknown",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "context",
+          "to": "explicit_search",
+          "label": "关键词 / 向量原文预览",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S9"
+          ]
+        },
+        {
+          "from": "narratives",
+          "to": "explicit_search",
+          "label": "匹配本体并绑定 ID",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "amendments",
+          "to": "explicit_search",
+          "label": "修订检索并按时序回显",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S7"
+          ]
+        },
+        {
+          "from": "identity_inject",
+          "to": "context_frame",
+          "label": "返回会话身份块",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "auto_recall",
+          "to": "context_frame",
+          "label": "返回自动召回文本",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ]
+        },
+        {
+          "from": "explicit_search",
+          "to": "context_frame",
+          "label": "返回可供查证的文本",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S7"
+          ]
+        },
+        {
+          "from": "context_frame",
+          "to": "current_model",
+          "label": "host 交付后由模型解释",
+          "status": "unknown",
+          "evidence": []
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "context 的原始片段",
+          "writers": "sync_turn、补录、context_record、epilogue seal、memory_mirror",
+          "changes": "不同写入口有不同截断/metadata规则；读接口也使用预览",
+          "limits": "不把 context 表名或 source_links 解释为完整原始对话归档。",
+          "evidence": [
+            "S13",
+            "S14",
+            "S9",
+            "S18",
+            "S38"
+          ]
+        },
+        {
+          "owner": "narratives 的形成",
+          "writers": "显式 memory_write；epilogue 独立 INSERT；DREAM 需模型发工具调用",
+          "changes": "memory_write 传播 tag recurrence；epilogue 模型评分直接入库",
+          "limits": "自动 schema 写入不是模型选择正确、来源归属正确或人已认可的证据。",
+          "evidence": [
+            "S4",
+            "S18",
+            "S21"
+          ]
+        },
+        {
+          "owner": "provider 的 session 去重与缓存",
+          "writers": "initialize/prefetch/queue_prefetch",
+          "changes": "T1 已注入 IDs 跨轮去重，后台 queue_prefetch 可预计算",
+          "limits": "短 query 可回 cache；无 embedding 提前返回，不保证 T4 降级；最近2000以外不做 T1 扫描。",
+          "evidence": [
+            "S10",
+            "S11",
+            "S12"
+          ]
+        },
+        {
+          "owner": "最新理解的不同消费面",
+          "writers": "MCP search/recall、T1、T2/T4 各自读取",
+          "changes": "MCP 能按修订命中；T1 原向量选中后才附轨迹",
+          "limits": "不能从修订落盘推断所有自动入口已更新。",
+          "evidence": [
+            "S8",
+            "S11",
+            "S12",
+            "S10"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revision",
+      "title": "修订、维护与保留边界",
+      "question": "修正了哪一层状态、哪些派生物会更新、哪些保留或删除并不随之发生？",
+      "reading_guide": "上路看 memory_amend 先保修订，再尽力补向量/轨迹；中路看画像覆盖与维护重建；下路看 remove 镜像只增加记录，不是全库撤回。",
+      "omissions": [
+        "没有执行 SQL 删除，不能声称某种手工删除操作已经清除全部派生数据。",
+        "不把 DREAM prompt 的冲突裁决指令当成可自动正确执行的实现。",
+        "外部备份、宿主原始会话、provider 的在途 daemon 生命周期未研究。"
+      ],
+      "regions": [
+        {
+          "id": "mutation",
+          "label": "MCP 与回调入口",
+          "responsibility": "明确的持久状态变更入口",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S25",
+            "S38"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "SQLite 主表与历史",
+          "responsibility": "叙事、修订、当前身份、旧版、轨迹和上下文",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2"
+          ]
+        },
+        {
+          "id": "maintenance",
+          "label": "维护合同与派生计算",
+          "responsibility": "DREAM 需外部模型执行；脚本和补铸是独立路径",
+          "status": "observed",
+          "evidence": [
+            "S21",
+            "S22",
+            "S31"
+          ]
+        },
+        {
+          "id": "consumption",
+          "label": "消费与保留边界",
+          "responsibility": "主动/自动读取与尚未提供的全局遗忘合同",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S11",
+            "S12",
+            "S3"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "memory_amend",
+          "label": "memory_amend\n先提交修订",
+          "kind": "entry",
+          "region": "mutation",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ],
+          "note": "验证目标存在，commit amendment 后才尝试向量和轨迹；非一个原子事务。"
+        },
+        {
+          "id": "narratives",
+          "label": "narratives\n原叙事语义保留",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S5"
+          ],
+          "note": "语义字段不被 memory_amend 改写；原文仍可检索。权重仍可被维护更新。"
+        },
+        {
+          "id": "amendments",
+          "label": "amendments\n修订按时间追加",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S5"
+          ],
+          "note": "保留旧理解；effective_text 为原文+全部修订串接，不是自动事实裁决。"
+        },
+        {
+          "id": "amendment_vectors",
+          "label": "amendment_vectors\n当前 namespace 检索",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S40"
+          ],
+          "note": "写后、关键词命中后、批量补铸；失败冷却不回滚已提交修订。"
+        },
+        {
+          "id": "trajectories",
+          "label": "trajectories\n新修订使 llm → mech",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S5"
+          ],
+          "note": "机械重建后可再升格；最多保留12段，注入6段；轨迹失败不阻止修订成功。"
+        },
+        {
+          "id": "dream_prompts",
+          "label": "DREAM prompts\n观察 / 画像 / 轨迹重讲",
+          "kind": "process",
+          "region": "maintenance",
+          "status": "observed",
+          "evidence": [
+            "S21",
+            "S22",
+            "S23"
+          ],
+          "note": "prompt 合同存在，实际调度与模型遵循未验证。固化旧指令仍有 memory_write 更新错位。"
+        },
+        {
+          "id": "identity_update",
+          "label": "profile / self 更新\n拒空、归档、UPSERT",
+          "kind": "process",
+          "region": "mutation",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S26"
+          ],
+          "note": "历史表不在时归档失败可被忽略，当前写入仍继续。"
+        },
+        {
+          "id": "identity_state",
+          "label": "profiles / self_concept\nsnapshot / threads",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S25"
+          ],
+          "note": "本节点的历史归档只适用于 profiles/self_concept；snapshot/threads 生命周期不同。"
+        },
+        {
+          "id": "profile_history",
+          "label": "*_history\n每键最多 30 旧版",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S26"
+          ],
+          "note": "历史主要留作查证恢复，不进入正常当前身份注入。"
+        },
+        {
+          "id": "maintenance_scripts",
+          "label": "维护脚本\n频次 / 聚类 / 图 / 冲突",
+          "kind": "process",
+          "region": "maintenance",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30",
+            "S31",
+            "S33",
+            "S34",
+            "S35"
+          ],
+          "note": "clusters/graph/conflicts 读取原叙事字段或原向量；不统一吸收 amendment。"
+        },
+        {
+          "id": "attention",
+          "label": "attention_log / stats\n检索命中反馈",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S36",
+            "S37"
+          ],
+          "note": "热图是命中分布；不是正确性或实际使用回执。"
+        },
+        {
+          "id": "explicit_search",
+          "label": "memory_search / recall\n本体与修订一起显示",
+          "kind": "process",
+          "region": "consumption",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ],
+          "note": "修订向量命中归并到原 narrative ID；显式读保留层次。"
+        },
+        {
+          "id": "auto_recall",
+          "label": "prefetch：T1 → T4\n选择依据仍为原文",
+          "kind": "process",
+          "region": "consumption",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ],
+          "note": "T1 命中后展示轨迹；T4、T2和压缩提醒仍主要显示原叙事。"
+        },
+        {
+          "id": "memory_mirror",
+          "label": "on_memory_write(remove)\n追加删除动作镜像",
+          "kind": "entry",
+          "region": "mutation",
+          "status": "observed",
+          "evidence": [
+            "S38"
+          ],
+          "note": "这里镜像的是宿主内置 memory 动作，不是 Tideline semantic delete。"
+        },
+        {
+          "id": "context",
+          "label": "context\n保留片段与 remove 记录",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S38"
+          ],
+          "note": "镜像保留前200字的动作正文；不能作为清除派生内容的收据。"
+        },
+        {
+          "id": "deletion_boundary",
+          "label": "全库语义遗忘\n未见原生传播合同",
+          "kind": "decision",
+          "region": "consumption",
+          "status": "inferred",
+          "evidence": [
+            "S3",
+            "S39",
+            "S38"
+          ],
+          "note": "已列 MCP tools 无 forget/delete；FTS 删除触发器不构成画像/向量/轨迹/缓存的统一撤回机制。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "narratives",
+          "to": "memory_amend",
+          "label": "核验 narrative ID 存在",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ]
+        },
+        {
+          "from": "memory_amend",
+          "to": "amendments",
+          "label": "INSERT 后先 commit",
+          "status": "observed",
+          "evidence": [
+            "S5"
+          ]
+        },
+        {
+          "from": "memory_amend",
+          "to": "amendment_vectors",
+          "label": "随后尽力补铸向量",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S40"
+          ]
+        },
+        {
+          "from": "memory_amend",
+          "to": "trajectories",
+          "label": "随后重建 mech 轨迹",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S6"
+          ]
+        },
+        {
+          "from": "amendments",
+          "to": "trajectories",
+          "label": "保留时序并裁到12段",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ]
+        },
+        {
+          "from": "trajectories",
+          "to": "dream_prompts",
+          "label": "list 提供轨迹+生效态",
+          "status": "inferred",
+          "evidence": [
+            "S5",
+            "S21"
+          ]
+        },
+        {
+          "from": "dream_prompts",
+          "to": "trajectories",
+          "label": "模型发 promote write",
+          "status": "inferred",
+          "evidence": [
+            "S21",
+            "S6"
+          ]
+        },
+        {
+          "from": "dream_prompts",
+          "to": "identity_update",
+          "label": "模型决定覆盖内容",
+          "status": "inferred",
+          "evidence": [
+            "S22",
+            "S25"
+          ]
+        },
+        {
+          "from": "identity_update",
+          "to": "identity_state",
+          "label": "UPSERT 最新画像/自我概念",
+          "status": "observed",
+          "evidence": [
+            "S25"
+          ]
+        },
+        {
+          "from": "identity_update",
+          "to": "profile_history",
+          "label": "覆盖前存旧值并限30版",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S26"
+          ]
+        },
+        {
+          "from": "narratives",
+          "to": "maintenance_scripts",
+          "label": "原字段 / tag / 原向量",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S30",
+            "S32",
+            "S34",
+            "S35"
+          ]
+        },
+        {
+          "from": "maintenance_scripts",
+          "to": "narratives",
+          "label": "刷新 recurrence / weight",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ]
+        },
+        {
+          "from": "maintenance_scripts",
+          "to": "amendment_vectors",
+          "label": "缺向量时批量补铸",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "amendments",
+          "to": "explicit_search",
+          "label": "FTS/LIKE 命中与完整修订显示",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S7"
+          ]
+        },
+        {
+          "from": "amendment_vectors",
+          "to": "explicit_search",
+          "label": "按 namespace 匹配回母条目",
+          "status": "observed",
+          "evidence": [
+            "S40",
+            "S8"
+          ]
+        },
+        {
+          "from": "narratives",
+          "to": "auto_recall",
+          "label": "原向量 / 原文 FTS 选候选",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ]
+        },
+        {
+          "from": "trajectories",
+          "to": "auto_recall",
+          "label": "T1 命中后附最多6段",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S11"
+          ]
+        },
+        {
+          "from": "auto_recall",
+          "to": "attention",
+          "label": "记录 T1 检索命中",
+          "status": "observed",
+          "evidence": [
+            "S36"
+          ]
+        },
+        {
+          "from": "attention",
+          "to": "dream_prompts",
+          "label": "heatmap 供模型观察",
+          "status": "inferred",
+          "evidence": [
+            "S22",
+            "S37"
+          ]
+        },
+        {
+          "from": "memory_mirror",
+          "to": "context",
+          "label": "remove 也变为新 context 行",
+          "status": "observed",
+          "evidence": [
+            "S38"
+          ]
+        },
+        {
+          "from": "context",
+          "to": "deletion_boundary",
+          "label": "持久镜像无全库删除回执",
+          "status": "inferred",
+          "evidence": [
+            "S38",
+            "S3"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "amendments 是修订持久真源",
+          "writers": "memory_amend",
+          "changes": "修订提交先于向量与轨迹；后续错误不回滚修订",
+          "limits": "成功文本证明修订已存，不证明所有派生物、自动注入和模型回答已经更新。",
+          "evidence": [
+            "S5",
+            "S40"
+          ]
+        },
+        {
+          "owner": "trajectory 是有损派生链",
+          "writers": "机械重建与 memory_traj_promote write",
+          "changes": "新 amendment 重置 mech；LLM 升格覆盖 traj_json",
+          "limits": "模型字段非空校验不验证事件忠实；原始修订仍留在 amendments 供显式读取。",
+          "evidence": [
+            "S6",
+            "S7"
+          ]
+        },
+        {
+          "owner": "当前 identity 与覆盖历史",
+          "writers": "MCP profile/self_concept writer",
+          "changes": "旧版归档、当前 UPSERT；每键 history 限30版",
+          "limits": "归档失败可不阻止写入；不等同于永久版本保留或撤回协议。",
+          "evidence": [
+            "S25",
+            "S26",
+            "S1"
+          ]
+        },
+        {
+          "owner": "索引、图与记忆频次",
+          "writers": "脚本重建和写入触发器",
+          "changes": "FTS 跟增删改同步；主题/软聚类/实体图独立重建",
+          "limits": "原 narrative 聚类/图不自动重写为 amendment 生效态；amend-backfill 前置计数未辨模型 namespace。",
+          "evidence": [
+            "S39",
+            "S28",
+            "S32",
+            "S34",
+            "S31"
+          ]
+        },
+        {
+          "owner": "删除与保留边界",
+          "writers": "本仓库无统一 semantic forget tool；宿主 remove 回调仅镜像",
+          "changes": "SQL FTS触发器只覆盖相应索引动作；未见全派生撤回流程",
+          "limits": "这是限定到所读工具/写路径的缺口；不宣称外部人工维护或备份的实际状态。",
+          "evidence": [
+            "S3",
+            "S39",
+            "S38"
+          ]
+        }
+      ]
+    }
+  ]
+}

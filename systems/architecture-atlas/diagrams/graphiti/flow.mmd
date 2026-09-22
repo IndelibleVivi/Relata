@@ -1,0 +1,63 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_caller["调用应用与官方示例"]
+    caller["Application<br/>来源 / scope / 时间"]:::entry
+    projection["Context projection<br/>示例仅取 edge.fact"]:::process
+    feedback["asyncio.create_task<br/>示例回写人机对话"]:::process
+  end
+  subgraph region_core["Graphiti OSS 异步库"]
+    ingest["add_episode()<br/>异步写入编排"]:::process
+    previous["Previous episodes<br/>同组参考时间上下文"]:::process
+    node_extract["extract / resolve nodes<br/>实体识别与合并"]:::process
+    edge_resolve["extract / resolve edges<br/>候选与语义解析"]:::process
+    hydrate["Entity hydration<br/>属性 / 摘要更新"]:::process
+    graph_driver["GraphDriver<br/>session / provider 路由"]:::process
+    search["search() / search_()<br/>边或多层对象"]:::process
+    filter{"SearchFilters<br/>调用者选择时间语义"}:::decision
+    search_methods["BM25 / cosine / BFS<br/>按 recipe 召回"]:::process
+    rank["RRF / MMR / distance<br/>或 cross encoder"]:::process
+  end
+  subgraph region_models["可注入模型客户端"]
+    llm[["LLMClient<br/>抽取与语义判断"]]:::model
+    generation[["Agent LLM<br/>消费 system context"]]:::model
+  end
+  subgraph region_storage["调用方部署的图数据库"]
+    episodes[("EpisodicNode<br/>正文与来源记录")]:::store
+    entities[("EntityNode<br/>摘要 / 属性 / 向量")]:::store
+    facts[("EntityEdge<br/>事实 / 来源 / 双时间")]:::store
+  end
+  caller -->|"提供输入、schema 与参考时间"| ingest
+  ingest -->|"await 同组历史检索 / 显式 UUID"| previous
+  episodes -->|"已存 episode 正文与时间"| previous
+  previous -->|"历史帮助消歧；当前正文抽取"| node_extract
+  node_extract -->|"必要时抽取 / 消歧调用"| llm
+  node_extract -->|"实体与 UUID 映射"| edge_resolve
+  facts -->|"同端点重复候选与组内矛盾候选"| edge_resolve
+  edge_resolve -->|"抽取事实 / 裁决候选索引"| llm
+  edge_resolve -->|"新事实更新属性与摘要"| hydrate
+  hydrate -->|"属性与必要的摘要压缩"| llm
+  hydrate -->|"await 批量保存对象"| graph_driver
+  graph_driver -->|"写内容、关联；可选清空本次正文"| episodes
+  graph_driver -->|"写摘要 / 属性 / 名称 embedding"| entities
+  graph_driver -->|"写来源 UUID、时间、fact embedding"| facts
+  caller -->|"另一次 query 请求"| search
+  search -->|"无提供则空 SearchFilters"| filter
+  filter -->|"group / 时间条件 + recipe"| search_methods
+  facts -->|"图中事实候选"| search_methods
+  search_methods -->|"并行方法结果；可选 BFS 扩展"| rank
+  rank -->|"排序后的边；高级含其他层"| projection
+  projection -->|"示例仅 fact 文本 + 对话"| generation
+  generation -->|"回复与最近输入组成新 episode"| feedback
+  feedback -->|"示例：create_task，未 await 回写"| ingest
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

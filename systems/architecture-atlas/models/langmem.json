@@ -1,0 +1,1760 @@
+{
+  "id": "langmem",
+  "name": "LangMem",
+  "repository": "https://github.com/langchain-ai/langmem",
+  "commit": "9d033b47d9ce53e37e92c92241b0496c0278932e",
+  "study_date": "2026-09-22",
+  "boundary": "公开 commit 的 Python library 静态源码研究（pyproject 0.0.30）；重点 knowledge tools/manager、ReflectionExecutor、prompt optimizers。未安装、执行上游、调用模型或 embedding；LangGraph/Trustcall/Store/provider 内部与部署运行不在证据范围。",
+  "summary": "LangMem 把 agent 热路径的记忆工具、模型驱动的对象提取／局部整理和 procedural prompt 优化拆为可组合部件。Store manager 先检索有限候选再写回，ReflectionExecutor 提供可选延迟提交；持久化、身份授权、上下文采用和 prompt 激活仍跨越调用方或 LangGraph/Store 边界。",
+  "mechanisms": [
+    "Hot-path tools + background composition",
+    "Schema-based objects + limited-candidate consolidation",
+    "Config namespace routing",
+    "Separate procedural prompt optimization"
+  ],
+  "strengths": [
+    "已有 LangGraph/BaseStore 应用可按需组合工具与后台整理；是否减少延迟/改善记忆需实测。",
+    "自定义 schema 与 namespace 可表达 general-memory 的工作事实、profile 和关系共享上下文；不要求单一固定 ontology。",
+    "Prompt、事实和会话状态的边界可由应用显式配置，适于研究内容记忆与行为适应的不同作用。"
+  ],
+  "limits": [
+    "对模型的事实裁决依赖强；有限检索之外的冲突不会自动进入该轮 consolidation。",
+    "NamespaceTemplate 是路由，持久性/索引/TTL/授权不是这一个 library 的保证。",
+    "Hot tool 与 store manager 数据 envelope 不同；同 namespace 混用需验证或适配。",
+    "未见跨事实、prompt、checkpoint、summary 的删除级联或事实 provenance；不能据此声称完整遗忘。"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/tools.py#L263-L355",
+      "note": "Hot-path manage tool：动作限制、UUID、namespace、直接 put/delete 与返回文本"
+    },
+    {
+      "id": "S2",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/tools.py#L433-L497",
+      "note": "Search tool：query/filter/limit/offset 透传；序列化结果与可选 artifact；store 注入"
+    },
+    {
+      "id": "S3",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/utils.py#L56-L95",
+      "note": "NamespaceTemplate 只从 configurable 插值；缺键报错；没有身份认证"
+    },
+    {
+      "id": "S4",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L217-L339",
+      "note": "MemoryManager 用 Trustcall 提取/更新/移除；max_steps；返回对象，不写 store"
+    },
+    {
+      "id": "S5",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L457-L533",
+      "note": "整段 conversation 的提示包装、existing 对象与 RemoveDoc 过滤"
+    },
+    {
+      "id": "S6",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L832-L913",
+      "note": "MemoryStoreManager 的 schemas、query model、scope、store 绑定与 manager 组合"
+    },
+    {
+      "id": "S7",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L936-L1004",
+      "note": "稳定候选 ID、RemoveDoc 映射、optional phase 默认值与检索排序截断"
+    },
+    {
+      "id": "S8",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L1006-L1084",
+      "note": "Async 候选搜索、default seed、有限 existing 集与提取调用"
+    },
+    {
+      "id": "S9",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L1086-L1137",
+      "note": "Optional phases、差异写入、原 key 更新、逐项删除；返回 final_puts"
+    },
+    {
+      "id": "S10",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L1145-L1184",
+      "note": "Sync 检索无 query_model 时额外重复 search；future 结果进入候选"
+    },
+    {
+      "id": "S11",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L1244-L1280",
+      "note": "Sync mutation 提交 executor；本层没有逐个读取 mutation Future"
+    },
+    {
+      "id": "S12",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L1666-L1713",
+      "note": "公开 store-manager factory 默认 deletes=False；docstring 另称版本历史/默认 query model"
+    },
+    {
+      "id": "S13",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/reflection.py#L254-L329",
+      "note": "LocalReflectionExecutor：进程内 queue，按 thread_id 取消旧 pending task；保存本次 payload"
+    },
+    {
+      "id": "S14",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/reflection.py#L389-L443",
+      "note": "延迟 worker：检查取消、patch Runtime、invoke reflector、Future 回执；没有 payload 合并"
+    },
+    {
+      "id": "S15",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/reflection.py#L110-L198",
+      "note": "Local/remote 分流；remote runs.create(after_seconds, rollback)，返回的是提交完成"
+    },
+    {
+      "id": "S16",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/prompts/optimization.py#L260-L268",
+      "note": "Prompt optimizer 三种实现的分派"
+    },
+    {
+      "id": "S17",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/prompts/stateless.py#L149-L243",
+      "note": "prompt_memory 以 trajectories + feedback + prompt 推导新 prompt 字符串"
+    },
+    {
+      "id": "S18",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/prompts/gradient.py#L318-L360",
+      "note": "gradient 先反思建议、再有条件改写 prompt，返回字符串"
+    },
+    {
+      "id": "S19",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/prompts/metaprompt.py#L168-L260",
+      "note": "metaprompt 反思循环、最终输出 schema 与原 prompt 回退"
+    },
+    {
+      "id": "S20",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/prompts/optimization.py#L375-L456",
+      "note": "多 prompt classifier 选择待更新模块；返回更新后的 prompt 列表"
+    },
+    {
+      "id": "S21",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/prompts/stateful.py#L16-L54",
+      "note": "独立 stateful graph 根据模型 update_prompt 决定覆盖 store 中 prompt，index=False"
+    },
+    {
+      "id": "S22",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/docs/docs/hot_path_quickstart.md#L35-L119",
+      "note": "仅为静态集成示例：prompt callback 注入 search results；store/checkpointer 分开"
+    },
+    {
+      "id": "S23",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/README.md#L34-L64",
+      "note": "仅为 README 示例/说明：ReAct agent 和 InMemoryStore；明确重启丢失"
+    },
+    {
+      "id": "S24",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/docs/docs/background_quickstart.md#L48-L82",
+      "note": "Background quickstart 实际 await manager；示例不是独立 nonblocking scheduler"
+    },
+    {
+      "id": "S25",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L1580-L1658",
+      "note": "手动 aput TTL/index 参数转交 store，adelete 按 namespace/key；adapter 才负责实际 TTL"
+    },
+    {
+      "id": "S26",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/graphs/auth.py#L20-L80",
+      "note": "可选部署 auth hook：认证、thread owner、namespace identity 前缀；不属于 NamespaceTemplate"
+    },
+    {
+      "id": "S27",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/prompts/types.py#L7-L92",
+      "note": "Prompt 和 AnnotatedTrajectory 的数据合同"
+    },
+    {
+      "id": "S28",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/utils.py#L103-L119",
+      "note": "默认候选 query 来源为最近消息的指数窗口"
+    },
+    {
+      "id": "S29",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L775-L815",
+      "note": "独立 memory searcher：model 生成多条 query、批量搜索、按对象去重排序"
+    },
+    {
+      "id": "S30",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/short_term/summarization.py#L23-L79",
+      "note": "另有短期 summary 数据类型与 prompt；本研究未深查其实现"
+    },
+    {
+      "id": "S31",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L536-L574",
+      "note": "Core manager factory 的文案声称持久化；与已读类实现区分"
+    },
+    {
+      "id": "S32",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/pyproject.toml#L1-L17",
+      "note": "包版本 0.0.30 和 LangGraph/Trustcall/model dependencies"
+    },
+    {
+      "id": "S33",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/graphs/prompts.py#L23-L67",
+      "note": "部署 graph 包装 optimizer 后返回 updated_prompts；未启用到 agent"
+    },
+    {
+      "id": "S34",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/utils.py#L212-L246",
+      "note": "部分 optimizer 的 schema 检查 prompt 模板变量，而非语义正确性"
+    },
+    {
+      "id": "S35",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/tools.py#L25-L39",
+      "note": "Hot-path factory 的默认 schema 与 actions_permitted"
+    },
+    {
+      "id": "S36",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L64-L92",
+      "note": "Core memory 输入和默认 Memory.content schema"
+    },
+    {
+      "id": "S37",
+      "url": "https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L1504-L1566",
+      "note": "Store get/search 包装的 refresh_ttl 透传"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": "全景与系统边界",
+      "question": "LangMem 负责什么，什么状态与行为仍由 agent、Store 或模型依赖拥有？",
+      "reading_guide": "上方热路径由 agent 调用 manage/search；中部 ReflectionExecutor 可调度 store manager，经 core extractor 与可选 phases 写回。下方 procedural 路径产出 prompt，调用方决定启用。",
+      "omissions": [
+        "未读 LangGraph/Trustcall/provider 内部；图中的 API 边界不证明服务运行。",
+        "短期 summarization 仅查数据类型与 prompt；graph_rag、thread extractor 未细读，不画为全自动长期记忆闭环。"
+      ],
+      "regions": [
+        {
+          "id": "app",
+          "label": "调用方 / agent harness",
+          "responsibility": "提供 messages/config，调度任务，装配 context 并采用 prompt；示例 wiring 可见，实际应用未检查",
+          "status": "inferred",
+          "evidence": [
+            "S22",
+            "S24"
+          ]
+        },
+        {
+          "id": "lib",
+          "label": "LangMem library",
+          "responsibility": "工具、提取、局部整理、调度客户端、prompt 优化",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S9",
+            "S13",
+            "S16"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "外部 Store / runtime",
+          "responsibility": "BaseStore 实现、索引、持久化、checkpoint、remote scheduler；此仓库只检查调用边界",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S15",
+            "S25"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "模型 / Trustcall 依赖",
+          "responsibility": "模型推断与结构化 extraction dependency；其内部实现不在本次 source pin",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S17",
+            "S32"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "input",
+          "label": "messages + config\n调用方输入",
+          "kind": "entry",
+          "region": "app",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S13"
+          ],
+          "note": "公开合成研究对象；真实调用方负责授权、身份绑定和完整历史。"
+        },
+        {
+          "id": "agent",
+          "label": "Agent harness\n工具调用与响应",
+          "kind": "external",
+          "region": "app",
+          "status": "inferred",
+          "evidence": [
+            "S22",
+            "S23"
+          ],
+          "note": "LangGraph ReAct 在静态示例中装配；LangMem 不拥有通用 agent loop。"
+        },
+        {
+          "id": "scope",
+          "label": "NamespaceTemplate\n配置生成 tuple",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S3"
+          ],
+          "note": "配置路由不是身份认证；固定 namespace 可跨线程共享。"
+        },
+        {
+          "id": "manage",
+          "label": "manage_memory\n创建 / 覆盖 / 删除",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "note": "默认准许三动作；写 {content}；update/delete 需 UUID，无前置读或版本条件。"
+        },
+        {
+          "id": "search",
+          "label": "search_memory\nquery / filter / limit",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S2"
+          ],
+          "note": "搜索逻辑/embedding 在 BaseStore；返回序列化 item，可附 raw artifact。"
+        },
+        {
+          "id": "executor",
+          "label": "ReflectionExecutor\n延迟与 pending 取消",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S15"
+          ],
+          "note": "本地进程队列与 remote client 是替代模式；取消不是已写入状态回滚。"
+        },
+        {
+          "id": "manager",
+          "label": "MemoryStoreManager\n检索后整理并写回",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S8",
+            "S9"
+          ],
+          "note": "输入/输出为 facts、episodes、profiles 等 schema 实例；写 {kind,content}，与 hot tool 格式不同。"
+        },
+        {
+          "id": "extractor",
+          "label": "MemoryManager\n生成对象变更",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5"
+          ],
+          "note": "core API 无 store 写入；Trustcall 边界负责结构化输出/patch；返回 ExtractedMemory。"
+        },
+        {
+          "id": "phases",
+          "label": "MemoryPhase[]\n可选逐阶段整理",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9"
+          ],
+          "note": "默认 phases=[]；追加 phase 只见选中对象和新对象，include_messages 默认 False；deletes 默认 True。"
+        },
+        {
+          "id": "store",
+          "label": "BaseStore\nnamespace / key / value",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S9",
+            "S25"
+          ],
+          "note": "同一个接口可接不同 backend；图中不保证两种封装格式无适配互通；durability/index/TTL 由 adapter 决定。"
+        },
+        {
+          "id": "llm",
+          "label": "Chat model + Trustcall\n推断 / 结构化输出",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S17",
+            "S18"
+          ],
+          "note": "观察到 library 调用，未执行模型，也未读依赖内部。"
+        },
+        {
+          "id": "context",
+          "label": "Context assembly\n工具结果或 prompt",
+          "kind": "process",
+          "region": "app",
+          "status": "inferred",
+          "evidence": [
+            "S2",
+            "S22"
+          ],
+          "note": "调用方选择插入系统消息、tool result 或其他上下文；检索成功不等于正确使用。"
+        },
+        {
+          "id": "optimizer",
+          "label": "Prompt optimizer\n行为指令改写",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17",
+            "S18",
+            "S19",
+            "S20"
+          ],
+          "note": "procedural memory 路径，输入 trajectories/feedback/原 prompt；默认返回文本/列表，非事实条目写入。"
+        },
+        {
+          "id": "promptout",
+          "label": "Updated prompt\n由调用方采用",
+          "kind": "output",
+          "region": "app",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S18",
+            "S20",
+            "S33"
+          ],
+          "note": "输出还不是 active instruction；部署 graph 也只返回 updated_prompts。"
+        },
+        {
+          "id": "runtime",
+          "label": "LangGraph runtime\ncheckpoint / remote runs",
+          "kind": "external",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S22"
+          ],
+          "note": "所见只有客户端调用和示例接线；持久调度、checkpoint 存储和恢复未检查。"
+        },
+        {
+          "id": "backend",
+          "label": "Store adapter\n索引 / TTL / 耐久性",
+          "kind": "external",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S23"
+          ],
+          "note": "具体 BaseStore 后端源码与运行状态未检查；README InMemoryStore 是易失示例。"
+        }
+      ],
+      "edges": [
+        {
+          "to": "agent",
+          "label": "messages / configurable",
+          "status": "inferred",
+          "evidence": [
+            "S22"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "manage",
+          "label": "模型决定 action + content + id",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S23"
+          ],
+          "from": "agent"
+        },
+        {
+          "to": "search",
+          "label": "按需 query / filter",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S23"
+          ],
+          "from": "agent"
+        },
+        {
+          "to": "manage",
+          "label": "解析 namespace",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S3"
+          ],
+          "from": "scope"
+        },
+        {
+          "to": "manager",
+          "label": "解析 namespace",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S8"
+          ],
+          "from": "scope"
+        },
+        {
+          "to": "store",
+          "label": "put 或 delete：{content}",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "manage"
+        },
+        {
+          "to": "store",
+          "label": "search(namespace, query)",
+          "status": "observed",
+          "evidence": [
+            "S2"
+          ],
+          "from": "search"
+        },
+        {
+          "to": "context",
+          "label": "序列化命中 / artifact",
+          "status": "observed",
+          "evidence": [
+            "S2"
+          ],
+          "from": "search"
+        },
+        {
+          "to": "agent",
+          "label": "注入 system 或工具上下文",
+          "status": "inferred",
+          "evidence": [
+            "S22",
+            "S23"
+          ],
+          "from": "context"
+        },
+        {
+          "to": "executor",
+          "label": "submit(payload, after_seconds)",
+          "status": "observed",
+          "evidence": [
+            "S13"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "manager",
+          "label": "本地延迟 invoke(payload)",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ],
+          "from": "executor"
+        },
+        {
+          "to": "runtime",
+          "label": "remote：runs.create",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ],
+          "from": "executor"
+        },
+        {
+          "to": "store",
+          "label": "候选读取 + {kind,content} 写回",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S9"
+          ],
+          "from": "manager"
+        },
+        {
+          "to": "extractor",
+          "label": "messages + selected existing",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ],
+          "from": "manager"
+        },
+        {
+          "to": "llm",
+          "label": "schema / 指令 / existing",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "from": "extractor"
+        },
+        {
+          "to": "phases",
+          "label": "可选：已整理对象继续处理",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ],
+          "from": "extractor"
+        },
+        {
+          "to": "manager",
+          "label": "无 phase 时返回对象变化",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S9"
+          ],
+          "from": "extractor"
+        },
+        {
+          "to": "manager",
+          "label": "最终对象与移除 IDs",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9"
+          ],
+          "from": "phases"
+        },
+        {
+          "to": "backend",
+          "label": "委托搜索 / 存储 / TTL",
+          "status": "observed",
+          "evidence": [
+            "S25"
+          ],
+          "from": "store"
+        },
+        {
+          "to": "optimizer",
+          "label": "trajectories / feedback / prompt",
+          "status": "observed",
+          "evidence": [
+            "S27"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "llm",
+          "label": "反思与 prompt 改写",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S18",
+            "S19"
+          ],
+          "from": "optimizer"
+        },
+        {
+          "to": "promptout",
+          "label": "返回新 prompt 或原 prompt",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S18",
+            "S20"
+          ],
+          "from": "optimizer"
+        },
+        {
+          "to": "agent",
+          "label": "调用方选择启用",
+          "status": "inferred",
+          "evidence": [
+            "S33"
+          ],
+          "from": "promptout"
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "BaseStore 具体 backend 拥有 namespace/key 当前值",
+          "writers": "hot tool、MemoryStoreManager、直接 Store caller",
+          "changes": "hot write 与 background write 是不同 envelope；存储成功与 agent 采用分开",
+          "limits": "外部耐久性/事务/索引语义未查；不把 InMemoryStore 当 durable",
+          "evidence": [
+            "S1",
+            "S8",
+            "S9",
+            "S23",
+            "S25"
+          ]
+        },
+        {
+          "owner": "调用方拥有 conversation / active prompt",
+          "writers": "agent harness 与显式 optimizer consumer",
+          "changes": "search 结果由上下文装配代码使用；optimizer 只给候选新 prompt",
+          "limits": "LangMem memory mutation 不自动修改 checkpoint 或 active prompt",
+          "evidence": [
+            "S22",
+            "S17",
+            "S33"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "写入、选择、读取与使用",
+      "question": "一次输入怎样进入热路径或延迟路径，何时成为可检索对象并真正进入下一次回答？",
+      "reading_guide": "左侧是调用方输入与 scope；热路径直接写 Store。延迟分支在本地 worker 到期后才执行检索、提取和写回；下方 search→context→response 表示独立的使用路径。",
+      "omissions": [
+        "remote 分支仅画提交边界，服务端调度和重试未查。",
+        "单独 create_memory_searcher 的 model-query 变体在报告说明，图合并到搜索责任。",
+        "这里的保留指写入 Store；实际落盘、索引刷新与 TTL 到期依赖 backend。"
+      ],
+      "regions": [
+        {
+          "id": "app",
+          "label": "调用方 / agent harness",
+          "responsibility": "提供 messages/config，调度任务，装配 context 并采用 prompt；示例 wiring 可见，实际应用未检查",
+          "status": "inferred",
+          "evidence": [
+            "S22",
+            "S24"
+          ]
+        },
+        {
+          "id": "lib",
+          "label": "LangMem library",
+          "responsibility": "工具、提取、局部整理、调度客户端、prompt 优化",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S9",
+            "S13",
+            "S16"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "外部 Store / runtime",
+          "responsibility": "BaseStore 实现、索引、持久化、checkpoint、remote scheduler；此仓库只检查调用边界",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S15",
+            "S25"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "模型 / Trustcall 依赖",
+          "responsibility": "模型推断与结构化 extraction dependency；其内部实现不在本次 source pin",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S17",
+            "S32"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "input",
+          "label": "messages + config\n调用方输入",
+          "kind": "entry",
+          "region": "app",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S13"
+          ],
+          "note": "公开合成研究对象；真实调用方负责授权、身份绑定和完整历史。"
+        },
+        {
+          "id": "scope",
+          "label": "NamespaceTemplate\n配置生成 tuple",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S3"
+          ],
+          "note": "配置路由不是身份认证；固定 namespace 可跨线程共享。"
+        },
+        {
+          "id": "agent",
+          "label": "Agent harness\n工具调用与响应",
+          "kind": "external",
+          "region": "app",
+          "status": "inferred",
+          "evidence": [
+            "S22",
+            "S23"
+          ],
+          "note": "LangGraph ReAct 在静态示例中装配；LangMem 不拥有通用 agent loop。"
+        },
+        {
+          "id": "manage",
+          "label": "manage_memory\n创建 / 覆盖 / 删除",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "note": "默认准许三动作；写 {content}；update/delete 需 UUID，无前置读或版本条件。"
+        },
+        {
+          "id": "executor",
+          "label": "ReflectionExecutor\n延迟与 pending 取消",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S15"
+          ],
+          "note": "本地进程队列与 remote client 是替代模式；取消不是已写入状态回滚。"
+        },
+        {
+          "id": "runtime",
+          "label": "LangGraph runtime\ncheckpoint / remote runs",
+          "kind": "external",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S22"
+          ],
+          "note": "所见只有客户端调用和示例接线；持久调度、checkpoint 存储和恢复未检查。"
+        },
+        {
+          "id": "manager",
+          "label": "MemoryStoreManager\n检索后整理并写回",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S8",
+            "S9"
+          ],
+          "note": "输入/输出为 facts、episodes、profiles 等 schema 实例；写 {kind,content}，与 hot tool 格式不同。"
+        },
+        {
+          "id": "select",
+          "label": "Candidate selection\n去重 / score / top-k",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8",
+            "S28"
+          ],
+          "note": "query_model 生成 queries，或最近消息指数窗口；最后全局截断 query_limit（默认 5）。"
+        },
+        {
+          "id": "extractor",
+          "label": "MemoryManager\n生成对象变更",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5"
+          ],
+          "note": "core API 无 store 写入；Trustcall 边界负责结构化输出/patch；返回 ExtractedMemory。"
+        },
+        {
+          "id": "phases",
+          "label": "MemoryPhase[]\n可选逐阶段整理",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9"
+          ],
+          "note": "默认 phases=[]；追加 phase 只见选中对象和新对象，include_messages 默认 False；deletes 默认 True。"
+        },
+        {
+          "id": "delta",
+          "label": "final_puts / deletes\n映射回原 key",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9",
+            "S11"
+          ],
+          "note": "已读异步实现 await gather；无跨对象 transaction、CAS 或独立历史表；返回值只列 puts。"
+        },
+        {
+          "id": "store",
+          "label": "BaseStore\nnamespace / key / value",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S9",
+            "S25"
+          ],
+          "note": "同一个接口可接不同 backend；图中不保证两种封装格式无适配互通；durability/index/TTL 由 adapter 决定。"
+        },
+        {
+          "id": "search",
+          "label": "search_memory\nquery / filter / limit",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S2"
+          ],
+          "note": "搜索逻辑/embedding 在 BaseStore；返回序列化 item，可附 raw artifact。"
+        },
+        {
+          "id": "context",
+          "label": "Context assembly\n工具结果或 prompt",
+          "kind": "process",
+          "region": "app",
+          "status": "inferred",
+          "evidence": [
+            "S2",
+            "S22"
+          ],
+          "note": "调用方选择插入系统消息、tool result 或其他上下文；检索成功不等于正确使用。"
+        },
+        {
+          "id": "response",
+          "label": "Agent response\n在当前上下文生成",
+          "kind": "output",
+          "region": "app",
+          "status": "inferred",
+          "evidence": [
+            "S22",
+            "S24"
+          ],
+          "note": "下一轮是否重检索及如何使用由调用方负责，不能从 store 写成功推导质量。"
+        },
+        {
+          "id": "llm",
+          "label": "Chat model + Trustcall\n推断 / 结构化输出",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S17",
+            "S18"
+          ],
+          "note": "观察到 library 调用，未执行模型，也未读依赖内部。"
+        }
+      ],
+      "edges": [
+        {
+          "to": "scope",
+          "label": "configurable scope values",
+          "status": "observed",
+          "evidence": [
+            "S3"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "agent",
+          "label": "新消息",
+          "status": "inferred",
+          "evidence": [
+            "S22"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "manage",
+          "label": "同步工具决策",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S23"
+          ],
+          "from": "agent"
+        },
+        {
+          "to": "manage",
+          "label": "namespace tuple",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S3"
+          ],
+          "from": "scope"
+        },
+        {
+          "to": "store",
+          "label": "直接 create/update/delete",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "manage"
+        },
+        {
+          "to": "executor",
+          "label": "显式提交本次 payload",
+          "status": "observed",
+          "evidence": [
+            "S13"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "executor",
+          "label": "同 thread 新 task 取消旧 pending",
+          "status": "observed",
+          "evidence": [
+            "S13"
+          ],
+          "from": "executor"
+        },
+        {
+          "to": "manager",
+          "label": "到期后本地 invoke",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ],
+          "from": "executor"
+        },
+        {
+          "to": "runtime",
+          "label": "remote after_seconds / rollback",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ],
+          "from": "executor"
+        },
+        {
+          "to": "manager",
+          "label": "也可直接 await ainvoke",
+          "status": "observed",
+          "evidence": [
+            "S24"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "manager",
+          "label": "限定此次 namespace",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ],
+          "from": "scope"
+        },
+        {
+          "to": "select",
+          "label": "最近窗口或 query_model queries",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S28"
+          ],
+          "from": "manager"
+        },
+        {
+          "to": "store",
+          "label": "多 query 搜索",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ],
+          "from": "select"
+        },
+        {
+          "to": "select",
+          "label": "候选 item + scores",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ],
+          "from": "store"
+        },
+        {
+          "to": "extractor",
+          "label": "去重 top-k + 输入 messages",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ],
+          "from": "select"
+        },
+        {
+          "to": "llm",
+          "label": "按 schema 推断对象变更",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ],
+          "from": "extractor"
+        },
+        {
+          "to": "phases",
+          "label": "可选 additional phase",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ],
+          "from": "extractor"
+        },
+        {
+          "to": "delta",
+          "label": "无 phase 时直接形成差异",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ],
+          "from": "extractor"
+        },
+        {
+          "to": "delta",
+          "label": "顺序整理后的对象 / removals",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ],
+          "from": "phases"
+        },
+        {
+          "to": "store",
+          "label": "await aput/adelete gather",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ],
+          "from": "delta"
+        },
+        {
+          "to": "search",
+          "label": "后续需要时发起 query",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S23"
+          ],
+          "from": "agent"
+        },
+        {
+          "to": "store",
+          "label": "namespace + query/filter/limit",
+          "status": "observed",
+          "evidence": [
+            "S2"
+          ],
+          "from": "search"
+        },
+        {
+          "to": "context",
+          "label": "返回选中 item 的内容",
+          "status": "observed",
+          "evidence": [
+            "S2"
+          ],
+          "from": "search"
+        },
+        {
+          "to": "response",
+          "label": "调用方交给 agent 生成回答",
+          "status": "inferred",
+          "evidence": [
+            "S22"
+          ],
+          "from": "context"
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "LocalReflectionExecutor 拥有 pending task / Future",
+          "writers": "submit 和单 worker thread",
+          "changes": "延迟、按 thread_id 尝试取消旧 task；新 payload 替换旧 task，源码未合并历史",
+          "limits": "不承诺 durable queue、已执行操作撤销或 exactly-once；完整历史需调用方提供",
+          "evidence": [
+            "S13",
+            "S14"
+          ]
+        },
+        {
+          "owner": "MemoryStoreManager 一次调用拥有 store_map 与 ephemeral 对象",
+          "writers": "检索、MemoryManager、optional phases",
+          "changes": "候选集合按 score 截断；只映射这些已存对象的更新/删除，其余未检索对象不参加整理",
+          "limits": "默认 query_limit=5、无 query_model 时窗口数量 query_limit//4；不是全库 consolidation",
+          "evidence": [
+            "S6",
+            "S7",
+            "S8",
+            "S9",
+            "S28"
+          ]
+        },
+        {
+          "owner": "Backend 持有写入结果；harness 持有最终响应",
+          "writers": "delta writer 与后续 context assembler",
+          "changes": "async 完成等待 Store 操作；下一次检索/回答独立发生",
+          "limits": "返回 final_puts 不列删除项；sync 不读取每个 mutation future 结果，回执不能直接作为完整审计",
+          "evidence": [
+            "S9",
+            "S11",
+            "S22"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revision",
+      "title": "修订、删除、保留与权威",
+      "question": "谁能纠正或删除哪种状态，修改会传播到 prompt、历史和已用上下文吗？",
+      "reading_guide": "主干展示两条 authority 路径：显式工具按 ID 变更，或模型在有限候选中提出变更后写回。下方 prompt 是独立演化状态；虚线解释未实现的自动级联，而非声称存在级联。",
+      "omissions": [
+        "底层 Store 的删除索引一致性、物理清除、备份保留、TTL worker 未读。",
+        "未运行冲突写、取消竞态、prompt drift 或删除后再生成测试。"
+      ],
+      "regions": [
+        {
+          "id": "app",
+          "label": "调用方 / agent harness",
+          "responsibility": "提供 messages/config，调度任务，装配 context 并采用 prompt；示例 wiring 可见，实际应用未检查",
+          "status": "inferred",
+          "evidence": [
+            "S22",
+            "S24"
+          ]
+        },
+        {
+          "id": "lib",
+          "label": "LangMem library",
+          "responsibility": "工具、提取、局部整理、调度客户端、prompt 优化",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S9",
+            "S13",
+            "S16"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "外部 Store / runtime",
+          "responsibility": "BaseStore 实现、索引、持久化、checkpoint、remote scheduler；此仓库只检查调用边界",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S15",
+            "S25"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "模型 / Trustcall 依赖",
+          "responsibility": "模型推断与结构化 extraction dependency；其内部实现不在本次 source pin",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S17",
+            "S32"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "input",
+          "label": "messages + config\n调用方输入",
+          "kind": "entry",
+          "region": "app",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S13"
+          ],
+          "note": "公开合成研究对象；真实调用方负责授权、身份绑定和完整历史。"
+        },
+        {
+          "id": "policy",
+          "label": "Schemas + flags\n动作与对象边界",
+          "kind": "decision",
+          "region": "app",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S6",
+            "S12"
+          ],
+          "note": "库的 deterministic 边界限制结构/允许动作；何者真实、过时或应遗忘主要交给模型指令。"
+        },
+        {
+          "id": "manage",
+          "label": "manage_memory\n创建 / 覆盖 / 删除",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "note": "默认准许三动作；写 {content}；update/delete 需 UUID，无前置读或版本条件。"
+        },
+        {
+          "id": "manager",
+          "label": "MemoryStoreManager\n检索后整理并写回",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S8",
+            "S9"
+          ],
+          "note": "输入/输出为 facts、episodes、profiles 等 schema 实例；写 {kind,content}，与 hot tool 格式不同。"
+        },
+        {
+          "id": "select",
+          "label": "Candidate selection\n去重 / score / top-k",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8",
+            "S28"
+          ],
+          "note": "query_model 生成 queries，或最近消息指数窗口；最后全局截断 query_limit（默认 5）。"
+        },
+        {
+          "id": "extractor",
+          "label": "MemoryManager\n生成对象变更",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5"
+          ],
+          "note": "core API 无 store 写入；Trustcall 边界负责结构化输出/patch；返回 ExtractedMemory。"
+        },
+        {
+          "id": "llm",
+          "label": "Chat model + Trustcall\n推断 / 结构化输出",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S17",
+            "S18"
+          ],
+          "note": "观察到 library 调用，未执行模型，也未读依赖内部。"
+        },
+        {
+          "id": "phases",
+          "label": "MemoryPhase[]\n可选逐阶段整理",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9"
+          ],
+          "note": "默认 phases=[]；追加 phase 只见选中对象和新对象，include_messages 默认 False；deletes 默认 True。"
+        },
+        {
+          "id": "delta",
+          "label": "final_puts / deletes\n映射回原 key",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9",
+            "S11"
+          ],
+          "note": "已读异步实现 await gather；无跨对象 transaction、CAS 或独立历史表；返回值只列 puts。"
+        },
+        {
+          "id": "store",
+          "label": "BaseStore\nnamespace / key / value",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S9",
+            "S25"
+          ],
+          "note": "同一个接口可接不同 backend；图中不保证两种封装格式无适配互通；durability/index/TTL 由 adapter 决定。"
+        },
+        {
+          "id": "backend",
+          "label": "Store adapter\n索引 / TTL / 耐久性",
+          "kind": "external",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S23"
+          ],
+          "note": "具体 BaseStore 后端源码与运行状态未检查；README InMemoryStore 是易失示例。"
+        },
+        {
+          "id": "optimizer",
+          "label": "Prompt optimizer\n行为指令改写",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17",
+            "S18",
+            "S19",
+            "S20"
+          ],
+          "note": "procedural memory 路径，输入 trajectories/feedback/原 prompt；默认返回文本/列表，非事实条目写入。"
+        },
+        {
+          "id": "promptout",
+          "label": "Updated prompt\n由调用方采用",
+          "kind": "output",
+          "region": "app",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S18",
+            "S20",
+            "S33"
+          ],
+          "note": "输出还不是 active instruction；部署 graph 也只返回 updated_prompts。"
+        },
+        {
+          "id": "stateful",
+          "label": "update_general\n可选 prompt 存储图",
+          "kind": "process",
+          "region": "lib",
+          "status": "observed",
+          "evidence": [
+            "S21"
+          ],
+          "note": "独立内部 graph 读旧 prompt，模型 update_prompt=True 才 aput(data,new_prompt,index=False)；非默认 optimizer。"
+        },
+        {
+          "id": "promptstore",
+          "label": "Stored prompt\n独立 key 的 data",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S21"
+          ],
+          "note": "逻辑上与 fact/profile 分开；没有所读事实删除到 prompt 的自动失效路径。"
+        },
+        {
+          "id": "derivatives",
+          "label": "History / 已用 context\n应用持有的衍生物",
+          "kind": "external",
+          "region": "app",
+          "status": "inferred",
+          "evidence": [
+            "S22",
+            "S30"
+          ],
+          "note": "checkpoint、已组装上下文、summary 的清理不由所读 memory delete 路径实现；自动传播未见。"
+        }
+      ],
+      "edges": [
+        {
+          "to": "policy",
+          "label": "应用选择 schema / scope / flags",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S6"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "manage",
+          "label": "actions_permitted + 类型约束",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "policy"
+        },
+        {
+          "to": "manage",
+          "label": "显式 ID + update/delete",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "store",
+          "label": "同 key 覆盖 / 删除",
+          "status": "observed",
+          "evidence": [
+            "S1"
+          ],
+          "from": "manage"
+        },
+        {
+          "to": "manager",
+          "label": "factory defaults / phase 配置",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S12"
+          ],
+          "from": "policy"
+        },
+        {
+          "to": "manager",
+          "label": "新事实 / 更正 conversation",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "select",
+          "label": "搜索有限 relevant existing",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ],
+          "from": "manager"
+        },
+        {
+          "to": "select",
+          "label": "返回候选及旧内容",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ],
+          "from": "store"
+        },
+        {
+          "to": "extractor",
+          "label": "仅选中对象参与修订",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8"
+          ],
+          "from": "select"
+        },
+        {
+          "to": "llm",
+          "label": "提示判定过时 / enrichment",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5"
+          ],
+          "from": "extractor"
+        },
+        {
+          "to": "phases",
+          "label": "可选局部 consolidation",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ],
+          "from": "extractor"
+        },
+        {
+          "to": "delta",
+          "label": "新对象 / 改写 / RemoveDoc",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9"
+          ],
+          "from": "extractor"
+        },
+        {
+          "to": "delta",
+          "label": "合并后的变化与删除 IDs",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S9"
+          ],
+          "from": "phases"
+        },
+        {
+          "to": "store",
+          "label": "改变内容才 put；映射 ID delete",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ],
+          "from": "delta"
+        },
+        {
+          "to": "backend",
+          "label": "删除 / TTL 实际语义委托",
+          "status": "observed",
+          "evidence": [
+            "S25"
+          ],
+          "from": "store"
+        },
+        {
+          "to": "optimizer",
+          "label": "原 prompt + feedback + trajectories",
+          "status": "observed",
+          "evidence": [
+            "S27"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "promptout",
+          "label": "模型改写的 prompt 候选",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S18",
+            "S20"
+          ],
+          "from": "optimizer"
+        },
+        {
+          "to": "stateful",
+          "label": "另一入口：messages + feedback",
+          "status": "observed",
+          "evidence": [
+            "S21"
+          ],
+          "from": "input"
+        },
+        {
+          "to": "stateful",
+          "label": "读取当前 prompt data",
+          "status": "observed",
+          "evidence": [
+            "S21"
+          ],
+          "from": "promptstore"
+        },
+        {
+          "to": "llm",
+          "label": "判断 update_prompt 与新文本",
+          "status": "observed",
+          "evidence": [
+            "S21"
+          ],
+          "from": "stateful"
+        },
+        {
+          "to": "promptstore",
+          "label": "有条件覆盖 data；index=False",
+          "status": "observed",
+          "evidence": [
+            "S21"
+          ],
+          "from": "stateful"
+        },
+        {
+          "to": "promptstore",
+          "label": "未见事实删除→prompt 失效传播",
+          "status": "inferred",
+          "evidence": [
+            "S9",
+            "S21"
+          ],
+          "from": "store"
+        },
+        {
+          "to": "derivatives",
+          "label": "未见 memory delete→history 清除",
+          "status": "inferred",
+          "evidence": [
+            "S1",
+            "S9",
+            "S22"
+          ],
+          "from": "store"
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "应用限制动作，模型选择内容；Store caller 拥有实际 mutation 能力",
+          "writers": "manage tool 或 manager；直接 Store API 也能写",
+          "changes": "公开 create_memory_store_manager 默认 enable_deletes=False；内部 class 默认 True；追加 phase 默认 deletes=True",
+          "limits": "不能把全局禁删从 factory flag 推断到每个 phase；schema 校验不证明事实真伪或 consent",
+          "evidence": [
+            "S1",
+            "S4",
+            "S6",
+            "S7",
+            "S12"
+          ]
+        },
+        {
+          "owner": "BaseStore 当前对象，不是本层版本历史",
+          "writers": "同 namespace/key 的 put/delete",
+          "changes": "没有所读路径中的 history ledger、tombstone graph、CAS 或全库级联失效",
+          "limits": "删除当前条目不保证擦除 checkpoint、prompt、summary、provider traces；后来重放旧输入仍可能重提取",
+          "evidence": [
+            "S1",
+            "S9",
+            "S11",
+            "S21",
+            "S22"
+          ]
+        },
+        {
+          "owner": "Procedural prompt 是独立状态",
+          "writers": "optimizer consumer；可选 update_general graph",
+          "changes": "stateless API 返回字符串；stateful graph 按模型布尔值覆盖 prompt key",
+          "limits": "未见事实→prompt provenance、自动撤回或质量验证门；模型提出改写不等于实测提升",
+          "evidence": [
+            "S17",
+            "S18",
+            "S20",
+            "S21",
+            "S33"
+          ]
+        }
+      ]
+    }
+  ]
+}

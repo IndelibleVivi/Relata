@@ -7,7 +7,7 @@ System Census 研究真实 memory / agent systems 怎样工作、架构选择带
 
 Census object 可以是 memory engine、context compiler、完整 companion agent、local personal stack、manually curated archive、agent framework 或 mixed architecture。System 不必暴露 discrete memories、retrieval candidates 或 write/search API，仍可被表示。
 
-首轮[五份源码研究](source-studies/README.md) 固定 Mem0、当前 Letta、Graphiti、lmc-5 与 Tideline Memory 的公开 commits，包含有条件的架构比较与两组窄范围离线观察。它们保持 source-study draft 状态，不等于 reviewed 或 accepted System Cards。
+[十份源码研究](source-studies/README.md) 固定 Mem0、当前 Letta、Graphiti、lmc-5、Tideline Memory、Aelios、Hindsight、OpenViking、LangMem 与 A-MEM 的公开 commits，包含有条件的架构比较与两组窄范围离线观察。[架构图集](architecture-atlas/README.md) 为每个项目提供三幅绑定源码的视图，含独立 SVG 和离线交互 reader。它们保持 source-study draft 状态，不等于 reviewed 或 accepted System Cards。
 
 ## Classification
 

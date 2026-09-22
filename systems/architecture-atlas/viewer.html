@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Relata · Memory Architecture Atlas</title>
+  <style>/* ATLAS_STYLES */</style>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="../../README.zh-CN.md">relata<span>前沿记忆研究室</span></a>
+    <div class="collection">ARCHITECTURE ATLAS <span id="project-count"></span></div>
+    <label class="search-label" for="project-search">寻找项目或机制</label>
+    <input id="project-search" type="search" placeholder="搜索 memory 的不同形状" autocomplete="off">
+    <nav id="project-list" aria-label="研究项目"></nav>
+    <p id="search-empty" hidden>没有匹配项目。试试「检索」「文件」或项目名。</p>
+    <div class="sidebar-foot"><span class="small-dot"></span> SOURCE STUDIES · 2026.09.22<br><a href="README.md">阅读与复现说明 ↗</a></div>
+  </aside>
+  <main>
+    <header class="page-top"><span>过去如何进入现在</span><a href="../../research/agent-memory-inquiry.md">研究问题与 AMS ↗</a></header>
+    <section class="project-heading">
+      <div><div class="eyebrow" id="project-number"></div><h1 id="project-name"></h1><p id="project-summary"></p></div>
+      <div class="identity"><a id="upstream-link" target="_blank" rel="noreferrer">公开 upstream ↗</a><a id="commit-link" target="_blank" rel="noreferrer"></a><a id="report-link">阅读完整研究 ↗</a></div>
+    </section>
+    <p class="boundary" id="boundary"></p>
+    <nav id="view-tabs" aria-label="架构视图"></nav>
+    <section class="diagram-section" aria-labelledby="view-title">
+      <div class="view-heading"><div><h2 id="view-title"></h2><p id="view-question"></p></div><div class="exports"><button id="export-svg" type="button">SVG ↓</button><a id="export-source" download>Mermaid ↓</a></div></div>
+      <div class="diagram-toolbar"><span id="view-instruction" role="status">点击节点，沿源码查看它的职责</span><div class="zoom-controls"><button id="zoom-out" type="button" aria-label="缩小">−</button><output id="zoom-value">100%</output><button id="zoom-in" type="button" aria-label="放大">＋</button><button id="fit-reading" type="button">阅读</button><button id="fit-width" type="button">适宽</button><button id="fit-all" type="button">全图</button></div></div>
+      <div id="diagram-viewport" tabindex="0" aria-label="可滚动架构图"><div id="diagram-stage"></div></div>
+      <div class="legend"><span><i class="store-swatch"></i>状态 / 存储</span><span><i class="model-swatch"></i>模型参与</span><span><i class="decision-swatch"></i>选择 / 控制</span><span>实线：已读源码路径</span><span>虚线：推断 / 未知，见标签</span></div>
+      <p class="reading-guide" id="reading-guide"></p>
+    </section>
+    <section class="evidence-section" aria-label="图示与证据">
+      <div class="inspector"><div class="eyebrow">FOLLOW THE EVIDENCE</div><h2 id="detail-title">从一个节点开始</h2><div id="detail-body"></div><label for="node-picker">或从列表选择节点</label><select id="node-picker"><option value="">选择节点…</option></select></div>
+      <div class="state-panel"><h2>谁改变状态，谁承担后果</h2><div id="state-notes"></div></div>
+    </section>
+    <section class="judgment-section"><div><h2>机制提供的可能性</h2><ul id="strengths"></ul></div><div><h2>条件、代价与未验证部分</h2><ul id="limits"></ul></div></section>
+    <details class="source-details"><summary>本视图的全部关系与证据</summary><div id="edge-evidence"></div></details>
+    <details class="source-details"><summary>覆盖边界与来源目录</summary><div id="coverage"></div><div id="source-list"></div></details>
+    <footer>图中“已读源码”不等于实际运行。图集是有界 source studies；未建立性能排名或 accepted System Cards。<a href="../source-studies/README.md">比较综合 ↗</a></footer>
+  </main>
+  <noscript>交互图集需要 JavaScript。可直接阅读 diagrams/ 下的 SVG 和 README.md 中的项目索引。</noscript>
+  <!-- ATLAS_DATA -->
+  <script>/* ATLAS_LOGIC */</script>
+</body>
+</html>

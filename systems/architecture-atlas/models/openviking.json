@@ -1,0 +1,1721 @@
+{
+  "id": "openviking",
+  "name": "OpenViking",
+  "repository": "https://github.com/volcengine/OpenViking",
+  "commit": "bbf2e37f88b8b15482edb83be41feb3ed510d03a",
+  "study_date": "2026-09-22",
+  "boundary": "公开 main checkout 的 Python context database 路径，静态源码 observed；未执行 upstream、模型、benchmark、hosted 产品或 Rust/vector engine 行为。",
+  "summary": "OpenViking 把资源、可演化记忆和技能放入有 scope 的 viking:// 目录；资源解析与会话提取分开写入，L0/L1 摘要和向量由异步后处理派生，find/search 再按目录范围与可选层级展开选择内容，context assembler 控制读取和预算。",
+  "mechanisms": [
+    "虚拟目录与 L0/L1/L2",
+    "资源/会话双写入路径",
+    "持久 QueueFS 与两阶段 commit",
+    "schema merge 与 peer scope",
+    "条件目录递归与预算装配"
+  ],
+  "strengths": [
+    "当项目/人际 scope 可正确组织时，目录限定和可检查 Markdown 能帮助混合场景的定位、修订与审计。",
+    "保留 raw archive、完成状态与生成记忆的区别，提供回看依据；预算装配可避免每条命中都读取全文。"
+  ],
+  "limits": [
+    "模型摘要/提取与配置 schema 可能丢失隐含意义；存在 Markdown 不证明长期关系理解或回答质量。",
+    "摘要刷新与向量派生异步；snapshot completed 与逐项成功存在静态代码/注释落差。",
+    "性能、并发恢复、底层索引与数据彻底删除未运行验证；hosted 及 paper-only 能力不能并入观察事实。"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/service/core.py#L160-L213",
+      "note": "RAGFS binding、QueueManager、VikingDBManager 初始化；路径锁归 Rust ragfs"
+    },
+    {
+      "id": "S2",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/service/core.py#L510-L585",
+      "note": "session idle scheduler、队列消费者、watch scheduler 启动条件"
+    },
+    {
+      "id": "S3",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/server/app.py#L594-L620",
+      "note": "HTTP filesystem/resource/search/session/snapshot/task 等入口"
+    },
+    {
+      "id": "S4",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/viking_fs/_access.py#L659-L675",
+      "note": "viking URI 到 account-isolated AGFS 路径映射"
+    },
+    {
+      "id": "S5",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/viking_fs/_access.py#L205-L265",
+      "note": "读写/管理权限、actor peer 和 namespace 边界"
+    },
+    {
+      "id": "S6",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/core/retrieval_targets.py#L49-L171",
+      "note": "默认 user/resource/skill 与 actor-peer 检索范围"
+    },
+    {
+      "id": "S7",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/service/resource_service.py#L1496-L1600",
+      "note": "资源导入与 scheduled refresh 两个入口"
+    },
+    {
+      "id": "S8",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/utils/resource_processor.py#L694-L840",
+      "note": "解析产物与 TreeBuilder finalize，L2 不应自动等同原始文件字节"
+    },
+    {
+      "id": "S9",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/service/resource_service.py#L2080-L2170",
+      "note": "ResourceProcessor 调用与 post-process AddResourceMsg"
+    },
+    {
+      "id": "S10",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/queuefs/semantic_processor.py#L405-L465",
+      "note": "语义消费者与 stale/coalesced 消息分流"
+    },
+    {
+      "id": "S11",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/queuefs/semantic_processor.py#L1035-L1066",
+      "note": "摘要写入含 generated_by/freshness metadata"
+    },
+    {
+      "id": "S12",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/queuefs/semantic_processor.py#L1495-L1545",
+      "note": "目录摘要由文件摘要/子目录摘要生成；可采样或批次处理"
+    },
+    {
+      "id": "S13",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/queuefs/semantic_processor.py#L1847-L1894",
+      "note": "目录 L0/L1 向量任务进入 EmbeddingQueue"
+    },
+    {
+      "id": "S14",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/collection_schemas.py#L768-L786",
+      "note": "Embedding handler 调用配置模型"
+    },
+    {
+      "id": "S15",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/collection_schemas.py#L965-L980",
+      "note": "Embedding result 写入 VikingDB"
+    },
+    {
+      "id": "S16",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/session.py#L1786-L1830",
+      "note": "两阶段 commit 与 retention 参数合同"
+    },
+    {
+      "id": "S17",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/session.py#L1989-L2140",
+      "note": "archive messages、phase1 metadata、持久化队列与 live tail"
+    },
+    {
+      "id": "S18",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/queuefs/session_commit_processor.py#L43-L93",
+      "note": "恢复 session 并 resume_queued_commit；未就绪重新入队"
+    },
+    {
+      "id": "S19",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/compressor_v3.py#L651-L793",
+      "note": "ExtractLoop → isolation → streaming updater → memory diff"
+    },
+    {
+      "id": "S20",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/memory/extract_loop.py#L111-L145",
+      "note": "工具辅助 memory extraction loop 的职责边界"
+    },
+    {
+      "id": "S21",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/memory/streaming_memory_updater.py#L1-L110",
+      "note": "普通记忆按 count/time batching；account/user、peer/type 分组"
+    },
+    {
+      "id": "S22",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/memory/memory_updater.py#L928-L1045",
+      "note": "upsert/delete、links、向量化与目录 overview 更新"
+    },
+    {
+      "id": "S23",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/memory/memory_updater.py#L1100-L1212",
+      "note": "先读当前文件、schema merge_op、version 与来源 metadata 写入"
+    },
+    {
+      "id": "S24",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/memory/memory_isolation_handler.py#L62-L167",
+      "note": "self/peer 写入、user message 归属与允许 peer 边界"
+    },
+    {
+      "id": "S25",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/viking_fs/_semantic.py#L246-L299",
+      "note": "find 固定 QUICK"
+    },
+    {
+      "id": "S26",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/viking_fs/_semantic.py#L431-L499",
+      "note": "search 条件 intent planning 与 retrieve"
+    },
+    {
+      "id": "S27",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/retrieve/hierarchical_retriever.py#L120-L218",
+      "note": "无 reranker 默认 QUICK；QUICK 单层范围向量查询"
+    },
+    {
+      "id": "S28",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/retrieve/hierarchical_retriever.py#L421-L588",
+      "note": "THINKING 目录优先队列、子目录查询、分数传播与收敛"
+    },
+    {
+      "id": "S29",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/retrieve/context_assembler/pipeline.py#L53-L170",
+      "note": "查询扩展、跨 turn ledger、配额召回、按需读取、预算、render/rewrite"
+    },
+    {
+      "id": "S30",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/retrieve/context_assembler/tiers.py#L1-L8",
+      "note": "abstract 来自 vector payload；overview/full 需要读取内容"
+    },
+    {
+      "id": "S31",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/resource/watch_scheduler.py#L310-L424",
+      "note": "资源 watcher 定时 refresh、身份恢复与目标不存在时停用"
+    },
+    {
+      "id": "S32",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/service/session_auto_commit.py#L28-L145",
+      "note": "配置启用的 idle auto-commit 扫描与调度"
+    },
+    {
+      "id": "S33",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/service/fs_service.py#L401-L474",
+      "note": "delete 首先 rm，随后 watch/摘要/关联记忆清理"
+    },
+    {
+      "id": "S34",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/viking_fs/_ops.py#L215-L349",
+      "note": "rm 加锁，先删向量后删文件，可清孤儿索引"
+    },
+    {
+      "id": "S35",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/content_write.py#L123-L205",
+      "note": "内容写入按 memory/direct 路径刷新派生数据"
+    },
+    {
+      "id": "S36",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/queuefs/semantic_ops/freshness_policy.py#L12-L61",
+      "note": "父摘要 NOOP/MARK_PENDING/REFRESH_NOW 策略"
+    },
+    {
+      "id": "S37",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/service/resource_memory_link_service.py#L355-L462",
+      "note": "资源引用记忆重新提交与后续 literal unlink"
+    },
+    {
+      "id": "S38",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/viking_fs/_snapshot.py#L336-L383",
+      "note": "snapshot restore 接口与文档所称的 reindex 完成合同"
+    },
+    {
+      "id": "S39",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/storage/viking_fs/_snapshot.py#L855-L929",
+      "note": "tracked rebuild 完成，但子任务异常被捕获并仅记录日志"
+    },
+    {
+      "id": "S40",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/retention.py#L406-L494",
+      "note": "turn-budget retention：保留 anchor/tail、归档早期内容，非存储过期删除"
+    },
+    {
+      "id": "S41",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/retrieve/hierarchical_retriever.py#L590-L664",
+      "note": "hotness 是可配置排序分数混合，非删除"
+    },
+    {
+      "id": "S42",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/prompts/templates/memory/events.yaml#L1-L98",
+      "note": "默认 event 提取原子事件、第三人称、日期化与 add_only 模式"
+    },
+    {
+      "id": "S43",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/README.md#L49-L120",
+      "note": "产品层级与性能主张；不作为本研究运行结果"
+    },
+    {
+      "id": "S44",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/README.md#L282-L302",
+      "note": "VikingMem 子集、目录索引与 VikingRAG 论文关系说明"
+    },
+    {
+      "id": "S45",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/tests/retrieve/test_context_assembler_pipeline.py#L123-L149",
+      "note": "预算 context assembly 的测试代码，仅阅读未运行"
+    },
+    {
+      "id": "S46",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/compressor_v3.py#L434-L516",
+      "note": "条件 agent-evolution train/session-skill 分支，未深入训练实现"
+    },
+    {
+      "id": "S47",
+      "url": "https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/session/memory/memory_type_registry.py#L43-L86",
+      "note": "默认 schema 加载与可配置覆盖，非固定通用记忆 ontology"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": "全景与系统边界",
+      "question": "目录文件、模型、索引和调用方如何共同形成 memory service？",
+      "reading_guide": "左侧请求分流到资源导入与 session commit；中间文件是当前内容权威，摘要和索引分别派生，右侧返回上下文给 agent。",
+      "omissions": [
+        "具体 harness 注入与回答策略未读；native Rust storage / TrieHI 算法未审计。",
+        "训练、VikingBot compile、外部 connectors、商业/hosted 服务不代表于本图。"
+      ],
+      "regions": [
+        {
+          "id": "caller",
+          "label": "调用方与上下文使用",
+          "responsibility": "服务返回上下文；最终 agent 行为由调用方拥有",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S29"
+          ]
+        },
+        {
+          "id": "native",
+          "label": "OpenViking service",
+          "responsibility": "Python service、VikingFS API 与队列调度",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "id": "durable",
+          "label": "持久状态与索引",
+          "responsibility": "VikingFS/RAGFS 文件，QueueFS 和 vector store；配置后端",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S17"
+          ]
+        },
+        {
+          "id": "models",
+          "label": "配置的模型边界",
+          "responsibility": "VLM、embedding、可选 rerank；本研究未调用",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S19",
+            "S27"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "caller",
+          "label": "调用方 agent\n消费并产生对话",
+          "kind": "external",
+          "region": "caller",
+          "status": "unknown",
+          "evidence": [],
+          "note": "具体 harness 注入位置与最终回复未检查。"
+        },
+        {
+          "id": "api",
+          "label": "HTTP / Service API\n携带 RequestContext",
+          "kind": "entry",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S5"
+          ],
+          "note": ""
+        },
+        {
+          "id": "resource",
+          "label": "ResourceService\n解析并导入资源",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8",
+            "S9"
+          ],
+          "note": "导入产物可能转换/切分；不是所有 L2 都是上传原始字节。"
+        },
+        {
+          "id": "session",
+          "label": "Session.commit_async\n归档与保留 live tail",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ],
+          "note": ""
+        },
+        {
+          "id": "queue",
+          "label": "QueueFS / workers\n持久化异步任务",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S18"
+          ],
+          "note": "接收成功不等于语义/向量完成；streaming batcher 本身为 process-local。"
+        },
+        {
+          "id": "extract",
+          "label": "ExtractLoop + updater\n提取、合并与应用",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S19",
+            "S20",
+            "S21",
+            "S22"
+          ],
+          "note": "先模型提议，再 isolation/schema merge 写入；可选 agent evolution 分支未深查。"
+        },
+        {
+          "id": "semantic",
+          "label": "SemanticProcessor\n生成目录语义",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11",
+            "S12"
+          ],
+          "note": ""
+        },
+        {
+          "id": "files",
+          "label": "VikingFS / RAGFS\n资源与 memory 文件",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S8",
+            "S23"
+          ],
+          "note": "当前内容权威：account 路径下资源/记忆文件；记忆本身已是模型变换结果。"
+        },
+        {
+          "id": "summary",
+          "label": ".abstract / .overview\nL0 / L1 派生摘要",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ],
+          "note": "生成内容与 freshness metadata；宽目录可采样、延迟刷新。"
+        },
+        {
+          "id": "vector",
+          "label": "VikingDBManager\n向量与检索 metadata",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S13",
+            "S15"
+          ],
+          "note": "与文件分离的派生检索状态，可能等待异步更新。"
+        },
+        {
+          "id": "retrieve",
+          "label": "find / search\n范围检索与目录展开",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S26",
+            "S27",
+            "S28"
+          ],
+          "note": "find 固定 QUICK；search 无 reranker 默认 QUICK，不能一概画成递归。"
+        },
+        {
+          "id": "assemble",
+          "label": "assemble_context\n配额、读取与 token 预算",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ],
+          "note": "按需读取、可选 rewrite、best-effort cross-turn dedup ledger。"
+        },
+        {
+          "id": "vlm",
+          "label": "VLM / rerank\n提取、摘要与重排",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S19",
+            "S27"
+          ],
+          "note": "配置决定服务和数据出站；未验证 provider 行为。"
+        },
+        {
+          "id": "embed",
+          "label": "Embedding model\nquery / content 向量",
+          "kind": "model",
+          "region": "models",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S27"
+          ],
+          "note": ""
+        },
+        {
+          "id": "schedulers",
+          "label": "Watch / AutoCommit\n资源刷新与 idle 提交",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S31",
+            "S32"
+          ],
+          "note": "分别由配置启用；不是通用遗忘/衰减 daemon。"
+        },
+        {
+          "id": "context",
+          "label": "AssembleResult\nentries / rendered / digest",
+          "kind": "output",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ],
+          "note": "返回给调用方不证明实际注入、使用或回答正确。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "caller",
+          "to": "api",
+          "label": "资源、消息、查询与读写请求",
+          "status": "observed",
+          "evidence": [
+            "S3"
+          ]
+        },
+        {
+          "from": "api",
+          "to": "resource",
+          "label": "add_resource",
+          "status": "observed",
+          "evidence": [
+            "S7"
+          ]
+        },
+        {
+          "from": "api",
+          "to": "session",
+          "label": "commit + retention policy",
+          "status": "observed",
+          "evidence": [
+            "S16"
+          ]
+        },
+        {
+          "from": "resource",
+          "to": "files",
+          "label": "解析树持久化",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "resource",
+          "to": "queue",
+          "label": "post-process job",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "session",
+          "to": "queue",
+          "label": "archive job / task_id",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ]
+        },
+        {
+          "from": "queue",
+          "to": "extract",
+          "label": "恢复并提取 Phase 2",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "files",
+          "label": "schema merge / upsert / delete",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S23"
+          ]
+        },
+        {
+          "from": "queue",
+          "to": "semantic",
+          "label": "SemanticMsg",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "files",
+          "to": "semantic",
+          "label": "文件与子目录摘要材料",
+          "status": "observed",
+          "evidence": [
+            "S12"
+          ]
+        },
+        {
+          "from": "semantic",
+          "to": "summary",
+          "label": "生成 L0/L1 与 freshness",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ]
+        },
+        {
+          "from": "semantic",
+          "to": "queue",
+          "label": "embedding jobs",
+          "status": "observed",
+          "evidence": [
+            "S13"
+          ]
+        },
+        {
+          "from": "queue",
+          "to": "embed",
+          "label": "内容 embedding",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ]
+        },
+        {
+          "from": "embed",
+          "to": "vector",
+          "label": "向量 + metadata upsert",
+          "status": "observed",
+          "evidence": [
+            "S15"
+          ]
+        },
+        {
+          "from": "api",
+          "to": "retrieve",
+          "label": "query + 范围",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S26"
+          ]
+        },
+        {
+          "from": "retrieve",
+          "to": "vector",
+          "label": "tenant / path scope 查询",
+          "status": "observed",
+          "evidence": [
+            "S27",
+            "S28"
+          ]
+        },
+        {
+          "from": "retrieve",
+          "to": "assemble",
+          "label": "候选集合供预算选择",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "from": "assemble",
+          "to": "files",
+          "label": "仅按 tier 读取所需 body",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ]
+        },
+        {
+          "from": "assemble",
+          "to": "context",
+          "label": "entries / rendered / digest",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "from": "context",
+          "to": "caller",
+          "label": "可供 agent 使用的内容",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "vlm",
+          "label": "带 schema 的提取请求",
+          "status": "observed",
+          "evidence": [
+            "S19",
+            "S20"
+          ]
+        },
+        {
+          "from": "semantic",
+          "to": "vlm",
+          "label": "overview 生成请求",
+          "status": "observed",
+          "evidence": [
+            "S12"
+          ]
+        },
+        {
+          "from": "schedulers",
+          "to": "resource",
+          "label": "到期 watch refresh",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "schedulers",
+          "to": "session",
+          "label": "idle 条件提交",
+          "status": "observed",
+          "evidence": [
+            "S32"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "VikingFS/RAGFS account 路径",
+          "writers": "ResourceProcessor、MemoryUpdater、FS API",
+          "changes": "维护当前资源与 schema-based memory；summary/index 分步更新",
+          "limits": "memory Markdown 是推导内容，不等于原始会话；文件存在不代表检索就绪",
+          "evidence": [
+            "S4",
+            "S8",
+            "S22",
+            "S23"
+          ]
+        },
+        {
+          "owner": "scope / RequestContext",
+          "writers": "认证入口及 service 内部调度",
+          "changes": "account 路径隔离、user/actor-peer retrieval 与 write scope",
+          "limits": "图展示静态规则，不是 tenant 隔离测试或第三方 consent 证明",
+          "evidence": [
+            "S5",
+            "S6",
+            "S24"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "写入、保留、检索与使用",
+      "question": "一次写入何时可被检索并进入上下文？",
+      "reading_guide": "上路资源解析后异步生成摘要/索引；下路 commit 先存 archive 再提取记忆。检索经显式 scope 与预算返回 context。",
+      "omissions": [
+        "为可读性将模型调用折叠进 processor；独立模型边界见 overview。",
+        "已有 tests 仅阅读，未实测并发重启、延迟或 provider failures。"
+      ],
+      "regions": [
+        {
+          "id": "native",
+          "label": "OpenViking service",
+          "responsibility": "Python service、VikingFS API 与队列调度",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "id": "durable",
+          "label": "持久状态与索引",
+          "responsibility": "VikingFS/RAGFS 文件，QueueFS 和 vector store；配置后端",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S17"
+          ]
+        },
+        {
+          "id": "caller",
+          "label": "调用方与上下文使用",
+          "responsibility": "服务返回上下文；最终 agent 行为由调用方拥有",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S29"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "resource",
+          "label": "ResourceService\n解析并导入资源",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8",
+            "S9"
+          ],
+          "note": "导入产物可能转换/切分；不是所有 L2 都是上传原始字节。"
+        },
+        {
+          "id": "files",
+          "label": "VikingFS / RAGFS\n资源与 memory 文件",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S8",
+            "S23"
+          ],
+          "note": "当前内容权威：account 路径下资源/记忆文件；记忆本身已是模型变换结果。"
+        },
+        {
+          "id": "semantic",
+          "label": "SemanticProcessor\n生成目录语义",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11",
+            "S12"
+          ],
+          "note": ""
+        },
+        {
+          "id": "summary",
+          "label": ".abstract / .overview\nL0 / L1 派生摘要",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ],
+          "note": "生成内容与 freshness metadata；宽目录可采样、延迟刷新。"
+        },
+        {
+          "id": "vector",
+          "label": "VikingDBManager\n向量与检索 metadata",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S13",
+            "S15"
+          ],
+          "note": "与文件分离的派生检索状态，可能等待异步更新。"
+        },
+        {
+          "id": "session",
+          "label": "Session.commit_async\n归档与保留 live tail",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ],
+          "note": ""
+        },
+        {
+          "id": "archive",
+          "label": "messages.jsonl + meta\n会话历史与完成标记",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17",
+            "S18"
+          ],
+          "note": "archive 原始消息、live tail、working-memory summary 与提取记忆不是同一权威。"
+        },
+        {
+          "id": "queue",
+          "label": "QueueFS / workers\n持久化异步任务",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S18"
+          ],
+          "note": "接收成功不等于语义/向量完成；streaming batcher 本身为 process-local。"
+        },
+        {
+          "id": "extract",
+          "label": "ExtractLoop + updater\n提取、合并与应用",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S19",
+            "S20",
+            "S21",
+            "S22"
+          ],
+          "note": "先模型提议，再 isolation/schema merge 写入；可选 agent evolution 分支未深查。"
+        },
+        {
+          "id": "schedulers",
+          "label": "Watch / AutoCommit\n资源刷新与 idle 提交",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S31",
+            "S32"
+          ],
+          "note": "分别由配置启用；不是通用遗忘/衰减 daemon。"
+        },
+        {
+          "id": "query",
+          "label": "query + session\n显式目录与 peer scope",
+          "kind": "entry",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S25",
+            "S26"
+          ],
+          "note": ""
+        },
+        {
+          "id": "retrieve",
+          "label": "find / search\n范围检索与目录展开",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S26",
+            "S27",
+            "S28"
+          ],
+          "note": "find 固定 QUICK；search 无 reranker 默认 QUICK，不能一概画成递归。"
+        },
+        {
+          "id": "assemble",
+          "label": "assemble_context\n配额、读取与 token 预算",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ],
+          "note": "按需读取、可选 rewrite、best-effort cross-turn dedup ledger。"
+        },
+        {
+          "id": "context",
+          "label": "AssembleResult\nentries / rendered / digest",
+          "kind": "output",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ],
+          "note": "返回给调用方不证明实际注入、使用或回答正确。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "resource",
+          "to": "files",
+          "label": "解析/结构化后保存 L2",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "resource",
+          "to": "queue",
+          "label": "后处理任务",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "queue",
+          "to": "semantic",
+          "label": "消费语义任务",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "files",
+          "to": "semantic",
+          "label": "文件 summaries + child abstracts",
+          "status": "observed",
+          "evidence": [
+            "S12"
+          ]
+        },
+        {
+          "from": "semantic",
+          "to": "summary",
+          "label": "写入 L0/L1",
+          "status": "observed",
+          "evidence": [
+            "S11"
+          ]
+        },
+        {
+          "from": "semantic",
+          "to": "vector",
+          "label": "经 embedding queue 建索引",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S14",
+            "S15"
+          ]
+        },
+        {
+          "from": "session",
+          "to": "archive",
+          "label": "锁内保存 raw + phase1 intent",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ]
+        },
+        {
+          "from": "session",
+          "to": "queue",
+          "label": "入队后发布 retained root",
+          "status": "observed",
+          "evidence": [
+            "S17"
+          ]
+        },
+        {
+          "from": "queue",
+          "to": "extract",
+          "label": "Phase 2 读 archive / 恢复",
+          "status": "observed",
+          "evidence": [
+            "S18",
+            "S19"
+          ]
+        },
+        {
+          "from": "archive",
+          "to": "extract",
+          "label": "消息与已有 overview",
+          "status": "observed",
+          "evidence": [
+            "S19"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "files",
+          "label": "count/time merge → memory writes",
+          "status": "observed",
+          "evidence": [
+            "S19",
+            "S21",
+            "S22"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "summary",
+          "label": "刷新 memory overview",
+          "status": "observed",
+          "evidence": [
+            "S22"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "vector",
+          "label": "memory embedding 任务",
+          "status": "observed",
+          "evidence": [
+            "S22"
+          ]
+        },
+        {
+          "from": "schedulers",
+          "to": "session",
+          "label": "idle auto commit",
+          "status": "observed",
+          "evidence": [
+            "S32"
+          ]
+        },
+        {
+          "from": "schedulers",
+          "to": "resource",
+          "label": "周期 refresh_resource",
+          "status": "observed",
+          "evidence": [
+            "S31"
+          ]
+        },
+        {
+          "from": "query",
+          "to": "retrieve",
+          "label": "raw query 或 intent queries",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S26"
+          ]
+        },
+        {
+          "from": "retrieve",
+          "to": "vector",
+          "label": "QUICK 或 THINKING 范围查询",
+          "status": "observed",
+          "evidence": [
+            "S27",
+            "S28"
+          ]
+        },
+        {
+          "from": "retrieve",
+          "to": "assemble",
+          "label": "类别候选 / scores",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "from": "files",
+          "to": "assemble",
+          "label": "有需要的 overview/full 内容",
+          "status": "observed",
+          "evidence": [
+            "S29",
+            "S30"
+          ]
+        },
+        {
+          "from": "assemble",
+          "to": "context",
+          "label": "token budget 内 render / digest",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "from": "context",
+          "to": "assemble",
+          "label": "served URIs 记入 dedup ledger",
+          "status": "observed",
+          "evidence": [
+            "S29"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "Session archive / live root",
+          "writers": "Session.commit_async 与 QueueFS Phase 2",
+          "changes": "保存 recoverable intent/raw，入队，再发布 retained state；phase2 提取",
+          "limits": "task_id 是跟踪句柄，不是已经完成的 memory；streaming batcher 不等同持久队列",
+          "evidence": [
+            "S16",
+            "S17",
+            "S18",
+            "S21"
+          ]
+        },
+        {
+          "owner": "ContextAssembler ledger",
+          "writers": "assemble_context",
+          "changes": "按 served URI 记录跨 turn 冷却，rewrite no_relevant 不冷却未提供内容",
+          "limits": "ledger best-effort；context 返回不证明调用方真正使用",
+          "evidence": [
+            "S29"
+          ]
+        },
+        {
+          "owner": "Retrieval path",
+          "writers": "find/search 与配置",
+          "changes": "find QUICK；search 条件 intent，reranker 可触发 THINKING 目录展开",
+          "limits": "目录结构可改善 scope，但 summary 选择、阈值/收敛也可能漏召回",
+          "evidence": [
+            "S25",
+            "S26",
+            "S27",
+            "S28"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revision",
+      "title": "修订、删除、保留与派生状态",
+      "question": "当前文件改变后，摘要、索引和历史如何跟随？",
+      "reading_guide": "主线从显式编辑或 memory merge 到当前文件，再经 freshness/queue 更新派生状态。删除与 restore 有独立异步阶段。",
+      "omissions": [
+        "未验证底层快照对象垃圾回收、备份擦除、日志/provider 数据删除。",
+        "未发现足够证据将 hotness 排序描述为自动遗忘删除；不作全仓 absence claim。"
+      ],
+      "regions": [
+        {
+          "id": "native",
+          "label": "OpenViking service",
+          "responsibility": "Python service、VikingFS API 与队列调度",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "id": "durable",
+          "label": "持久状态与索引",
+          "responsibility": "VikingFS/RAGFS 文件，QueueFS 和 vector store；配置后端",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S17"
+          ]
+        },
+        {
+          "id": "caller",
+          "label": "调用方与上下文使用",
+          "responsibility": "服务返回上下文；最终 agent 行为由调用方拥有",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S29"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "edit",
+          "label": "修订 / 删除 / restore\n显式 API 请求",
+          "kind": "entry",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S33",
+            "S35",
+            "S38"
+          ],
+          "note": ""
+        },
+        {
+          "id": "write",
+          "label": "ContentWriteCoordinator\n写入后刷新派生数据",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S35"
+          ],
+          "note": ""
+        },
+        {
+          "id": "files",
+          "label": "VikingFS / RAGFS\n资源与 memory 文件",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S8",
+            "S23"
+          ],
+          "note": "当前内容权威：account 路径下资源/记忆文件；记忆本身已是模型变换结果。"
+        },
+        {
+          "id": "summary",
+          "label": ".abstract / .overview\nL0 / L1 派生摘要",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S11",
+            "S12"
+          ],
+          "note": "生成内容与 freshness metadata；宽目录可采样、延迟刷新。"
+        },
+        {
+          "id": "vector",
+          "label": "VikingDBManager\n向量与检索 metadata",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S13",
+            "S15"
+          ],
+          "note": "与文件分离的派生检索状态，可能等待异步更新。"
+        },
+        {
+          "id": "extract",
+          "label": "ExtractLoop + updater\n提取、合并与应用",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S19",
+            "S20",
+            "S21",
+            "S22"
+          ],
+          "note": "先模型提议，再 isolation/schema merge 写入；可选 agent evolution 分支未深查。"
+        },
+        {
+          "id": "archive",
+          "label": "messages.jsonl + meta\n会话历史与完成标记",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17",
+            "S18"
+          ],
+          "note": "archive 原始消息、live tail、working-memory summary 与提取记忆不是同一权威。"
+        },
+        {
+          "id": "rm",
+          "label": "VikingFS.rm\n锁内先索引后文件",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S34"
+          ],
+          "note": "文件与向量删除不是一个跨存储原子事务；失败后状态需重新检查。"
+        },
+        {
+          "id": "freshness",
+          "label": "FreshnessAction\n刷新或累计 pending",
+          "kind": "decision",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S36"
+          ],
+          "note": ""
+        },
+        {
+          "id": "resource_links",
+          "label": "ResourceMemoryLinkService\n更新与清除资源引用",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S33",
+            "S37"
+          ],
+          "note": "由高层 FSService 调用；低层 rm 不自动完成全部语义引用清理。"
+        },
+        {
+          "id": "restore",
+          "label": "snapshot restore\n恢复已选文件版本",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S38",
+            "S39"
+          ],
+          "note": ""
+        },
+        {
+          "id": "reindex",
+          "label": "ReindexExecutor\n按 URI / level 更新",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S39"
+          ],
+          "note": "子路径异常会被捕获；tracked completed 不能单独证明所有向量成功。"
+        },
+        {
+          "id": "receipt",
+          "label": "task / semantic status\n回执需按阶段解释",
+          "kind": "output",
+          "region": "caller",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S33",
+            "S39"
+          ],
+          "note": ""
+        },
+        {
+          "id": "queue",
+          "label": "QueueFS / workers\n持久化异步任务",
+          "kind": "store",
+          "region": "durable",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S2",
+            "S18"
+          ],
+          "note": "接收成功不等于语义/向量完成；streaming batcher 本身为 process-local。"
+        },
+        {
+          "id": "session",
+          "label": "Session.commit_async\n归档与保留 live tail",
+          "kind": "process",
+          "region": "native",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S17"
+          ],
+          "note": ""
+        }
+      ],
+      "edges": [
+        {
+          "from": "edit",
+          "to": "write",
+          "label": "create / replace / append",
+          "status": "observed",
+          "evidence": [
+            "S35"
+          ]
+        },
+        {
+          "from": "write",
+          "to": "files",
+          "label": "受权限与路径锁约束写入",
+          "status": "observed",
+          "evidence": [
+            "S35",
+            "S5"
+          ]
+        },
+        {
+          "from": "write",
+          "to": "freshness",
+          "label": "变更触发后处理策略",
+          "status": "observed",
+          "evidence": [
+            "S35",
+            "S36"
+          ]
+        },
+        {
+          "from": "freshness",
+          "to": "queue",
+          "label": "REFRESH_NOW；否则 pending",
+          "status": "observed",
+          "evidence": [
+            "S36",
+            "S10"
+          ]
+        },
+        {
+          "from": "queue",
+          "to": "summary",
+          "label": "消费后重生成摘要",
+          "status": "observed",
+          "evidence": [
+            "S10",
+            "S11"
+          ]
+        },
+        {
+          "from": "queue",
+          "to": "vector",
+          "label": "异步 embedding / upsert",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S15"
+          ]
+        },
+        {
+          "from": "archive",
+          "to": "extract",
+          "label": "提取输入与过去 overview",
+          "status": "observed",
+          "evidence": [
+            "S19"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "files",
+          "label": "merge_op、version、来源和 links",
+          "status": "observed",
+          "evidence": [
+            "S22",
+            "S23"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "vector",
+          "label": "更新已写记忆索引",
+          "status": "observed",
+          "evidence": [
+            "S22"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "summary",
+          "label": "受影响 memory directories",
+          "status": "observed",
+          "evidence": [
+            "S22"
+          ]
+        },
+        {
+          "from": "edit",
+          "to": "rm",
+          "label": "DELETE 请求",
+          "status": "observed",
+          "evidence": [
+            "S33"
+          ]
+        },
+        {
+          "from": "rm",
+          "to": "vector",
+          "label": "先清理目标及子树索引",
+          "status": "observed",
+          "evidence": [
+            "S34"
+          ]
+        },
+        {
+          "from": "rm",
+          "to": "files",
+          "label": "再删除文件/目录",
+          "status": "observed",
+          "evidence": [
+            "S34"
+          ]
+        },
+        {
+          "from": "rm",
+          "to": "resource_links",
+          "label": "高层随后清理相关 memory refs",
+          "status": "observed",
+          "evidence": [
+            "S33",
+            "S37"
+          ]
+        },
+        {
+          "from": "resource_links",
+          "to": "files",
+          "label": "重新提交 / literal unlink",
+          "status": "observed",
+          "evidence": [
+            "S37"
+          ]
+        },
+        {
+          "from": "rm",
+          "to": "freshness",
+          "label": "刷新现存父目录",
+          "status": "observed",
+          "evidence": [
+            "S33"
+          ]
+        },
+        {
+          "from": "edit",
+          "to": "restore",
+          "label": "选定 snapshot / 路径",
+          "status": "observed",
+          "evidence": [
+            "S38"
+          ]
+        },
+        {
+          "from": "restore",
+          "to": "files",
+          "label": "应用文件恢复",
+          "status": "observed",
+          "evidence": [
+            "S38"
+          ]
+        },
+        {
+          "from": "restore",
+          "to": "reindex",
+          "label": "后台逐路径索引维护",
+          "status": "observed",
+          "evidence": [
+            "S38",
+            "S39"
+          ]
+        },
+        {
+          "from": "reindex",
+          "to": "vector",
+          "label": "reindex marker/file 或 delete",
+          "status": "observed",
+          "evidence": [
+            "S39"
+          ]
+        },
+        {
+          "from": "reindex",
+          "to": "receipt",
+          "label": "completed 可掩盖子项日志错误",
+          "status": "observed",
+          "evidence": [
+            "S39"
+          ]
+        },
+        {
+          "from": "write",
+          "to": "receipt",
+          "label": "内容与派生处理状态分离",
+          "status": "observed",
+          "evidence": [
+            "S35"
+          ]
+        },
+        {
+          "from": "session",
+          "to": "archive",
+          "label": "转移历史；保留 live tail",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S40"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "当前 memory 文件",
+          "writers": "MemoryUpdater / ContentWriteCoordinator",
+          "changes": "schema merge_op、递增 version、来源 metadata 与 link 迁移",
+          "limits": "来源标记不保证语义正确；同意/关系共同解释不由 merge_op 自动建立",
+          "evidence": [
+            "S22",
+            "S23"
+          ]
+        },
+        {
+          "owner": "父目录摘要与 vector records",
+          "writers": "SemanticProcessor / embedding worker / FSService",
+          "changes": "NOOP、pending 或立即入队；低层 rm 先索引后文件",
+          "limits": "高层关联清理发生在 rm 后；跨状态失败可留下部分更新",
+          "evidence": [
+            "S33",
+            "S34",
+            "S36",
+            "S37"
+          ]
+        },
+        {
+          "owner": "Snapshot restore 的回执",
+          "writers": "_run_restore_rebuild_tracked",
+          "changes": "await 子任务后 tracker.complete；子任务自身捕获异常写日志",
+          "limits": "不能沿用 docstring 的“completed 保证所有索引成功”表述；需核对实际检索/日志",
+          "evidence": [
+            "S38",
+            "S39"
+          ]
+        },
+        {
+          "owner": "Archive 与 live message retention",
+          "writers": "Session retention planner",
+          "changes": "按 turns / token budget 决定 live tail 和 archive",
+          "limits": "retention 是活跃 context 管理；不是过期数据擦除，hotness 只是排序",
+          "evidence": [
+            "S40",
+            "S41"
+          ]
+        }
+      ]
+    }
+  ]
+}

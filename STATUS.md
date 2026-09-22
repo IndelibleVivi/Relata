@@ -26,7 +26,8 @@ Current working authority consists of `CHARTER.md`, `RESEARCH_QUESTIONS.md`, `AS
 |---|---|---|
 | Evidence Cards | 2 accepted | EC-001 public-boundary/causal-limit findings and EC-002 observation/scorer-binding limits/released-corpus no-impact finding, only within their own authorizations |
 | Agent-memory inquiry / article direction | open research questions, AMS links and initial synthesis | no accepted definition, exhaustive survey or article manuscript |
-| Open-source architecture studies | 5 bounded drafts: Mem0, Letta, Graphiti, lmc-5, Tideline Memory | pinned source observations; lmc-5 and Graphiti additionally have isolated offline diagnostics; no independent human review, accepted System Card or model-backed comparative result |
+| Open-source architecture studies | 10 bounded drafts: Mem0, Letta, Graphiti, lmc-5, Tideline Memory, Aelios, Hindsight, OpenViking, LangMem, A-MEM | pinned source observations; lmc-5 and Graphiti additionally have isolated offline diagnostics; no independent human review, accepted System Card or model-backed comparative result |
+| [Architecture atlas](systems/architecture-atlas/README.md) | 10 models, 30 SVG/Mermaid views and an offline interactive reader | source-grounded diagrams; no new upstream execution or capability measurement |
 | Claim boundaries | bilingual candidate study | CL0–CL6, lanes, cells and adapter classes remain proposals; no accepted result unit or publication policy |
 | System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards or maps |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
@@ -46,7 +47,7 @@ Define and critically examine agent memory across concepts, open-source architec
 
 ## Immediate work
 
-Develop the [agent-memory inquiry](research/agent-memory-inquiry.md) from the [five source-study drafts](systems/source-studies/README.md): review source fidelity, test competing interpretations and narrow the standalone article's argument. Selected public AMS work can inform questions with its original evidence limits. This research proceeds independently of live evaluation and the case promotion gate.
+Develop the [agent-memory inquiry](research/agent-memory-inquiry.md) from the [ten source-study drafts](systems/source-studies/README.md): review source fidelity, test competing interpretations and narrow the standalone article's argument. Selected public AMS work can inform questions with its original evidence limits. This research proceeds independently of live evaluation and the case promotion gate.
 
 Use the [offline rehearsal](experiments/offline-rehearsal.md) now; it does not wait for submitted scores. Source-audited System Cards, community review and additional case work can proceed in parallel. The script is not permission to call model providers.
 

@@ -1,0 +1,68 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_harness["调用方与部署接线"]
+    runtime["Agent runtime<br/>调用、使用返回上下文<br/>〔未知〕"]:::external
+    class runtime unknown
+    loader["Chunk loader<br/>由部署方组织来源<br/>〔未知〕"]:::external
+    class loader unknown
+    callbacks["Injected callbacks<br/>持久化与接线责任<br/>〔推断〕"]:::external
+    class callbacks inferred
+    context["返回 context<br/>调用方决定如何使用"]:::output
+  end
+  subgraph region_minimal["Minimal · SQLite core"]
+    min_raw[("events + events_fts<br/>角色、channel、原始事件")]:::store
+    min_consolidate["consolidate_events()<br/>窗口与来源绑定"]:::process
+    min_chunks[("event_chunks<br/>chunk_events 来源关联")]:::store
+    min_hippo["run_hippocampus()<br/>原子候选与安全关系"]:::process
+    min_curated[("memories<br/>X / Z / E / M 字段")]:::store
+    min_read["recall_hits()<br/>词法、entity、graph、M"]:::process
+    min_surface["surface()<br/>curated 严格 gate + raw"]:::process
+    current_state[("current_state_items<br/>显式刷新、TTL 投影")]:::store
+  end
+  subgraph region_production["Production reference · PostgreSQL"]
+    hooks["Claude Code hooks<br/>SessionEnd / Start / Prompt"]:::process
+    pg_raw[("lmc5_raw_events<br/>session / role / FTS")]:::store
+    nightdream["NightDream<br/>propose → gate → write"]:::process
+    pg_curated[("lmc5_curated_memories<br/>XYZEM 主记录")]:::store
+    pg_vectors[("lmc5_vectors<br/>halfvec + text_preview")]:::store
+    pipeline["RecallPipeline<br/>分层召回、去重、注入"]:::process
+    runner["DreamRunner<br/>顺序调度 callbacks"]:::process
+  end
+  runtime -->|"log_event 留原始角色/内容"| min_raw
+  min_raw -->|"未整理 events"| min_consolidate
+  min_consolidate -->|"摘要与 chunk_events 绑定"| min_chunks
+  min_consolidate -->|"默认另写 review observation"| min_curated
+  min_chunks -->|"关联 event → attributed atoms"| min_hippo
+  min_hippo -->|"apply 写 review 候选"| min_curated
+  min_curated -->|"仅 live 进入候选 + M gate"| min_read
+  min_read -->|"recall 结果；默认不 redact"| context
+  min_surface -->|"gate_mode=surface"| min_read
+  min_read -->|"经严格 gate 的 curated hits"| min_surface
+  min_raw -->|"独立 search_events 支路"| min_surface
+  current_state -->|"TTL 内的物化 pack"| min_surface
+  min_surface -->|"state + memories + events；redact"| context
+  runtime -->|"session 或每轮 prompt"| hooks
+  hooks -->|"结束时归档 raw"| pg_raw
+  pg_raw -.->|"部署方读取并构建 chunks"| loader
+  loader -->|"传入 Chunk 列表"| nightdream
+  runner -.->|"配置后的 hippocampus callback"| nightdream
+  nightdream -->|"apply：candidate → durable ID"| callbacks
+  callbacks -.->|"按部署策略持久化"| pg_curated
+  pg_curated -->|"current FTS 等适配器候选"| pipeline
+  pg_vectors -->|"向量主路；独立存储状态"| pipeline
+  pg_raw -->|"低 vector 分 FTS / literal"| pipeline
+  hooks -->|"每轮 query + session_id"| pipeline
+  pipeline -->|"融合、去重、可选 rerank 后注入"| context
+  context -.->|"交给宿主使用；实际行为未验证"| runtime
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

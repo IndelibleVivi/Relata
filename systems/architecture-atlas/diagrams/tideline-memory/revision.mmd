@@ -1,0 +1,60 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_mutation["MCP 与回调入口"]
+    memory_amend["memory_amend<br/>先提交修订"]:::entry
+    identity_update["profile / self 更新<br/>拒空、归档、UPSERT"]:::process
+    memory_mirror["on_memory_write(remove)<br/>追加删除动作镜像"]:::entry
+  end
+  subgraph region_storage["SQLite 主表与历史"]
+    narratives[("narratives<br/>原叙事语义保留")]:::store
+    amendments[("amendments<br/>修订按时间追加")]:::store
+    amendment_vectors[("amendment_vectors<br/>当前 namespace 检索")]:::store
+    trajectories[("trajectories<br/>新修订使 llm → mech")]:::store
+    identity_state[("profiles / self_concept<br/>snapshot / threads")]:::store
+    profile_history[("*_history<br/>每键最多 30 旧版")]:::store
+    attention[("attention_log / stats<br/>检索命中反馈")]:::store
+    context[("context<br/>保留片段与 remove 记录")]:::store
+  end
+  subgraph region_maintenance["维护合同与派生计算"]
+    dream_prompts["DREAM prompts<br/>观察 / 画像 / 轨迹重讲"]:::process
+    maintenance_scripts["维护脚本<br/>频次 / 聚类 / 图 / 冲突"]:::process
+  end
+  subgraph region_consumption["消费与保留边界"]
+    explicit_search["memory_search / recall<br/>本体与修订一起显示"]:::process
+    auto_recall["prefetch：T1 → T4<br/>选择依据仍为原文"]:::process
+    deletion_boundary{"全库语义遗忘<br/>未见原生传播合同<br/>〔推断〕"}:::decision
+    class deletion_boundary inferred
+  end
+  narratives -->|"核验 narrative ID 存在"| memory_amend
+  memory_amend -->|"INSERT 后先 commit"| amendments
+  memory_amend -->|"随后尽力补铸向量"| amendment_vectors
+  memory_amend -->|"随后重建 mech 轨迹"| trajectories
+  amendments -->|"保留时序并裁到12段"| trajectories
+  trajectories -.->|"list 提供轨迹+生效态"| dream_prompts
+  dream_prompts -.->|"模型发 promote write"| trajectories
+  dream_prompts -.->|"模型决定覆盖内容"| identity_update
+  identity_update -->|"UPSERT 最新画像/自我概念"| identity_state
+  identity_update -->|"覆盖前存旧值并限30版"| profile_history
+  narratives -->|"原字段 / tag / 原向量"| maintenance_scripts
+  maintenance_scripts -->|"刷新 recurrence / weight"| narratives
+  maintenance_scripts -->|"缺向量时批量补铸"| amendment_vectors
+  amendments -->|"FTS/LIKE 命中与完整修订显示"| explicit_search
+  amendment_vectors -->|"按 namespace 匹配回母条目"| explicit_search
+  narratives -->|"原向量 / 原文 FTS 选候选"| auto_recall
+  trajectories -->|"T1 命中后附最多6段"| auto_recall
+  auto_recall -->|"记录 T1 检索命中"| attention
+  attention -.->|"heatmap 供模型观察"| dream_prompts
+  memory_mirror -->|"remove 也变为新 context 行"| context
+  context -.->|"持久镜像无全库删除回执"| deletion_boundary
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

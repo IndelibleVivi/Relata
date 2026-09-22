@@ -4,7 +4,7 @@ Relata research connects conceptual questions, architecture judgments, synthesis
 
 ## Open comparative inquiry
 
-The [agent-memory inquiry](agent-memory-inquiry.md) asks what open-source memory projects implement, what their choices enable or constrain, and how conclusions transfer inside and outside adult human–AI intimacy. It connects a standalone article direction, selected public AMS research and [five bounded source studies](../systems/source-studies/README.md), including two isolated offline diagnostics. Definitions and comparative outcomes remain open; no accepted Evidence Card or complete system result is added.
+The [agent-memory inquiry](agent-memory-inquiry.md) asks what open-source memory projects implement, what their choices enable or constrain, and how conclusions transfer inside and outside adult human–AI intimacy. It connects a standalone article direction, selected public AMS research and [ten bounded source studies](../systems/source-studies/README.md), including two isolated offline diagnostics. A [thirty-view architecture atlas](../systems/architecture-atlas/README.md) connects system boundaries, write-to-use paths and revision/control to pinned source evidence. Definitions and comparative outcomes remain open; no accepted Evidence Card or complete system result is added.
 
 ## Current evidence spine
 

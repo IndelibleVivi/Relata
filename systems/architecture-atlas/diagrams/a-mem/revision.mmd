@@ -1,0 +1,51 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_harness["Evaluation harness"]
+  end
+  subgraph region_native["Robust memory layer"]
+    add["add_note<br/>同步写入入口"]:::process
+    evolve["process_memory<br/>决策与条件演化"]:::process
+    strengthen["STRENGTHEN<br/>新 note 链接与 tags"]:::process
+    update["UPDATE_NEIGHBOR<br/>改 context / tags"]:::process
+    notes[("memories<br/>UUID → MemoryNote")]:::store
+    history[("evolution_history 等<br/>构造字段未推进")]:::store
+    gate{"evo_cnt % threshold<br/>默认每 100 次演化"}:::decision
+    rebuild["consolidate_memories<br/>全量重建索引"]:::process
+    index[("SimpleEmbeddingRetriever<br/>corpus + embeddings")]:::store
+    policy["修正 / 删除 / TTL<br/>未实现专用路径<br/>〔推断〕"]:::output
+    class policy inferred
+  end
+  subgraph region_models["模型执行边界"]
+    controller["RobustLLMController<br/>同步模型调用"]:::process
+  end
+  subgraph region_disk["Harness 本地派生文件"]
+    cache[("三文件 cache<br/>notes / index / vectors")]:::store
+  end
+  add -->|"新 content 作为演化触发"| evolve
+  evolve -->|"邻居内容与 metadata 送模型"| controller
+  controller -->|"选 STRENGTHEN 的连接/tag 结果"| strengthen
+  controller -->|"选 UPDATE 的逐邻居结果"| update
+  strengthen -->|"新 note.links += int；改 tags"| notes
+  update -->|"旧 note.context/tags 原位覆盖"| notes
+  notes -.->|"字段仍保留初始化值"| history
+  evolve -->|"仅演化成功标记计数"| gate
+  gate -->|"达到 threshold 才全量重编"| rebuild
+  notes -->|"当前 content / metadata"| rebuild
+  rebuild -->|"新索引替换旧索引"| index
+  notes -->|"摄入结束 pickle notes"| cache
+  index -->|"分别 save index 与 npy"| cache
+  cache -->|"下次运行 restore notes"| notes
+  cache -->|"load 索引；缺 index 时从 notes 重建"| index
+  notes -.->|"未提供更正/删除/TTL 合约"| policy
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

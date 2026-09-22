@@ -24,21 +24,6 @@ A bounded source study of Mem0 Python OSS as an application-facing memory layer,
 
 ## 生命周期：材料怎样变成可用 memory
 
-```mermaid
-flowchart TD
-  A[应用提交 messages 与 scope] --> B[最近10条消息 + 相关10条 memory]
-  B --> C[LLM 单次抽取事实]
-  C --> D[Embedding / 去重 / 主索引]
-  D --> E[SQLite history 与消息缓冲]
-  D --> F[实体到 memory 的关联索引]
-  Q[应用查询与 scope] --> G[Semantic 候选池]
-  D --> G
-  F --> H[BM25 与 entity 加分]
-  G --> H
-  H --> I[结果条目 / metadata / score]
-  I --> J[应用组装上下文并决定行动]
-```
-
 **SOURCE-OBSERVED：写入与保留。** `add` 至少需要一个 `user_id/agent_id/run_id`；scope 身份来自显式参数，metadata 不能覆盖身份。默认 `infer=True` 先取该 scope 的最近10条消息，再以整段新消息 embedding 查相关10条 memory，交给 LLM 单次抽取。随后批量 embedding，按文本 hash 在本批与已检索条目内去重，创建 UUID、文本、时间和可选 `attributed_to`，写主索引、history 与实体索引。不是全库语义去重，也不是自动维持唯一“当前事实”。`infer=False` 可逐条保存非 system 消息及 role/name；procedural 分支则生成文本摘要再入库。[scope L360–404](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L360-L404)、[主路径 L879–1039](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L879-L1039)、[持久化 L1045–1206](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1045-L1206)、[procedural L1993–2035](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1993-L2035)
 
 **SOURCE-OBSERVED：检索与交接。** `search` 要求 scope filters，默认 top_k=20；先取 `max(4×top_k,60)` 个 semantic 候选，再计算 BM25 与 entity boost。最终候选只来自 semantic 结果，且 semantic threshold 先于融合分数生效：keyword/entity 命中不能救回池外条目。可选 reranker 和 `explain` 提供可观察调优空间；返回文本、ID、score、时间及 metadata，不生成最终回答，`chat` 尚未实现。INFERRED：这是一种低耦合检索服务边界，同时把 query 构造、上下文预算、冲突处理和行动判断交回调用者。[检索 L1628–1731](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1628-L1731)、[分数 L94–139](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/utils/scoring.py#L94-L139)、[chat L2168–2169](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L2168-L2169)
@@ -66,6 +51,18 @@ ADD-only 的长处是保留变化材料、减少自动覆写；代价可能是�
 1. **归属与修订 probe。** 使用两名虚构成年人的合成跨日对话：用户提出周五交稿，助手仅建议周四；后续用户明确改为周六，并澄清助手先前没有提交。保持 user/agent scope 不变，另设不同项目 scope 对照；询问谁提出、谁批准、当前/过去日期、是否实际提交。分别记录原始抽取、metadata、search 与最终答案，以 full-history/full-search 对照区分抽取丢失、检索遗漏和回答误判。
 2. **删除与派生 probe。** 合成“蓝色门牌”为事实 A，后续产生依赖 A 的计划 B。显式改 A，再删 A；观察主索引、history、近期消息与 entity links，并在新实例及原实例分别查询、继续录入无关短句。验证 B 是否被撤回、A 是否仍参与上下文；控制 `infer=False` 与正常抽取，并分别测试 expiration 与 delete。预期只作为待证假设，不把保留审计历史直接判成整体失败。
 
+## 三视图补读：入口、异步与剩余状态
+
+图集分别画出默认 `infer=True`、raw 和 procedural 路径；后两者绕过默认抽取的近期消息/批量实体接线路线，不能用一条默认流程概括所有入口。Async 对应路径使用 awaited `to_thread` 等并发调用，不构成持久后台队列。`reset` 与删除不同，会清理 SQLite history/消息状态；`get(id)` 也不自动套用 search/get_all 的过期过滤。可选 spaCy 装载/下载与配置控制的 telemetry 是额外边界，本研究没有完成网络或隐私全审计。精确源段与各状态归属见[可编辑模型及证据](../architecture-atlas/models/mem0.json)。这些增补仍为静态源码观察，未做全 API parity 或 runtime 验证。
+
 ## 覆盖与限制
 
-读到 Python 同步 `Memory` 的写入、scope、检索、更新、删除、history、procedural 关键路径，活跃 V3 prompt、SQLite schema/消息保留、scoring、消息解析、spaCy loader、配置和 hosted client 边界；检索了 async 对应关联字段，但没有做完整 parity 审计。未完整阅读所有 provider、server/auth、TypeScript、graph 历史路径、测试或 evaluation submodule，未核查 managed 内部实现。某次批量工具输出发生截断，本文实质引用的生命周期与 prompt 段落已分段重新读取。没有运行测试或效果实验；以上 SOURCE-OBSERVED 均为静态观察，性能、中文召回、事实忠实性、长期稳定性与端到端纠错效果均 UNVERIFIED。
+读到 Python 同步 `Memory` 的写入、scope、检索、更新、删除、history、procedural 关键路径，活跃 V3 prompt、SQLite schema/消息保留、scoring、消息解析、spaCy loader、配置和 hosted client 边界；首读检索了 async 对应关联字段；图集进一步读了异步增删、reset/get 及外部边界，仍没有做完整 parity 审计。未完整阅读所有 provider、server/auth、TypeScript、graph 历史路径、测试或 evaluation submodule，未核查 managed 内部实现。某次批量工具输出发生截断，本文实质引用的生命周期与 prompt 段落已分段重新读取。没有运行测试或效果实验；以上 SOURCE-OBSERVED 均为静态观察，性能、中文召回、事实忠实性、长期稳定性与端到端纠错效果均 UNVERIFIED。
+
+## 架构三视图
+
+[打开交互图集](../architecture-atlas/index.html#mem0/overview) · [总览 SVG](../architecture-atlas/diagrams/mem0/overview.svg) · [写入到使用 SVG](../architecture-atlas/diagrams/mem0/flow.svg) · [修订与控制 SVG](../architecture-atlas/diagrams/mem0/revision.svg) · [可编辑模型与源码证据](../architecture-atlas/models/mem0.json)
+
+![mem0 全景与边界](../architecture-atlas/diagrams/mem0/overview.svg)
+
+图中“已读”表示固定版本的静态源码观察；“推断”和“未知”分别保留条件与未检查边界。三幅图覆盖不同问题，不等于全仓审计。[图例与阅读方法](../architecture-atlas/README.md)。

@@ -1,0 +1,60 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_caller["调用应用与官方示例"]
+    caller["Application<br/>来源 / scope / 时间"]:::entry
+    projection["Context projection<br/>示例仅取 edge.fact"]:::process
+    feedback["asyncio.create_task<br/>示例回写人机对话"]:::process
+  end
+  subgraph region_core["Graphiti OSS 异步库"]
+    ingest["add_episode()<br/>异步写入编排"]:::process
+    mediation["抽取与解析<br/>实体 / 事实 / 派生摘要"]:::process
+    graph_driver["GraphDriver<br/>session / provider 路由"]:::process
+    search["search() / search_()<br/>边或多层对象"]:::process
+  end
+  subgraph region_models["可注入模型客户端"]
+    llm[["LLMClient<br/>抽取与语义判断"]]:::model
+    embedder[["EmbedderClient<br/>名称 / 事实 / query"]]:::model
+    reranker[["CrossEncoderClient<br/>可选候选重排"]]:::model
+    generation[["Agent LLM<br/>消费 system context"]]:::model
+  end
+  subgraph region_storage["调用方部署的图数据库"]
+    episodes[("EpisodicNode<br/>正文与来源记录")]:::store
+    entities[("EntityNode<br/>摘要 / 属性 / 向量")]:::store
+    facts[("EntityEdge<br/>事实 / 来源 / 双时间")]:::store
+    community[("CommunityNode<br/>可选聚合摘要")]:::store
+    indexes[("DB indexes<br/>range / fulltext")]:::store
+  end
+  caller -->|"正文、来源、group、reference_time"| ingest
+  ingest -->|"await 抽取、解析和派生更新"| mediation
+  mediation -->|"提示与结构化判断请求"| llm
+  llm -->|"实体、事实、矛盾索引、摘要"| mediation
+  mediation -->|"名称 / 事实 embedding"| embedder
+  mediation -->|"解析后 nodes、edges、episodes"| graph_driver
+  graph_driver -->|"保存 episode 与 MENTIONS"| episodes
+  graph_driver -->|"保存属性、摘要、名称向量"| entities
+  graph_driver -->|"保存事实、来源与时间窗"| facts
+  ingest -->|"可选：LLM 合并后保存"| community
+  graph_driver -->|"Neo4j 启动时安排构建 task"| indexes
+  caller -->|"query、group、recipe、filter"| search
+  episodes -->|"高级检索可返回 episode"| search
+  entities -->|"高级检索可返回实体"| search
+  facts -->|"BM25 / cosine / 可选 BFS"| search
+  community -->|"高级检索可返回 community"| search
+  search -->|"按 recipe 请求 query 向量"| embedder
+  search -->|"配置可选：候选事实重排"| reranker
+  search -->|"EntityEdge / SearchResults"| projection
+  projection -->|"示例 system message 事实串"| generation
+  generation -->|"示例回复与最后一条人类消息"| feedback
+  feedback -->|"示例 create_task(add_episode)"| ingest
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

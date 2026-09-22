@@ -1,0 +1,65 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+  subgraph region_app["调用方 / agent harness"]
+    input["messages + config<br/>调用方输入"]:::entry
+    agent["Agent harness<br/>工具调用与响应<br/>〔推断〕"]:::external
+    class agent inferred
+    context["Context assembly<br/>工具结果或 prompt<br/>〔推断〕"]:::process
+    class context inferred
+    response["Agent response<br/>在当前上下文生成<br/>〔推断〕"]:::output
+    class response inferred
+  end
+  subgraph region_lib["LangMem library"]
+    scope["NamespaceTemplate<br/>配置生成 tuple"]:::process
+    manage["manage_memory<br/>创建 / 覆盖 / 删除"]:::process
+    executor["ReflectionExecutor<br/>延迟与 pending 取消"]:::process
+    manager["MemoryStoreManager<br/>检索后整理并写回"]:::process
+    select["Candidate selection<br/>去重 / score / top-k"]:::process
+    extractor["MemoryManager<br/>生成对象变更"]:::process
+    phases["MemoryPhase[]<br/>可选逐阶段整理"]:::process
+    delta["final_puts / deletes<br/>映射回原 key"]:::process
+    search["search_memory<br/>query / filter / limit"]:::process
+  end
+  subgraph region_storage["外部 Store / runtime"]
+    runtime["LangGraph runtime<br/>checkpoint / remote runs"]:::external
+    store[("BaseStore<br/>namespace / key / value")]:::store
+  end
+  subgraph region_models["模型 / Trustcall 依赖"]
+    llm[["Chat model + Trustcall<br/>推断 / 结构化输出"]]:::model
+  end
+  input -->|"configurable scope values"| scope
+  input -.->|"新消息"| agent
+  agent -->|"同步工具决策"| manage
+  scope -->|"namespace tuple"| manage
+  manage -->|"直接 create/update/delete"| store
+  input -->|"显式提交本次 payload"| executor
+  executor -->|"同 thread 新 task 取消旧 pending"| executor
+  executor -->|"到期后本地 invoke"| manager
+  executor -->|"remote after_seconds / rollback"| runtime
+  input -->|"也可直接 await ainvoke"| manager
+  scope -->|"限定此次 namespace"| manager
+  manager -->|"最近窗口或 query_model queries"| select
+  select -->|"多 query 搜索"| store
+  store -->|"候选 item + scores"| select
+  select -->|"去重 top-k + 输入 messages"| extractor
+  extractor -->|"按 schema 推断对象变更"| llm
+  extractor -->|"可选 additional phase"| phases
+  extractor -->|"无 phase 时直接形成差异"| delta
+  phases -->|"顺序整理后的对象 / removals"| delta
+  delta -->|"await aput/adelete gather"| store
+  agent -->|"后续需要时发起 query"| search
+  search -->|"namespace + query/filter/limit"| store
+  search -->|"返回选中 item 的内容"| context
+  context -.->|"调用方交给 agent 生成回答"| response
+  classDef entry fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef process fill:#ffffff,stroke:#76828a,color:#20313a
+  classDef decision fill:#fff1d9,stroke:#b88733,color:#5d441a
+  classDef store fill:#e4efe9,stroke:#54836b,color:#204a36
+  classDef model fill:#eeeaf7,stroke:#8371aa,color:#453467
+  classDef output fill:#e8f0f3,stroke:#365665,color:#173644
+  classDef external fill:#f5f3ef,stroke:#8e897f,color:#49453e
+  classDef inferred stroke-dasharray:5 4
+  classDef unknown stroke-dasharray:2 4

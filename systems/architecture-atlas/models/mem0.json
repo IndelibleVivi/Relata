@@ -1,0 +1,1885 @@
+{
+  "id": "mem0",
+  "name": "Mem0",
+  "repository": "https://github.com/mem0ai/mem0",
+  "commit": "a39a802bbc93e85b820078cd3c4dbaf53af25dbe",
+  "study_date": "2026-09-22",
+  "boundary": "固定 commit 的 Python OSS Memory/AsyncMemory 默认 V3 extraction、raw/procedural、search、显式 revision 与 SQLite/entity 派生状态；hosted client 仅表示外部调用边界。排除 managed 内部、server/auth、TypeScript、全部 provider 和真实运行效果。",
+  "summary": "Mem0 Python OSS 以 ADD-only 对话事实抽取连接向量主索引、实体派生索引、近期消息和变更历史；检索以 semantic 候选为门槛融合 keyword/entity 信号，结果再由应用决定如何使用。显式修订与自动追加分开，async 主要等待同步依赖而非持久任务队列。",
+  "mechanisms": [
+    "ADD-only 事实抽取",
+    "scope 参数与身份 metadata 分离",
+    "recent10 + relevant10 抽取上下文",
+    "semantic-gated hybrid retrieval",
+    "entity→memory 独立派生索引",
+    "SQLite history 与 recent messages",
+    "awaited to_thread async",
+    "显式 update/delete；expiry 可见性"
+  ],
+  "strengths": [
+    "条件收益：追加新事实保留变化材料，避免抽取阶段直接覆写旧事实。",
+    "条件收益：provider 可配置，search explain 与可选 reranker 让相关性机制较易检查。",
+    "条件收益：显式更新保留旧/新文本 history，适合把修订事件与当前索引分开审查。"
+  ],
+  "limits": [
+    "SOURCE-OBSERVED：semantic 候选池与 threshold 先于 hybrid 分数；keyword/entity 不能补回池外条目。",
+    "SOURCE-OBSERVED：LLM 输出的 linked_memory_ids 未进入默认事实 payload；实体索引不等于事实修订依赖图。",
+    "SOURCE-OBSERVED：写入与 history/entity 分步进行，部分失败仍可返回 records；未运行故障实验。",
+    "SOURCE-OBSERVED：delete 留旧文本 history 和近期消息，entity cleanup 有初始化条件与 best-effort 语义。",
+    "SOURCE-OBSERVED：timestamp/reference_date 在 OSS 被拒绝；default observation date 为当天。",
+    "UNVERIFIED：managed headline benchmark、中文/长期效果、provider 一致性、完整应用权限与行动后果。"
+  ],
+  "sources": [
+    {
+      "id": "S1",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L487-L551",
+      "note": "Memory 组装 LLM、embedding、vector、SQLite 与可选 reranker；keyword 支持依 provider。"
+    },
+    {
+      "id": "S2",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L314-L419",
+      "note": "add scope 构建、身份 metadata 隔离与 session scope key。"
+    },
+    {
+      "id": "S3",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L760-L877",
+      "note": "同步 add 参数、timestamp 拒绝、输入规范化、procedural 分支和返回。"
+    },
+    {
+      "id": "S4",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L879-L969",
+      "note": "raw 直写、最近10条消息、相关10条事实、单次 ADD-only extraction。"
+    },
+    {
+      "id": "S5",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L971-L1039",
+      "note": "解析、batch embedding、有限范围 hash 去重、事实 payload 字段。"
+    },
+    {
+      "id": "S6",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1045-L1084",
+      "note": "主索引与 history 分步写入；逐条 fallback 失败只记日志。"
+    },
+    {
+      "id": "S7",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1086-L1206",
+      "note": "NLP entity linking、独立实体集合、save_messages 和 ADD 回执。"
+    },
+    {
+      "id": "S8",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1379-L1522",
+      "note": "search scope、reference_date 拒绝、可选 rerank 与结果返回。"
+    },
+    {
+      "id": "S9",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1628-L1731",
+      "note": "semantic 候选池、keyword 加分、expiry 可见性、结果 formatting。"
+    },
+    {
+      "id": "S10",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1733-L1813",
+      "note": "entity boost 的限定 scope、匹配、关联 memory 与权重。"
+    },
+    {
+      "id": "S11",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/utils/scoring.py#L60-L139",
+      "note": "semantic threshold 先于 hybrid 融合，只遍历 semantic candidates。"
+    },
+    {
+      "id": "S12",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1815-L1888",
+      "note": "update/delete 公共入口按 memory ID 操作；metadata 身份不可迁移。"
+    },
+    {
+      "id": "S13",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1890-L1959",
+      "note": "同步 delete_all 顺序删除 scope 条目；history 按 ID 查询。"
+    },
+    {
+      "id": "S14",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L2038-L2128",
+      "note": "显式更新主文本/向量与 UPDATE history；删除主向量并保留旧文本 DELETE history。"
+    },
+    {
+      "id": "S15",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L652-L728",
+      "note": "实体清理只对已初始化 entity store 执行，错误不阻断主操作；重提取实体。"
+    },
+    {
+      "id": "S16",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L2130-L2169",
+      "note": "同步 reset 重置 SQLite 与主索引，条件重置实体集合；chat 未实现。"
+    },
+    {
+      "id": "S17",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/storage.py#L102-L148",
+      "note": "SQLite history 与 messages 是独立表。"
+    },
+    {
+      "id": "S18",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/storage.py#L227-L324",
+      "note": "history 读出旧/新文本；recent messages 每 scope 留10条并用于后续抽取。"
+    },
+    {
+      "id": "S19",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/storage.py#L326-L344",
+      "note": "SQLite reset 删除 history 与 messages 表；close 仅关闭连接。"
+    },
+    {
+      "id": "S20",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L2172-L2228",
+      "note": "AsyncMemory 组装同类同步 provider 和 SQLite、lazy entity store。"
+    },
+    {
+      "id": "S21",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L2580-L2630",
+      "note": "AsyncMemory 以 awaited asyncio.to_thread 取上下文、调用 embedding 与 LLM。"
+    },
+    {
+      "id": "S22",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L2651-L2744",
+      "note": "Async batch embedding / 主索引 / history 通过 awaited to_thread 执行。"
+    },
+    {
+      "id": "S23",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L2838-L2864",
+      "note": "async entity insert 错误日志、消息保存 await 后返回 records。"
+    },
+    {
+      "id": "S24",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L3293-L3394",
+      "note": "async 检索仍是 semantic 候选门槛与后续融合；provider 操作 to_thread。"
+    },
+    {
+      "id": "S25",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L3546-L3617",
+      "note": "async delete_all gather 并行删除、收集异常，再对已初始化实体集合做 scope 清理。"
+    },
+    {
+      "id": "S26",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L2319-L2383",
+      "note": "async bulk entity clear 与单条 cleanup 的范围、上限及 non-fatal 错误。"
+    },
+    {
+      "id": "S27",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L3733-L3868",
+      "note": "async update/delete/reset 的存储与历史写入顺序及实体清理条件。"
+    },
+    {
+      "id": "S28",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L427-L451",
+      "note": "expiration_date 规范化与 UTC 日粒度过期判定。"
+    },
+    {
+      "id": "S29",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1208-L1253",
+      "note": "get(id) 直接读主条目并输出 metadata，无 expiry 隐藏步骤。"
+    },
+    {
+      "id": "S30",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1993-L2035",
+      "note": "procedural memory 由 LLM 摘要，经 embedding/_create_memory 写入。"
+    },
+    {
+      "id": "S31",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/utils.py#L61-L76",
+      "note": "parse_messages 保留 system/user/assistant 文本，未保留结构化 name/tool role。"
+    },
+    {
+      "id": "S32",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/configs/prompts.py#L918-L956",
+      "note": "prompt 请求 attributed_to 和 linked_memory_ids；这是生成规范，不是效果证明。"
+    },
+    {
+      "id": "S33",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/configs/prompts.py#L1007-L1042",
+      "note": "日期默认 current/observation 为当天，构造 prompt 的输入字段。"
+    },
+    {
+      "id": "S34",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/utils/spacy_models.py#L21-L91",
+      "note": "可选英文 spaCy 模型装载；模型缺失时尝试下载、失败返回 None。"
+    },
+    {
+      "id": "S35",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/client/main.py#L184-L228",
+      "note": "MemoryClient 是默认连接托管 endpoint 的 HTTP client，要求 API key。"
+    },
+    {
+      "id": "S36",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/README.md#L45-L63",
+      "note": "仅用于边界：官方声明 headline benchmark 为 managed platform，含 proprietary optimizations。"
+    },
+    {
+      "id": "S37",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/telemetry.py#L14-L20",
+      "note": "MEM0_TELEMETRY 默认开启，配置解析；不引用或复制 SDK 公共写入 key。"
+    },
+    {
+      "id": "S38",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/telemetry.py#L76-L120",
+      "note": "telemetry 的 PostHog 构造、环境属性与 capture_event 出站边界。"
+    },
+    {
+      "id": "S39",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L559-L580",
+      "note": "entity store 从同一 vector config 派生独立 collection，lazy 初始化。"
+    },
+    {
+      "id": "S40",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1326-L1377",
+      "note": "get_all 在输出阶段按 show_expired 过滤过期条目。"
+    },
+    {
+      "id": "S41",
+      "url": "https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1961-L1991",
+      "note": "raw/procedural _create_memory 写主向量与 history，不走默认 batch entity/message 流程。"
+    }
+  ],
+  "views": [
+    {
+      "id": "overview",
+      "title": "全景与系统边界",
+      "question": "Mem0 OSS 在应用、模型和多份存储之间承担哪部分 memory 工作，哪些能力属于另一托管产品？",
+      "reading_guide": "从应用进入 Memory/AsyncMemory，跟随抽取到事实与独立派生状态，再看读取结果交还应用。托管 client 和 telemetry 是独立边界，不能把它们视作 OSS 推理或持久化核心。",
+      "omissions": [
+        "TypeScript、server/auth 与 integrations 未审计。",
+        "未展开所有 provider 的数据库语义、模型 endpoint 或故障处理。",
+        "telemetry 仅画出已检查的 capture 出站边界；notice/feature-flag 完整行为未审计。"
+      ],
+      "regions": [
+        {
+          "id": "caller",
+          "label": "调用应用边界",
+          "responsibility": "外部应用决定授权、query、上下文组装与行动；未检查其实现。",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "id": "core",
+          "label": "Python OSS runtime",
+          "responsibility": "Memory/AsyncMemory 执行模型调用、scope、事实写入、选择和显式修订。",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S3",
+            "S8",
+            "S20"
+          ]
+        },
+        {
+          "id": "providers",
+          "label": "模型与辅助依赖",
+          "responsibility": "可配置模型调用、本地 NLP 与诊断出站依赖；不代表同一部署域。",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S34",
+            "S38"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "配置的持久化层",
+          "responsibility": "事实索引、实体派生索引与 SQLite 历史/近期消息各自持有状态。",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S39",
+            "S1"
+          ]
+        },
+        {
+          "id": "managed",
+          "label": "另一路托管产品",
+          "responsibility": "客户端代码可见；远端 proprietary 实现及效果不在本图证据范围。",
+          "status": "observed",
+          "evidence": [
+            "S35"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "app",
+          "label": "应用 / harness\n提交材料与查询",
+          "kind": "external",
+          "region": "caller",
+          "status": "unknown",
+          "evidence": [],
+          "note": "外部调用者的权限、调度、实际上下文与行动实现未检查；SDK API 暴露调用边界，不证明某个应用实现。"
+        },
+        {
+          "id": "api",
+          "label": "Memory / AsyncMemory\n应用调用接口",
+          "kind": "entry",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S3",
+            "S20",
+            "S21"
+          ],
+          "note": "同步调用与 await coroutine 两种入口；async 在已读路径用 to_thread 执行同步依赖，没有这里可见的持久 job queue。"
+        },
+        {
+          "id": "extract",
+          "label": "add extraction\nV3 ADD-only 主路径",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5",
+            "S7"
+          ],
+          "note": "raw/procedural 是显式不同分支；默认抽取不自动覆盖旧事实。"
+        },
+        {
+          "id": "select",
+          "label": "search / get / get_all\n选择条目与可见性",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S9",
+            "S29",
+            "S40"
+          ],
+          "note": "search/get_all 默认隐藏 expired，get(id) 不做该隐藏；search 基于 scope filter。"
+        },
+        {
+          "id": "mutate",
+          "label": "update / delete / reset\n显式修订入口",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13",
+            "S14",
+            "S16"
+          ],
+          "note": "调用者选择 ID/scope；不自动撤回已生成的应用输出。"
+        },
+        {
+          "id": "llm",
+          "label": "LLM provider\n事实抽取 / 摘要",
+          "kind": "model",
+          "region": "providers",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S30"
+          ],
+          "note": "配置选择模型实现；图证明调用边界，不证明生成事实正确或远端部署方式。"
+        },
+        {
+          "id": "embedder",
+          "label": "Embedding provider\n文本 → 向量",
+          "kind": "model",
+          "region": "providers",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S5"
+          ],
+          "note": "查询、事实和实体用配置模型 embedding；未逐一审计 provider。"
+        },
+        {
+          "id": "nlp",
+          "label": "spaCy 辅助处理\n词形 / entity",
+          "kind": "process",
+          "region": "providers",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S34"
+          ],
+          "note": "英文模型可选，缺失时可能尝试下载；NLP 失败可退化。"
+        },
+        {
+          "id": "vector_store",
+          "label": "Vector store\n当前事实与检索索引",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S5",
+            "S6",
+            "S9"
+          ],
+          "note": "持有事实文本、向量、hash、scope、timestamps、attributed_to 等；落地位置和 keyword 能力依 provider。"
+        },
+        {
+          "id": "messages",
+          "label": "SQLite messages\n每 scope 最近10条",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S18"
+          ],
+          "note": "独立于事实 ID；默认抽取结束保存，后续注入 extraction prompt。raw/procedural 路径不走同样的消息保存流程。"
+        },
+        {
+          "id": "history",
+          "label": "SQLite history\nADD / UPDATE / DELETE",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S14",
+            "S17",
+            "S18"
+          ],
+          "note": "变更记录保存旧/新文本；与 vector store 分步写入，非跨库原子事务。"
+        },
+        {
+          "id": "entity_store",
+          "label": "Entity store\n实体 → memory IDs",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S39"
+          ],
+          "note": "lazy 独立 collection；从 NLP 结果建立关联，不是 LLM 输出的 memory→memory 修订依赖。"
+        },
+        {
+          "id": "results",
+          "label": "返回条目 / 操作回执\n不代替最终回答",
+          "kind": "output",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8",
+            "S9",
+            "S12",
+            "S16"
+          ],
+          "note": "读取返回 memory/ID/score/metadata；ADD records 或成功文案不证明跨存储一致、完全遗忘或下游已用。"
+        },
+        {
+          "id": "client",
+          "label": "MemoryClient\n托管 HTTP client",
+          "kind": "entry",
+          "region": "managed",
+          "status": "observed",
+          "evidence": [
+            "S35"
+          ],
+          "note": "同品牌下另一路执行对象；不执行本图 OSS 抽取流程。"
+        },
+        {
+          "id": "managed_service",
+          "label": "Managed platform\n远端实现未检查",
+          "kind": "external",
+          "region": "managed",
+          "status": "unknown",
+          "evidence": [],
+          "note": "远端实现不在公开 clone 内；README benchmark 仅作为官方声明，未据此画出内部组件。"
+        },
+        {
+          "id": "telemetry",
+          "label": "PostHog telemetry\n可配置诊断出站",
+          "kind": "external",
+          "region": "providers",
+          "status": "observed",
+          "evidence": [
+            "S37",
+            "S38"
+          ],
+          "note": "默认 MEM0_TELEMETRY=True；图不宣称完整字段隐私审计。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "app",
+          "to": "api",
+          "label": "messages / scope / query",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S8"
+          ]
+        },
+        {
+          "from": "api",
+          "to": "extract",
+          "label": "add 调用",
+          "status": "observed",
+          "evidence": [
+            "S3"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "llm",
+          "label": "提交抽取上下文",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "llm",
+          "to": "extract",
+          "label": "返回事实 JSON",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "embedder",
+          "label": "query / facts / entities",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5",
+            "S7"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "vector_store",
+          "label": "追加事实 payload + vectors",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S6"
+          ]
+        },
+        {
+          "from": "vector_store",
+          "to": "extract",
+          "label": "scope 内相关10条",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "messages",
+          "to": "extract",
+          "label": "同 scope 最近10条",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S18"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "messages",
+          "label": "保留新消息并裁至10条",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S18"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "history",
+          "label": "分步记录 ADD",
+          "status": "observed",
+          "evidence": [
+            "S6"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "nlp",
+          "label": "抽取实体与词形",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S7"
+          ]
+        },
+        {
+          "from": "nlp",
+          "to": "entity_store",
+          "label": "由 add 持久化实体关联",
+          "status": "observed",
+          "evidence": [
+            "S7"
+          ]
+        },
+        {
+          "from": "api",
+          "to": "select",
+          "label": "search / get / get_all",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S29",
+            "S40"
+          ]
+        },
+        {
+          "from": "vector_store",
+          "to": "select",
+          "label": "候选事实 / 按 ID 读取",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S29"
+          ]
+        },
+        {
+          "from": "entity_store",
+          "to": "select",
+          "label": "linked IDs 加分",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "select",
+          "to": "results",
+          "label": "条目 / score / metadata",
+          "status": "observed",
+          "evidence": [
+            "S9"
+          ]
+        },
+        {
+          "from": "results",
+          "to": "app",
+          "label": "交还调用者",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S12"
+          ]
+        },
+        {
+          "from": "api",
+          "to": "mutate",
+          "label": "显式 ID / scope 操作",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S13",
+            "S16"
+          ]
+        },
+        {
+          "from": "mutate",
+          "to": "vector_store",
+          "label": "更新 / 删除 / 重置",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S16"
+          ]
+        },
+        {
+          "from": "mutate",
+          "to": "history",
+          "label": "变更记录；reset 清表",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S16"
+          ]
+        },
+        {
+          "from": "mutate",
+          "to": "entity_store",
+          "label": "条件清理 / 重建 / reset",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S15",
+            "S16"
+          ]
+        },
+        {
+          "from": "api",
+          "to": "telemetry",
+          "label": "capture_event 诊断事件",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S38"
+          ]
+        },
+        {
+          "from": "app",
+          "to": "client",
+          "label": "另一种 SDK 选择",
+          "status": "observed",
+          "evidence": [
+            "S35"
+          ]
+        },
+        {
+          "from": "client",
+          "to": "managed_service",
+          "label": "HTTP + API key",
+          "status": "observed",
+          "evidence": [
+            "S35"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "Vector store",
+          "writers": "add/update/delete/reset",
+          "changes": "追加事实与显式内容替换；搜索不自动整合矛盾。",
+          "limits": "主索引、history 与实体更新无已读代码中的跨库事务。",
+          "evidence": [
+            "S5",
+            "S6",
+            "S14"
+          ]
+        },
+        {
+          "owner": "SQLiteManager",
+          "writers": "默认抽取流程；显式 mutation；reset",
+          "changes": "近期消息作为下轮上下文，history 作为变更记录。",
+          "limits": "返回 memory 不是完整来源档案；删除事实不等于清除两表。",
+          "evidence": [
+            "S17",
+            "S18",
+            "S13",
+            "S19"
+          ]
+        },
+        {
+          "owner": "调用应用",
+          "writers": "应用自身（未检查）",
+          "changes": "应用可能把返回条目放入上下文再调用模型。",
+          "limits": "chat 未实现；最终生成、外部行动和反馈策略在 OSS 边界外。",
+          "evidence": [
+            "S16"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "flow",
+      "title": "写入、选择与交给调用者",
+      "question": "一次 add/search 怎样产生和选择事实，async 实际等待什么，最终上下文由谁组装？",
+      "reading_guide": "主线是 scope→默认抽取→分步持久化→search→semantic 门槛与融合→结果。两条旁支明确 raw 与 procedural 不经过完整默认派生流程；AsyncMemory 等待同类步骤，不代表后台队列接单。",
+      "omissions": [
+        "没有在已读 API 生命周期中发现持久队列、定时 consolidation 或后台 agent loop；未据此断言全仓库没有调度器。",
+        "vision 解析、所有 LLM/provider 内部、reranker 实现未展开。"
+      ],
+      "regions": [
+        {
+          "id": "caller",
+          "label": "调用应用边界",
+          "responsibility": "外部应用决定授权、query、上下文组装与行动；未检查其实现。",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "id": "core",
+          "label": "Python OSS runtime",
+          "responsibility": "Memory/AsyncMemory 执行模型调用、scope、事实写入、选择和显式修订。",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S3",
+            "S8",
+            "S20"
+          ]
+        },
+        {
+          "id": "providers",
+          "label": "模型与辅助依赖",
+          "responsibility": "可配置模型调用、本地 NLP 与诊断出站依赖；不代表同一部署域。",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S34",
+            "S38"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "配置的持久化层",
+          "responsibility": "事实索引、实体派生索引与 SQLite 历史/近期消息各自持有状态。",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S39",
+            "S1"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "app",
+          "label": "应用 / harness\n提交材料与查询",
+          "kind": "external",
+          "region": "caller",
+          "status": "unknown",
+          "evidence": [],
+          "note": "外部调用者的权限、调度、实际上下文与行动实现未检查；SDK API 暴露调用边界，不证明某个应用实现。"
+        },
+        {
+          "id": "api",
+          "label": "Memory / AsyncMemory\n应用调用接口",
+          "kind": "entry",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S3",
+            "S20",
+            "S21"
+          ],
+          "note": "同步调用与 await coroutine 两种入口；async 在已读路径用 to_thread 执行同步依赖，没有这里可见的持久 job queue。"
+        },
+        {
+          "id": "scope",
+          "label": "Scope 与输入规范化\nuser / agent / run",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3",
+            "S31"
+          ],
+          "note": "scope 至少一个，metadata 身份键被剥离；默认文本化忽略结构化 name 与 tool role。"
+        },
+        {
+          "id": "mode",
+          "label": "infer / memory_type\n选择写入路径",
+          "kind": "decision",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4",
+            "S30",
+            "S41"
+          ],
+          "note": "infer=False 逐条 raw 存储；agent_id + procedural_memory 走摘要；其余是默认 extraction。"
+        },
+        {
+          "id": "context",
+          "label": "抽取上下文\n近期10条 + 相关10条",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S21"
+          ],
+          "note": "scope 构造查询；默认 observation date 是当天；没有向 prompt builder 传 timestamp。"
+        },
+        {
+          "id": "llm",
+          "label": "LLM provider\n事实抽取 / 摘要",
+          "kind": "model",
+          "region": "providers",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S30"
+          ],
+          "note": "配置选择模型实现；图证明调用边界，不证明生成事实正确或远端部署方式。"
+        },
+        {
+          "id": "batch",
+          "label": "解析 / embedding / 去重\n批量事实与实体派生",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S6",
+            "S7",
+            "S41"
+          ],
+          "note": "仅默认分支批量 NLP/entity/messages；raw/procedural 用 _create_memory 写主索引和 history。hash 去重限相关结果与本批；LLM linked_memory_ids 未进入 payload。"
+        },
+        {
+          "id": "embedder",
+          "label": "Embedding provider\n文本 → 向量",
+          "kind": "model",
+          "region": "providers",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S4",
+            "S5"
+          ],
+          "note": "查询、事实和实体用配置模型 embedding；未逐一审计 provider。"
+        },
+        {
+          "id": "vector_store",
+          "label": "Vector store\n当前事实与检索索引",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S5",
+            "S6",
+            "S9"
+          ],
+          "note": "持有事实文本、向量、hash、scope、timestamps、attributed_to 等；落地位置和 keyword 能力依 provider。"
+        },
+        {
+          "id": "messages",
+          "label": "SQLite messages\n每 scope 最近10条",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S18"
+          ],
+          "note": "独立于事实 ID；默认抽取结束保存，后续注入 extraction prompt。raw/procedural 路径不走同样的消息保存流程。"
+        },
+        {
+          "id": "history",
+          "label": "SQLite history\nADD / UPDATE / DELETE",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S14",
+            "S17",
+            "S18"
+          ],
+          "note": "变更记录保存旧/新文本；与 vector store 分步写入，非跨库原子事务。"
+        },
+        {
+          "id": "entity_store",
+          "label": "Entity store\n实体 → memory IDs",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S39"
+          ],
+          "note": "lazy 独立 collection；从 NLP 结果建立关联，不是 LLM 输出的 memory→memory 修订依赖。"
+        },
+        {
+          "id": "select",
+          "label": "search / get / get_all\n选择条目与可见性",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S9",
+            "S29",
+            "S40"
+          ],
+          "note": "search/get_all 默认隐藏 expired，get(id) 不做该隐藏；search 基于 scope filter。"
+        },
+        {
+          "id": "rank",
+          "label": "semantic 门槛 → 融合\n可选 reranker",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S9",
+            "S10",
+            "S11",
+            "S24"
+          ],
+          "note": "池为 max(4×top_k,60) semantic hits；keyword/entity 只加分，不能补进池外条目。"
+        },
+        {
+          "id": "results",
+          "label": "返回条目 / 操作回执\n不代替最终回答",
+          "kind": "output",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8",
+            "S9",
+            "S12",
+            "S16"
+          ],
+          "note": "读取返回 memory/ID/score/metadata；ADD records 或成功文案不证明跨存储一致、完全遗忘或下游已用。"
+        },
+        {
+          "id": "use",
+          "label": "应用上下文与行动\n是否采纳由调用者决定",
+          "kind": "external",
+          "region": "caller",
+          "status": "unknown",
+          "evidence": [],
+          "note": "上下文注入、生成模型、行动工具及后续再次调用 add 属外部应用；本研究未检查实际 harness。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "app",
+          "to": "api",
+          "label": "提交消息；同步或 await",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S21"
+          ]
+        },
+        {
+          "from": "api",
+          "to": "scope",
+          "label": "规范化 scope + messages",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S3"
+          ]
+        },
+        {
+          "from": "scope",
+          "to": "mode",
+          "label": "选择 infer / procedural",
+          "status": "observed",
+          "evidence": [
+            "S3"
+          ]
+        },
+        {
+          "from": "mode",
+          "to": "context",
+          "label": "默认 infer=True",
+          "status": "observed",
+          "evidence": [
+            "S4"
+          ]
+        },
+        {
+          "from": "messages",
+          "to": "context",
+          "label": "最近10条作指代上下文",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S18"
+          ]
+        },
+        {
+          "from": "vector_store",
+          "to": "context",
+          "label": "query embedding 检索相关10条",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S21"
+          ]
+        },
+        {
+          "from": "context",
+          "to": "llm",
+          "label": "一次 extraction 请求",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S21"
+          ]
+        },
+        {
+          "from": "mode",
+          "to": "llm",
+          "label": "procedural：生成摘要",
+          "status": "observed",
+          "evidence": [
+            "S30"
+          ]
+        },
+        {
+          "from": "mode",
+          "to": "batch",
+          "label": "infer=False：raw message",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S41"
+          ]
+        },
+        {
+          "from": "llm",
+          "to": "batch",
+          "label": "JSON facts；或摘要文本",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S30"
+          ]
+        },
+        {
+          "from": "batch",
+          "to": "embedder",
+          "label": "embedding facts / entities",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S7"
+          ]
+        },
+        {
+          "from": "batch",
+          "to": "vector_store",
+          "label": "写入 text / vectors / metadata",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S6",
+            "S41"
+          ]
+        },
+        {
+          "from": "batch",
+          "to": "history",
+          "label": "随后记录 ADD",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S41"
+          ]
+        },
+        {
+          "from": "batch",
+          "to": "entity_store",
+          "label": "默认分支：NLP 派生关联",
+          "status": "observed",
+          "evidence": [
+            "S7"
+          ]
+        },
+        {
+          "from": "batch",
+          "to": "messages",
+          "label": "默认分支：结束时存消息",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S18",
+            "S23"
+          ]
+        },
+        {
+          "from": "batch",
+          "to": "results",
+          "label": "records 回执；非原子提交证明",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S7",
+            "S23"
+          ]
+        },
+        {
+          "from": "api",
+          "to": "select",
+          "label": "query + scope filters",
+          "status": "observed",
+          "evidence": [
+            "S8"
+          ]
+        },
+        {
+          "from": "select",
+          "to": "embedder",
+          "label": "生成 query embedding",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S24"
+          ]
+        },
+        {
+          "from": "vector_store",
+          "to": "select",
+          "label": "semantic 与 keyword hits",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S24"
+          ]
+        },
+        {
+          "from": "select",
+          "to": "rank",
+          "label": "semantic 候选；默认隐去过期",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S24"
+          ]
+        },
+        {
+          "from": "entity_store",
+          "to": "rank",
+          "label": "entity boost",
+          "status": "observed",
+          "evidence": [
+            "S10"
+          ]
+        },
+        {
+          "from": "rank",
+          "to": "results",
+          "label": "top_k；可解释分数",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S9",
+            "S11"
+          ]
+        },
+        {
+          "from": "results",
+          "to": "use",
+          "label": "交还记忆条目以供上下文",
+          "status": "inferred",
+          "evidence": [
+            "S8",
+            "S16"
+          ]
+        },
+        {
+          "from": "use",
+          "to": "app",
+          "label": "应用可提交后续消息形成循环",
+          "status": "inferred",
+          "evidence": [
+            "S3",
+            "S16"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "Memory / AsyncMemory 调用栈",
+          "writers": "调用应用",
+          "changes": "同步执行或 await asyncio.to_thread 的 provider/storage 调用，再返回 records。",
+          "limits": "这里的 async 不证明持久队列或 crash-recovery；未运行 cancellation/并发实验。",
+          "evidence": [
+            "S21",
+            "S22",
+            "S23",
+            "S24"
+          ]
+        },
+        {
+          "owner": "默认抽取 payload",
+          "writers": "LLM 提议、SDK 采纳字段",
+          "changes": "text / attributed_to 加 scope、hash、timestamps 入库；不同事实可共存。",
+          "limits": "prompt 的 linked_memory_ids 请求没有变为事实间持久关系；recent messages 与 history 不构成来源消息绑定。",
+          "evidence": [
+            "S5",
+            "S32",
+            "S18"
+          ]
+        },
+        {
+          "owner": "检索结果",
+          "writers": "search + score_and_rank + 可选 reranker",
+          "changes": "semantic pool 先决定候选，expiry/semantic threshold 过滤，再融合分数。",
+          "limits": "keyword/entity 不提供独立候选救回；结果使用与行动效果未验证。",
+          "evidence": [
+            "S8",
+            "S9",
+            "S11"
+          ]
+        },
+        {
+          "owner": "raw / procedural 分支",
+          "writers": "infer=False / agent_id + memory_type",
+          "changes": "以 _create_memory 写 vector + history。",
+          "limits": "未走默认 extraction 的消息缓冲和 batch entity linking，不能画成所有分支都有相同派生物。",
+          "evidence": [
+            "S4",
+            "S30",
+            "S41"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "revision",
+      "title": "修订、删除与派生状态",
+      "question": "更正或删除一条 memory 时，哪些状态改变、哪些仍保留，回执与实际遗忘相差什么？",
+      "reading_guide": "先区分新说法的 ADD、显式 update/delete 和 expiration 可见性，再跟随主索引、history 与 entity cleanup 三条不同结果。reset 才触及 SQLite 两表，但对实体集合仍有初始化条件，应用副本不在该权限内。",
+      "omissions": [
+        "没有可见的自动事实 consolidation 或派生事实回滚路径；不能据此替代所有 provider 与应用实现审计。",
+        "未验证底层数据库物理擦除、备份、并发一致性或失败恢复。"
+      ],
+      "regions": [
+        {
+          "id": "caller",
+          "label": "调用应用边界",
+          "responsibility": "外部应用决定授权、query、上下文组装与行动；未检查其实现。",
+          "status": "unknown",
+          "evidence": []
+        },
+        {
+          "id": "core",
+          "label": "Python OSS runtime",
+          "responsibility": "Memory/AsyncMemory 执行模型调用、scope、事实写入、选择和显式修订。",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S3",
+            "S8",
+            "S20"
+          ]
+        },
+        {
+          "id": "storage",
+          "label": "配置的持久化层",
+          "responsibility": "事实索引、实体派生索引与 SQLite 历史/近期消息各自持有状态。",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S39",
+            "S1"
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "app",
+          "label": "应用 / harness\n提交材料与查询",
+          "kind": "external",
+          "region": "caller",
+          "status": "unknown",
+          "evidence": [],
+          "note": "外部调用者的权限、调度、实际上下文与行动实现未检查；SDK API 暴露调用边界，不证明某个应用实现。"
+        },
+        {
+          "id": "identity_guard",
+          "label": "身份字段不可迁移\nmetadata keys 剥离",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S12",
+            "S14"
+          ],
+          "note": "add scope 由参数设定；update 保留 user/agent/run/actor identity。此为 SDK 约定，不是调用者认证。"
+        },
+        {
+          "id": "update",
+          "label": "update(memory_id)\n显式替换条目",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S14",
+            "S27"
+          ],
+          "note": "保留 created_at、刷新 updated_at；重做 embedding、词形与 history。"
+        },
+        {
+          "id": "delete",
+          "label": "delete(memory_id)\n删除主条目",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S12",
+            "S14",
+            "S27"
+          ],
+          "note": "记录旧文本 DELETE history；没有删除来源消息或应用副本。"
+        },
+        {
+          "id": "delete_all",
+          "label": "delete_all(scope)\nsync 顺序 / async 并发",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S25"
+          ],
+          "note": "async gather 收集错误，随后 bulk clear 已初始化 entity store；最终文案不逐条反映错误。"
+        },
+        {
+          "id": "expiry",
+          "label": "expiration_date\n读取可见性",
+          "kind": "decision",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S28",
+            "S9",
+            "S29",
+            "S40"
+          ],
+          "note": "UTC 日期早于今天时默认从 search/get_all 隐藏；show_expired 可包含，get(id) 仍可读。"
+        },
+        {
+          "id": "reset",
+          "label": "reset()\n重置主索引与 SQLite",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S19",
+            "S27"
+          ],
+          "note": "同步和异步顺序不同；实体集合只在已初始化时尝试 reset；未声称永久擦除磁盘或外部副本。"
+        },
+        {
+          "id": "vector_store",
+          "label": "Vector store\n当前事实与检索索引",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S1",
+            "S5",
+            "S6",
+            "S9"
+          ],
+          "note": "持有事实文本、向量、hash、scope、timestamps、attributed_to 等；落地位置和 keyword 能力依 provider。"
+        },
+        {
+          "id": "entity_store",
+          "label": "Entity store\n实体 → memory IDs",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S39"
+          ],
+          "note": "lazy 独立 collection；从 NLP 结果建立关联，不是 LLM 输出的 memory→memory 修订依赖。"
+        },
+        {
+          "id": "history",
+          "label": "SQLite history\nADD / UPDATE / DELETE",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S6",
+            "S14",
+            "S17",
+            "S18"
+          ],
+          "note": "变更记录保存旧/新文本；与 vector store 分步写入，非跨库原子事务。"
+        },
+        {
+          "id": "messages",
+          "label": "SQLite messages\n每 scope 最近10条",
+          "kind": "store",
+          "region": "storage",
+          "status": "observed",
+          "evidence": [
+            "S17",
+            "S18"
+          ],
+          "note": "独立于事实 ID；默认抽取结束保存，后续注入 extraction prompt。raw/procedural 路径不走同样的消息保存流程。"
+        },
+        {
+          "id": "entity_cleanup",
+          "label": "实体关联清理 / 重建\nbest effort",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S26",
+            "S27"
+          ],
+          "note": "单条更新文本后移除旧 links 再加新；未初始化则跳过；错误被记录，list 上限10000。"
+        },
+        {
+          "id": "results",
+          "label": "返回条目 / 操作回执\n不代替最终回答",
+          "kind": "output",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S7",
+            "S8",
+            "S9",
+            "S12",
+            "S16"
+          ],
+          "note": "读取返回 memory/ID/score/metadata；ADD records 或成功文案不证明跨存储一致、完全遗忘或下游已用。"
+        },
+        {
+          "id": "downstream",
+          "label": "其他派生事实 / 应用副本\n无自动撤回证据",
+          "kind": "external",
+          "region": "caller",
+          "status": "unknown",
+          "evidence": [],
+          "note": "其他 memory 可能由此前事实影响生成，应用也可能保存输出；未检查其实现，没有事实依赖图或跨应用撤回的证据。"
+        },
+        {
+          "id": "select",
+          "label": "search / get / get_all\n选择条目与可见性",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S8",
+            "S9",
+            "S29",
+            "S40"
+          ],
+          "note": "search/get_all 默认隐藏 expired，get(id) 不做该隐藏；search 基于 scope filter。"
+        },
+        {
+          "id": "extract",
+          "label": "add extraction\n新说法继续追加",
+          "kind": "process",
+          "region": "core",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S5"
+          ],
+          "note": "默认新信息仍 ADD；不自动把冲突事实改成一个唯一当前状态。"
+        }
+      ],
+      "edges": [
+        {
+          "from": "app",
+          "to": "identity_guard",
+          "label": "add scope / update metadata",
+          "status": "observed",
+          "evidence": [
+            "S2",
+            "S12"
+          ]
+        },
+        {
+          "from": "identity_guard",
+          "to": "update",
+          "label": "过滤身份键后合并 metadata",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ]
+        },
+        {
+          "from": "app",
+          "to": "delete",
+          "label": "指定 memory_id",
+          "status": "observed",
+          "evidence": [
+            "S12"
+          ]
+        },
+        {
+          "from": "app",
+          "to": "delete_all",
+          "label": "指定 user / agent / run scope",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S25"
+          ]
+        },
+        {
+          "from": "app",
+          "to": "expiry",
+          "label": "add/update 设定或清除日期",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S12"
+          ]
+        },
+        {
+          "from": "app",
+          "to": "reset",
+          "label": "显式 reset 调用",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S27"
+          ]
+        },
+        {
+          "from": "app",
+          "to": "extract",
+          "label": "新消息含更正/变化",
+          "status": "observed",
+          "evidence": [
+            "S3",
+            "S4"
+          ]
+        },
+        {
+          "from": "extract",
+          "to": "vector_store",
+          "label": "仍作为新条目追加",
+          "status": "observed",
+          "evidence": [
+            "S5",
+            "S6"
+          ]
+        },
+        {
+          "from": "update",
+          "to": "vector_store",
+          "label": "覆盖文本 / 向量 / metadata",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ]
+        },
+        {
+          "from": "update",
+          "to": "history",
+          "label": "记录 old → new",
+          "status": "observed",
+          "evidence": [
+            "S14"
+          ]
+        },
+        {
+          "from": "update",
+          "to": "entity_cleanup",
+          "label": "text 变化时移除旧再建新",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S27"
+          ]
+        },
+        {
+          "from": "delete_all",
+          "to": "delete",
+          "label": "sync 逐条；async gather",
+          "status": "observed",
+          "evidence": [
+            "S13",
+            "S25"
+          ]
+        },
+        {
+          "from": "delete",
+          "to": "vector_store",
+          "label": "删除 ID",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S27"
+          ]
+        },
+        {
+          "from": "delete",
+          "to": "history",
+          "label": "保留旧文本 DELETE 事件",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S27"
+          ]
+        },
+        {
+          "from": "delete",
+          "to": "entity_cleanup",
+          "label": "单条删除清 link",
+          "status": "observed",
+          "evidence": [
+            "S14",
+            "S27"
+          ]
+        },
+        {
+          "from": "delete_all",
+          "to": "entity_cleanup",
+          "label": "async 后置 bulk clear",
+          "status": "observed",
+          "evidence": [
+            "S25",
+            "S26"
+          ]
+        },
+        {
+          "from": "entity_cleanup",
+          "to": "entity_store",
+          "label": "条件清理 / 删除空实体 / 重建",
+          "status": "observed",
+          "evidence": [
+            "S15",
+            "S26"
+          ]
+        },
+        {
+          "from": "expiry",
+          "to": "select",
+          "label": "默认隐藏，show_expired 可读",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S40"
+          ]
+        },
+        {
+          "from": "vector_store",
+          "to": "select",
+          "label": "按 ID / scope 读取当前条目",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S29"
+          ]
+        },
+        {
+          "from": "select",
+          "to": "results",
+          "label": "当前可见结果",
+          "status": "observed",
+          "evidence": [
+            "S9",
+            "S29"
+          ]
+        },
+        {
+          "from": "reset",
+          "to": "vector_store",
+          "label": "reset / delete collection",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S27"
+          ]
+        },
+        {
+          "from": "reset",
+          "to": "history",
+          "label": "drop 与重建 SQLite",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S19",
+            "S27"
+          ]
+        },
+        {
+          "from": "reset",
+          "to": "messages",
+          "label": "drop 与重建 SQLite",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S19",
+            "S27"
+          ]
+        },
+        {
+          "from": "reset",
+          "to": "entity_store",
+          "label": "仅已初始化时尝试 reset",
+          "status": "observed",
+          "evidence": [
+            "S16",
+            "S27"
+          ]
+        },
+        {
+          "from": "messages",
+          "to": "extract",
+          "label": "非 reset 删除后仍可作上下文",
+          "status": "observed",
+          "evidence": [
+            "S4",
+            "S13",
+            "S18"
+          ]
+        },
+        {
+          "from": "results",
+          "to": "downstream",
+          "label": "调用者可保留 / 使用返回值",
+          "status": "inferred",
+          "evidence": [
+            "S8",
+            "S16"
+          ]
+        }
+      ],
+      "state_notes": [
+        {
+          "owner": "当前事实：vector store",
+          "writers": "add/update/delete/delete_all/reset",
+          "changes": "默认抽取追加；显式 ID mutation 替换或删除；expiry 是可见性。",
+          "limits": "API 成功文案不证明历史、实体与下游全部清除。",
+          "evidence": [
+            "S5",
+            "S12",
+            "S14",
+            "S25",
+            "S28"
+          ]
+        },
+        {
+          "owner": "审计：history 与近期 messages",
+          "writers": "add/update/delete 写 history；默认 add 写 messages；reset 清两表",
+          "changes": "delete 保留旧文本历史，delete_all 已读实现不清近期消息。",
+          "limits": "旧消息可能继续进入 extraction；具体再生需要未运行 probe。",
+          "evidence": [
+            "S13",
+            "S14",
+            "S18",
+            "S19",
+            "S25"
+          ]
+        },
+        {
+          "owner": "派生：entity_store",
+          "writers": "NLP linking、update/delete cleanup、async bulk clear、reset",
+          "changes": "文本变更后尝试更新关联；async delete_all 为避免并行 RMW 另做整 scope entity clear。",
+          "limits": "未初始化会跳过；list 上限与 non-fatal 错误允许残留；不能称完整依赖撤回。",
+          "evidence": [
+            "S15",
+            "S26",
+            "S27"
+          ]
+        },
+        {
+          "owner": "权限与下游",
+          "writers": "调用者选择 ID/scope；应用自行管理副本",
+          "changes": "SDK 防止用 metadata 改身份，不提供已读 library 接口内的调用者认证。",
+          "limits": "人类同意、应用权限和外部行动撤销未检查；不以 scope 字段代表完成治理。",
+          "evidence": [
+            "S2",
+            "S12",
+            "S14",
+            "S16"
+          ]
+        }
+      ]
+    }
+  ]
+}
