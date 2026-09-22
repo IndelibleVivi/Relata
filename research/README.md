@@ -1,6 +1,10 @@
 # Relata Source and Evidence Workflow
 
-Relata research is organized around decisions and cases, not a pile of summaries. A source name, paper title, repository, or benchmark mentioned in Draft 0.1 carries no current evidentiary weight until the exact object is pinned and reviewed in an Evidence Card.
+Relata research connects conceptual questions, architecture judgments, synthesis, decisions and cases. Under [ADR-0006](../decisions/ADR-0006-frontier-memory-research-lab.md), source research and critical articles are independent outputs; they need not first become benchmark cases. A source name, paper title, repository, or benchmark mentioned in Draft 0.1 carries no current evidentiary weight until the exact object is pinned and reviewed in an Evidence Card.
+
+## Open comparative inquiry
+
+The [agent-memory inquiry](agent-memory-inquiry.md) asks what open-source memory projects implement, what their choices enable or constrain, and how conclusions transfer inside and outside adult human–AI intimacy. It connects a standalone article direction, selected public AMS research and [five bounded source studies](../systems/source-studies/README.md), including two isolated offline diagnostics. Definitions and comparative outcomes remain open; no accepted Evidence Card or complete system result is added.
 
 ## Current evidence spine
 
@@ -49,7 +53,7 @@ Use one of these labels when the status is not obvious:
 
 ### 1. Name the decision target
 
-Before collecting sources, state which research question, distinction, case, assumption, or proposed decision could change. A source with no decision target stays in `source-map.md` rather than becoming an Evidence Card.
+Before collecting sources, state which research question, definition, architectural judgment, comparative argument, distinction, case, assumption, or proposed decision could change. A source with no such target stays in `source-map.md` or an explicitly labeled inquiry lead rather than becoming an Evidence Card.
 
 ### 2. Pin the exact object
 
@@ -76,6 +80,7 @@ A reviewer checks that the pinned object exists, coverage is stated honestly, so
 An accepted Evidence Card must change or support at least one of:
 
 - a research question or assumption;
+- a conceptual or comparative argument with explicit scope and counter-evidence;
 - a Distinction Atlas entry;
 - a case or control;
 - a System Census dimension;

@@ -3,7 +3,9 @@
 
 # Relata Research Foundation: Start Here
 
-This is the operational path from the non-normative Target Architecture Draft 0.1 to evidence-backed research and cases.
+Relata is a frontier memory research lab. Begin with the [agent-memory inquiry](research/agent-memory-inquiry.md) for definitions, open-source architecture studies and a comparative article direction. General agent use and adult long-term intimacy are both in scope under [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md). Source research and writing can proceed independently of case evaluation.
+
+The foundation work below also preserves the operational path from the non-normative Target Architecture Draft 0.1 to evidence-backed cases.
 
 Current local tooling: use the [RC-002 scripted rehearsal](experiments/offline-rehearsal.md) or the [RC-005 candidate input audit](experiments/continuity-input-audit.md) without waiting for the broader research programme below. Neither authorizes model execution or accepts a case.
 
@@ -16,6 +18,7 @@ Current local tooling: use the [RC-002 scripted rehearsal](experiments/offline-r
 - System Census and Architecture Pressure Map templates
 - Distinction Atlas, case method, Pilot 001, and a manual pilot plan
 - mixed-domain scope authority under [ADR-0003](decisions/ADR-0003-mixed-domain-memory-ecology.md)
+- broader research-lab scope under [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md), retaining the relational Case Lab
 - Chinese-first bilingual authority under [ADR-0004](decisions/ADR-0004-r0-bilingual-documentation.md) and the [language policy](docs/language-policy.md)
 - a proposed bilingual [claim-boundary study](research/claim-boundary-study.md), candidate [RC-001 E0 calibration fixtures](case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md), and unreviewed [RC-004 mixed-domain seed](case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md)
 - repository structure, bilingual-drift, Case Card metadata, and Markdown-link checker

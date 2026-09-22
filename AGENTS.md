@@ -3,7 +3,7 @@
 ## Project identity
 
 - The project name is **Relata**. `R0` and `Research Foundation` are phase labels only.
-- Relata is a research program and case lab, not an accepted benchmark platform.
+- Relata is a frontier memory research lab with an existing case programme, not an accepted benchmark platform.
 
 ## Authority
 
@@ -20,9 +20,13 @@ The body of `docs/vision/relata-target-architecture-draft-0.1.md` is preserved h
 
 ## Current scope
 
-Work may advance project questions, source Evidence Cards, community contribution methods, System Cards, Architecture Pressure Maps, distinctions, synthetic cases, pilot records, decision records, and repository checks.
+Work may advance definitions, public-source architecture research, comparative synthesis and articles, project questions, source Evidence Cards, community contribution methods, System Cards, Architecture Pressure Maps, distinctions, synthetic cases, pilot records, decision records, and repository checks. Source research and writing do not wait for the cross-system implementation promotion gate.
 
-Relata's primary deployment domain is adult long-term human–AI intimacy and romance. Its working evaluation object is a longitudinal mixed-domain memory ecology spanning personal/lived, shared-relational, operational/project, and companion/system continuity. Do not require ordinary events or shared work to carry explicit romantic symbolism. Treat coverage strata as portfolio labels, not permanent tracks or an internal ontology.
+Under ADR-0006, general agent memory and adult long-term human–AI intimacy are independent research contexts; intimacy remains a founding focus, not an eligibility filter for every study. The existing Case Lab's working evaluation object is a longitudinal mixed-domain memory ecology spanning personal/lived, shared-relational, operational/project, and companion/system continuity. Do not require ordinary events or shared work to carry explicit romantic symbolism. Treat coverage strata as case-portfolio labels, not permanent tracks or an ontology for the whole lab.
+
+Public-source system studies do not require maintainer endorsement. Follow the source-review route in `systems/README.md`; private contributor descriptions retain their disclosure and consent requirements. Separate public code, hosted products, historical versions, source claims, observed behavior and editorial judgment. Linking AMS or another research project does not import accepted evidence or authorize cross-repository edits.
+
+The five bounded drafts in `systems/source-studies/` are source research, not accepted System Cards or live system results. Their two `observations/` scripts consume exact, clean public lmc-5/Graphiti checkouts and public synthetic inputs only; commands and evidence limits live in that directory's README. They are source-study diagnostics, not a general runner or an extension to model/provider execution.
 
 Do not add a benchmark runner, system-under-study API, Leaderboard, Arena, SDK, services, hosted infrastructure, sealed corpus, or canonical system ontology unless a later accepted decision changes `STATUS.md`.
 

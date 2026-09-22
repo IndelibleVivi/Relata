@@ -7,6 +7,8 @@
 **Scope:** R0 research object and case coverage
 **Accepted:** 2026-08-24
 
+**Scope update, 2026-09-22:** [ADR-0006](ADR-0006-frontier-memory-research-lab.md) supersedes the overall deployment-domain restriction below. The mixed-domain Case Lab and its evidence requirements remain in force. The original reasoning is preserved here as decision history.
+
 ## 中文摘要
 
 Relata 继续以成人长期人机亲密与浪漫关系为主要 deployment domain，但不再把 memory content 缩窄为显式的亲密表达、关系规则或 repair。当前 working evaluation object 是“长期人机关系中的混合领域连续性记忆生态”：personal/lived、shared-relational、operational/project 与 companion/system continuity 彼此作用，同时需要正确 routing、scope isolation、authority、time、permission 与 change handling。Pilot 001 只代表其中的 shared-relational / current-state-use 窄切片。

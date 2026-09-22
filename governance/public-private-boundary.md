@@ -8,7 +8,9 @@ May contain:
 
 - charter, research questions, and methods;
 - exact-source Evidence Cards based on public material;
+- clearly labeled conceptual studies, public-source architecture analyses and comparative articles;
 - contributor-approved System Card summaries;
+- source-reviewed System Cards based only on public material, without implying maintainer endorsement;
 - adult synthetic cases;
 - de-identified aggregate insights;
 - public decision and review records;

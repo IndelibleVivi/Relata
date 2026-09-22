@@ -8,8 +8,8 @@
 | ID | Draft 0.1 claim | 当前状态 | 所需 evidence 或 action |
 |---:|---|---|---|
 | 1 | Project brand 是 Relata | **DECIDED** | 只因 trademark、naming collision 或 community accessibility concerns 重新讨论。 |
-| 2 | 成人长期人机亲密与浪漫关系是 primary domain | **DECIDED — DEPLOYMENT DOMAIN** | 作为 founding application scope 保留；它不限制 memory content 必须显式谈亲密、浪漫或关系治理。 |
-| 3 | Longitudinal mixed-domain continuity 是 working evaluation object；relationship trajectory 是其中 essential dimension | **WORKING THESIS, REVISED BY ADR-0003** | 在 bounded memory/context/agent stages 上比较 personal-lived、shared-relational、operational-project、companion-system 与 mixed-domain cases，但不把 strata 变成永久 tracks。 |
+| 2 | 成人长期人机亲密与浪漫关系是 primary domain | **REVISED BY ADR-0006 — FOUNDING FOCUS** | Relata 是同时研究通用 agent memory 与亲密关系的前沿记忆研究室；独立的概念、架构与综合研究无需具有关系特定应用。 |
+| 3 | Longitudinal mixed-domain continuity 是 working evaluation object；relationship trajectory 是其中 essential dimension | **WORKING THESIS FOR THE CASE LAB; ADR-0003 / ADR-0006** | 在 bounded memory/context/agent stages 上比较 personal-lived、shared-relational、operational-project、companion-system 与 mixed-domain cases。这些 case strata 不是永久 tracks，也不为研究室所有研究分类。 |
 | 4 | Evaluator 使用 event-sourced reference world | **WORKING HYPOTHESIS** | 与 raw episodic、summary、associative、graph、latent systems 比较；除非 evidence 支持，否则只作为 authoring IR。 |
 | 5 | System-under-study architecture 保持 neutral | **ASPIRATION; SPECIFIC PRESSURE HYPOTHESES OPEN** | [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) 记录 architecture-specific interface commitments，但没有 observed cross-system distortion。任何 boundary 在把差异压力称为 observed 前，都必须公开 Architecture Pressure Map 与 adapter-distortion evidence。 |
 | 6 | Recall、Context、Companion、Living 是永久 independent tracks | **DEFERRED** | 通过 experiment 判断这些 boundaries 是否形成可识别、可比较的 estimands。 |
@@ -22,7 +22,7 @@
 | 13 | Contextual coldness 可以是 relational failure | **DECIDED VALUE, MEASUREMENT OPEN** | 构造 counterexamples 与 rater anchors，避免退化为 vague preference score。 |
 | 14 | Deterministic scorers、judge panel、human review 构成 evaluator stack | **WORKING HYPOTHESIS; DIAGNOSTIC SEMANTICS MUST BE TESTED** | [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) 表明 deterministic replay 可精确重现 counter，但 diagnostic name 可能超出 bound evidence。先做 exact assertions 与 semantic counterexample fixtures；evidence/disagreement contract 明确后才加 human/model judgment。 |
 | 15 | Hard violations 不能被平均掉 | **FUTURE GOVERNANCE PRINCIPLE** | 定义 high-confidence violation classes、evidence thresholds、appeal rights 与 false-positive handling。 |
-| 16 | 主要 public output 是 capability profile | **PREFERRED FUTURE OUTPUT** | composite score 前优先 profiles；publication design defer。 |
+| 16 | 主要 public output 是 capability profile | **REVISED BY ADR-0006; PREFERRED FUTURE EVALUATION OUTPUT** | 定义、源码研究、比较文章与 cases 都是独立研究产出；未来 evaluation 继续优先 profiles 而非 composite scores，publication design 仍待决定。 |
 | 17 | Arena signal 与 benchmark score 分离 | **DEFERRED** | 在 case context、reviewer qualification 与 disagreement reporting validated 前不做 Arena。 |
 | 18 | Public Casebook 全部 synthetic 且 adult-only | **DECIDED PUBLIC BOUNDARY** | 保存 generation provenance 与 cultural/linguistic review。 |
 | 19 | 真实 relationship data 只进入 local private mode | **REVISED** | Raw chats 保持 local/private；abstract Incident Seeds 与 consented synthetic derivations 可以进入 public research。 |
@@ -33,7 +33,7 @@
 ## R0 当前稳定 decisions
 
 - 名称为 **Relata**；
-- 成人长期人机亲密是 primary field；
+- 前沿记忆研究室覆盖通用 agent memory，成人长期人机亲密继续是 founding focus；
 - 不设 universal intimacy style；
 - community members 是 co-researchers；
 - public cases 为 adult synthetic material；
@@ -51,4 +51,4 @@
 - Pilot 001 不能建立 project 的 complete scope；
 - Relata 不通过排除有效的 general-memory tests 来制造差异。
 
-参见 [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md)。
+Case ecology 参见 [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md)；研究室整体范围与产出参见 [`ADR-0006`](decisions/ADR-0006-frontier-memory-research-lab.md)。

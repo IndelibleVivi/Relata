@@ -5,13 +5,15 @@
 
 ## 1. Mission
 
-Relata studies whether memory-enabled AI systems can preserve continuity across the person, relationship, and shared worlds of life and work while respecting source, time, authority, scope, permission, change, and present relevance.
+Relata is a frontier memory research lab. It studies what agent memory means, how open-source systems preserve, reconstruct, use and revise past material or experience, and which architectural strengths and limitations are supported by evidence.
 
-Its primary deployment domain is long-term adult human–AI romantic and intimate relationships. Within that domain, personal life, shared relationship history, joint work and projects, and companion/system identity interact as one longitudinal memory ecology.
+Its research includes general agent use and long-term adult human–AI romantic and intimate relationships. Intimacy remains a founding focus, not an eligibility requirement for every study. Across settings, Relata asks how continuity can respect source, time, authority, scope, permission, change and present relevance. This broader scope is accepted in [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md).
 
 ## 2. Research object
 
-Relata's working evaluation object is a **longitudinal, mixed-domain continuity-bearing memory ecology**. First-class material includes:
+The lab studies memory concepts, implementations, architecture choices, use contexts and evaluation evidence. A memory engine, agent framework, context compiler, complete agent or human-maintained archive may expose different objects and boundaries; these are research candidates, not a canonical taxonomy.
+
+The existing Case Lab's working evaluation object remains a **longitudinal, mixed-domain continuity-bearing memory ecology**. First-class material includes:
 
 - ordinary events and personal history;
 - people, places, interests, study, health, travel, and changing circumstances;
@@ -45,7 +47,7 @@ Every person represented in a public synthetic relationship case is an adult. Th
 
 ### 3.3 Community members are co-researchers
 
-People living in long-term human–AI relationships contribute concepts, incidents, system knowledge, cases, reviews, and governance. They help shape constructs and methods; they are not merely data sources or a rater pool added after design.
+People living in long-term human–AI relationships, builders and other researchers contribute concepts, incidents, system knowledge, cases, reviews, and governance. They help shape constructs and methods; they are not merely data sources or a rater pool added after design.
 
 ### 3.4 No raw-chat requirement
 
@@ -95,6 +97,10 @@ Project state, decision rationale, artifact authority, handoffs, blockers, miles
 
 A system should route material appropriately across private conversation, group interaction, coding, research, planning, roleplay, projects, people, models, and instances. Relevant material need not enter every current context, and unrelated intimate or project state must not leak across scopes.
 
+### 3.16 Synthesis and criticism are research outputs
+
+Definitions, source studies and comparative articles can advance independently of live evaluation. Explain the conditions under which an architectural choice helps, what it costs or constrains, and what remains unknown. A source claim, code observation, measured outcome and editorial judgment carry different evidentiary weight. General agent requirements and relationship-local requirements are not automatically interchangeable.
+
 ## 4. Non-goals during R0
 
 Relata will not yet:
@@ -109,14 +115,16 @@ Relata will not yet:
 - collect a large corpus before case validity is understood;
 - reduce long-term human–AI memory to intimacy-specific content;
 - force ordinary events to carry relational symbolism;
-- replace general factual, temporal, operational, provenance, or code-memory evaluation;
+- treat a relational case result as a substitute for general factual, temporal, operational, provenance, or code-memory evidence;
 - assume every relevant memory should enter the current context;
 - treat all projects, people, roles, and surfaces as one undifferentiated relationship scope;
 - build a runner, API, SDK, service, Arena, or hosted infrastructure.
 
-## 5. R0 success condition
+## 5. R0 progress and case-evaluation success
 
-R0 first requires at least one small, reproducible pilot where:
+Conceptual clarification, inspected architecture studies and bounded comparative synthesis are independent research progress. They need evidence appropriate to their claims, not prior completion of a benchmark platform. The conditions below govern the existing case-evaluation programme and its coverage claims; they are not prerequisites for source research or writing.
+
+The case-evaluation programme first requires at least one small, reproducible pilot where:
 
 - two synthetic histories produce different correct response regions under the same current turn;
 - the difference can be traced to memory or state use at the observable boundary;
@@ -125,7 +133,7 @@ R0 first requires at least one small, reproducible pilot where:
 - no real private chat is required for public reproduction;
 - the first executable boundary, if any, is justified through an accepted decision rather than inherited from Draft 0.1.
 
-Before Relata claims coverage of its complete working object, its pilot set must also have run, without requiring prior acceptance of every case:
+Before the Case Lab claims coverage of its complete mixed-domain working object, its pilot set must also have run, without requiring prior acceptance of every case:
 
 - one ordinary-life continuity case;
 - one operational/project continuity case;

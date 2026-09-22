@@ -5,7 +5,8 @@
 
 **Project：** Relata
 **Phase：** R0 — Research Foundation
-**Implementation：** repository checks、离线合成执行演练与 candidate 输入准备/核验/投影审计；没有 accepted benchmark implementation
+**Identity：** 前沿记忆研究室；通用 agent memory 与成人长期亲密关系都是研究情境
+**Implementation：** repository checks、离线合成执行演练、candidate 输入准备/核验/投影审计与两份局部源码诊断；没有 accepted benchmark implementation
 **Remote/publication：** public source repository；没有 formal release
 **Case release：** none
 **Protocol version：** none
@@ -17,11 +18,15 @@
 
 [ADR-0005](decisions/ADR-0005-offline-pilot-tooling.zh-CN.md) 记录 maintainer 对可替换、内置合成材料演练工具的窄范围授权。它不接受研究协议或系统能力结论。下方正式 implementation-boundary promotion gate 不作为这项离线工程检查的前提。
 
+[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 接受研究室定位扩展、独立的概念、架构和综合研究，以及两份有界离线源码诊断。成人长期亲密关系继续是 founding focus。这项范围决定不提升证据状态、不接受文章论点，也不授权模型/provider 执行。
+
 ## Evidence state
 
 | Artifact | State | Accepted evidence |
 |---|---|---|
 | Evidence Cards | 2 accepted | EC-001 public-boundary/causal-limit findings；EC-002 observation/scorer-binding limits 与 released-corpus no-impact finding；只在各自 authorization 内有效 |
+| Agent-memory inquiry / 文章方向 | 开放研究问题、AMS 连接与初步综合 | 无 accepted definition、穷尽综述或文章正文 |
+| 开源架构研究 | 5 份有界 drafts：Mem0、Letta、Graphiti、lmc-5、Tideline Memory | 固定源码观察；lmc-5 与 Graphiti 另有窄范围离线诊断；无独立人类 review、accepted System Card 或模型参与的比较结果 |
 | Claim boundaries | 双语 candidate study | CL0–CL6、lanes、cells、adapter classes 仍为提议；无 accepted result unit 或 publication policy |
 | System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards/maps |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
@@ -37,9 +42,11 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 
 ## 当前 research target
 
-建立长期 mixed-role 关系中可 bounded evaluation 的 memory/continuity constructs；确定哪些失败需要历史才能区分；寻找能保留不同架构的观察边界；区分 deterministic、semantic 与 legitimate disagreement；让 contributors 无需转移 raw private conversations 就能共同设计研究。
+定义并批判性研究 agent memory 的概念、开源架构与证据。比较不同实现保留什么、过去的经验怎样影响当前行为，以及架构选择在什么条件下有用或失效。在通用 agent 和长期 mixed-role 关系中研究这些问题，保留历史依赖 controls、尊重架构差异的观察边界，以及保护隐私的社区参与。
 
 ## Immediate work
+
+从[五份源码研究 drafts](systems/source-studies/README.md) 推进 [agent-memory inquiry](research/agent-memory-inquiry.md)：review source fidelity、检查竞争解释，收敛独立文章的论点。选定的公开 AMS 研究可以带着原有证据限制进入问题设计。这项研究独立于 live evaluation 与 case promotion gate 推进。
 
 现在即可运行[离线演练](experiments/offline-rehearsal.md)，无需等待别人提交分数。基于公开源码审查的 System Cards、community review 和其他 case 工作可以并行。这个脚本不授权调用模型 provider。
 
@@ -51,7 +58,9 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 
 没有 universal relationship-quality measure、排名、canonical ontology、validated judge/panel、formal third-party submissions、protected hidden cases，或 privacy/safety/health/relationship certification；不代表亲密关系的完整多样性。Pilot 001 和 RC-002 scripted rehearsal 不覆盖完整 mixed-domain ecology。Companion/system continuity 仍未经测试。
 
-## Working promotion gate
+## 跨系统 evaluation 的 working promotion gate
+
+这项 gate 管理现有 case-evaluation programme 的 implementation boundary 与 coverage claims，不决定一篇源码研究、概念论述或比较文章是否可以开始。
 
 Accepted cross-system implementation-boundary decision 仍需：
 

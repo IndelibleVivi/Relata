@@ -3,13 +3,15 @@
 
 # Relata
 
-**Relata** 是一个开放、由社区活经验参与塑造的研究计划与案例实验室，研究成人长期人机关系中的记忆与连续性。中文是 R0 的主要工作与社区语言，英文入口同步维护。
+**Relata** 是一个开放、由社区活经验参与塑造的**前沿记忆研究室**。它定义、综合与评判 agent memory、开源架构及其长处与局限的证据，研究范围同时包含长期人机关系内外的使用情境。中文是 R0 的主要工作与社区语言，英文入口同步维护。
 
-> 一个系统能否延续这个人、这段关系，以及双方共同形成的生活与工作世界，同时忠于来源、时间、权威、范围、权限、变化与当下相关性？
+> Agent 记住过去究竟意味着什么，不同系统怎样实现它，又怎样在变化的任务、生活和关系中支持连续性？
 
 ## 记忆生态
 
-成人长期亲密与浪漫关系是 primary deployment domain。记忆内容也包括普通生活、共同关系经历、项目决策与材料，以及跨模型和实例的 companion/system continuity。普通事件无需被加工成浪漫象征才有研究价值。
+通用 agent memory 与成人长期人机亲密关系都有独立研究地位。亲密与浪漫关系继续是 founding focus；现有 Case Lab 将普通生活、共同关系经历、项目决策与材料，以及跨模型和实例的 companion/system continuity 作为长期混合领域记忆生态研究。普通事件无需被加工成浪漫象征才有研究价值。
+
+[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 确立了这次定位扩展。定义、架构研究、综合文章与批评和 cases 一样，都是研究产出。[Agent-memory inquiry](research/agent-memory-inquiry.md) 连接独立文章方向、选定的公开 AMS 研究与[五份有界源码研究](systems/source-studies/README.md)。这些是研究 drafts，尚不是穷尽综述或比较性能结果。
 
 Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或适当地保持沉默。事实回忆、时间推理、来源忠实、抗干扰、scope isolation 和 full-history/full-search controls 继续有价值，但需要说明各自的观察边界。
 

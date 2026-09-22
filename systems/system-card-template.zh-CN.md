@@ -4,11 +4,12 @@
 # System Card：<系统名称>
 
 **Card ID：** SC-000  
-**Status：** draft | contributor-reviewed | accepted-for-census | superseded  
+**Status：** draft | source-reviewed | contributor-reviewed | accepted-for-census | superseded\
+**Basis：** public-source | contributor-description | mixed\
 **可见范围：** public | restricted | private summary  
 **Contribution ID：**  
 **贡献者署名：**  
-**贡献者描述这套系统的 authority：**  
+**来源研究者 / 贡献者 authority：** 说明属于公开源码分析，或描述非公开材料的权限；不暗示 ownership 或 endorsement\
 **Exact version 或 observation date：**
 
 > 这不是产品评分表。先用系统自己的 vocabulary 讲清真实结构，再讨论它怎样映射到 Relata 的拟议 boundary。
@@ -50,7 +51,7 @@ Summarize the system, the version and boundary represented by this card, the key
 
 ## 5. Activation 与 use
 
-过去的关系材料怎样影响 current response 或 action？描述 trigger、search、prompt assembly、context、model mediation、tools、reminders 或 opaque behavior，不要发明系统没有暴露的 stages。
+过去的材料或经验怎样影响 current response 或 action？描述 trigger、search、prompt assembly、context、model mediation、tools、reminders 或 opaque behavior，不要发明系统没有暴露的 stages。
 
 ## 6. Source、authority 与 perspective
 
@@ -77,6 +78,8 @@ private chat、group chat、CLI、voice、roleplay、projects、devices、models
 ## 11. Known successes 与 failures
 
 写具体 behavior、evidence class 与 version。分开 product claim、contributor experience 与 reproduced observation。
+
+说明设计在什么条件下有帮助、引入什么成本或限制，以及哪些责任仍留给模型、harness、应用或人。Source inspection 本身不证明 runtime outcomes。
 
 ## 12. Candidate Relata boundaries 下的 observability
 
@@ -106,10 +109,11 @@ private chat、group chat、CLI、voice、roleplay、projects、devices、models
 
 Relata 不得公开、推断或索取什么？填好的 restricted card 与 identifying consent record 必须留在 public repo 之外。
 
-## 15. Contributor review
+## 15. Source / contributor review
 
 - 这份描述足以支持 declared use：是 | 否
-- public-safe fields 已批准：是 | 否 | 不公开
+- review basis 与已检查 source paths：
+- 来自 contributor 的 public-safe fields 已批准：是 | 否 | 不公开 | 不适用（仅 public source）
 - 保留的 disagreement / unknown：
 - review date：
 - reviewer / contributor confirmation route：

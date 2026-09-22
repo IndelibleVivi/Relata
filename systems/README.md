@@ -3,9 +3,11 @@
 
 # Relata System Census
 
-The System Census maps how actual memory and companion systems sustain continuity before Relata chooses a system-under-study boundary.
+The System Census studies how actual memory and agent systems work, what their architectural choices enable or constrain, and how they sustain continuity. It supports independent comparative research as well as future system-under-study boundary choices. General agent use and adult long-term intimacy are both in scope; start with the [agent-memory inquiry](../research/agent-memory-inquiry.md).
 
 A census object may be a memory engine, context compiler, complete companion agent, local personal stack, manually curated archive, agent framework, or mixed architecture. A system need not expose discrete memories, retrieval candidates, or a write/search API to be represented.
+
+The first [five source studies](source-studies/README.md) cover Mem0, current Letta, Graphiti, lmc-5 and Tideline Memory at pinned public commits. They include conditional architecture comparisons and two isolated offline observations. They remain source-study drafts, separate from reviewed or accepted System Cards.
 
 ## Classification
 
@@ -20,14 +22,16 @@ A census object may be a memory engine, context compiler, complete companion age
 
 ## Census workflow
 
-1. **Permission and scope:** identify the contributor’s authority to describe the system, the exact version or date, visibility, and forbidden details.
+1. **Basis and scope:** choose public-source research, an authorized contributor description, or a clearly separated combination. Pin the repository/version and distinguish public implementation, hosted service and historical source. For contributor material, identify disclosure authority and forbidden details.
 2. **System-native description:** map components, retained or reconstructed material, update and activation behavior, surfaces, and outputs in the system’s own vocabulary.
 3. **Evidence and limits:** distinguish public source, contributor-reviewed description, reproduced probe, inference, and unknown behavior.
-4. **Contributor review:** let the authorized contributor correct the System Card and approve the public-safe fields.
+4. **Review:** public-source cards receive source-fidelity review with the inspected paths and unresolved claims visible; maintainer endorsement is not required or implied. Contributor-derived material additionally requires the authorized contributor to correct its description and approve public-safe fields.
 5. **Boundary pressure:** compare cards in an Architecture Pressure Map only after individual cards are reviewed.
 6. **Research transfer:** record which proposed Relata boundary measures the system, an adapter, an opaque composite, or a capability outside scope.
 
-The census does not require source code, production access, credentials, raw chats, or private configuration. Restricted cards stay outside the public repository; only contributor-approved summaries may be added here.
+The census does not require production access, credentials, raw chats, or private configuration. A contributor-described system need not publish source code. Restricted cards stay outside the public repository; their public summaries require contributor approval. Independent analysis of already-public sources does not require a system owner's permission, and must not imply insider knowledge or endorsement.
+
+Write conditional architectural judgments: what a mechanism makes possible, the costs or constraints it introduces, who supplies missing integration, and the evidence for each statement. Separate source inspection from runtime observation; the classification above is not a performance grade. Source essays can remain clearly labeled drafts while System Card review is pending.
 
 Every first-round System Card should also ask:
 

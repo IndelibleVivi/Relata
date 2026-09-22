@@ -17,7 +17,7 @@
 | **probe evidence contract** | case-bounded event evidence、explicit accord、allowed interpretations 与 must/may/must-not expectations | 用 `oracle truth` 声称 total relationship truth |
 | **reference-context baseline** | case author 提供的 compact context，用于检查 response contract 是否 feasible | 暗示其 format 是 required system ontology |
 | **relationship-local norms** | 由 bounded synthetic history 与 current case state 支持的 norms | universal `Relationship Constitution` |
-| **deployment domain** | Relata questions 所处的长期 setting / population；当前是成人长期人机亲密与浪漫 | 把它当成 memory content eligibility restriction |
+| **deployment domain** | 某项研究的 setting / population；Relata 同时研究通用 agent 使用情境与成人长期人机亲密关系，亲密关系为 founding focus | 要求研究室的每项研究都具备浪漫应用，或把 deployment domain 当成 memory content |
 | **memory content domain** | continuity-bearing material 的类别：personal/lived、shared-relational、operational/project、companion/system 或 combination | 假定 content domain 决定 storage architecture |
 | **use domain** | memory 可能影响 behavior 的 activity，例如 private conversation、group conversation、coding、research、planning 或 roleplay | 把一个 surface 当成整段关系 |
 | **coverage stratum** | case portfolio 的 `personal-lived`、`shared-relational`、`operational-project`、`companion-system` 或 `mixed-domain` coverage label | 永久 benchmark track 或 mutually exclusive ontology |

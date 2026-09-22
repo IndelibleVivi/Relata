@@ -5,7 +5,8 @@
 
 **Project:** Relata
 **Phase:** R0 — Research Foundation
-**Implementation:** repository checks, an offline synthetic execution rehearsal, and candidate input preparation/verification/projection audits; no accepted benchmark implementation
+**Identity:** frontier memory research lab; general agent memory and adult long-term intimacy are research contexts
+**Implementation:** repository checks, an offline synthetic execution rehearsal, candidate input preparation/verification/projection audits, and two isolated source-study diagnostics; no accepted benchmark implementation
 **Remote/publication:** public source repository; no formal release
 **Case release:** none
 **Protocol version:** none
@@ -17,11 +18,15 @@ Current working authority consists of `CHARTER.md`, `RESEARCH_QUESTIONS.md`, `AS
 
 [ADR-0005](decisions/ADR-0005-offline-pilot-tooling.md) records a narrow maintainer-authorized exception for replaceable, bundled synthetic rehearsal tooling. It accepts no research protocol or system capability claim. The formal implementation-boundary promotion gate below is not a prerequisite for this offline engineering check.
 
+[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) accepts the broader lab identity, independent conceptual, architecture and synthesis work, and the two bounded offline source diagnostics. Adult long-term intimacy remains a founding focus. This scope decision does not promote evidence, accept an article thesis or authorize model/provider execution.
+
 ## Evidence state
 
 | Artifact | State | Accepted evidence |
 |---|---|---|
 | Evidence Cards | 2 accepted | EC-001 public-boundary/causal-limit findings and EC-002 observation/scorer-binding limits/released-corpus no-impact finding, only within their own authorizations |
+| Agent-memory inquiry / article direction | open research questions, AMS links and initial synthesis | no accepted definition, exhaustive survey or article manuscript |
+| Open-source architecture studies | 5 bounded drafts: Mem0, Letta, Graphiti, lmc-5, Tideline Memory | pinned source observations; lmc-5 and Graphiti additionally have isolated offline diagnostics; no independent human review, accepted System Card or model-backed comparative result |
 | Claim boundaries | bilingual candidate study | CL0–CL6, lanes, cells and adapter classes remain proposals; no accepted result unit or publication policy |
 | System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards or maps |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
@@ -37,9 +42,11 @@ Templates, corrected contracts, generated fixtures and passing plumbing tests ar
 
 ## Current research target
 
-Establish which memory/continuity constructs are bounded and evaluable in long-term mixed-role relationships; which failures require history; which observation boundaries preserve materially different architectures; which judgments can be deterministic, semantic or legitimately disputed; and how contributors can co-design without transferring raw private conversations.
+Define and critically examine agent memory across concepts, open-source architectures and evidence. Compare what different implementations preserve, how past experience affects current behavior, and the conditions under which their choices help or fail. Study these questions in general agent settings and in long-term mixed-role relationships, retaining history-dependent controls, architecture-sensitive observation and privacy-preserving community participation.
 
 ## Immediate work
+
+Develop the [agent-memory inquiry](research/agent-memory-inquiry.md) from the [five source-study drafts](systems/source-studies/README.md): review source fidelity, test competing interpretations and narrow the standalone article's argument. Selected public AMS work can inform questions with its original evidence limits. This research proceeds independently of live evaluation and the case promotion gate.
 
 Use the [offline rehearsal](experiments/offline-rehearsal.md) now; it does not wait for submitted scores. Source-audited System Cards, community review and additional case work can proceed in parallel. The script is not permission to call model providers.
 
@@ -51,7 +58,9 @@ The next empirical work remains: obtain materially different reviewed System Car
 
 No universal relationship-quality measure, ranking, canonical ontology, validated judge/panel, formal third-party submissions, protected hidden cases, privacy/safety/health/relationship certification, or complete representation of intimacy. Pilot 001 and the RC-002 scripted rehearsal do not cover the full mixed-domain ecology. Companion/system continuity remains untested.
 
-## Working promotion gate
+## Working promotion gate for cross-system evaluation
+
+This gate governs the existing case-evaluation programme's implementation boundary and coverage claims. It does not govern whether a source study, conceptual argument or comparative essay may begin.
 
 An accepted cross-system implementation-boundary decision still requires:
 

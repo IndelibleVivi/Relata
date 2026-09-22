@@ -3,9 +3,11 @@
 
 # Relata System Census
 
-System Census 在 Relata 选择 system-under-study boundary 之前，先描绘真实 memory / companion systems 怎样维持 continuity。
+System Census 研究真实 memory / agent systems 怎样工作、架构选择带来什么可能性或约束，以及怎样维持 continuity。它既支持独立的比较研究，也帮助未来选择 system-under-study boundary。通用 agent 使用情境与成人长期亲密关系都在范围内；从 [agent-memory inquiry](../research/agent-memory-inquiry.md) 进入。
 
 Census object 可以是 memory engine、context compiler、完整 companion agent、local personal stack、manually curated archive、agent framework 或 mixed architecture。System 不必暴露 discrete memories、retrieval candidates 或 write/search API，仍可被表示。
+
+首轮[五份源码研究](source-studies/README.md) 固定 Mem0、当前 Letta、Graphiti、lmc-5 与 Tideline Memory 的公开 commits，包含有条件的架构比较与两组窄范围离线观察。它们保持 source-study draft 状态，不等于 reviewed 或 accepted System Cards。
 
 ## Classification
 
@@ -20,14 +22,16 @@ Census object 可以是 memory engine、context compiler、完整 companion agen
 
 ## Census workflow
 
-1. **Permission and scope：** 确认 contributor 是否有 authority 描述 system、exact version/date、visibility 与 forbidden details。
+1. **Basis and scope：** 选择公开源码研究、获授权的 contributor description，或明确分开的两者组合。固定 repository/version，区分公开实现、托管服务与历史源码。对 contributor material 确认 disclosure authority 与 forbidden details。
 2. **System-native description：** 用 system 自己的 vocabulary 描述 components、retained/reconstructed material、update / activation behavior、surfaces 与 outputs。
 3. **Evidence and limits：** 分开 public source、contributor-reviewed description、reproduced probe、inference 与 unknown behavior。
-4. **Contributor review：** 让 authorized contributor correction System Card，并批准 public-safe fields。
+4. **Review：** 公开源码 card 接受 source-fidelity review，保留已读路径与未解决 claims；不要求、也不暗示 maintainer endorsement。来自 contributor 的材料还需要 authorized contributor 修正描述并批准 public-safe fields。
 5. **Boundary pressure：** individual cards reviewed 后，才放进 Architecture Pressure Map 比较。
 6. **Research transfer：** 记录 proposed Relata boundary 测到的是 system、adapter、opaque composite，还是 out-of-scope capability。
 
-Census 不要求 source code、production access、credentials、raw chats 或 private configuration。Restricted cards 留在 public repo 外；只有 contributor-approved summaries 可以加入。
+Census 不要求 production access、credentials、raw chats 或 private configuration；contributor 描述的系统不必公开 source code。Restricted cards 留在 public repo 外，公开摘要需 contributor approval。独立分析已经公开的来源，不需要 system owner 批准，也不能暗示 insider knowledge 或 endorsement。
+
+架构判断应带着条件：机制使什么成为可能、引入什么成本或限制、谁补上缺少的集成，以及每项说法的证据。Source inspection 与 runtime observation 分开；上方 classification 不是性能等级。System Card review 尚未完成时，source essay 可以明确保持 draft 状态。
 
 每张 first-round System Card 还应追问：
 

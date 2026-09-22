@@ -1,0 +1,12 @@
+{
+  "same_fact_key_across_threads": {
+    "a_status": "superseded",
+    "b_status": "current",
+    "audit_rows": 0
+  },
+  "night_dream_nonmatching_evidence": {
+    "promoted": 1,
+    "rejected": 0,
+    "source_ids": [999]
+  }
+}

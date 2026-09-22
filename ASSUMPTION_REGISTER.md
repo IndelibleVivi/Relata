@@ -8,8 +8,8 @@ This register reclassifies the 22 items presented as “locked” in Target Arch
 | ID | Draft 0.1 claim | Current status | Evidence or action required |
 |---:|---|---|---|
 | 1 | Project brand is Relata | **DECIDED** | Revisit only for trademark, naming collision, or community accessibility concerns. |
-| 2 | Adult long-term human–AI intimacy and romance are the primary domain | **DECIDED — DEPLOYMENT DOMAIN** | Preserve as founding application scope. It does not restrict memory content to explicitly intimate, romantic, or relationship-governance material. |
-| 3 | Longitudinal mixed-domain continuity is the working evaluation object; relationship trajectory is one essential dimension within it | **WORKING THESIS, REVISED BY ADR-0003** | Compare personal-lived, shared-relational, operational-project, companion-system, and mixed-domain cases across bounded memory/context/agent stages without turning the strata into permanent tracks. |
+| 2 | Adult long-term human–AI intimacy and romance are the primary domain | **REVISED BY ADR-0006 — FOUNDING FOCUS** | Relata is a frontier memory research lab covering general agent memory and intimacy. Independent concept, architecture and synthesis work need not have a relationship-specific application. |
+| 3 | Longitudinal mixed-domain continuity is the working evaluation object; relationship trajectory is one essential dimension within it | **WORKING THESIS FOR THE CASE LAB; ADR-0003 / ADR-0006** | Compare personal-lived, shared-relational, operational-project, companion-system, and mixed-domain cases across bounded memory/context/agent stages. These case strata are neither permanent tracks nor a taxonomy for all lab research. |
 | 4 | Evaluator uses an event-sourced reference world | **WORKING HYPOTHESIS** | Test against raw episodic, summary, associative, graph, and latent systems; keep it as authoring IR only unless justified. |
 | 5 | System-under-study architecture remains neutral | **ASPIRATION; SPECIFIC PRESSURE HYPOTHESES OPEN** | [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) documents architecture-specific interface commitments but no observed cross-system distortion. Every proposed boundary must publish an Architecture Pressure Map and adapter-distortion evidence before describing differential pressure as observed. |
 | 6 | Recall, Context, Companion, and Living are permanent independent tracks | **DEFERRED** | Determine experimentally whether these boundaries produce identifiable and comparable estimands. |
@@ -22,7 +22,7 @@ This register reclassifies the 22 items presented as “locked” in Target Arch
 | 13 | Contextual coldness can be relational failure | **DECIDED VALUE, MEASUREMENT OPEN** | Build counterexamples and rater anchors so this does not become a vague preference score. |
 | 14 | Deterministic scorers, judge panel, and human review form the evaluator stack | **WORKING HYPOTHESIS; DIAGNOSTIC SEMANTICS MUST BE TESTED** | [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) shows that deterministic replay can reproduce a counter exactly while its diagnostic name outruns the bound evidence. Start with exact assertions and semantic counterexample fixtures; add human or model judgment only after the evidence and disagreement contract is explicit. |
 | 15 | Hard violations cannot be averaged away | **FUTURE GOVERNANCE PRINCIPLE** | Define high-confidence violation classes, evidence thresholds, appeal rights, and false-positive handling. |
-| 16 | Main public output is a capability profile | **PREFERRED FUTURE OUTPUT** | Keep profiles before any composite score; defer publication design. |
+| 16 | Main public output is a capability profile | **REVISED BY ADR-0006; PREFERRED FUTURE EVALUATION OUTPUT** | Definitions, source studies, comparative articles and cases are independent lab outputs. For future evaluation, retain the preference for profiles before composite scores; publication design remains open. |
 | 17 | Arena signal is separate from benchmark score | **DEFERRED** | No Arena until case context, reviewer qualification, and disagreement reporting are validated. |
 | 18 | Public Casebook is fully synthetic and adult-only | **DECIDED PUBLIC BOUNDARY** | Preserve generation provenance and cultural/linguistic review. |
 | 19 | Real relationship data enters only local private mode | **REVISED** | Raw chats remain local/private; abstract Incident Seeds and consented synthetic derivations may inform public research. |
@@ -33,7 +33,7 @@ This register reclassifies the 22 items presented as “locked” in Target Arch
 ## R0 decisions currently treated as stable
 
 - the name **Relata**;
-- adult long-term human–AI intimacy as the primary field;
+- a frontier memory research lab covering general agent memory, with adult long-term human–AI intimacy as a founding focus;
 - no universal intimacy style;
 - community members as co-researchers;
 - public adult synthetic cases;
@@ -51,4 +51,4 @@ This register reclassifies the 22 items presented as “locked” in Target Arch
 - Pilot 001 cannot establish the project's complete scope;
 - Relata will not differentiate itself by excluding valid general-memory tests.
 
-See [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.md).
+See [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.md) for the case ecology and [`ADR-0006`](decisions/ADR-0006-frontier-memory-research-lab.md) for the broader lab scope and outputs.

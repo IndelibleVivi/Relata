@@ -3,7 +3,9 @@
 
 # Relata 从这里开始：Research Foundation 执行路径
 
-这条路径负责把 non-normative 的 Target Architecture Draft 0.1，推进成有 source provenance、architecture pressure、community authority 与 case evidence 的 Relata。
+Relata 是前沿记忆研究室。概念定义、开源架构研究与比较文章方向，从 [agent-memory inquiry](research/agent-memory-inquiry.md) 开始。[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 将通用 agent 与成人长期亲密关系都纳入研究；源码研究与写作可以独立于 case evaluation 推进。
+
+下方基础工作也保留了从 non-normative Target Architecture Draft 0.1，走向有 source provenance、architecture pressure、community authority 与 case evidence 的执行路径。
 
 当前本地工具：[RC-002 scripted rehearsal](experiments/offline-rehearsal.md) 与 [RC-005 candidate 输入审计](experiments/continuity-input-audit.md) 不必等待下方完整研究计划；两者都不授权模型执行，也不接受 case。
 
@@ -16,6 +18,7 @@
 - System Census 与 Architecture Pressure Map templates
 - Distinction Atlas、case method、Pilot 001 与 manual pilot plan
 - [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md) 确立的 mixed-domain scope authority
+- [`ADR-0006`](decisions/ADR-0006-frontier-memory-research-lab.md) 确立的研究室整体范围，保留 relational Case Lab
 - [`ADR-0004`](decisions/ADR-0004-r0-bilingual-documentation.zh-CN.md) 与 [language policy](docs/language-policy.zh-CN.md) 确立的中文优先双语 authority
 - proposed 双语 [claim-boundary study](research/claim-boundary-study.zh-CN.md)、candidate [`RC-001 E0 calibration fixtures`](case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md)，以及未经 review 的 [`RC-004` mixed-domain seed](case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md)
 - repository structure、bilingual drift、Case Card metadata 与 Markdown link checker

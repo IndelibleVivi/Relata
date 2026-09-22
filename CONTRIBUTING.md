@@ -9,6 +9,10 @@ Community contributors participate as co-researchers. They may challenge project
 
 ## Contribution routes
 
+### Conceptual or comparative study
+
+An evidence-linked definition, public-source architecture study or critical synthesis can contribute independently of a benchmark case. State the question, inspected scope, conditional strengths and limitations, and competing interpretations. Start with the [agent-memory inquiry](research/agent-memory-inquiry.md). Draft studies remain distinct from accepted Evidence Cards and observed system results.
+
 ### Evidence Card
 
 A close read or source-level audit tied to an exact public source and version. Use the [Evidence Card template](research/evidence-card-template.md).
@@ -19,7 +23,7 @@ An abstract account of a relational-memory failure or moment of continuity. Raw 
 
 ### System Card
 
-A system-native description of an actual memory or companion architecture, including what is observable, opaque, adapter-emulated, unsupported, or unknown. Use the [Chinese](systems/system-card-template.zh-CN.md) or [English](systems/system-card-template.md) template.
+A system-native description of an actual memory or agent architecture, including what is observable, opaque, adapter-emulated, unsupported, or unknown. Public-source analysis and authorized contributor descriptions use distinct [census routes](systems/README.md). Use the [Chinese](systems/system-card-template.zh-CN.md) or [English](systems/system-card-template.md) template.
 
 ### Case contribution
 

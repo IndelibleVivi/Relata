@@ -4,11 +4,12 @@
 # System Card: <System name>
 
 **Card ID:** SC-000  
-**Status:** draft | contributor-reviewed | accepted-for-census | superseded  
+**Status:** draft | source-reviewed | contributor-reviewed | accepted-for-census | superseded\
+**Basis:** public-source | contributor-description | mixed\
 **Visibility:** public | restricted | private summary  
 **Contribution ID:**  
 **Contributor attribution:**  
-**Contributor’s authority to describe this system:**  
+**Source analyst / contributor authority:** identify public-source analysis or the authority for non-public descriptions; do not imply ownership or endorsement\
 **Exact version or observation date:**
 
 > This is not a product scorecard. Describe the system in its own terms before translating anything into Relata’s proposed boundaries.
@@ -50,7 +51,7 @@ How can material or behavior change? Describe correction, supersession, coexiste
 
 ## 5. Activation and use
 
-How does prior relationship material affect a current response or action? Describe triggers, search, prompt assembly, context, model mediation, tools, reminders, or opaque behavior without inventing stages the system does not expose.
+How does prior material or experience affect a current response or action? Describe triggers, search, prompt assembly, context, model mediation, tools, reminders, or opaque behavior without inventing stages the system does not expose.
 
 ## 6. Source, authority, and perspective
 
@@ -77,6 +78,8 @@ Who can inspect, explain, amend, revoke, delete, export, rebuild, or migrate con
 ## 11. Known successes and failures
 
 Name concrete observed behavior, its evidence class, and version. Separate product claims, contributor experience, and reproduced observations.
+
+Explain the conditions under which a design helps and the costs or limitations it introduces. Name which responsibilities remain with the model, harness, application or human. Source inspection alone does not establish runtime outcomes.
 
 ## 12. Observability at candidate Relata boundaries
 
@@ -106,10 +109,11 @@ Which incident, distinction, or pilot could this system help pressure-test? Whic
 
 State what Relata must not publish, infer, or request. Completed restricted cards and identifying consent records stay outside the public repository.
 
-## 15. Contributor review
+## 15. Source / contributor review
 
 - System description accurate enough for the stated use: yes | no
-- Public-safe fields approved: yes | no | not public
+- Review basis and inspected source paths:
+- Public-safe contributor-derived fields approved: yes | no | not public | not applicable (public-source only)
 - Disagreements or unknowns preserved:
 - Review date:
 - Reviewer / contributor confirmation route:

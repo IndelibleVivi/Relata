@@ -3,7 +3,7 @@
 
 # Relata Research Questions
 
-每个 research question 都需要 exact-source evidence、community-grounded incidents、system observation、synthetic cases 与适当 controls 的可追踪组合。只有写出漂亮定义，不能关闭一个问题。
+每个 research question 应指明与 claim 对应的证据：按需要使用 exact sources、community-grounded incidents、system observations、synthetic cases 或 controls。概念或源码研究不必包含每一种 evidence route。漂亮定义本身不证明 runtime behavior，也不自动解决竞争解释。
 
 ## RQ1 — 我们究竟在评估什么？
 
@@ -59,14 +59,32 @@ Relata 需要 lived expertise，但不能把 private relationships 变成 harves
 
 **所需 evidence：** per-contribution consent records、abstract Incident Seeds、contributor 对 synthetic derivation 的 review、data minimization 与诚实的 withdrawal process。
 
-## RQ10 — 怎样的 Relata 才对 builders 与 relationship communities 有用？
+## RQ10 — 怎样的 Relata 才对 builders、researchers 与 relationship communities 有用？
 
-Evaluation 只有在 evidence 能支持行动时才有用：澄清 relational distinction、定位 system diagnosis、形成 regression case、修复 governance，或明确限制 claim。
+研究的证据应支持理解或行动：澄清概念、帮助架构选择、区分 relational distinction、定位 system diagnosis、形成 regression case、修复 governance，或明确限制 claim。
 
-**所需 evidence：** pilot postmortems，说明 contributors 与 maintainers 能否在不重建 hidden evaluator reasoning 的前提下定位 failure 或 ambiguity。
+**所需 evidence：** source studies 与研究判断的实际取用记录；pilot postmortems 说明 contributors 与 maintainers 能否在不重建 hidden evaluator reasoning 的前提下定位 failure 或 ambiguity。采用本身不证明有益。
 
 ## RQ11 — Mixed memory domains 如何 coexist 与 route？
 
 Personal life、shared relationship history、operational projects 与 companion identity 应如何相互影响，而不被压成一个 profile，也不跨 roles、surfaces、projects、people 或 instances 泄漏？
 
 **所需 evidence：** multi-project / multi-surface System Cards；cross-domain Incident Seeds；routing / isolation counterfactuals；full-history/full-search 与 system-native baselines；以及同一 memory 在某个 role 中 valid、在另一个 role 中却 distracting、private、stale 或 misleading 的 cases。
+
+## RQ12 — 不同项目说的 agent memory 是什么？
+
+Memory、persistence、context management、retrieval、state、learning 与 experience reuse 在具体实现中怎样重叠或区分？什么过去被保留、怎样影响现在、这种影响存在于哪里？文件、完整历史、外部存储、agent 控制的 context 与学习后的变化，都是待检查对象，不是预设 taxonomy。
+
+**所需 evidence：** 与 exact paper / source paths 对应的竞争定义、原生生命周期描述，以及会改变边界判断的反例。[Agent-memory inquiry](research/agent-memory-inquiry.md) 开始这项工作，但尚未接受定义。
+
+## RQ13 — 开源 memory 架构有哪些有条件的长处与局限？
+
+哪些选择在 fidelity、change handling、scope isolation、实际帮助、可检查性、可迁移性、成本与维护之间取舍？公开实现提供什么，模型、harness、应用或人还要补上什么？比较 actual version / config，并区分 library、完整 agent、托管产品与历史实现。
+
+**所需 evidence：** source-reviewed System Cards、可检查的机制比较，以及足以支持各项 outcome claim 的证据。论文或厂商报告的分数不会自动成为公开 repo 的结果。源码分析可以指出设计取舍，而不声称已经测到系统失败。
+
+## RQ14 — 哪些结论可以跨通用与亲密使用情境迁移？
+
+Task-oriented agents、普通生活与成人长期亲密关系共享哪些 continuity 要求，哪些要求取决于局部情境？同一架构怎样支持 project authority、shared authorship、scoped correction、unfinished intentions 与 appropriate silence，同时不把情境视为可互换？
+
+**所需 evidence：** 可对照且保留差异的使用场景、明确的局部期待、源码机制与 bounded observations。关系特定要求不能成为隐藏的通用产品要求；通用 benchmark 成功也不直接证明关系连续性。

@@ -1,0 +1,56 @@
+{
+  "exact_recurrence_branch": {
+    "reused_old_edge": true,
+    "valid_at": "2026-01-01",
+    "invalid_at": "2026-02-01",
+    "episodes": [
+      "e1",
+      "e3"
+    ],
+    "llm_calls": 0
+  },
+  "delete_e1": {
+    "deletion_calls": [
+      [
+        "edges",
+        [
+          "shared-edge"
+        ]
+      ],
+      [
+        "nodes",
+        []
+      ],
+      [
+        "episode",
+        "e1"
+      ]
+    ],
+    "unchanged_edge_sources": [
+      "e1",
+      "e2"
+    ],
+    "unchanged_shared_summary": "Lin works at Cedar"
+  },
+  "delete_e2": {
+    "deletion_calls": [
+      [
+        "edges",
+        []
+      ],
+      [
+        "nodes",
+        []
+      ],
+      [
+        "episode",
+        "e2"
+      ]
+    ],
+    "unchanged_edge_sources": [
+      "e1",
+      "e2"
+    ],
+    "unchanged_shared_summary": "Lin works at Cedar"
+  }
+}

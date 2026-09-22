@@ -9,6 +9,10 @@ Community contributors 以 co-researchers 身份参与。她们可以挑战 proj
 
 ## Contribution routes
 
+### 概念或比较研究
+
+有证据链接的定义、公开源码架构研究或批判性综合，可以独立于 benchmark case 贡献。说明问题、已检查范围、有条件的长处与局限，以及竞争解释。从 [agent-memory inquiry](research/agent-memory-inquiry.md) 进入。Draft studies 与 accepted Evidence Cards、实测系统结果保持区分。
+
 ### Evidence Card
 
 对 exact public source 与 version 做 close read 或 source-level audit。使用 [Evidence Card template](research/evidence-card-template.md)。
@@ -19,7 +23,7 @@ Community contributors 以 co-researchers 身份参与。她们可以挑战 proj
 
 ### System Card
 
-用 system-native vocabulary 描述真实 memory / companion architecture，说明哪些内容 observable、opaque、adapter-emulated、unsupported 或 unknown。使用[中文](systems/system-card-template.zh-CN.md)或 [English](systems/system-card-template.md) template。
+用 system-native vocabulary 描述真实 memory / agent architecture，说明哪些内容 observable、opaque、adapter-emulated、unsupported 或 unknown。公开源码分析与获授权 contributor description 使用不同的 [census routes](systems/README.zh-CN.md)。使用[中文](systems/system-card-template.zh-CN.md)或 [English](systems/system-card-template.md) template。
 
 ### Case contribution
 

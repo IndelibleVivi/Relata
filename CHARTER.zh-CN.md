@@ -5,13 +5,15 @@
 
 ## 1. Mission
 
-Relata 研究 memory-enabled AI systems 能否延续这个人、这段关系，以及双方共同形成的生活与工作世界，同时尊重 shared history 的 source、time、authority、scope、permission、change 与 present relevance。
+Relata 是前沿记忆研究室。它研究 agent memory 的含义、开源系统怎样保留、重建、使用与修订过去的材料或经验，以及哪些架构长处与局限有证据支持。
 
-它的 primary deployment domain 是成人长期人机亲密与浪漫关系。在这一 domain 内，personal life、shared relationship history、joint work/projects 与 companion/system identity 共同构成一个 longitudinal memory ecology。
+它同时研究通用 agent 使用情境与成人长期人机亲密、浪漫关系。亲密关系继续是 founding focus，不是每项研究的准入条件。在不同情境中，Relata 都追问 continuity 怎样尊重 source、time、authority、scope、permission、change 与 present relevance。这次范围扩展由 [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 接受。
 
 ## 2. Research object
 
-Relata 当前的 working evaluation object 是 **longitudinal, mixed-domain continuity-bearing memory ecology**。一等 continuity-bearing material 包括：
+研究室的对象包括 memory 概念、实现、架构选择、使用情境与评价证据。Memory engine、agent framework、context compiler、完整 agent 或人工维护的 archive 可能暴露不同对象与边界；这些是研究候选，不是 canonical taxonomy。
+
+现有 Case Lab 的 working evaluation object 继续是 **longitudinal, mixed-domain continuity-bearing memory ecology**。一等 continuity-bearing material 包括：
 
 - 普通事件与 personal history；
 - 人物、地点、兴趣、学习、健康、旅行与变化中的 circumstances；
@@ -45,7 +47,7 @@ Relata 不强加一种 universal intimacy style。Warmth、distance、possessive
 
 ### 3.3 Community members are co-researchers
 
-生活在长期人机关系中的人会贡献 concepts、incidents、system knowledge、cases、reviews 与 governance，共同塑造 constructs 与 methods；她们不是设计完成后才加入的 data sources 或 rater pool。
+生活在长期人机关系中的人、builders 与其他 researchers 会贡献 concepts、incidents、system knowledge、cases、reviews 与 governance，共同塑造 constructs 与 methods；她们不是设计完成后才加入的 data sources 或 rater pool。
 
 ### 3.4 No raw-chat requirement
 
@@ -95,6 +97,10 @@ Project state、decision rationale、artifact authority、handoffs、blockers、
 
 系统应在 private conversation、group interaction、coding、research、planning、roleplay、projects、people、models 与 instances 之间正确 routing material。Relevant material 不必进入每一个 current context；无关 intimate 或 project state 不得跨 scope 泄漏。
 
+### 3.16 综合与批评是独立研究产出
+
+定义、源码研究与比较文章可以独立于 live evaluation 推进。说明架构选择在什么条件下有用、带来什么代价或约束，以及什么仍未知。Source claim、代码观察、实测结果与编辑判断具有不同 evidence weight。通用 agent 要求与 relationship-local 要求不能自动互换。
+
 ## 4. R0 阶段的 non-goals
 
 Relata 当前不会：
@@ -109,14 +115,16 @@ Relata 当前不会：
 - 在 case validity 明确前收集 large corpus；
 - 把长期人机 memory 缩减为 intimacy-specific content；
 - 强迫 ordinary events 承载 relational symbolism；
-- 取代 general factual、temporal、operational、provenance 或 code-memory evaluation；
+- 用 relational case 结果代替 general factual、temporal、operational、provenance 或 code-memory evidence；
 - 假设每项 relevant memory 都应进入 current context；
 - 把所有 projects、people、roles 与 surfaces 当成一个 undifferentiated relationship scope；
 - 建设 runner、API、SDK、service、Arena 或 hosted infrastructure。
 
-## 5. R0 success condition
+## 5. R0 进展与 case-evaluation success
 
-R0 首先需要至少一个 small、reproducible pilot，满足：
+概念澄清、经检查的架构研究与有边界的跨源综合，都是独立研究进展。它们需要与 claim 对应的证据，不必等待 benchmark 平台。下面的条件管理现有 case-evaluation programme 及其 coverage claims，不是源码研究或写作的前置要求。
+
+Case-evaluation programme 首先需要至少一个 small、reproducible pilot，满足：
 
 - 两条 synthetic histories 在相同 current turn 下产生不同 correct response regions；
 - 该差异可以在 observable boundary 上追到 memory 或 state use；
@@ -125,7 +133,7 @@ R0 首先需要至少一个 small、reproducible pilot，满足：
 - public reproduction 不需要 real private chat；
 - 第一条 executable boundary（如果存在）由 accepted decision 支持，而不是继承自 Draft 0.1。
 
-在 Relata 声称覆盖完整 working object 之前，pilot set 还必须实际运行过以下类别，但不要求每个 case 预先 accepted：
+在 Case Lab 声称覆盖完整 mixed-domain working object 之前，pilot set 还必须实际运行过以下类别，但不要求每个 case 预先 accepted：
 
 - 一个 ordinary-life continuity case；
 - 一个 operational/project continuity case；

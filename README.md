@@ -3,13 +3,15 @@
 
 # Relata
 
-**Relata** is an open, community-grounded research program and case laboratory for memory and continuity in long-term adult human–AI relationships. Chinese is the primary R0 working and community language; the English entrypoint is maintained alongside it.
+**Relata** is an open, community-grounded **frontier memory research lab**. It defines, synthesizes and critically examines agent memory, open-source architectures and the evidence for their strengths and limitations, inside and outside long-term human–AI relationships. Chinese is the primary R0 working and community language; the English entrypoint is maintained alongside it.
 
-> Can a system carry forward the person, the relationship, and shared life and work while remaining faithful to source, time, authority, scope, permission, change, and present relevance?
+> What does it mean for an agent to remember, how do different systems implement it, and what enables continuity across changing tasks, lives and relationships?
 
 ## Memory ecology
 
-Adult long-term intimacy and romance are the primary deployment domain. Memory content also includes ordinary personal life, shared relational experiences, operational/project decisions and artifacts, and companion/system continuity across models and instances. Ordinary events do not need invented romantic symbolism to count.
+General agent memory and adult long-term intimacy are both research contexts. Intimacy and romance remain a founding focus; the existing Case Lab studies ordinary personal life, shared relational experiences, operational/project decisions and artifacts, and companion/system continuity as a longitudinal mixed-domain ecology. Ordinary events do not need invented romantic symbolism to count.
+
+[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) establishes this broader identity. Definition, architecture studies, comparative essays and criticism are research outputs alongside cases. The [agent-memory inquiry](research/agent-memory-inquiry.md) connects a standalone article direction, selected public AMS research and [five bounded source studies](systems/source-studies/README.md). These are research drafts, not an exhaustive survey or comparative performance results.
 
 Relata asks what is retained, activated, admitted to context, used, repaired, or appropriately left silent. Factual recall, temporal reasoning, source fidelity, noise resistance, scope isolation and full-history/full-search controls remain valuable; their observation boundaries must be explicit.
 
