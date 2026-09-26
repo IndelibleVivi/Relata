@@ -10,7 +10,7 @@ ADR-0003-<decision-title>.md
 
 Each record includes:
 
-- status: proposed, accepted, superseded, rejected;
+- status: proposed, accepted, superseded, rejected, corrected;
 - context and evidence;
 - decision;
 - alternatives;
@@ -20,7 +20,7 @@ Each record includes:
 
 Vision documents do not become authority without an accepted decision record.
 
-## Accepted decisions
+## Decision index
 
 - [`ADR-0001`](ADR-0001-research-first-bootstrap.md) — begin as a research program and case lab;
 - [`ADR-0002`](ADR-0002-vision-doc-is-non-normative.md) — preserve Target Architecture Draft 0.1 as non-normative history;
@@ -28,4 +28,4 @@ Vision documents do not become authority without an accepted decision record.
 - [`ADR-0004`](ADR-0004-r0-bilingual-documentation.md) — use Chinese-first bilingual documentation with stable paired authority during R0.
 - [`ADR-0005`](ADR-0005-offline-pilot-tooling.md) — permit the narrow bundled offline synthetic rehearsal without accepting a research protocol.
 - [`ADR-0006`](ADR-0006-frontier-memory-research-lab.md) — expand Relata into a frontier memory research lab, including general and intimate uses, architecture criticism and independent synthesis.
-- [`ADR-0007`](ADR-0007-local-memory-apparatus.md) — permit an independently authored local explicit-input memory apparatus in a separate repository; no model or cross-system evaluation authority.
+- [`ADR-0007`](ADR-0007-local-memory-apparatus.md) — corrected scope: withdraw the implementation-authority interpretation, distinguish the independent Tilia goal, and retain the already-written early experiment as engineering evidence.

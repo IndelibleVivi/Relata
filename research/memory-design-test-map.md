@@ -1,7 +1,7 @@
 # Memory 设计的可检验维度图（proposed）
 
 **Status:** proposed research map；不是 accepted ontology、评分表、评测协议或 system 结果。
-**用途:** 连接现有研究与[自有架构候选](own-memory-architecture.md)，允许竞争设计接受同样的检验；不由某个候选反向决定合格答案。ADR-0007 后的[本地工程记录](../experiments/local-memory-apparatus.md) 单独记录明确操作下的机制检查，不表示本文四组广义实验或现有 cases 已完成。
+**用途:** 连接现有研究与面向独立 Tilia 目标的[自有架构候选](own-memory-architecture.md)，允许竞争设计接受同样的检验；不由某个候选反向决定合格答案。更正后的 ADR-0007 不提供实现授权；保留的[本地工程记录](../experiments/local-memory-apparatus.md) 只记录非常早期实验中明确操作下的机制检查，不表示正式 Tilia、本文四组广义实验或现有 cases 已完成。Tilia 的向量语义检索要求仍待设计和实现。
 **来源版本:** Relata `4bd0603` 的公开研究材料；本图最初仅转移固定版本研究，没有更新上游或运行 system under study。后续本地工程观察单独记录，不回填成来源研究的结果。
 **主要来源:** [STATUS.md](../STATUS.md)、[CHARTER.md](../CHARTER.md)、[ASSUMPTION_REGISTER.md](../ASSUMPTION_REGISTER.md)、[agent-memory-inquiry](../research/agent-memory-inquiry.md)、[distinction-atlas](../case-lab/distinction-atlas.zh-CN.md)、`case-lab/cases/` 五篇、[RC-001 E0 pack](../case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md)、[claim-boundary](../research/claim-boundary-study.zh-CN.md)、[source-studies README](../systems/source-studies/README.md) 与十报告。
 **标签:** 沿用 [research/README](README.md) 的证据分层；source-observed 在本文只描述固定源码所见，不表示 runtime-observed。本文所有**新维度、实验、自有设计推断均标 `proposed`**；未改动任何 source study、Case Card 或 Evidence Card 的接受级别。

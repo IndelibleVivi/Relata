@@ -1,18 +1,18 @@
 # Local Memory Apparatus — 工程实验记录
 
-**Status:** implemented and locally exercised，2026-09-26；没有 accepted capability result。
-**Authority:** [ADR-0007](../decisions/ADR-0007-local-memory-apparatus.md)。
-**System:** 独立本地 repository `relata-memory`；Python 标准库与 SQLite。
+**Status:** very early engineering experiment，2026-09-26；已实现并局部检查，范围纠正后保留；没有 accepted architecture 或 capability result。
+**Scope correction:** [ADR-0007](../decisions/ADR-0007-local-memory-apparatus.md) 已撤回把长期 goal 当作实现授权的解释；本记录保留实际工程证据，不提供后续实现权限。
+**System:** 独立本地 repository `relata-memory`（历史工作名）；Python 标准库与 SQLite。不是正式 Tilia。
 **Code revision:** `99f673f95770215b186e7d2530122ad50b04a42b`，该 repo 的首次本地 commit。
 **Publication:** 源码尚未公开发布、无 remote、未选择公共 license；本文不是公共代码已可独立复现的结果包。
 
 ## 中文摘要
 
-本实验将[候选 B](../research/own-memory-architecture.md)的部分状态责任推进成明确操作的本地装置，走通输入、持久化、修订、派生状态、检索、context 消费与恢复。操作与内容均为人工编写的 synthetic development material，consumer 为脚本。最终实现通过 110 项工程测试与一套 38 个 CLI 步骤、21 项断言的 demo；每个 CLI 步骤都是新进程。它验证构造场景中的 revision、scope、失效、输入暴露和恢复机制，不能测自动抽取、语义回答质量、长期连续性或架构比较收益；现有 Case Lab 状态不变。
+本实验将[候选 B](../research/own-memory-architecture.md)的部分状态责任推进成明确操作的本地装置，走通输入、持久化、修订、派生状态、字面检索、context 消费与恢复。操作与内容均为人工编写的 synthetic development material，consumer 为脚本。所记录代码通过 110 项工程测试与一套 38 个 CLI 步骤、21 项断言的 demo；每个 CLI 步骤都是新进程。它验证构造场景中的 revision、scope、失效、输入暴露和恢复机制，不能测自动抽取、语义回答质量、长期连续性或架构比较收益；现有 Case Lab 状态不变。未来独立装置以 Tilia 为名，需要向量语义检索；现有实验未实现这项能力，保留它不表示设计已被接受。
 
 ## English summary
 
-This local engineering experiment implements selected responsibilities of candidate B with explicit operations, a persistent store and a scripted consumer. The final code passed 110 engineering tests and a 38-step subprocess demo with 21 assertions. Checks cover constructed revision, scope, invalidation, input-exposure and recovery scenarios. They do not establish automatic extraction quality, semantic response quality, longitudinal continuity, comparative benefit or Case Lab acceptance. The independent implementation is locally committed but has not been publicly published.
+This very early local experiment implements selected responsibilities of candidate B with explicit operations, literal search, a persistent store and a scripted consumer. The recorded code passed 110 engineering tests and a 38-step subprocess demo with 21 assertions. Checks cover constructed revision, scope, invalidation, input-exposure and recovery scenarios. They do not establish automatic extraction quality, semantic response quality, longitudinal continuity, comparative benefit or Case Lab acceptance. The code is retained after correcting an implementation-scope misinterpretation; it is locally committed but not publicly published. It is not formal Tilia and lacks the vector-based semantic retrieval required for that independent goal.
 
 ## 问题与实现边界
 

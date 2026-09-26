@@ -6,7 +6,7 @@
 **Project:** Relata
 **Phase:** R0 — Research Foundation
 **Identity:** frontier memory research lab; general agent memory and adult long-term intimacy are research contexts
-**Implementation:** repository checks, an offline synthetic execution rehearsal, candidate input preparation/verification/projection audits, and two isolated source-study diagnostics, plus a separately housed local explicit-input memory apparatus; no accepted benchmark implementation
+**Implementation:** repository checks, an offline synthetic execution rehearsal, candidate input preparation/verification/projection audits, and two isolated source-study diagnostics; a separate early memory experiment is retained as a research artifact, not a Relata product; no accepted benchmark implementation
 **Remote/publication:** public source repository; no formal release
 **Case release:** none
 **Protocol version:** none
@@ -20,7 +20,7 @@ Current working authority consists of `CHARTER.md`, `RESEARCH_QUESTIONS.md`, `AS
 
 [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) accepts the broader lab identity, independent conceptual, architecture and synthesis work, and the two bounded offline source diagnostics. Adult long-term intimacy remains a founding focus. This scope decision does not promote evidence, accept an article thesis or authorize model/provider execution.
 
-The maintainer’s 2026-09-26 direction adds a long-term aim: use this research to prepare an independently authored memory architecture and runnable apparatus from an empty repository. The current work is a [candidate design](research/own-memory-architecture.md) and [test map](research/memory-design-test-map.md). The subsequent continuation is bounded by [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md): implement and test an explicit-input local apparatus in a separate repository. The [engineering record](experiments/local-memory-apparatus.md) owns its actual execution status. No model/provider authority or architectural superiority follows.
+The maintainer’s 2026-09-26 clarification separates the long-term **Tilia** goal from Relata's current research scope. Relata's [candidate design](research/own-memory-architecture.md) and [test map](research/memory-design-test-map.md) may inform that future independent system; they do not authorize its implementation or settle its architecture. [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) corrects the coordinator's earlier scope misinterpretation. Already-written `relata-memory` code is retained as a very early local experiment, with evidence in its [engineering record](experiments/local-memory-apparatus.md). Tilia requires vector-based semantic retrieval; the experiment only supplies literal search. Encoder/model choices remain open.
 
 ## Evidence state
 
@@ -30,8 +30,8 @@ The maintainer’s 2026-09-26 direction adds a long-term aim: use this research 
 | Agent-memory inquiry / article direction | open research questions, AMS links and initial synthesis | no accepted definition, exhaustive survey or article manuscript |
 | Open-source architecture studies | 10 bounded drafts: Mem0, Letta, Graphiti, lmc-5, Tideline Memory, Aelios, Hindsight, OpenViking, LangMem, A-MEM | pinned source observations; lmc-5 and Graphiti additionally have isolated offline diagnostics; no independent human review, accepted System Card or model-backed comparative result |
 | [Architecture atlas](systems/architecture-atlas/README.md) | 10 models, 30 SVG/Mermaid views and an offline interactive reader | source-grounded diagrams; no new upstream execution or capability measurement |
-| Own-memory design / case-to-test map | proposed architecture, controls and falsification conditions | candidate B selected for a bounded local engineering experiment under ADR-0007; no accepted universal schema or capability result |
-| [Local memory apparatus](experiments/local-memory-apparatus.md) | implemented, locally committed; code not publicly published | 110 engineering tests and a 38-step / 21-assertion subprocess demo; explicit synthetic inputs and scripted consumption only, no semantic result |
+| Own-memory design / case-to-test map | proposed architecture, controls and falsification conditions for the independent Tilia goal | candidate B is not an accepted Tilia architecture; no accepted universal schema or capability result |
+| [Local memory apparatus](experiments/local-memory-apparatus.md) | very early experiment retained after scope correction; locally committed, code not publicly published | 110 engineering tests and a 38-step / 21-assertion subprocess demo; explicit synthetic inputs and scripted consumption only, no vector retrieval or semantic result |
 | Claim boundaries | bilingual candidate study | CL0–CL6, lanes, cells and adapter classes remain proposals; no accepted result unit or publication policy |
 | System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards or maps |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
@@ -51,7 +51,7 @@ Define and critically examine agent memory across concepts, open-source architec
 
 ## Immediate work
 
-Use the [own-memory design study](research/own-memory-architecture.md) and [test map](research/memory-design-test-map.md) to challenge the proposed core, derived views and context boundary with existing cases and simpler controls. Keep source observations, design hypotheses and execution results separate; the known cases are development examples, not held-out validation. ADR-0007 supplies the concrete local implementation/execution scope; the engineering record must preserve mechanisms tested, actual consumers and remaining semantic questions. It does not complete the cross-system benchmark programme.
+Use the [own-memory design study](research/own-memory-architecture.md) and [test map](research/memory-design-test-map.md) to challenge candidate mechanisms with existing cases and simpler controls, and study vector retrieval and encoder options for the independent Tilia goal. Keep source observations, design hypotheses and execution results separate; the known cases are development examples, not held-out validation. Preserve the retained experiment's tested mechanisms and remaining semantic questions without treating ADR-0007 or the code's existence as an instruction to continue implementation.
 
 Develop the [agent-memory inquiry](research/agent-memory-inquiry.md) from the [ten source-study drafts](systems/source-studies/README.md): review source fidelity, test competing interpretations and narrow the standalone article's argument. Selected public AMS work can inform questions with its original evidence limits. This research proceeds independently of live evaluation and the case promotion gate.
 

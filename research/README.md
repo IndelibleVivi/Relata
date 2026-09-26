@@ -8,7 +8,7 @@ The [agent-memory inquiry](agent-memory-inquiry.md) asks what open-source memory
 
 ## Design toward an independently authored system
 
-The [own-memory architecture study](own-memory-architecture.md) and [case-to-test map](memory-design-test-map.md) connect source mechanisms, candidate cases and controls to the long-term aim of independently authoring a memory runtime. They preserve alternatives and falsification conditions; the broad proposed components and experiments remain design material. [ADR-0007](../decisions/ADR-0007-local-memory-apparatus.md) permits a bounded local explicit-input implementation, with observations in the [engineering record](../experiments/local-memory-apparatus.md). The in-house system is one research object, not the evaluator’s ontology. Existing article and community research continues independently.
+The [own-memory architecture study](own-memory-architecture.md) and [case-to-test map](memory-design-test-map.md) connect source mechanisms, candidate cases and controls to the independent long-term **Tilia** goal. They preserve alternatives and falsification conditions; proposed components and experiments remain design material. The corrected [ADR-0007](../decisions/ADR-0007-local-memory-apparatus.md) withdraws the interpretation that this goal authorized immediate implementation. The [engineering record](../experiments/local-memory-apparatus.md) preserves observations from an already-written early local experiment, without accepting it as Tilia's architecture or the evaluator’s ontology. Existing article and community research continues independently.
 
 ## Current evidence spine
 

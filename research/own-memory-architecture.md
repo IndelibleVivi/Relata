@@ -1,15 +1,15 @@
 # 自有记忆架构：从连续性要求到可运行候选
 
-**Status:** proposed design study；研究目标来自 maintainer 2026-09-26 的方向补充。[ADR-0007](../decisions/ADR-0007-local-memory-apparatus.md) 已授权第一套明确输入的本地实现；其验收状态见[工程记录](../experiments/local-memory-apparatus.md)。本文的广义架构、实验与效用主张仍是候选。
-**Scope:** 为未来从空 Git repository 编写自有 memory 核心与运行装置积累设计和验证依据；不是跨系统协议或普适 memory ontology。
+**Status:** proposed design study；已按 maintainer 2026-09-26 澄清纠正范围。[ADR-0007](../decisions/ADR-0007-local-memory-apparatus.md) 不再作为实现授权；已经写出的早期实验见[工程记录](../experiments/local-memory-apparatus.md)。本文不是已接受的 Tilia 架构或产品 SPEC。
+**Scope:** 为未来从空 Git repository 编写的独立 **Tilia** 积累设计和验证依据；Relata 继续承担研究，不将长期目标变成当前实现任务。
 
 ## 中文摘要
 
-Relata 的研究也服务于一项建设目标：自己理解、设计并写出能长期运行的记忆系统。十项目研究给出可借鉴的机制与条件，Case Lab 给出需要保住的具体行为；二者通过[设计与测试映射](memory-design-test-map.md)连接。本研究建议优先比较「可追溯的持久材料与修订 + 可重建的理解/检索视图 + 面向当前任务的 context 编排」和更简单的完整历史／文件搜索方案。建议的中心是当前使用、修复和正向帮助，不是尽可能存下更多 facts。本文的组件和广义实验仍为候选；具体本地实现另行记录，不据此声称模型或连续性效果。
+Relata 的研究也可以为独立的 Tilia 目标蓄力：自己理解、设计并写出能长期运行的记忆系统。十项目研究给出可借鉴的机制与条件，Case Lab 给出需要保住的具体行为；二者通过[设计与测试映射](memory-design-test-map.md)连接。本研究建议优先比较「可追溯的持久材料与修订 + 可重建的理解/检索视图 + 面向当前任务的 context 编排」和更简单的完整历史／文件搜索方案。Tilia 的预期设计包含必要的向量语义检索；具体编码器、小模型和检索组合仍待研究。本文组件仍为候选；已经写出的明确输入实验只提供局部工程证据，不锁定正式系统，也不证明模型或连续性效果。
 
 ## English summary
 
-Relata's research also prepares an independently authored memory architecture and runnable apparatus starting from an empty repository. This design study connects existing source studies and candidate cases to falsifiable engineering choices. It proposes comparing a durable, revisable evidence core with rebuildable memory views and task-specific context assembly against simpler full-history and file-search approaches. The proposal concerns useful continuity, scoped revision and inspectable use; it defines neither a universal memory ontology nor a cross-system API. ADR-0007 separately authorizes the first local explicit-input apparatus; its engineering record distinguishes implementation evidence from the broader proposed experiments and performance claims.
+Relata's research may inform **Tilia**, a future independent memory system starting from an empty repository. This study connects source studies and candidate cases to falsifiable design choices, comparing a durable, revisable evidence core, rebuildable views and context assembly against simpler history/file-search approaches. Vector-based semantic retrieval is required for the intended Tilia system; encoders and small-model integration remain open. Corrected ADR-0007 withdraws the earlier interpretation that this goal authorized implementation. The retained local experiment provides bounded engineering evidence, not an accepted Tilia architecture, universal ontology or performance result.
 
 ## 1. 我们想自己承担什么
 
@@ -17,7 +17,7 @@ Relata's research also prepares an independently authored memory architecture an
 
 希望最终装置能完成一条真实闭环：经历或工作结果留下可用材料，后来的任务在适当条件下得到帮助，使用者能检查影响的来历，纠正能改变后续影响，必要的历史与未受影响内容继续保留。它应支持普通生活、项目与共同创作、亲密关系、实例和模型迁移中的不同需求；并非每条信息都要承载关系象征，也并非每次互动都需要召回。
 
-研究室和自有系统承担不同责任。Relata 继续容纳不同架构与独立文章；未来自有实现只是一个 system under study。其内部 schema 不能变成他人参测的标准答案。当前按 [STATUS](../STATUS.md) 与 ADR-0007 推进一套独立本地实现；研究 repo 不因此获得 provider、服务或公开新 repo 的权限。
+研究室和自有系统承担不同责任。Relata 继续容纳不同架构与独立文章；未来 Tilia 可以成为一个 system under study，其内部 schema 不能变成他人参测的标准答案。按 [STATUS](../STATUS.md) 与更正后的 ADR-0007，现有 `relata-memory` 只是保留的早期工程实验；不把它的名字、代码或 schema 自动转成正式 Tilia，也不从研究目标推导后续实现权限。
 
 ## 2. 从已有研究转移什么
 
@@ -37,11 +37,11 @@ Relata's research also prepares an independently authored memory architecture an
 
 | 候选 | 它解决什么 | 具体代价 / 可推翻条件 | 本研究的位置 |
 |---|---|---|---|
-| A：完整历史 + 可搜索文件 + 显式 context 选择 | 最少加工，保留叙事和原文，便于检查、编辑与迁移 | 长历史的预算、条件修订、scope 和新旧版本选择要有人或调用方负责；不能假定全文自然会正确使用 | 必须保留的强基线；若满足目标，可以成为实际方案 |
+| A：完整历史 + 可搜索文件 + 显式 context 选择 | 最少加工，保留叙事和原文，便于检查、编辑与迁移 | 长历史的预算、条件修订、scope 和新旧版本选择要有人或调用方负责；不能假定全文自然会正确使用 | 必须保留的强基线；若发展为 Tilia 实际方案，仍须满足向量语义检索要求 |
 | B：可修订证据核心 + 派生视图 + context 编排 | 明确修订/来源/适用条件，并让检索和当前使用读同一状态；解释和摘要可再生成 | schema、写入判断、维护和状态传播更复杂；元数据不会自动让推断可靠 | **优先验证的候选**；先证明相对 A 的必要性，再逐步加入加工 |
 | C：以自主组织／学习为主的记忆 | 经验可改变链接、摘要、提示或更深层的策略，可能获得更好的跨任务迁移 | 变化的归因、回滚、遗忘和代价更难检查；学习对象和实际收益需另有证据 | 有价值的后续研究方向；不作为第一装置的隐含前提 |
 
-B 不是把十个项目的模块全部装在一起。文件、图、向量和规则各自解决具体问题；没有收益证据时不同时引入。对 C 的暂缓不是判定它较差，参数学习也不被排除在 memory 研究之外。
+B 不是把十个项目的模块全部装在一起。文件、图、向量和规则各自解决具体问题。向量语义检索是 Tilia 已明确的需求；它不要求同时引入图数据库、复杂规则或学习循环。对 C 的暂缓不是判定它较差，参数学习也不被排除在 memory 研究之外。候选 B 是研究优先项，不是已选定的正式 Tilia 架构。
 
 ## 4. 候选 B 的责任与状态
 
@@ -59,7 +59,11 @@ B 不是把十个项目的模块全部装在一起。文件、图、向量和规
 
 在这个候选里，核心保留材料与修订关系；全文、摘要、关联和向量是不同的视图。某条理解可以引用多段材料；材料也可以保持完整片段，不强制抽成原子 fact。解释和经验适用条件可以成为记录，但不能悄悄覆盖说话者原文或获准范围。
 
-ADR-0007 的第一装置选择 Python 标准库与单个本地 SQLite 事务存储，配合普通文件导出，以减少持久状态 owner；这是一项实现选择，不是已证的最优架构。只有在实际检索不足时再引入 embedding；只有并发或维护成本证据要求时再拆后台服务。移动端、多租户云服务和多节点同步不在第一装置的拟议责任中。
+已经写出的早期实验使用 Python 标准库与单个本地 SQLite 事务存储，配合普通文件导出；这是该实验的实现事实，不锁定 Tilia 的技术栈。实验目前只有字面检索，没有 embedding 或语义召回。**Tilia 的正式设计需要向量语义检索，不以字面搜索先失败为引入前提。** 编码小模型可以进入候选；具体模型、向量索引、与字面检索的组合、重排以及更正后的刷新机制仍待研究，不能由这个实验代为决定。服务拆分、移动端、多租户和同步也尚无已接受的产品合同。
+
+**Jev 与 encoder 分别研究。** Encoder 用于生成检索表示；Jev 是结构化判断模型，对 state 回答 `Noul`、`Choice`、`Score` 问题。[Cloudflare 官方目录](https://developers.cloudflare.com/ai/models/typesafe/jev/)已提供 `typesafe/jev` 的调用说明，并标为 third-party（2026-09-26 文档核验，未调用）。将它用于准入、关联或检索停止，是待验证的设计候选；不将它等同于 embedding 模型，也不据接口可用性推断其记忆效果。
+
+这条线接回 [AMS 的 Jev-Mem 精读](https://indeliblevivi.github.io/agent-memory-study/material/jev-mem-system-one-control/)与[给定判断的源码实验](https://github.com/IndelibleVivi/agent-memory-study/blob/main/research/jev-memory-contract-study/README.md)。AMS 记录的 10 个案例使用 scripted controller 和 MockEncoder，检查的是固定源码在给定判断后的状态变化；它们不证明 Jev 推理、真实语义检索或端到端收益。本研究把它们作为已有研究入口，不增加一份 Relata 上游实测或接受结论。
 
 内核不承诺自行理解什么是真的。它可以核对受信调用方提供的权限上下文、明确引用、scope 和 revision，却不能验证一句模型解释是否忠于真实经历；第一装置也不提供账号认证。存储接受、来源身份、断言可信度和共同认可应保持不同状态；第一工程实验使用明确输入操作测试这些区别，后续自动抽取必须在相同原始材料上另测。自动维护也不意味着每条材料都要人工审批：已获准范围内可按策略自动保存带来源的提案，但扩大权限或声称共同接受不能由模型自行完成。
 
@@ -121,17 +125,17 @@ current-only 诊断历史是否必要；full-history/full-search 保留简单而
 
 既有五个 cases 是已知开发表例，不能再被称为隐藏验证集。后续需要先锁定设计主张，再做未用于开发的变体和竞争反例，记录争议；尚未有人类 review 的案例仍不据此升级为 accepted。对 companion identity、长时段效用、学习迁移、撤回意图等覆盖缺口保持明确，尤其不将 D-006 的未来意图 authority 缺口补成已完成案例。
 
-## 8. 第一次 git init 的实现范围
+## 8. 已保留的早期实验与未来 Tilia
 
-本设计最初交付研究、反例和装置合同候选。随后的继续实现按 ADR-0007 在独立 `relata-memory` repo 中承担下列闭合本地路径；实际完成项和命令以工程记录及该 repo 的 README 为准：
+本设计交付研究、反例和装置合同候选。协调者随后把长期 goal 误读成了实现任务，在独立 `relata-memory` repo 写出了下列明确操作路径。更正后的 ADR-0007 撤回这项授权解释；代码与工程证据保留，实际范围和命令以工程记录及该 repo 的 README 为准：
 
 - 输入与来源/scope 绑定 → 持久写入 → 检索/编排 → 实际消费 → 局部纠正 → 重启后继续使用；
 - 能检查、导出和恢复该实验装置自己的材料；能区分原始材料、派生视图与已交付 context；
 - 同一条路径有当前请求、完整历史和简单搜索对照，避免内核测试被误报成模型或长期关系能力。
 
-可先用明确操作和 scripted consumer 验证持久性、revision、scope 与失效规则。这会是存储/状态机制的工程证据；只有接入具体 reader 并观察语义使用，才开始回答连续性效果。不要把人工标注好的结构当作自动抽取的成绩。
+这份实验用明确操作和 scripted consumer 检查持久性、revision、scope 与失效规则。它提供存储/状态机制的工程证据；人工标注好的结构不是自动抽取的成绩，消费脚本展示内容也不证明 agent 能正确理解和使用。向量检索、编码模型与真实语义使用尚未实现或验证，不能称为完整的目标记忆系统。
 
-独立 repo 的工作名为 `relata-memory`，第一技术栈为 Python 标准库 + SQLite；新 repo 中保留自有源代码和基础设施来源，不继承上游 maintainer 设置，也不默认增加公共许可或远端。Relata 研究记录仍留在这里，未来独立实现按其真实权限、数据和运行条件进入研究。第一装置不以正式跨系统 benchmark 的完整 promotion gate 作为开发前提；具体获准范围由 ADR-0007 给出；本设计不将其扩大成自动抽取或模型效果试验。
+`relata-memory` / `relata_memory` 是保留实验的历史目录／包名，本轮不做物理改名。未来正式装置用 **Tilia** 的名字承接，其架构仍开放，现有实验可以成为讨论、替换或舍弃的素材。代码已经存在和测试通过都不等于 owner 接受了设计。研究、essay 与规格可以继续帮助澄清目标；本文不是要求先完成一份很长的 SPEC 才能学习，也不是立即继续实现的工作单。
 
 ## 9. 本轮认识的边界
 

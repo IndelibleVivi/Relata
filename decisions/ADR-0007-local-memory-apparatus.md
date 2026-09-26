@@ -1,17 +1,21 @@
-# ADR-0007 — Build a Bounded Local Memory Apparatus
+# ADR-0007 — Correct the Local Apparatus Scope
 
-**Status:** accepted for the maintainer-authorized implementation continuation on 2026-09-26; no evaluation protocol or capability result accepted
-**Scope:** independently authored local experiment in a separate repository, working name `relata-memory`
+**Status:** corrected on 2026-09-26 following maintainer clarification; the earlier claim of implementation authorization is withdrawn because the original “accepted” status misread a long-term goal as an implementation request
+**Scope:** distinguish Relata research, the future independent Tilia goal, and an already-written early experiment retained for inspection
 
 ## 中文摘要
 
-在自有架构设计与测试映射之后，maintainer 要求继续推进。此次承接设计中第一次 `git init` 的完整本地路径：明确输入与来源/scope、持久保存、检索/context、scripted consumption、局部修订、重启、检查与导出恢复，并保留原始历史和简单文件搜索对照。选择 Python 标准库与 SQLite，先验证显式操作下的状态机制。实现放在独立本地 repo；Relata 保留研究记录与评价的独立性。此决定不授权模型/provider、私人材料、跨系统 runner、服务、部署或新 repo 的公开发布。
+Maintainer 澄清：从零编写自有记忆装置是长期 **goal**，不是要求在 Relata 中启动实现；未来独立装置以 **Tilia** 的名字承接。协调者把“继续推进研究”误读成了立即实现，并据此写下原 ADR。即使代码位于独立 repo，也不能使这项误读成为授权。现保留已经写出的 `relata-memory` 作为非常早期的工程实验，不将其认定为正式 Tilia、已接受架构或后续实现任务。
+
+Tilia 的预期设计必须包含向量语义检索；编码小模型可作为研究候选，具体模型与集成方式尚未选择。现有实验只有字面检索，未达到这项要求。Relata 继续推进定义、源码研究、架构图、比较文章与 cases；其研究可以为独立 Tilia 提供依据，不承担 Tilia 产品身份。
 
 ## English summary
 
-The maintainer's continuation advances the own-memory design into its first complete local engineering loop: explicit input/provenance/scope, persistence, retrieval/context, scripted consumption, scoped revision, restart, inspection, export/restore, and raw-history/simple-file controls. The implementation uses Python's standard library and SQLite in a separate local repository. This authorizes a bounded state-mechanism experiment, not a model study, private-data import, cross-system runner, service, deployment, public repository creation or capability claim.
+The maintainer clarified that an independently authored memory apparatus is a long-term goal, to be pursued under the name **Tilia**, not an instruction to start implementation within Relata. The coordinator incorrectly promoted research continuation into implementation authority. The already-written local `relata-memory` code is retained as a very early engineering experiment; it is neither the accepted Tilia architecture nor an ongoing implementation mandate. Vector-based semantic retrieval is required for the intended Tilia system, with encoder models still open for research. The experiment's literal search does not meet that requirement. Relata remains an independent research lab.
 
-## Decision and rationale
+## Historical implementation rationale — not current authority
+
+The following choices explain the retained experiment. They record what the coordinator implemented under the mistaken scope interpretation; they do not represent maintainer acceptance of an architecture or permission to extend it.
 
 1. Implement the local path proposed in [the design study](../research/own-memory-architecture.md), using explicit operations and public synthetic examples. Candidate B becomes an engineering hypothesis with an implementation; it is not accepted as superior to simpler candidate A or as a universal memory schema.
 2. Reuse SQLite transactions and Python's standard library for one local persistent state owner. Do not build a database, external queue or framework. The current environment provides Python 3.13 and SQLite; no new production dependency is necessary. Atomic checks/mutations use a single transaction boundary, following [SQLite's transaction semantics](https://www.sqlite.org/lang_transaction.html) and [Python's sqlite3 interface](https://docs.python.org/3.13/library/sqlite3.html).
@@ -19,12 +23,12 @@ The maintainer's continuation advances the own-memory design into its first comp
 4. Keep raw-history and simple-file controls inspectable. Explicitly prepared operations can test state mechanisms, but cannot demonstrate extraction quality, semantic use, memory necessity, long-term utility or comparative superiority. Do not feed Case Lab evaluator keys into the apparatus or present a development demo as a completed case.
 5. Keep implementation in a separate local Git repository. This split separates an experimental system from its research/evaluation programme; it does not implement the historical public/sealed/operations three-repository scheme. The new repository has no remote or public license by default. Research documentation remains here.
 
-## Retained boundaries
+## Current disposition and boundaries
 
-ADR-0001's research discipline, ADR-0004's language policy, ADR-0005's specific rehearsal and ADR-0006's plural lab identity remain in force. This decision narrowly permits one first-party local experimental runtime; it does not promote a stable system-under-study API, SDK, benchmark runner, hosted infrastructure, canonical ontology, model/provider integration, live personal memory, or existing Case Cards. Cross-system evaluation retains its separate promotion gate.
+ADR-0001's research discipline, ADR-0004's language policy, ADR-0005's specific rehearsal and ADR-0006's plural lab identity remain in force. Retain the existing code, diagrams and bounded engineering evidence. The directory/package name `relata-memory` / `relata_memory` is historical; this correction does not rename or migrate it, establish a formal Tilia implementation, or authorize feature expansion. No stable system-under-study API, SDK, benchmark runner, hosted infrastructure, canonical ontology, model/provider integration, private-data import, release or deployment follows. Cross-system evaluation retains its separate promotion gate.
 
-## Alternatives and review
+## Evidence and future design
 
-Continuing only design documents would leave the requested state mechanisms untested. Building a hosted or model-backed application now would add execution and data boundaries that this task has not chosen. A local explicit-input apparatus makes the mechanisms inspectable while keeping those choices separate.
+The experiment makes selected state mechanisms inspectable, but its existence and passing tests do not settle the intended system's design. Candidate B remains a proposal that may change or be replaced; its schema must not become Relata's evaluator contract. Vector retrieval is a Tilia requirement, not a claim that all memory research must use vectors.
 
-Revisit candidate B when simple file/history controls meet the same need with less burden, or when observed failures require changing the state model. New claims must bind actual code, inputs, operations, outputs and limits. The [experiment record](../experiments/local-memory-apparatus.md) owns engineering observations; this decision records scope, not successful execution.
+The [experiment record](../experiments/local-memory-apparatus.md) preserves actual code, inputs, operations, outputs and limits. The [design study](../research/own-memory-architecture.md) and test map remain research inputs to future discussion, not a completed product SPEC. The earlier wording remains recoverable in Git history.
