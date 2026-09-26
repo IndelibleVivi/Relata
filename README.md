@@ -17,11 +17,11 @@ Relata asks what is retained, activated, admitted to context, used, repaired, or
 
 ## Research toward our own memory system
 
-The lab also prepares an independently authored memory architecture and runnable apparatus starting from an empty repository. The [candidate design](research/own-memory-architecture.md) and [case-to-test map](research/memory-design-test-map.md) turn the existing studies into explicit choices, controls and counterexamples. They compare useful continuity, revision and scoped use with simpler full-history/file-search approaches. This is design research: no new memory runtime has been built, and the lab’s other research outputs remain independently valuable.
+The lab also prepares an independently authored memory architecture and runnable apparatus starting from an empty repository. The [candidate design](research/own-memory-architecture.md) and [case-to-test map](research/memory-design-test-map.md) turn the existing studies into explicit choices, controls and counterexamples. They compare useful continuity, revision and scoped use with simpler full-history/file-search approaches. [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) bounds the first local explicit-input apparatus, now implemented and locally exercised in a separate repository under the working name `relata-memory`. Its code is locally committed, not publicly published. Its [engineering record](experiments/local-memory-apparatus.md) distinguishes implementation and checks from semantic memory outcomes. The lab’s other research outputs remain independently valuable.
 
 ## Current stage
 
-**R0 — Research Foundation.** Two narrow source Evidence Cards are accepted. RC-001 is clinic-ready; RC-002/003/004 are unreviewed seeds. There are no reviewed System Cards, accepted cases, validated evaluators, real system results or rankings.
+**R0 — Research Foundation.** Two narrow source Evidence Cards are accepted. RC-001 is clinic-ready; RC-002/003/004 are unreviewed seeds. There are no reviewed System Cards, accepted cases, validated evaluators, semantic system-evaluation results or rankings.
 
 Software now includes the public repository checker and an **offline RC-002 execution rehearsal**. It runs two synthetic histories across five conditions with a deliberately scripted subject, preserving evidence and exporting a blind packet. Its tests establish plumbing behavior only. No model is called, and no semantic or capability score is generated. Exact evidence status is in [STATUS](STATUS.md).
 

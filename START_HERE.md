@@ -7,7 +7,7 @@ Relata is a frontier memory research lab. Begin with the [agent-memory inquiry](
 
 The foundation work below also preserves the operational path from the non-normative Target Architecture Draft 0.1 to evidence-backed cases.
 
-For the long-term in-house build aim, read the [candidate memory architecture](research/own-memory-architecture.md), then the [case-to-test map](research/memory-design-test-map.md). They connect mechanisms, current coverage, alternatives and falsification conditions. Design research can proceed now; no runtime, provider execution or case acceptance follows from those documents. The cross-system promotion gate below is not a universal prerequisite for developing a future in-house prototype under a concrete implementation task.
+For the long-term in-house build aim, read the [candidate memory architecture](research/own-memory-architecture.md), then the [case-to-test map](research/memory-design-test-map.md). They connect mechanisms, current coverage, alternatives and falsification conditions. For the first local apparatus, follow [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) and its [engineering record](experiments/local-memory-apparatus.md). It uses explicit inputs and a scripted consumer in a separate repository; provider execution and case acceptance are outside that scope. The cross-system promotion gate below does not gate this bounded implementation.
 
 Current local tooling: use the [RC-002 scripted rehearsal](experiments/offline-rehearsal.md) or the [RC-005 candidate input audit](experiments/continuity-input-audit.md) without waiting for the broader research programme below. Neither authorizes model execution or accepts a case.
 

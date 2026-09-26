@@ -28,3 +28,4 @@ Vision documents do not become authority without an accepted decision record.
 - [`ADR-0004`](ADR-0004-r0-bilingual-documentation.md) — use Chinese-first bilingual documentation with stable paired authority during R0.
 - [`ADR-0005`](ADR-0005-offline-pilot-tooling.md) — permit the narrow bundled offline synthetic rehearsal without accepting a research protocol.
 - [`ADR-0006`](ADR-0006-frontier-memory-research-lab.md) — expand Relata into a frontier memory research lab, including general and intimate uses, architecture criticism and independent synthesis.
+- [`ADR-0007`](ADR-0007-local-memory-apparatus.md) — permit an independently authored local explicit-input memory apparatus in a separate repository; no model or cross-system evaluation authority.

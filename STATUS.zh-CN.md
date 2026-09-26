@@ -6,7 +6,7 @@
 **Project：** Relata
 **Phase：** R0 — Research Foundation
 **Identity：** 前沿记忆研究室；通用 agent memory 与成人长期亲密关系都是研究情境
-**Implementation：** repository checks、离线合成执行演练、candidate 输入准备/核验/投影审计与两份局部源码诊断；没有 accepted benchmark implementation
+**Implementation：** repository checks、离线合成执行演练、candidate 输入准备/核验/投影审计、两份局部源码诊断与独立 repo 的本地明确输入记忆装置；没有 accepted benchmark implementation
 **Remote/publication：** public source repository；没有 formal release
 **Case release：** none
 **Protocol version：** none
@@ -20,7 +20,7 @@
 
 [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 接受研究室定位扩展、独立的概念、架构和综合研究，以及两份有界离线源码诊断。成人长期亲密关系继续是 founding focus。这项范围决定不提升证据状态、不接受文章论点，也不授权模型/provider 执行。
 
-Maintainer 于 2026-09-26 补充长期目标：让研究为从空 repository 独立编写自有 memory 架构与可运行装置积累依据。当前成果是[候选设计](research/own-memory-architecture.md)与[测试映射](research/memory-design-test-map.md)。建设目标不等于接受具体架构、增加 runtime 或改变模型/provider 执行权限。
+Maintainer 于 2026-09-26 补充长期目标：让研究为从空 repository 独立编写自有 memory 架构与可运行装置积累依据。当前成果是[候选设计](research/own-memory-architecture.md)与[测试映射](research/memory-design-test-map.md)。随后的继续实现按 [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) 限定：在独立 repo 编写并测试明确输入的本地装置；[工程记录](experiments/local-memory-apparatus.md) 管理实际执行状态。这不增加模型/provider 权限，也不接受架构优越性。
 
 ## Evidence state
 
@@ -30,7 +30,8 @@ Maintainer 于 2026-09-26 补充长期目标：让研究为从空 repository 独
 | Agent-memory inquiry / 文章方向 | 开放研究问题、AMS 连接与初步综合 | 无 accepted definition、穷尽综述或文章正文 |
 | 开源架构研究 | 10 份有界 drafts：Mem0、Letta、Graphiti、lmc-5、Tideline Memory、Aelios、Hindsight、OpenViking、LangMem、A-MEM | 固定源码观察；lmc-5 与 Graphiti 另有窄范围离线诊断；无独立人类 review、accepted System Card 或模型参与的比较结果 |
 | [架构图集](systems/architecture-atlas/README.md) | 10 份模型、30 幅 SVG/Mermaid 与离线交互 reader | 绑定源码的图示；没有新增上游运行或能力测量 |
-| 自有 memory 设计 / 案例—测试映射 | proposed 架构、controls 与推翻条件 | 已记录建设目标；没有新 runtime、accepted 内部 schema、系统执行或能力结果 |
+| 自有 memory 设计 / 案例—测试映射 | proposed 架构、controls 与推翻条件 | ADR-0007 选取候选 B 做窄范围本地工程实验；没有 accepted 普适 schema 或能力结果 |
+| [本地记忆装置](experiments/local-memory-apparatus.md) | 已实现并本地提交；源码未公开发布 | 110 项工程测试与 38 步／21 项断言的子进程 demo；只有明确合成输入与脚本消费，没有语义效果结果 |
 | Claim boundaries | 双语 candidate study | CL0–CL6、lanes、cells、adapter classes 仍为提议；无 accepted result unit 或 publication policy |
 | System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards/maps |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
@@ -50,7 +51,7 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 
 ## Immediate work
 
-用[自有记忆设计研究](research/own-memory-architecture.md)与[测试映射](research/memory-design-test-map.md)，以现有案例和更简单的 controls 检查候选内核、派生视图与 context 边界。分开源码观察、设计假设和执行结果；已知案例是开发表例，不能冒充 held-out validation。未来 prototype 需要具体的实现／执行范围，不必先完成整个跨系统 benchmark 计划。
+用[自有记忆设计研究](research/own-memory-architecture.md)与[测试映射](research/memory-design-test-map.md)，以现有案例和更简单的 controls 检查候选内核、派生视图与 context 边界。分开源码观察、设计假设和执行结果；已知案例是开发表例，不能冒充 held-out validation。ADR-0007 已给出具体本地实现／执行范围；工程记录须保留已测机制、实际消费者和仍待回答的语义问题。这不表示跨系统 benchmark 计划已完成。
 
 从[十份源码研究 drafts](systems/source-studies/README.md) 推进 [agent-memory inquiry](research/agent-memory-inquiry.md)：review source fidelity、检查竞争解释，收敛独立文章的论点。选定的公开 AMS 研究可以带着原有证据限制进入问题设计。这项研究独立于 live evaluation 与 case promotion gate 推进。
 

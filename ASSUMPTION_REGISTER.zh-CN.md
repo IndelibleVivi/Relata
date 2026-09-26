@@ -28,7 +28,7 @@
 | 19 | 真实 relationship data 只进入 local private mode | **REVISED** | Raw chats 保持 local/private；abstract Incident Seeds 与 consented synthetic derivations 可以进入 public research。 |
 | 20 | Formal results 绑定 exact source、contract 与 artifact digests | **FUTURE REPRODUCIBILITY PRINCIPLE; PUBLIC PROOF REQUIRED** | [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) 区分 operator-required records 与 public proof；[`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) 增加 observation、task-version、step-identity、row-order 与 live/replay mode 的绑定要求。最终 Relata proof artifact 仍需另行决定。 |
 | 21 | Workbench 输出 repair layers 与 regression fixtures | **PRODUCT HYPOTHESIS** | 在建 UI 前用 pilot postmortems 向 maintainers 验证。 |
-| 22 | Public、sealed、operations concerns 需要三个 repos | **REJECTED FOR NOW** | 从一个 research repo 开始；只有真实 secrets、sealed cases 或 deployment operations 出现后才 split。 |
+| 22 | Public、sealed、operations concerns 需要三个 repos | **REJECTED FOR NOW** | Public/sealed/operations 三分法仍被拒绝。ADR-0007 允许另一种有界分离：第一方本地实验系统拥有独立 repo，研究／评价 authority 仍留在 Relata。 |
 
 ## R0 当前稳定 decisions
 
@@ -40,7 +40,7 @@
 - 不要求 raw chat；
 - case acceptance 前通过 memory necessity 与 counterfactual controls；
 - evidence type 与 provenance 必须 explicit；
-- R0 不做 runner、API、SDK、service、Leaderboard、Arena 或 hosted infrastructure。
+- R0 不做跨系统 runner、API、SDK、service、Leaderboard、Arena 或 hosted infrastructure；ADR-0007 允许一套独立的本地明确输入实验装置。
 
 ## R0 scope corrections
 

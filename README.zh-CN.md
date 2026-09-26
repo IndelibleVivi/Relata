@@ -17,11 +17,11 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 
 ## 为自有 memory 系统积累设计
 
-研究室也为从空 repository 开始、独立编写自己的 memory 架构与可运行装置蓄力。[候选设计](research/own-memory-architecture.md)与[案例—测试映射](research/memory-design-test-map.md)把既有研究转为明确的选择、controls 与反例，比较连续性收益、修订和 scope 使用，也保留完整历史／简单文件搜索作为强对照。目前交付的是设计研究，尚未构建新的 memory runtime；研究室的其他研究产出继续有独立价值。
+研究室也为从空 repository 开始、独立编写自己的 memory 架构与可运行装置蓄力。[候选设计](research/own-memory-architecture.md)与[案例—测试映射](research/memory-design-test-map.md)把既有研究转为明确的选择、controls 与反例，比较连续性收益、修订和 scope 使用，也保留完整历史／简单文件搜索作为强对照。[ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) 限定了第一套本地、明确输入装置的范围；它已在工作名 `relata-memory` 的独立 repo 实现并完成本地工程检查，源码已本地提交、尚未公开发布；[工程记录](experiments/local-memory-apparatus.md) 分开实现、检查与语义效果。研究室的其他研究产出继续有独立价值。
 
 ## 当前阶段
 
-**R0 — Research Foundation。** 两张窄范围的 source Evidence Cards 已 accepted。RC-001 为 clinic-ready；RC-002/003/004 仍是未经 review 的 seeds。尚无 reviewed System Cards、accepted cases、validated evaluators、真实系统结果或排名。
+**R0 — Research Foundation。** 两张窄范围的 source Evidence Cards 已 accepted。RC-001 为 clinic-ready；RC-002/003/004 仍是未经 review 的 seeds。尚无 reviewed System Cards、accepted cases、validated evaluators、语义系统评测结果或排名。
 
 软件现有 public repository checker 和一个**离线 RC-002 执行演练**：用明确标识的脚本替身，在两条合成历史下分别运行五种条件，保存证据并导出盲审包。测试只建立工程链路行为，不调用模型，也不产生语义分数或能力分数。完整证据状态见 [STATUS](STATUS.zh-CN.md)。
 

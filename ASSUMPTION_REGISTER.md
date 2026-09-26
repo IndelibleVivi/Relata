@@ -28,7 +28,7 @@ This register reclassifies the 22 items presented as “locked” in Target Arch
 | 19 | Real relationship data enters only local private mode | **REVISED** | Raw chats remain local/private; abstract Incident Seeds and consented synthetic derivations may inform public research. |
 | 20 | Formal results bind exact source, contract, and artifact digests | **FUTURE REPRODUCIBILITY PRINCIPLE; PUBLIC PROOF REQUIRED** | [`EC-001`](research/evidence-cards/EC-001-agent-memory-leaderboard.md) distinguishes operator-required records from public proof. [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) adds that observation, task-version, step-identity, row-order, and live/replay mode must be bound when a claim depends on them. The eventual Relata proof artifact remains a separate design decision. |
 | 21 | Workbench outputs repair layers and regression fixtures | **PRODUCT HYPOTHESIS** | Validate with maintainers during pilot postmortems before building a UI. |
-| 22 | Public, sealed, and operations concerns require three repositories | **REJECTED FOR NOW** | Begin with one research repository; split only when real secrets, sealed cases, or deployment operations exist. |
+| 22 | Public, sealed, and operations concerns require three repositories | **REJECTED FOR NOW** | The public/sealed/operations split remains rejected. ADR-0007 permits a different, bounded separation: the first-party local experimental system has its own repository, while research/evaluation authority remains in Relata. |
 
 ## R0 decisions currently treated as stable
 
@@ -40,7 +40,7 @@ This register reclassifies the 22 items presented as “locked” in Target Arch
 - no raw-chat requirement;
 - memory necessity and counterfactual controls before case acceptance;
 - explicit evidence type and provenance;
-- no runner, API, SDK, service, Leaderboard, Arena, or hosted infrastructure during R0.
+- no cross-system runner, API, SDK, service, Leaderboard, Arena, or hosted infrastructure during R0; ADR-0007 permits one separate local explicit-input experimental apparatus.
 
 ## R0 scope corrections
 

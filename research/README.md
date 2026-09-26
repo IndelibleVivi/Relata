@@ -8,7 +8,7 @@ The [agent-memory inquiry](agent-memory-inquiry.md) asks what open-source memory
 
 ## Design toward an independently authored system
 
-The [own-memory architecture study](own-memory-architecture.md) and [case-to-test map](memory-design-test-map.md) connect source mechanisms, candidate cases and controls to the long-term aim of independently authoring a memory runtime. They preserve alternatives and falsification conditions; all proposed components, tests and experimental sequences remain design material. The future in-house system is one research object, not the evaluator’s ontology. Existing article and community research continues independently.
+The [own-memory architecture study](own-memory-architecture.md) and [case-to-test map](memory-design-test-map.md) connect source mechanisms, candidate cases and controls to the long-term aim of independently authoring a memory runtime. They preserve alternatives and falsification conditions; the broad proposed components and experiments remain design material. [ADR-0007](../decisions/ADR-0007-local-memory-apparatus.md) permits a bounded local explicit-input implementation, with observations in the [engineering record](../experiments/local-memory-apparatus.md). The in-house system is one research object, not the evaluator’s ontology. Existing article and community research continues independently.
 
 ## Current evidence spine
 

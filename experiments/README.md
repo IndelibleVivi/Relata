@@ -1,6 +1,6 @@
 # Relata Experiments
 
-R0 experiments are local, small, and evidence-producing. They validate cases and observation boundaries; they do not create benchmark releases or rankings.
+R0 experiments are local, small, and evidence-producing. They investigate cases, observation boundaries and authorized state mechanisms; they do not create benchmark releases or rankings.
 
 ## Available offline tools
 
@@ -8,6 +8,10 @@ R0 experiments are local, small, and evidence-producing. They validate cases and
 - [RC-005 input preparation and audit](continuity-input-audit.md) — 18 unanswered speaker-preserving checkpoint inputs, source-bound verification, and literal projection collisions; no subject execution.
 
 Both use public adult synthetic material and local derived artifacts. They retain separate responsibilities; the RC-002 text-only tape is not the RC-005 input boundary.
+
+## Separate first-party apparatus
+
+[Local memory apparatus](local-memory-apparatus.md) records the independent `relata-memory` implementation authorized by ADR-0007. Explicit operations, raw-history/simple-file controls and a scripted consumer test state behavior. The code lives in a separate local repository; these checks are not completed Case Lab studies.
 
 ## Response-level controls
 

@@ -1,15 +1,15 @@
 # 自有记忆架构：从连续性要求到可运行候选
 
-**Status:** proposed design study；研究目标来自 maintainer 2026-09-26 的方向补充，具体架构尚未接受、实现或实测。
+**Status:** proposed design study；研究目标来自 maintainer 2026-09-26 的方向补充。[ADR-0007](../decisions/ADR-0007-local-memory-apparatus.md) 已授权第一套明确输入的本地实现；其验收状态见[工程记录](../experiments/local-memory-apparatus.md)。本文的广义架构、实验与效用主张仍是候选。
 **Scope:** 为未来从空 Git repository 编写自有 memory 核心与运行装置积累设计和验证依据；不是跨系统协议或普适 memory ontology。
 
 ## 中文摘要
 
-Relata 的研究也服务于一项建设目标：自己理解、设计并写出能长期运行的记忆系统。十项目研究给出可借鉴的机制与条件，Case Lab 给出需要保住的具体行为；二者通过[设计与测试映射](memory-design-test-map.md)连接。本研究建议优先比较「可追溯的持久材料与修订 + 可重建的理解/检索视图 + 面向当前任务的 context 编排」和更简单的完整历史／文件搜索方案。建议的中心是当前使用、修复和正向帮助，不是尽可能存下更多 facts。本文的状态、组件和实验均为候选；没有新运行装置、模型试验或效果结果。
+Relata 的研究也服务于一项建设目标：自己理解、设计并写出能长期运行的记忆系统。十项目研究给出可借鉴的机制与条件，Case Lab 给出需要保住的具体行为；二者通过[设计与测试映射](memory-design-test-map.md)连接。本研究建议优先比较「可追溯的持久材料与修订 + 可重建的理解/检索视图 + 面向当前任务的 context 编排」和更简单的完整历史／文件搜索方案。建议的中心是当前使用、修复和正向帮助，不是尽可能存下更多 facts。本文的组件和广义实验仍为候选；具体本地实现另行记录，不据此声称模型或连续性效果。
 
 ## English summary
 
-Relata's research also prepares an independently authored memory architecture and runnable apparatus starting from an empty repository. This design study connects existing source studies and candidate cases to falsifiable engineering choices. It proposes comparing a durable, revisable evidence core with rebuildable memory views and task-specific context assembly against simpler full-history and file-search approaches. The proposal concerns useful continuity, scoped revision and inspectable use; it defines neither a universal memory ontology nor a cross-system API. No new runtime, model experiment or performance claim is delivered by this document.
+Relata's research also prepares an independently authored memory architecture and runnable apparatus starting from an empty repository. This design study connects existing source studies and candidate cases to falsifiable engineering choices. It proposes comparing a durable, revisable evidence core with rebuildable memory views and task-specific context assembly against simpler full-history and file-search approaches. The proposal concerns useful continuity, scoped revision and inspectable use; it defines neither a universal memory ontology nor a cross-system API. ADR-0007 separately authorizes the first local explicit-input apparatus; its engineering record distinguishes implementation evidence from the broader proposed experiments and performance claims.
 
 ## 1. 我们想自己承担什么
 
@@ -17,7 +17,7 @@ Relata's research also prepares an independently authored memory architecture an
 
 希望最终装置能完成一条真实闭环：经历或工作结果留下可用材料，后来的任务在适当条件下得到帮助，使用者能检查影响的来历，纠正能改变后续影响，必要的历史与未受影响内容继续保留。它应支持普通生活、项目与共同创作、亲密关系、实例和模型迁移中的不同需求；并非每条信息都要承载关系象征，也并非每次互动都需要召回。
 
-研究室和自有系统承担不同责任。Relata 继续容纳不同架构与独立文章；未来自有实现只是一个 system under study。其内部 schema 不能变成他人参测的标准答案。当前仍按 [STATUS](../STATUS.md) 推进研究；本次没有创建新 repo、提供服务或增加 provider adapter。
+研究室和自有系统承担不同责任。Relata 继续容纳不同架构与独立文章；未来自有实现只是一个 system under study。其内部 schema 不能变成他人参测的标准答案。当前按 [STATUS](../STATUS.md) 与 ADR-0007 推进一套独立本地实现；研究 repo 不因此获得 provider、服务或公开新 repo 的权限。
 
 ## 2. 从已有研究转移什么
 
@@ -59,9 +59,9 @@ B 不是把十个项目的模块全部装在一起。文件、图、向量和规
 
 在这个候选里，核心保留材料与修订关系；全文、摘要、关联和向量是不同的视图。某条理解可以引用多段材料；材料也可以保持完整片段，不强制抽成原子 fact。解释和经验适用条件可以成为记录，但不能悄悄覆盖说话者原文或获准范围。
 
-第一装置可考虑单进程、单个本地事务存储配合普通文件导出；这是减少持久状态 owner 的实现假设，尚未选定依赖。只有在实际检索不足时再引入 embedding；只有并发或维护成本证据要求时再拆后台服务。移动端、多租户云服务和多节点同步不在第一装置的拟议责任中。
+ADR-0007 的第一装置选择 Python 标准库与单个本地 SQLite 事务存储，配合普通文件导出，以减少持久状态 owner；这是一项实现选择，不是已证的最优架构。只有在实际检索不足时再引入 embedding；只有并发或维护成本证据要求时再拆后台服务。移动端、多租户云服务和多节点同步不在第一装置的拟议责任中。
 
-内核不承诺自行理解什么是真的。它可以验证调用身份、明确的引用、scope 和 revision，却不能验证一句模型解释是否忠于真实经历。存储接受、来源身份、断言可信度和共同认可应保持不同状态；第一工程实验使用明确输入操作测试这些区别，后续自动抽取必须在相同原始材料上另测。自动维护也不意味着每条材料都要人工审批：已获准范围内可按策略自动保存带来源的提案，但扩大权限或声称共同接受不能由模型自行完成。
+内核不承诺自行理解什么是真的。它可以核对受信调用方提供的权限上下文、明确引用、scope 和 revision，却不能验证一句模型解释是否忠于真实经历；第一装置也不提供账号认证。存储接受、来源身份、断言可信度和共同认可应保持不同状态；第一工程实验使用明确输入操作测试这些区别，后续自动抽取必须在相同原始材料上另测。自动维护也不意味着每条材料都要人工审批：已获准范围内可按策略自动保存带来源的提案，但扩大权限或声称共同接受不能由模型自行完成。
 
 ### 当前使用链
 
@@ -121,9 +121,9 @@ current-only 诊断历史是否必要；full-history/full-search 保留简单而
 
 既有五个 cases 是已知开发表例，不能再被称为隐藏验证集。后续需要先锁定设计主张，再做未用于开发的变体和竞争反例，记录争议；尚未有人类 review 的案例仍不据此升级为 accepted。对 companion identity、长时段效用、学习迁移、撤回意图等覆盖缺口保持明确，尤其不将 D-006 的未来意图 authority 缺口补成已完成案例。
 
-## 8. 从现在到第一次 git init
+## 8. 第一次 git init 的实现范围
 
-当前可交付的是设计研究、反例和装置合同的候选。未来启动自有 repo 时，最先承担的应是一条闭合的本地路径，而不是空目录加若干接口名：
+本设计最初交付研究、反例和装置合同候选。随后的继续实现按 ADR-0007 在独立 `relata-memory` repo 中承担下列闭合本地路径；实际完成项和命令以工程记录及该 repo 的 README 为准：
 
 - 输入与来源/scope 绑定 → 持久写入 → 检索/编排 → 实际消费 → 局部纠正 → 重启后继续使用；
 - 能检查、导出和恢复该实验装置自己的材料；能区分原始材料、派生视图与已交付 context；
@@ -131,7 +131,7 @@ current-only 诊断历史是否必要；full-history/full-search 保留简单而
 
 可先用明确操作和 scripted consumer 验证持久性、revision、scope 与失效规则。这会是存储/状态机制的工程证据；只有接入具体 reader 并观察语义使用，才开始回答连续性效果。不要把人工标注好的结构当作自动抽取的成绩。
 
-独立 repo 的名字、第一技术栈和运行环境可在具体实现任务中选择；新 repo 中保留自有源代码和第三方依赖的来源，不能继承不属于我们的上游 maintainer 设置。Relata 研究记录仍留在这里，未来独立实现按其真实权限、数据和运行条件进入研究。第一装置不以正式跨系统 benchmark 的完整 promotion gate 作为开发前提；但本研究也不替代一个具体、获准的实现与执行任务。
+独立 repo 的工作名为 `relata-memory`，第一技术栈为 Python 标准库 + SQLite；新 repo 中保留自有源代码和基础设施来源，不继承上游 maintainer 设置，也不默认增加公共许可或远端。Relata 研究记录仍留在这里，未来独立实现按其真实权限、数据和运行条件进入研究。第一装置不以正式跨系统 benchmark 的完整 promotion gate 作为开发前提；具体获准范围由 ADR-0007 给出；本设计不将其扩大成自动抽取或模型效果试验。
 
 ## 9. 本轮认识的边界
 

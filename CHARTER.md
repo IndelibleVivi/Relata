@@ -9,7 +9,7 @@ Relata is a frontier memory research lab. It studies what agent memory means, ho
 
 Its research includes general agent use and long-term adult human–AI romantic and intimate relationships. Intimacy remains a founding focus, not an eligibility requirement for every study. Across settings, Relata asks how continuity can respect source, time, authority, scope, permission, change and present relevance. This broader scope is accepted in [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md).
 
-An additional long-term research aim is to prepare an independently authored memory architecture and runnable apparatus, beginning from an empty repository. Existing source studies, cases and controls should inform falsifiable design choices, including whether simpler full-history or file-search approaches suffice. The [own-memory design study](research/own-memory-architecture.md) is a proposal, not an implemented system or an accepted architecture. Relata remains a plural research lab; a future in-house system is one system under study and does not define the evaluator’s universal schema.
+An additional long-term research aim is to prepare an independently authored memory architecture and runnable apparatus, beginning from an empty repository. Existing source studies, cases and controls should inform falsifiable design choices, including whether simpler full-history or file-search approaches suffice. The [own-memory design study](research/own-memory-architecture.md) remains a research proposal; [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) permits a bounded local explicit-input implementation to test its state mechanisms. This does not accept architectural superiority. Relata remains a plural research lab; an in-house system is one system under study and does not define the evaluator’s universal schema.
 
 ## 2. Research object
 
@@ -120,7 +120,7 @@ Relata will not yet:
 - treat a relational case result as a substitute for general factual, temporal, operational, provenance, or code-memory evidence;
 - assume every relevant memory should enter the current context;
 - treat all projects, people, roles, and surfaces as one undifferentiated relationship scope;
-- build a runner, API, SDK, service, Arena, or hosted infrastructure.
+- build a cross-system runner, API, SDK, service, Arena, or hosted infrastructure. The bounded first-party local apparatus in ADR-0007 is a separate engineering exception.
 
 ## 5. R0 progress and case-evaluation success
 
