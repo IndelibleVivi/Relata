@@ -94,9 +94,12 @@ REQUIRED = [
     "experiments/offline-rehearsal.md",
     "decisions/ADR-0005-offline-pilot-tooling.md",
     "decisions/ADR-0005-offline-pilot-tooling.zh-CN.md",
+    "decisions/ADR-0008-three-core-research-functions.md",
+    "decisions/ADR-0008-three-core-research-functions.zh-CN.md",
 ]
 
 BILINGUAL_PAIRS = [
+    ("decisions/ADR-0008-three-core-research-functions.md", "decisions/ADR-0008-three-core-research-functions.zh-CN.md"),
     ("decisions/ADR-0005-offline-pilot-tooling.md", "decisions/ADR-0005-offline-pilot-tooling.zh-CN.md"),
     ("README.md", "README.zh-CN.md"),
     ("START_HERE.md", "START_HERE.zh-CN.md"),

@@ -9,6 +9,8 @@ A census object may be a memory engine, context compiler, complete companion age
 
 The [ten source studies](source-studies/README.md) cover Mem0, current Letta, Graphiti, lmc-5, Tideline Memory, Aelios, Hindsight, OpenViking, LangMem and A-MEM at pinned public commits. The [architecture atlas](architecture-atlas/README.md) provides three source-linked views per project, with standalone SVGs and an offline interactive reader. They include conditional architecture comparisons and two isolated offline observations. They remain source-study drafts, separate from reviewed or accepted System Cards.
 
+The census, source studies and atlas together support Relata's **system collection** under [ADR-0008](../decisions/ADR-0008-three-core-research-functions.md). Museum, sample room and research lab remain possible names. The collection makes mechanisms and tradeoffs inspectable, supplies questions for Relata's own benchmark and contributes alternatives for future-system incubation. Its studies also have independent value; source inspection alone does not establish runtime performance.
+
 ## Classification
 
 - `N` — system-native and observed or contributor-confirmed;

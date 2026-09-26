@@ -29,3 +29,4 @@ Vision documents do not become authority without an accepted decision record.
 - [`ADR-0005`](ADR-0005-offline-pilot-tooling.md) — permit the narrow bundled offline synthetic rehearsal without accepting a research protocol.
 - [`ADR-0006`](ADR-0006-frontier-memory-research-lab.md) — expand Relata into a frontier memory research lab, including general and intimate uses, architecture criticism and independent synthesis.
 - [`ADR-0007`](ADR-0007-local-memory-apparatus.md) — corrected scope: withdraw the implementation-authority interpretation, distinguish the independent Tilia goal, and retain the already-written early experiment as engineering evidence.
+- [`ADR-0008`](ADR-0008-three-core-research-functions.md) ([中文](ADR-0008-three-core-research-functions.zh-CN.md)) — make Relata's own benchmark research, system collection and incubation for future memory systems core functions; retain open collection naming and separate Tilia product source.

@@ -22,7 +22,7 @@ This register reclassifies the 22 items presented as “locked” in Target Arch
 | 13 | Contextual coldness can be relational failure | **DECIDED VALUE, MEASUREMENT OPEN** | Build counterexamples and rater anchors so this does not become a vague preference score. |
 | 14 | Deterministic scorers, judge panel, and human review form the evaluator stack | **WORKING HYPOTHESIS; DIAGNOSTIC SEMANTICS MUST BE TESTED** | [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) shows that deterministic replay can reproduce a counter exactly while its diagnostic name outruns the bound evidence. Start with exact assertions and semantic counterexample fixtures; add human or model judgment only after the evidence and disagreement contract is explicit. |
 | 15 | Hard violations cannot be averaged away | **FUTURE GOVERNANCE PRINCIPLE** | Define high-confidence violation classes, evidence thresholds, appeal rights, and false-positive handling. |
-| 16 | Main public output is a capability profile | **REVISED BY ADR-0006; PREFERRED FUTURE EVALUATION OUTPUT** | Definitions, source studies, comparative articles and cases are independent lab outputs. For future evaluation, retain the preference for profiles before composite scores; publication design remains open. |
+| 16 | Main public output is a capability profile | **REVISED BY ADR-0006 / ADR-0008; PREFERRED FUTURE EVALUATION OUTPUT** | Own benchmark research, system collection and future-system incubation are core functions. Definitions, studies, articles, cases and design hypotheses have independent value. For future evaluation, retain the preference for profiles before composite scores; publication design remains open. |
 | 17 | Arena signal is separate from benchmark score | **DEFERRED** | No Arena until case context, reviewer qualification, and disagreement reporting are validated. |
 | 18 | Public Casebook is fully synthetic and adult-only | **DECIDED PUBLIC BOUNDARY** | Preserve generation provenance and cultural/linguistic review. |
 | 19 | Real relationship data enters only local private mode | **REVISED** | Raw chats remain local/private; abstract Incident Seeds and consented synthetic derivations may inform public research. |
@@ -34,6 +34,7 @@ This register reclassifies the 22 items presented as “locked” in Target Arch
 
 - the name **Relata**;
 - a frontier memory research lab covering general agent memory, with adult long-term human–AI intimacy as a founding focus;
+- three mutually supporting core functions under [ADR-0008](decisions/ADR-0008-three-core-research-functions.md): own benchmark research, system collection and incubation; the collection's name remains open and future Tilia product source stays separate;
 - no universal intimacy style;
 - community members as co-researchers;
 - public adult synthetic cases;

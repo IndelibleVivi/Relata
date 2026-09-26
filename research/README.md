@@ -2,6 +2,8 @@
 
 Relata research connects conceptual questions, architecture judgments, synthesis, decisions and cases. Under [ADR-0006](../decisions/ADR-0006-frontier-memory-research-lab.md), source research and critical articles are independent outputs; they need not first become benchmark cases. A source name, paper title, repository, or benchmark mentioned in Draft 0.1 carries no current evidentiary weight until the exact object is pinned and reviewed in an Evidence Card.
 
+Under [ADR-0008](../decisions/ADR-0008-three-core-research-functions.md), this workflow serves Relata's own benchmark research, system collection and incubation for future memory systems. Start from a concrete Relata question, draw on relevant existing AMS work with its conditions and evidence limits, and investigate remaining gaps. Both projects can inform long-form synthesis without becoming the same research programme.
+
 ## Open comparative inquiry
 
 The [agent-memory inquiry](agent-memory-inquiry.md) asks what open-source memory projects implement, what their choices enable or constrain, and how conclusions transfer inside and outside adult human–AI intimacy. It connects a standalone article direction, selected public AMS research and [ten bounded source studies](../systems/source-studies/README.md), including two isolated offline diagnostics. A [thirty-view architecture atlas](../systems/architecture-atlas/README.md) connects system boundaries, write-to-use paths and revision/control to pinned source evidence. Definitions and comparative outcomes remain open; no accepted Evidence Card or complete system result is added.

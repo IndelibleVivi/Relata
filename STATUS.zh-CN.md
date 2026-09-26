@@ -6,6 +6,7 @@
 **Project：** Relata
 **Phase：** R0 — Research Foundation
 **Identity：** 前沿记忆研究室；通用 agent memory 与成人长期亲密关系都是研究情境
+**Core functions：** 自己的 benchmark 研究；系统样本研究空间（museum／样本间／研究室名称开放）；面向未来独立记忆装置的 incubator
 **Implementation：** repository checks、离线合成执行演练、candidate 输入准备/核验/投影审计与两份局部源码诊断；另保留独立的早期记忆工程实验作为研究材料，不作为 Relata 产品；没有 accepted benchmark implementation
 **Remote/publication：** public source repository；没有 formal release
 **Case release：** none
@@ -21,6 +22,8 @@
 [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 接受研究室定位扩展、独立的概念、架构和综合研究，以及两份有界离线源码诊断。成人长期亲密关系继续是 founding focus。这项范围决定不提升证据状态、不接受文章论点，也不授权模型/provider 执行。
 
 Maintainer 于 2026-09-26 澄清：长期 **Tilia** 目标与 Relata 当前研究范围分开。Relata 的[候选设计](research/own-memory-architecture.md)与[测试映射](research/memory-design-test-map.md)可以为未来独立系统提供依据，不授权立即实现，也不锁定架构。[ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) 已纠正协调者先前的范围误读。已经写出的 `relata-memory` 保留为非常早期的本地实验，其证据见[工程记录](experiments/local-memory-apparatus.md)。Tilia 需要向量语义检索；现有实验只有字面搜索，编码器与模型选型仍开放。
+
+[ADR-0008](decisions/ADR-0008-three-core-research-functions.zh-CN.md) 接受三项职责作为 Relata 的核心定位。Benchmark 仍在发展；源码研究与架构图构成已有系统样本积累；候选设计支持未来孵化。这项定位决定不改变证据状态或执行边界。未来 Tilia 的产品源码属于独立项目。Relata 与 AMS 各有独立研究价值，也都能为长篇综合写作提供依据。
 
 ## Evidence state
 
@@ -51,11 +54,11 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 
 ## Immediate work
 
-用[自有记忆设计研究](research/own-memory-architecture.md)与[测试映射](research/memory-design-test-map.md)，以现有案例和更简单的 controls 检查候选机制，并为独立 Tilia 目标研究向量检索与编码器选项。分开源码观察、设计假设和执行结果；已知案例是开发表例，不能冒充 held-out validation。保留早期实验的已测机制与语义问题，不把 ADR-0007 或代码已经存在当作继续实现的指令。
+- **自己的 benchmark：** 通过现有 [Case Lab](case-lab/README.zh-CN.md) 推进案例、controls 与评价方法。在各自既定范围内使用[离线演练](experiments/offline-rehearsal.md)和[candidate 输入审计](experiments/continuity-input-audit.md)，无需等待第三方交分数。这些工具不授权 provider 调用，也不建立系统质量结论。
+- **系统样本研究空间：** 从[十份源码研究 drafts](systems/source-studies/README.md) 与[架构图集](systems/architecture-atlas/README.md) 推进 [agent-memory inquiry](research/agent-memory-inquiry.md)。Review source fidelity，比较机制与竞争解释，将具体问题带入案例或设计研究。这项工作独立于 live evaluation 与 case promotion gate 推进。
+- **Incubator：** 用[自有记忆设计研究](research/own-memory-architecture.md)与[测试映射](research/memory-design-test-map.md)，以现有案例和更简单的 controls 检查候选机制，为独立 Tilia 研究向量检索与编码器选项。分开源码观察、设计假设和执行结果；已知案例是开发表例，不能冒充 held-out validation。保留的早期实验是证据，不是继续实现的指令。
 
-从[十份源码研究 drafts](systems/source-studies/README.md) 推进 [agent-memory inquiry](research/agent-memory-inquiry.md)：review source fidelity、检查竞争解释，收敛独立文章的论点。选定的公开 AMS 研究可以带着原有证据限制进入问题设计。这项研究独立于 live evaluation 与 case promotion gate 推进。
-
-现在即可运行[离线演练](experiments/offline-rehearsal.md)，无需等待别人提交分数。基于公开源码审查的 System Cards、community review 和其他 case 工作可以并行。这个脚本不授权调用模型 provider。
+围绕三项职责，先取用相关的公开 AMS 成果及其条件和证据限制，再研究具体缺口。定义与长篇综合可以在没有预定论点的情况下发展；写作或其中一项职责都不必等待其余部分全部成熟。
 
 依据 ADR-0001 的 validity/reproducibility tooling 范围，现在可以使用 [RC-005 输入审计](experiments/continuity-input-audit.md)，下一项是 review 作者归属与继续制作手记的 contract。该工具只准备输入，不接受 Continuity Trials 提案的其余内容，也不扩大模型执行权限。
 

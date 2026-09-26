@@ -7,6 +7,20 @@
 
 > What does it mean for an agent to remember, how do different systems implement it, and what enables continuity across changing tasks, lives and relationships?
 
+## Three core functions
+
+Relata brings together **its own benchmark research, a collection of system studies, and an incubator for future memory systems**. [ADR-0008](decisions/ADR-0008-three-core-research-functions.md) makes these mutually supporting functions core to the project.
+
+| Function | What Relata develops | Start here |
+|---|---|---|
+| Own benchmark | Questions, cases, controls, evaluation methods, experiments and evidence-backed comparisons | [Case Lab](case-lab/README.md), [current evidence](STATUS.md) |
+| System collection | Inspectable memory architectures, source studies and conditional comparisons; museum / sample room / lab remains an open naming choice | [System Census](systems/README.md), [ten source studies](systems/source-studies/README.md), [architecture atlas](systems/architecture-atlas/README.md) |
+| Incubator for future systems | Design hypotheses, alternatives, counterexamples and lessons that can inform independent systems such as Tilia | [Candidate design](research/own-memory-architecture.md), [case-to-test map](research/memory-design-test-map.md) |
+
+System studies can expose case questions; evaluation can challenge architectural claims; both can inform future designs. Each function also has independent research value. The benchmark is under development, the existing collection contains research drafts, and future Tilia product source belongs in its own project.
+
+[Agent Memory Study (AMS)](https://github.com/IndelibleVivi/agent-memory-study) contributes readings, source investigations and experiments that Relata can use with their original evidence limits. Both projects can support long-form synthesis while retaining their own questions and artifacts.
+
 ## Memory ecology
 
 General agent memory and adult long-term intimacy are both research contexts. Intimacy and romance remain a founding focus; the existing Case Lab studies ordinary personal life, shared relational experiences, operational/project decisions and artifacts, and companion/system continuity as a longitudinal mixed-domain ecology. Ordinary events do not need invented romantic symbolism to count.

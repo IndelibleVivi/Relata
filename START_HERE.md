@@ -3,7 +3,15 @@
 
 # Relata Research Foundation: Start Here
 
-Relata is a frontier memory research lab. Begin with the [agent-memory inquiry](research/agent-memory-inquiry.md) for definitions, open-source architecture studies and a comparative article direction. General agent use and adult long-term intimacy are both in scope under [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md). Source research and writing can proceed independently of case evaluation. The [ten-project architecture atlas](systems/architecture-atlas/README.md) offers thirty source-linked SVGs and an offline reader; the [source studies](systems/source-studies/README.md) explain their findings and limits.
+Relata is a frontier memory research lab with three core functions under [ADR-0008](decisions/ADR-0008-three-core-research-functions.md). Choose an entrypoint by the research question; these are parallel responsibilities, not a required sequence.
+
+| Function | Reading path |
+|---|---|
+| Own benchmark research | [Current evidence and boundaries](STATUS.md) → [Case Lab](case-lab/README.md), cases, controls and evaluation methods |
+| System collection — name open | [System Census](systems/README.md) → [ten source studies](systems/source-studies/README.md) and [thirty-view architecture atlas](systems/architecture-atlas/README.md) |
+| Incubator for future systems | [Candidate design](research/own-memory-architecture.md) → [case-to-test map](research/memory-design-test-map.md), alternatives and falsification conditions |
+
+The [agent-memory inquiry](research/agent-memory-inquiry.md) connects definitions, comparisons, writing and relevant existing AMS work across these functions. General agent use and adult long-term intimacy remain in scope under [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md). Source research and writing can proceed independently of case evaluation.
 
 The foundation work below also preserves the operational path from the non-normative Target Architecture Draft 0.1 to evidence-backed cases.
 
@@ -21,6 +29,7 @@ Current local tooling: use the [RC-002 scripted rehearsal](experiments/offline-r
 - Distinction Atlas, case method, Pilot 001, and a manual pilot plan
 - mixed-domain scope authority under [ADR-0003](decisions/ADR-0003-mixed-domain-memory-ecology.md)
 - broader research-lab scope under [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md), retaining the relational Case Lab
+- three core research functions under [ADR-0008](decisions/ADR-0008-three-core-research-functions.md), with open collection naming and separate future Tilia product source
 - Chinese-first bilingual authority under [ADR-0004](decisions/ADR-0004-r0-bilingual-documentation.md) and the [language policy](docs/language-policy.md)
 - a proposed bilingual [claim-boundary study](research/claim-boundary-study.md), candidate [RC-001 E0 calibration fixtures](case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md), and unreviewed [RC-004 mixed-domain seed](case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md)
 - repository structure, bilingual-drift, Case Card metadata, and Markdown-link checker

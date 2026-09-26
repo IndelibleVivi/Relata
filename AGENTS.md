@@ -3,7 +3,7 @@
 ## Project identity
 
 - The project name is **Relata**. `R0` and `Research Foundation` are phase labels only.
-- Relata is a frontier memory research lab with an existing case programme, not an accepted benchmark platform.
+- Relata is a frontier memory research lab with three core functions under ADR-0008: its own benchmark research, an inspectable collection of system studies, and incubation for future memory systems. The collection's museum / sample-room / lab name remains open. The existing case programme is benchmark research in progress, not an accepted benchmark platform.
 
 ## Authority
 
@@ -22,6 +22,8 @@ The body of `docs/vision/relata-target-architecture-draft-0.1.md` is preserved h
 
 Work may advance definitions, public-source architecture research, comparative synthesis and articles, project questions, source Evidence Cards, community contribution methods, System Cards, Architecture Pressure Maps, distinctions, synthetic cases, pilot records, decision records, and repository checks. Source research and writing do not wait for the cross-system implementation promotion gate.
 
+Keep all three core functions visible in project direction and reading paths. Existing cases, source studies, architecture views and candidate designs support them with distinct evidence status; they are not permanent benchmark tracks or a universal ontology. Use relevant existing AMS work with its provenance and limits for Relata's own questions, and investigate concrete gaps as needed. Both projects can inform long-form writing; do not turn Relata into a duplicate reading room or require a predetermined article thesis. Incubation does not make Relata the source repository for future Tilia product code or promote a preferred design into the evaluator's contract.
+
 Under ADR-0006, general agent memory and adult long-term human–AI intimacy are independent research contexts; intimacy remains a founding focus, not an eligibility filter for every study. The existing Case Lab's working evaluation object is a longitudinal mixed-domain memory ecology spanning personal/lived, shared-relational, operational/project, and companion/system continuity. Do not require ordinary events or shared work to carry explicit romantic symbolism. Treat coverage strata as case-portfolio labels, not permanent tracks or an ontology for the whole lab.
 
 The research may inform a future independently authored memory system named **Tilia**. This is a long-term goal, not an implementation task within Relata. `research/own-memory-architecture.md` and `research/memory-design-test-map.md` remain proposed design/validation studies, not an accepted Tilia architecture or universal ontology. The corrected ADR-0007 withdraws the earlier implementation-authority interpretation. Already-written `relata-memory` code remains a very early separate local experiment; `experiments/local-memory-apparatus.md` owns its engineering evidence and limits. Retention does not authorize further implementation, physical renaming or migration. Tilia's intended design requires vector-based semantic retrieval; the experiment's literal search does not supply it, and encoder/model choices remain open. Its schema must not become the evaluator’s answer format. Source studies, articles and the existing Case Lab retain independent value.
@@ -34,7 +36,7 @@ The ten bounded drafts in `systems/source-studies/` are source research, not acc
 
 The architecture atlas is a research-document renderer, not system-under-study execution. `systems/architecture-atlas/models/*.json` owns the source-grounded nodes, relations, boundaries, state notes and pinned evidence; `guide-layouts.cjs` selects existing relations for the introductory path, while `build.cjs` and `render-*.cjs` own presentation generation. Edit models or viewer sources, then regenerate `diagrams/<project>/*.{svg,mmd}` and `index.html` with `node systems/architecture-atlas/build.cjs`. Do not hand-edit generated figures or keep parallel topology copies in reports. Run `node systems/architecture-atlas/build.cjs --check` after changes, and visually inspect affected diagrams and reader interactions. `observed` in models means static source inspection, never verified runtime behavior.
 
-Do not add a benchmark runner, system-under-study API, Leaderboard, Arena, SDK, services, hosted infrastructure, sealed corpus, or canonical system ontology unless a later accepted decision changes `STATUS.md`.
+Do not add a benchmark runner, system-under-study API, Leaderboard, Arena, SDK, services, hosted infrastructure, sealed corpus, or canonical system ontology unless a later accepted implementation-boundary decision explicitly authorizes it and changes `STATUS.md`. ADR-0008 accepts research functions, not that implementation boundary.
 
 The narrow engineering exception in `decisions/ADR-0005-offline-pilot-tooling.md` permits `tools/synthetic_pilot.py` and its bundled scripted subject to rehearse public synthetic inputs, controls, evidence binding and blind-packet export. It does not authorize a model/provider adapter, arbitrary corpus, stable cross-system interface or performance claim. Do not treat scripted outputs as completed case studies or reviewer calibration.
 

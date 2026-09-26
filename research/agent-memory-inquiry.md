@@ -2,7 +2,7 @@
 
 **Status:** open research inquiry / article seed
 **Opened:** 2026-09-22
-**Authority:** research scope under [ADR-0006](../decisions/ADR-0006-frontier-memory-research-lab.md); no accepted definition, system comparison or evaluation protocol
+**Authority:** research scope under [ADR-0006](../decisions/ADR-0006-frontier-memory-research-lab.md) and core functions under [ADR-0008](../decisions/ADR-0008-three-core-research-functions.md); no accepted definition, system comparison or evaluation protocol
 
 ## 中文摘要
 
@@ -16,7 +16,9 @@ This inquiry asks what different memory projects preserve from the past, how tha
 
 > 当开源项目都使用 agent memory 这个名字时，它们分别实现了什么；这些实现能支持哪些连续性要求，又把哪些责任留给了模型、harness、应用和人？
 
-暂定题眼：**《Agent Memory 到底是什么：开源架构、长期使用与人机关系中的连续性》**。题目、读者范围与最后论点仍待具体研究收敛。
+暂定题眼：**《Agent Memory 到底是什么：开源架构、长期使用与人机关系中的连续性》**。这是现有 inquiry 的一个写作入口，题目与论点保持开放；它不限定更广的长篇写作范围，也不要求先收敛出一个中心论点才能继续研究。
+
+Relata 的 benchmark、系统样本研究空间与 incubator 都可以为写作提供材料，并保留各自的独立价值。下面的问题与十项目样本是已有研究起点，不构成长篇文章的完整目录或全领域边界。
 
 一个可检验的写作假设是：只按存储介质或 retrieval 方法归类，会漏掉过去怎样成为当前行动依据，以及这种影响如何被修订。这不是“真正的 memory”的排他定义。文件、完整历史、检索层、状态管理、规则、参数或人工维护都可以成为候选研究对象；是否应称为 memory、learning、context management 或其组合，正是需要论证的边界。
 
@@ -73,7 +75,7 @@ This inquiry asks what different memory projects preserve from the past, how tha
 
 ## 与 AMS 的连接
 
-[Agent Memory Study](https://github.com/IndelibleVivi/agent-memory-study) 已经包含原文阅读、源码检查和研究实验；两个项目不按“论文 / 代码”机械分工。Relata 可以组织跨实现的综合问题，并把合适的案例问题带回这些来源。
+[Agent Memory Study](https://github.com/IndelibleVivi/agent-memory-study) 已经包含原文阅读、源码检查和研究实验；两个项目不按“论文 / 代码”机械分工。围绕 Relata 自己的 benchmark、系统比较或设计问题，先取用 AMS 已有成果与反例，再识别具体研究缺口。Relata 可以把系统与案例中暴露的问题带回 AMS。两者各自保留研究职责与材料，也都可以为长篇综合写作蓄力。
 
 - [旧经验，怎样继续帮助当前任务？](https://indeliblevivi.github.io/agent-memory-study/question/experience-to-capability/)连接 activation、经验适用条件和实际使用之间的区别。
 - [经验怎样长成判断习惯？](https://indeliblevivi.github.io/agent-memory-study/question/experience-becomes-policy/)为案例、规则、参数等不同影响路径提供研究入口。
@@ -87,6 +89,6 @@ This inquiry asks what different memory projects preserve from the past, how tha
 
 ## 下一次会推进认识的工作
 
-利用首轮报告中的跨入口状态差异、来源与作用域反例，收敛文章的中心论点，并完成 source-fidelity review。需要正式进入 census 的项目再按 [System Card](../systems/system-card-template.zh-CN.md) 补齐 review；需要 runtime 证据的结论另行设计具体试验。文件/目录实现已纳入研究，但简单文件/全文搜索、完整历史基线与学习机制的对照仍是样本缺口，不能把十项目归纳写成全部 agent memory 的边界。
+利用首轮报告中的跨入口状态差异、来源与作用域反例，对照相关 AMS 成果，扩展或修正问题与架构判断，并完成 source-fidelity review。让这些材料分别进入 benchmark 案例、系统比较、候选设计或开放的长篇综合，不预先锁定文章中心论点。需要正式进入 census 的项目再按 [System Card](../systems/system-card-template.zh-CN.md) 补齐 review；需要 runtime 证据的结论另行设计具体试验。文件/目录实现已纳入研究，但简单文件/全文搜索、完整历史基线与学习机制的对照仍是样本缺口，不能把十项目归纳写成全部 agent memory 的边界。
 
 文章可以先贡献清晰的问题、机制比较和有限度的批评；不把未运行的试验写成结论，也不以 Case Lab 的完整 promotion gate 作为写作前提。

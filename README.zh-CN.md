@@ -7,6 +7,20 @@
 
 > Agent 记住过去究竟意味着什么，不同系统怎样实现它，又怎样在变化的任务、生活和关系中支持连续性？
 
+## 三项核心职责
+
+Relata 将**自己的 benchmark 研究、系统样本研究空间，以及面向未来记忆装置的 incubator**结合起来。[ADR-0008](decisions/ADR-0008-three-core-research-functions.zh-CN.md) 将这三项相互支持的职责纳入项目核心定位。
+
+| 职责 | Relata 要发展什么 | 从这里进入 |
+|---|---|---|
+| 自己的 benchmark | 问题、案例、controls、评价方法、实验与有证据支持的比较 | [Case Lab](case-lab/README.zh-CN.md)、[当前证据](STATUS.zh-CN.md) |
+| 系统样本研究空间 | 可检查的记忆架构、源码研究与有条件的比较；museum／样本间／研究室的名称仍开放 | [System Census](systems/README.zh-CN.md)、[十份源码研究](systems/source-studies/README.md)、[架构图集](systems/architecture-atlas/README.md) |
+| 面向未来的 incubator | 可以用于 Tilia 等独立系统的设计假设、替代方案、反例与经验 | [候选设计](research/own-memory-architecture.md)、[案例—测试映射](research/memory-design-test-map.md) |
+
+系统研究可以暴露案例问题，评价可以挑战架构主张，两者又为未来设计提供依据；每项职责也有独立的研究价值。Benchmark 正在发展，现有系统样本包含研究 drafts，未来 Tilia 的产品源码属于独立项目。
+
+[Agent Memory Study（AMS）](https://github.com/IndelibleVivi/agent-memory-study) 的阅读、源码调查与实验可以带着原有证据限制进入 Relata。两个项目都可以支持长篇综合写作，同时保留各自的问题与研究材料。
+
 ## 记忆生态
 
 通用 agent memory 与成人长期人机亲密关系都有独立研究地位。亲密与浪漫关系继续是 founding focus；现有 Case Lab 将普通生活、共同关系经历、项目决策与材料，以及跨模型和实例的 companion/system continuity 作为长期混合领域记忆生态研究。普通事件无需被加工成浪漫象征才有研究价值。

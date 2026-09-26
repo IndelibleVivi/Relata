@@ -7,6 +7,10 @@
 
 Relata 是前沿记忆研究室。它研究 agent memory 的含义、开源系统怎样保留、重建、使用与修订过去的材料或经验，以及哪些架构长处与局限有证据支持。
 
+其核心职责是**自己的 benchmark 研究、可检查的系统样本研究空间，以及面向未来记忆装置的 incubator**，由 [ADR-0008](decisions/ADR-0008-three-core-research-functions.zh-CN.md) 接受。Benchmark 研究发展案例、controls、评价方法、实验与有证据支持的比较；样本空间连接源码研究、System Cards 与架构图，museum／样本间／研究室的最终名称仍开放；incubator 为未来独立系统发展设计假设、替代方案与反例。三者互相提供依据，不要求固定先后顺序、普适分类或某种首选架构。未来 Tilia 的产品源码属于独立项目。
+
+Relata 与 [Agent Memory Study（AMS）](https://github.com/IndelibleVivi/agent-memory-study) 各自保留研究问题与材料，并交流有来源支持的经验。两者都可以读论文、检查实现与开展获得相应授权的实验，也都可以为长篇综合写作提供依据。取用的结论保留原有证据状态、适用条件与不确定性。
+
 它同时研究通用 agent 使用情境与成人长期人机亲密、浪漫关系。亲密关系继续是 founding focus，不是每项研究的准入条件。在不同情境中，Relata 都追问 continuity 怎样尊重 source、time、authority、scope、permission、change 与 present relevance。这次范围扩展由 [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 接受。
 
 Relata 的研究可以为未来从空 repository 独立编写的记忆系统 **Tilia** 蓄力。这是独立的长期目标，不是在 Relata 中启动实现计划。现有源码研究、案例与 controls 应转成可反驳的设计选择；[自有记忆设计研究](research/own-memory-architecture.md) 仍是提案。更正后的 [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) 保留已经写出的非常早期本地实验，不将其视为已接受的 Tilia 架构。Tilia 的预期系统需要向量语义检索；该要求不定义普适 memory 架构。Relata 保留多元研究对象与独立的 evaluator 合同。

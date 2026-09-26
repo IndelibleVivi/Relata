@@ -6,6 +6,7 @@
 **Project:** Relata
 **Phase:** R0 — Research Foundation
 **Identity:** frontier memory research lab; general agent memory and adult long-term intimacy are research contexts
+**Core functions:** own benchmark research; system collection (museum / sample-room / lab name open); incubator for future independent memory systems
 **Implementation:** repository checks, an offline synthetic execution rehearsal, candidate input preparation/verification/projection audits, and two isolated source-study diagnostics; a separate early memory experiment is retained as a research artifact, not a Relata product; no accepted benchmark implementation
 **Remote/publication:** public source repository; no formal release
 **Case release:** none
@@ -21,6 +22,8 @@ Current working authority consists of `CHARTER.md`, `RESEARCH_QUESTIONS.md`, `AS
 [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) accepts the broader lab identity, independent conceptual, architecture and synthesis work, and the two bounded offline source diagnostics. Adult long-term intimacy remains a founding focus. This scope decision does not promote evidence, accept an article thesis or authorize model/provider execution.
 
 The maintainer’s 2026-09-26 clarification separates the long-term **Tilia** goal from Relata's current research scope. Relata's [candidate design](research/own-memory-architecture.md) and [test map](research/memory-design-test-map.md) may inform that future independent system; they do not authorize its implementation or settle its architecture. [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) corrects the coordinator's earlier scope misinterpretation. Already-written `relata-memory` code is retained as a very early local experiment, with evidence in its [engineering record](experiments/local-memory-apparatus.md). Tilia requires vector-based semantic retrieval; the experiment only supplies literal search. Encoder/model choices remain open.
+
+[ADR-0008](decisions/ADR-0008-three-core-research-functions.md) accepts the three functions as Relata's core identity. The benchmark remains under development; source studies and architecture views form the existing system collection; candidate designs support incubation. This identity decision changes no evidence status or execution boundary. Future Tilia product source belongs in a separate project. Relata and AMS retain independent research value and can both inform long-form synthesis.
 
 ## Evidence state
 
@@ -51,11 +54,11 @@ Define and critically examine agent memory across concepts, open-source architec
 
 ## Immediate work
 
-Use the [own-memory design study](research/own-memory-architecture.md) and [test map](research/memory-design-test-map.md) to challenge candidate mechanisms with existing cases and simpler controls, and study vector retrieval and encoder options for the independent Tilia goal. Keep source observations, design hypotheses and execution results separate; the known cases are development examples, not held-out validation. Preserve the retained experiment's tested mechanisms and remaining semantic questions without treating ADR-0007 or the code's existence as an instruction to continue implementation.
+- **Own benchmark:** advance cases, controls and evaluation methods through the existing [Case Lab](case-lab/README.md). Use the [offline rehearsal](experiments/offline-rehearsal.md) and [candidate input audit](experiments/continuity-input-audit.md) within their stated scope; do not wait for third-party scores. These tools do not authorize provider calls or establish system quality.
+- **System collection:** develop the [agent-memory inquiry](research/agent-memory-inquiry.md) from the [ten source-study drafts](systems/source-studies/README.md) and [architecture atlas](systems/architecture-atlas/README.md). Review source fidelity, compare mechanisms and competing interpretations, and carry concrete questions into case or design research. This work proceeds independently of live evaluation and the case promotion gate.
+- **Incubator:** use the [own-memory design study](research/own-memory-architecture.md) and [test map](research/memory-design-test-map.md) to challenge candidate mechanisms with existing cases and simpler controls, and study vector retrieval and encoder options for independent Tilia. Keep source observations, design hypotheses and execution results separate; known cases are development examples, not held-out validation. The retained experiment is evidence, not an instruction to continue implementation.
 
-Develop the [agent-memory inquiry](research/agent-memory-inquiry.md) from the [ten source-study drafts](systems/source-studies/README.md): review source fidelity, test competing interpretations and narrow the standalone article's argument. Selected public AMS work can inform questions with its original evidence limits. This research proceeds independently of live evaluation and the case promotion gate.
-
-Use the [offline rehearsal](experiments/offline-rehearsal.md) now; it does not wait for submitted scores. Source-audited System Cards, community review and additional case work can proceed in parallel. The script is not permission to call model providers.
+Across these functions, draw on relevant existing public AMS work with its conditions and evidence limits, then investigate concrete gaps. Definitions and long-form synthesis can develop without a predetermined thesis. Neither writing nor any one function must wait for all the others to mature.
 
 The [RC-005 input audit](experiments/continuity-input-audit.md) is available under ADR-0001’s validity/reproducibility tooling scope. Review its authorship and continuing-production-note contract next. This input-only tool neither accepts the rest of the Continuity Trials proposal nor extends model execution authority.
 

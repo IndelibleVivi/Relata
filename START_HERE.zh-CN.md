@@ -3,7 +3,15 @@
 
 # Relata 从这里开始：Research Foundation 执行路径
 
-Relata 是前沿记忆研究室。概念定义、开源架构研究与比较文章方向，从 [agent-memory inquiry](research/agent-memory-inquiry.md) 开始。[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 将通用 agent 与成人长期亲密关系都纳入研究；源码研究与写作可以独立于 case evaluation 推进。[十项目架构图集](systems/architecture-atlas/README.md) 提供三十幅绑定源码的 SVG 与离线 reader；[源码研究](systems/source-studies/README.md) 展开解释判断与限制。
+Relata 是前沿记忆研究室，[ADR-0008](decisions/ADR-0008-three-core-research-functions.zh-CN.md) 确立三项核心职责。按研究问题选择入口；它们并行存在，不要求固定先后顺序。
+
+| 职责 | 阅读路径 |
+|---|---|
+| 自己的 benchmark 研究 | [当前证据与边界](STATUS.zh-CN.md) → [Case Lab](case-lab/README.zh-CN.md)、案例、controls 与评价方法 |
+| 系统样本研究空间——名称开放 | [System Census](systems/README.zh-CN.md) → [十份源码研究](systems/source-studies/README.md)与[三十视图架构图集](systems/architecture-atlas/README.md) |
+| 面向未来系统的 incubator | [候选设计](research/own-memory-architecture.md) → [案例—测试映射](research/memory-design-test-map.md)、替代方案与推翻条件 |
+
+[Agent-memory inquiry](research/agent-memory-inquiry.md) 将定义、比较、写作与相关 AMS 已有成果接入这三项职责。[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 继续覆盖通用 agent 与成人长期亲密关系；源码研究与写作可以独立于 case evaluation 推进。
 
 下方基础工作也保留了从 non-normative Target Architecture Draft 0.1，走向有 source provenance、architecture pressure、community authority 与 case evidence 的执行路径。
 
@@ -21,6 +29,7 @@ Relata 是前沿记忆研究室。概念定义、开源架构研究与比较文�
 - Distinction Atlas、case method、Pilot 001 与 manual pilot plan
 - [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md) 确立的 mixed-domain scope authority
 - [`ADR-0006`](decisions/ADR-0006-frontier-memory-research-lab.md) 确立的研究室整体范围，保留 relational Case Lab
+- [`ADR-0008`](decisions/ADR-0008-three-core-research-functions.zh-CN.md) 确立三项核心职责，保留样本空间命名开放与未来 Tilia 产品源码独立存放
 - [`ADR-0004`](decisions/ADR-0004-r0-bilingual-documentation.zh-CN.md) 与 [language policy](docs/language-policy.zh-CN.md) 确立的中文优先双语 authority
 - proposed 双语 [claim-boundary study](research/claim-boundary-study.zh-CN.md)、candidate [`RC-001 E0 calibration fixtures`](case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md)，以及未经 review 的 [`RC-004` mixed-domain seed](case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md)
 - repository structure、bilingual drift、Case Card metadata 与 Markdown link checker

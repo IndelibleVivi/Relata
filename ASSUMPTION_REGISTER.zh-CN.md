@@ -22,7 +22,7 @@
 | 13 | Contextual coldness 可以是 relational failure | **DECIDED VALUE, MEASUREMENT OPEN** | 构造 counterexamples 与 rater anchors，避免退化为 vague preference score。 |
 | 14 | Deterministic scorers、judge panel、human review 构成 evaluator stack | **WORKING HYPOTHESIS; DIAGNOSTIC SEMANTICS MUST BE TESTED** | [`EC-002`](research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) 表明 deterministic replay 可精确重现 counter，但 diagnostic name 可能超出 bound evidence。先做 exact assertions 与 semantic counterexample fixtures；evidence/disagreement contract 明确后才加 human/model judgment。 |
 | 15 | Hard violations 不能被平均掉 | **FUTURE GOVERNANCE PRINCIPLE** | 定义 high-confidence violation classes、evidence thresholds、appeal rights 与 false-positive handling。 |
-| 16 | 主要 public output 是 capability profile | **REVISED BY ADR-0006; PREFERRED FUTURE EVALUATION OUTPUT** | 定义、源码研究、比较文章与 cases 都是独立研究产出；未来 evaluation 继续优先 profiles 而非 composite scores，publication design 仍待决定。 |
+| 16 | 主要 public output 是 capability profile | **REVISED BY ADR-0006 / ADR-0008; PREFERRED FUTURE EVALUATION OUTPUT** | 自己的 benchmark 研究、系统样本研究空间与未来系统孵化是核心职责。定义、研究、文章、cases 与设计假设都有独立价值；未来 evaluation 继续优先 profiles 而非 composite scores，publication design 仍待决定。 |
 | 17 | Arena signal 与 benchmark score 分离 | **DEFERRED** | 在 case context、reviewer qualification 与 disagreement reporting validated 前不做 Arena。 |
 | 18 | Public Casebook 全部 synthetic 且 adult-only | **DECIDED PUBLIC BOUNDARY** | 保存 generation provenance 与 cultural/linguistic review。 |
 | 19 | 真实 relationship data 只进入 local private mode | **REVISED** | Raw chats 保持 local/private；abstract Incident Seeds 与 consented synthetic derivations 可以进入 public research。 |
@@ -34,6 +34,7 @@
 
 - 名称为 **Relata**；
 - 前沿记忆研究室覆盖通用 agent memory，成人长期人机亲密继续是 founding focus；
+- [ADR-0008](decisions/ADR-0008-three-core-research-functions.zh-CN.md) 确立三项相互支持的核心职责：自己的 benchmark 研究、系统样本研究空间与未来孵化；样本空间名称仍开放，未来 Tilia 产品源码独立存放；
 - 不设 universal intimacy style；
 - community members 是 co-researchers；
 - public cases 为 adult synthetic material；

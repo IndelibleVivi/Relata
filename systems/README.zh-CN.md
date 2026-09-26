@@ -9,6 +9,8 @@ Census object 可以是 memory engine、context compiler、完整 companion agen
 
 [十份源码研究](source-studies/README.md) 固定 Mem0、当前 Letta、Graphiti、lmc-5、Tideline Memory、Aelios、Hindsight、OpenViking、LangMem 与 A-MEM 的公开 commits，包含有条件的架构比较与两组窄范围离线观察。[架构图集](architecture-atlas/README.md) 为每个项目提供三幅绑定源码的视图，含独立 SVG 和离线交互 reader。它们保持 source-study draft 状态，不等于 reviewed 或 accepted System Cards。
 
+Census、源码研究与图集共同支撑 [ADR-0008](../decisions/ADR-0008-three-core-research-functions.zh-CN.md) 下的**系统样本研究空间**；museum、样本间、研究室仍是可选名称。这里让机制与取舍可以被检查，为 Relata 自己的 benchmark 提出问题，也为未来系统孵化提供替代方案。样本研究本身有独立价值；仅有源码检查不建立 runtime 性能结论。
+
 ## Classification
 
 - `N` — system-native，且已 observed 或 contributor-confirmed；
