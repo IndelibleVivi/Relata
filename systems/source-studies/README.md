@@ -54,6 +54,10 @@ Ten bounded source studies examine Mem0, current Letta, Graphiti, lmc-5, Tidelin
 
 这组问题在人机恋语境内外都成立，但具体期望不能互换。项目里“谁批准交付”与共同作品“谁起名、谁接受”都涉及来源和接受；一次技术纠正是否覆盖私人习惯，则涉及适用范围。比较应保留这些具体差异，不把亲密语气或高情绪权重视作普遍更好的 memory。
 
+## 研究怎样进入自有设计
+
+[自有记忆架构研究](../../research/own-memory-architecture.md)与[机制／测试映射](../../research/memory-design-test-map.md)从这些固定源码观察提出可采用、修改或拒绝的候选机制。它们是有条件的设计推断，未新增上游执行或证明自有方案更好；现有十项目图集继续只表示各自 upstream，不混入我们的 proposed architecture。
+
 ## 离线观察复现
 
 以下只有固定上游代码的窄分支观察，不安装项目、不调用模型、embedding、数据库服务或账户。先在 repo 外准备相应 commit 的 clean public checkout；脚本会核对 commit 与工作区状态。结果写到新的临时输出文件，和保存的 JSON 作结构比较即可。

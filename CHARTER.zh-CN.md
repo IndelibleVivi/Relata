@@ -9,6 +9,8 @@ Relata 是前沿记忆研究室。它研究 agent memory 的含义、开源系�
 
 它同时研究通用 agent 使用情境与成人长期人机亲密、浪漫关系。亲密关系继续是 founding focus，不是每项研究的准入条件。在不同情境中，Relata 都追问 continuity 怎样尊重 source、time、authority、scope、permission、change 与 present relevance。这次范围扩展由 [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 接受。
 
+研究也为一项长期建设目标蓄力：从空 repository 开始，独立编写自己的 memory 架构与可运行装置。现有源码研究、案例与 controls 应转成可反驳的设计选择，包括完整历史或简单文件搜索是否已经足够。[自有记忆设计研究](research/own-memory-architecture.md) 仍是提案，不是已实现系统或 accepted architecture。Relata 保留多元研究对象；未来自有系统只是一个 system under study，不能决定 evaluator 的普适 schema。
+
 ## 2. Research object
 
 研究室的对象包括 memory 概念、实现、架构选择、使用情境与评价证据。Memory engine、agent framework、context compiler、完整 agent 或人工维护的 archive 可能暴露不同对象与边界；这些是研究候选，不是 canonical taxonomy。

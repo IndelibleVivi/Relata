@@ -20,6 +20,8 @@ Current working authority consists of `CHARTER.md`, `RESEARCH_QUESTIONS.md`, `AS
 
 [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) accepts the broader lab identity, independent conceptual, architecture and synthesis work, and the two bounded offline source diagnostics. Adult long-term intimacy remains a founding focus. This scope decision does not promote evidence, accept an article thesis or authorize model/provider execution.
 
+The maintainer’s 2026-09-26 direction adds a long-term aim: use this research to prepare an independently authored memory architecture and runnable apparatus from an empty repository. The current work is a [candidate design](research/own-memory-architecture.md) and [test map](research/memory-design-test-map.md). The build aim does not accept a particular architecture, add a runtime, or change model/provider execution authority.
+
 ## Evidence state
 
 | Artifact | State | Accepted evidence |
@@ -28,6 +30,7 @@ Current working authority consists of `CHARTER.md`, `RESEARCH_QUESTIONS.md`, `AS
 | Agent-memory inquiry / article direction | open research questions, AMS links and initial synthesis | no accepted definition, exhaustive survey or article manuscript |
 | Open-source architecture studies | 10 bounded drafts: Mem0, Letta, Graphiti, lmc-5, Tideline Memory, Aelios, Hindsight, OpenViking, LangMem, A-MEM | pinned source observations; lmc-5 and Graphiti additionally have isolated offline diagnostics; no independent human review, accepted System Card or model-backed comparative result |
 | [Architecture atlas](systems/architecture-atlas/README.md) | 10 models, 30 SVG/Mermaid views and an offline interactive reader | source-grounded diagrams; no new upstream execution or capability measurement |
+| Own-memory design / case-to-test map | proposed architecture, controls and falsification conditions | in-house build aim recorded; no new runtime, accepted internal schema, system execution or capability result |
 | Claim boundaries | bilingual candidate study | CL0–CL6, lanes, cells and adapter classes remain proposals; no accepted result unit or publication policy |
 | System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards or maps |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
@@ -46,6 +49,8 @@ Templates, corrected contracts, generated fixtures and passing plumbing tests ar
 Define and critically examine agent memory across concepts, open-source architectures and evidence. Compare what different implementations preserve, how past experience affects current behavior, and the conditions under which their choices help or fail. Study these questions in general agent settings and in long-term mixed-role relationships, retaining history-dependent controls, architecture-sensitive observation and privacy-preserving community participation.
 
 ## Immediate work
+
+Use the [own-memory design study](research/own-memory-architecture.md) and [test map](research/memory-design-test-map.md) to challenge the proposed core, derived views and context boundary with existing cases and simpler controls. Keep source observations, design hypotheses and execution results separate; the known cases are development examples, not held-out validation. A future prototype needs a concrete implementation/execution scope, not prior completion of the entire cross-system benchmark programme.
 
 Develop the [agent-memory inquiry](research/agent-memory-inquiry.md) from the [ten source-study drafts](systems/source-studies/README.md): review source fidelity, test competing interpretations and narrow the standalone article's argument. Selected public AMS work can inform questions with its original evidence limits. This research proceeds independently of live evaluation and the case promotion gate.
 

@@ -1,0 +1,28 @@
+%% Proposed revision race and recovery; no implementation or execution evidence.
+sequenceDiagram
+    participant H as 调用方
+    participant K as 状态内核
+    participant W as 派生 worker
+    participant D as 派生视图
+    participant C as Context 编排
+    Note over H,C: 候选 B：局部修订如何阻止晚到旧任务恢复旧影响（未实现）
+    K->>W: 提供允许的材料与 revision r7
+    Note over W: 生成摘要 / 索引中
+    H->>K: 获准的局部修订（预期 r7）
+    K->>K: 提交 r8；更新使用资格
+    K->>D: 标记受影响视图 stale
+    Note over K,D: 第一候选要求核心变更与失效状态共同提交
+    W->>K: 请求发布基于 r7 的派生物
+    K-->>W: 拒绝旧 revision；保留待刷新状态
+    C->>K: 请求当前允许的材料与 revision
+    K-->>C: 返回 r8；旧派生物不可作现行依据
+    Note over C: 回查核心 / 减少 context / 明示缺失
+    K->>W: 以允许的 r8 材料重新生成
+    W->>K: 请求发布基于 r8 的派生物
+    K->>D: 验证并发布 r8 派生视图
+    Note over K,D: 验证与发布在共同提交边界；读端仍复核资格
+    C->>D: 读取 r8 候选
+    D-->>C: 内容 + 来源 + 输入 revision
+    C->>K: 交付前复核当前使用条件
+    K-->>C: 条件满足 / 需要重选
+    Note over H,C: 此图只提出状态一致性要求；context 已交付不等于实际正确使用

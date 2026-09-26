@@ -81,6 +81,10 @@ This inquiry asks what different memory projects preserve from the past, how tha
 
 具体引用仍回到 exact paper、code 和实验 artifact；保留 paper-reported、source-observed、synthetic experiment 与 editorial inference 的层次。此连接不合并 repo，不复制私有研究材料，也不自动接受 AMS 中的每项判断。
 
+## 从综合研究到自己的运行装置
+
+这组问题也为未来从空 repo 编写自有 memory 架构蓄力。[候选设计研究](own-memory-architecture.md)把保留、理解、修订与当前使用转为有替代方案的组件责任；[案例—测试映射](memory-design-test-map.md)说明具体能力、已有覆盖、反例和需要的证据。建设目标让研究有可实践的去向，但不会将文章收窄成自有系统宣传，也不把内部表示变成全领域的标准。候选若无法比简单历史／文件方案更好地完成既定目标，就应缩减或放弃。
+
 ## 下一次会推进认识的工作
 
 利用首轮报告中的跨入口状态差异、来源与作用域反例，收敛文章的中心论点，并完成 source-fidelity review。需要正式进入 census 的项目再按 [System Card](../systems/system-card-template.zh-CN.md) 补齐 review；需要 runtime 证据的结论另行设计具体试验。文件/目录实现已纳入研究，但简单文件/全文搜索、完整历史基线与学习机制的对照仍是样本缺口，不能把十项目归纳写成全部 agent memory 的边界。

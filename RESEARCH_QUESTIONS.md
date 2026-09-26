@@ -88,3 +88,9 @@ Which choices trade fidelity, change handling, scope isolation, usefulness, insp
 Which continuity requirements are shared by task-oriented agents, ordinary life and adult long-term intimacy, and which depend on the local situation? Can the same architecture support project authority and shared authorship, scoped correction, unfinished intentions and appropriate silence without treating all contexts as interchangeable?
 
 **Evidence needed:** matched and contrasting use scenarios, explicit local expectations, source mechanisms and bounded observations. Relationship-specific demands must not become hidden universal product requirements; general benchmark success does not establish relational continuity.
+
+## RQ15 — Which architecture should an independently authored memory system test first?
+
+How can source studies and case requirements inform an in-house memory design that provides useful continuity, supports correction and scoped use, and remains inspectable and portable? Which responsibilities need explicit state, and which can be served more simply by complete history, searchable files or the host agent? Can the same criteria reveal weaknesses in our own candidate without privileging its representation?
+
+**Evidence needed:** a [candidate architecture](research/own-memory-architecture.md) with alternatives, a [case-to-test map](research/memory-design-test-map.md) with coverage gaps and falsification conditions, and eventually bounded observations of actual use, cost, repair and persistence. Existing development cases are not held-out validation; scripted state checks do not establish semantic memory quality.

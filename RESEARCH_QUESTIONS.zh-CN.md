@@ -88,3 +88,9 @@ Memory、persistence、context management、retrieval、state、learning 与 exp
 Task-oriented agents、普通生活与成人长期亲密关系共享哪些 continuity 要求，哪些要求取决于局部情境？同一架构怎样支持 project authority、shared authorship、scoped correction、unfinished intentions 与 appropriate silence，同时不把情境视为可互换？
 
 **所需 evidence：** 可对照且保留差异的使用场景、明确的局部期待、源码机制与 bounded observations。关系特定要求不能成为隐藏的通用产品要求；通用 benchmark 成功也不直接证明关系连续性。
+
+## RQ15 — 独立编写的自有 memory 系统应先验证哪种架构？
+
+源码研究和案例要求怎样帮助我们设计有连续性收益、可纠正、按 scope 使用、可检查和可迁移的 memory 系统？哪些责任需要显式状态，哪些由完整历史、可搜索文件或宿主 agent 就能更简单地承担？同样的标准能否暴露自有候选的弱点，而不偏爱它的表示方式？
+
+**所需 evidence：** 带替代方案的[候选架构](research/own-memory-architecture.md)、记录覆盖缺口和推翻条件的[案例—测试映射](research/memory-design-test-map.md)，以及后续对实际使用、成本、修复和持久性的有界观察。既有开发表例不是 held-out validation；scripted 状态检查不证明语义 memory 质量。

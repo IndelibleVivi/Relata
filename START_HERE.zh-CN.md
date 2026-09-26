@@ -7,6 +7,8 @@ Relata 是前沿记忆研究室。概念定义、开源架构研究与比较文�
 
 下方基础工作也保留了从 non-normative Target Architecture Draft 0.1，走向有 source provenance、architecture pressure、community authority 与 case evidence 的执行路径。
 
+围绕长期自有系统目标，先读[候选记忆架构](research/own-memory-architecture.md)，再读[案例—测试映射](research/memory-design-test-map.md)，把机制、当前覆盖、替代方案和推翻条件接起来。设计研究现在就可推进；这些文档不代表 runtime、provider 执行或 case acceptance。下方跨系统 promotion gate 也不是将来在具体实现任务中开发自有 prototype 的普遍前提。
+
 当前本地工具：[RC-002 scripted rehearsal](experiments/offline-rehearsal.md) 与 [RC-005 candidate 输入审计](experiments/continuity-input-audit.md) 不必等待下方完整研究计划；两者都不授权模型执行，也不接受 case。
 
 ## 当前已经存在的正式基础

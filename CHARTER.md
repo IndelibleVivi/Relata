@@ -9,6 +9,8 @@ Relata is a frontier memory research lab. It studies what agent memory means, ho
 
 Its research includes general agent use and long-term adult human–AI romantic and intimate relationships. Intimacy remains a founding focus, not an eligibility requirement for every study. Across settings, Relata asks how continuity can respect source, time, authority, scope, permission, change and present relevance. This broader scope is accepted in [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md).
 
+An additional long-term research aim is to prepare an independently authored memory architecture and runnable apparatus, beginning from an empty repository. Existing source studies, cases and controls should inform falsifiable design choices, including whether simpler full-history or file-search approaches suffice. The [own-memory design study](research/own-memory-architecture.md) is a proposal, not an implemented system or an accepted architecture. Relata remains a plural research lab; a future in-house system is one system under study and does not define the evaluator’s universal schema.
+
 ## 2. Research object
 
 The lab studies memory concepts, implementations, architecture choices, use contexts and evaluation evidence. A memory engine, agent framework, context compiler, complete agent or human-maintained archive may expose different objects and boundaries; these are research candidates, not a canonical taxonomy.

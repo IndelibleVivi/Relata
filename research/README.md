@@ -6,6 +6,10 @@ Relata research connects conceptual questions, architecture judgments, synthesis
 
 The [agent-memory inquiry](agent-memory-inquiry.md) asks what open-source memory projects implement, what their choices enable or constrain, and how conclusions transfer inside and outside adult human–AI intimacy. It connects a standalone article direction, selected public AMS research and [ten bounded source studies](../systems/source-studies/README.md), including two isolated offline diagnostics. A [thirty-view architecture atlas](../systems/architecture-atlas/README.md) connects system boundaries, write-to-use paths and revision/control to pinned source evidence. Definitions and comparative outcomes remain open; no accepted Evidence Card or complete system result is added.
 
+## Design toward an independently authored system
+
+The [own-memory architecture study](own-memory-architecture.md) and [case-to-test map](memory-design-test-map.md) connect source mechanisms, candidate cases and controls to the long-term aim of independently authoring a memory runtime. They preserve alternatives and falsification conditions; all proposed components, tests and experimental sequences remain design material. The future in-house system is one research object, not the evaluator’s ontology. Existing article and community research continues independently.
+
 ## Current evidence spine
 
 | Card | Status | Current use |

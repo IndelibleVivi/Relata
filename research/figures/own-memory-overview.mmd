@@ -1,0 +1,28 @@
+%% Candidate B: proposed design, not implemented or runtime-observed.
+%% Semantics and node responsibilities: ../own-memory-architecture.md section 4.
+flowchart TB
+    I["I · 受信调用方<br/>输入材料 / 当前请求<br/>绑定身份、scope 与允许使用范围"]
+    subgraph M["自有 memory · 候选 B · 尚未实现"]
+        P["P · 写入提案<br/>保留、修订、关联<br/>推断不自动变成共同接受"]
+        K[("K · 状态内核<br/>唯一核心写入口<br/>持久材料 / 来源 / revision / 适用条件")]
+        D["D · 派生与维护<br/>摘要 / 关联 / 检索索引<br/>可重建，绑定输入 revision"]
+        R["R · 候选检索<br/>允许范围内寻找材料<br/>检索命中不等于可使用"]
+        C["C · Context 编排<br/>资格与 freshness / 预算 / 来源<br/>本次 packet 可为空"]
+        P -->|权限与 revision 检查| K
+        K -->|材料与修订影响| D
+        K -->|当前材料与状态| R
+        D -->|候选及输入 revision| R
+        R -->|带依据的候选| C
+        K -.->|当前资格复核| C
+    end
+    U["U · Agent 与实际使用<br/>回答 / 继续工作 / 提出行动<br/>执行权限归宿主；使用效果另行观察"]
+    I -->|待保留材料| P
+    I -->|当前请求与 scope| R
+    C -->|本次 context packet| U
+    U -.->|可记录的实际结果| I
+    classDef caller fill:#e9f0f6,stroke:#375a73,color:#183141,stroke-width:1.5px;
+    classDef core fill:#dceee9,stroke:#28695a,color:#143f34,stroke-width:2px;
+    classDef candidate fill:#faf7ee,stroke:#8b7850,color:#403720,stroke-width:1.4px;
+    class I,U caller;
+    class K core;
+    class P,D,R,C candidate;

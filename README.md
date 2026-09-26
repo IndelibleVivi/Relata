@@ -15,6 +15,10 @@ General agent memory and adult long-term intimacy are both research contexts. In
 
 Relata asks what is retained, activated, admitted to context, used, repaired, or appropriately left silent. Factual recall, temporal reasoning, source fidelity, noise resistance, scope isolation and full-history/full-search controls remain valuable; their observation boundaries must be explicit.
 
+## Research toward our own memory system
+
+The lab also prepares an independently authored memory architecture and runnable apparatus starting from an empty repository. The [candidate design](research/own-memory-architecture.md) and [case-to-test map](research/memory-design-test-map.md) turn the existing studies into explicit choices, controls and counterexamples. They compare useful continuity, revision and scoped use with simpler full-history/file-search approaches. This is design research: no new memory runtime has been built, and the lab’s other research outputs remain independently valuable.
+
 ## Current stage
 
 **R0 — Research Foundation.** Two narrow source Evidence Cards are accepted. RC-001 is clinic-ready; RC-002/003/004 are unreviewed seeds. There are no reviewed System Cards, accepted cases, validated evaluators, real system results or rankings.

@@ -15,6 +15,10 @@
 
 Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或适当地保持沉默。事实回忆、时间推理、来源忠实、抗干扰、scope isolation 和 full-history/full-search controls 继续有价值，但需要说明各自的观察边界。
 
+## 为自有 memory 系统积累设计
+
+研究室也为从空 repository 开始、独立编写自己的 memory 架构与可运行装置蓄力。[候选设计](research/own-memory-architecture.md)与[案例—测试映射](research/memory-design-test-map.md)把既有研究转为明确的选择、controls 与反例，比较连续性收益、修订和 scope 使用，也保留完整历史／简单文件搜索作为强对照。目前交付的是设计研究，尚未构建新的 memory runtime；研究室的其他研究产出继续有独立价值。
+
 ## 当前阶段
 
 **R0 — Research Foundation。** 两张窄范围的 source Evidence Cards 已 accepted。RC-001 为 clinic-ready；RC-002/003/004 仍是未经 review 的 seeds。尚无 reviewed System Cards、accepted cases、validated evaluators、真实系统结果或排名。
