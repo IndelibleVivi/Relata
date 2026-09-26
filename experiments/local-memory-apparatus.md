@@ -4,7 +4,7 @@
 **Scope correction:** [ADR-0007](../decisions/ADR-0007-local-memory-apparatus.md) 已撤回把长期 goal 当作实现授权的解释；本记录保留实际工程证据，不提供后续实现权限。
 **System:** 独立本地 repository `relata-memory`（历史工作名）；Python 标准库与 SQLite。不是正式 Tilia。
 **Code revision:** `99f673f95770215b186e7d2530122ad50b04a42b`，该 repo 的首次本地 commit。
-**Publication:** 源码尚未公开发布、无 remote、未选择公共 license；本文不是公共代码已可独立复现的结果包。
+**Publication:** maintainer 于 2026-09-26 明确授权建立独立 private remote，名称保留 `relata-memory`；源码尚未公开发布、未选择公共 license，也没有 release 或部署。本文不是公共代码已可独立复现的结果包；私人续接与本地运行数据不上传。
 
 ## 中文摘要
 

@@ -19,7 +19,7 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 
 研究可以为未来从空 repository 独立编写的记忆系统 **Tilia** 蓄力。Tilia 是独立的长期目标；Relata 继续是研究室。[候选设计](research/own-memory-architecture.md)与[案例—测试映射](research/memory-design-test-map.md)把既有研究转为选择、controls 与反例，不锁定 Tilia 架构。其预期设计需要向量语义检索，编码器与模型选型仍开放。
 
-目前独立本地 repo 中已经有一份非常早期的明确输入实验，沿用历史工作名 `relata-memory`。源码已本地提交、尚未公开发布，现有能力是字面搜索与脚本消费。更正后的 [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) 记录了把研究目标误读成开工指令的范围错误；保留实验不表示它成为正式 Tilia 或持续实现任务。[工程记录](experiments/local-memory-apparatus.md) 保留有边界的检查结果，不声称语义记忆效果。研究室的其他研究产出继续有独立价值。
+目前独立 repo 中已经有一份非常早期的明确输入实验，沿用历史工作名 `relata-memory`，并有自己的 private remote。源码尚未公开发布，现有能力是字面搜索与脚本消费。更正后的 [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) 记录了把研究目标误读成开工指令的范围错误；保留实验不表示它成为正式 Tilia 或持续实现任务。[工程记录](experiments/local-memory-apparatus.md) 保留有边界的检查结果，不声称语义记忆效果。研究室的其他研究产出继续有独立价值。
 
 ## 当前阶段
 
