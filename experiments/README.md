@@ -9,6 +9,10 @@ R0 experiments are local, small, and evidence-producing. They investigate cases,
 
 Both use public adult synthetic material and local derived artifacts. They retain separate responsibilities; the RC-002 text-only tape is not the RC-005 input boundary.
 
+## Proposed model-backed research
+
+The [first research cycle](../research/first-research-cycle.md) plans real-system comparisons and design experiments, including candidate objects, controls, evidence packets and cost accounting. [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md) proposes a named execution envelope so exploratory observations can precede formal benchmark promotion. It remains unaccepted: no connector, provider call, approved spending or published result is supplied by these planning documents. Current available commands and permissions remain those of the offline tools above.
+
 ## Retained early apparatus experiment
 
 [Local memory apparatus](local-memory-apparatus.md) records the already-written `relata-memory` experiment retained after the scope correction in ADR-0007. Explicit operations, raw-history/simple-file controls and a scripted consumer test state behavior. The code lives in a separate local repository; it is very early, lacks vector retrieval, and is neither formal Tilia nor a completed Case Lab study. Retention does not supply a new implementation mandate.

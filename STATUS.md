@@ -45,6 +45,7 @@ The maintainer’s 2026-09-26 clarification separates the long-term **Tilia** go
 | RC-005 / CT-AUTHORSHIP | seed; selected from the 2026-09-22 proposal; input tooling implemented | 18 unanswered input views; literal speaker-removal collisions at 3 correlated checkpoints in one family; no independent human review, system output, or Memory Necessity Gate acceptance |
 | Evaluator calibration | plan and authored E0 fixtures | no reviewer data or validated evaluator boundary; review packet must retain the governing evidence |
 | Community contribution path | public-safe governance/templates | restricted contribution path not exercised |
+| [First research cycle](research/first-research-cycle.md) / [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) | proposed programme and execution-boundary decision | no accepted execution envelope, approved budget, new system run, publication or deployment |
 
 Templates, corrected contracts, generated fixtures and passing plumbing tests are not evidence that a memory method works. Semantic judgments remain pending; no composite or capability score is generated.
 
@@ -53,6 +54,8 @@ Templates, corrected contracts, generated fixtures and passing plumbing tests ar
 Define and critically examine agent memory across concepts, open-source architectures and evidence. Compare what different implementations preserve, how past experience affects current behavior, and the conditions under which their choices help or fail. Study these questions in general agent settings and in long-term mixed-role relationships, retaining history-dependent controls, architecture-sensitive observation and privacy-preserving community participation.
 
 ## Immediate work
+
+The [first research cycle plan](research/first-research-cycle.md) is the proposed coordination path for the next substantive edition: case development and real comparison, source and runtime exhibits, falsifiable design experiments, and synthesis with independently deliverable outputs. Its 12–20-family capacity target and four system candidates are planning choices, not validated sample sizes or runnable configurations. [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) remains **proposed**. Current execution limits and the promotion gate below remain in force; any acceptance must explicitly reconcile those surfaces and name the authorized study envelope.
 
 - **Own benchmark:** advance cases, controls and evaluation methods through the existing [Case Lab](case-lab/README.md). Use the [offline rehearsal](experiments/offline-rehearsal.md) and [candidate input audit](experiments/continuity-input-audit.md) within their stated scope; do not wait for third-party scores. These tools do not authorize provider calls or establish system quality.
 - **System collection:** develop the [agent-memory inquiry](research/agent-memory-inquiry.md) from the [ten source-study drafts](systems/source-studies/README.md) and [architecture atlas](systems/architecture-atlas/README.md). Review source fidelity, compare mechanisms and competing interpretations, and carry concrete questions into case or design research. This work proceeds independently of live evaluation and the case promotion gate.

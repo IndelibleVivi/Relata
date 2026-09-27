@@ -19,6 +19,10 @@ Relata 是前沿记忆研究室，[ADR-0008](decisions/ADR-0008-three-core-resea
 
 当前本地工具：[RC-002 scripted rehearsal](experiments/offline-rehearsal.md) 与 [RC-005 candidate 输入审计](experiments/continuity-input-audit.md) 不必等待下方完整研究计划；两者都不授权模型执行，也不接受 case。
 
+## 拟议的首轮研究计划
+
+先读[完整周期计划](research/first-research-cycle.md)，查看问题、候选对象、controls、work packages、证据要求与未定资源；再读 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)，了解把有界探索性执行与 benchmark promotion 分开的提案。两者仍为 proposed，当前权限以 [STATUS](STATUS.zh-CN.md) 为准。源码展品、案例修订与设计研究有独立价值，不必等待共同 release。运行展品需要真实执行证据；公开 hosting 与结果发布需要各自授权。
+
 ## 当前已经存在的正式基础
 
 - [Charter](CHARTER.md)、[research questions](RESEARCH_QUESTIONS.md) 与 [assumption register](ASSUMPTION_REGISTER.md)
@@ -52,10 +56,10 @@ python3 tools/check_repo.py
 
 ## 第二项：做第一轮 System Census
 
-- [ ] 收集 community contribution 前，先确认 identifying consent records 的 restricted storage 与 steward。
-- [ ] 只做小范围、私下 Founding Circle 邀请；source repo 已公开，但不要通过 public issue / PR 收 sensitive community material。
-- [ ] 每个人可以自由选择 Incident Seed、System Card、case review、source review 或 governance，不设技能等级。
-- [ ] 用系统自己的 vocabulary 与 boundary，完成三张 contributor-reviewed System Cards。
+- [ ] 为每个对象选择[公开源码或获准 contributor 路线](systems/README.zh-CN.md)；公开源码研究不要求 maintainer 背书或 private access。
+- [ ] Restricted contributions 收集前先确定 consent-record storage 与 disclosure authority。Founding Circle 邀请可选且需对应授权；不通过 public issue / PR 收 sensitive material。
+- [ ] 若有 contributors 参与，每个人可以自由选择 Incident Seed、System Card、case review、source review 或 governance，不设技能等级。
+- [ ] 用系统自己的 vocabulary 与 boundary，完成三张 reviewed System Cards：公开源码 card 做 source-fidelity review；来自 contributor 的公开字段另需其批准。
 - [ ] 做一张 Architecture Pressure Map，分清 native、adapter-emulated、opaque、unsupported、unknown 与 not applicable。
 - [ ] 单独列出每个拟议 observation boundary 会偏爱或抹掉哪类 architecture。
 

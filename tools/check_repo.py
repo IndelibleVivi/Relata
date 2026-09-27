@@ -96,9 +96,13 @@ REQUIRED = [
     "decisions/ADR-0005-offline-pilot-tooling.zh-CN.md",
     "decisions/ADR-0008-three-core-research-functions.md",
     "decisions/ADR-0008-three-core-research-functions.zh-CN.md",
+    "research/first-research-cycle.md",
+    "decisions/ADR-0009-exploratory-research-boundary.md",
+    "decisions/ADR-0009-exploratory-research-boundary.zh-CN.md",
 ]
 
 BILINGUAL_PAIRS = [
+    ("decisions/ADR-0009-exploratory-research-boundary.md", "decisions/ADR-0009-exploratory-research-boundary.zh-CN.md"),
     ("decisions/ADR-0008-three-core-research-functions.md", "decisions/ADR-0008-three-core-research-functions.zh-CN.md"),
     ("decisions/ADR-0005-offline-pilot-tooling.md", "decisions/ADR-0005-offline-pilot-tooling.zh-CN.md"),
     ("README.md", "README.zh-CN.md"),

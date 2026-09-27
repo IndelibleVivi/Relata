@@ -45,6 +45,7 @@ Maintainer 于 2026-09-26 澄清：长期 **Tilia** 目标与 Relata 当前研�
 | RC-005 / CT-AUTHORSHIP | seed；选自 2026-09-22 提案；输入工具已实现 | 18 份待答输入；一个家族的 3 个相关 checkpoint 在去掉 speaker 后发生字面碰撞；无独立人类 review、系统回答或 Memory Necessity Gate acceptance |
 | Evaluator calibration | plan 与 authored E0 fixtures | 无 reviewer data 或 validated boundary；评审包必须保留治理该回答的证据 |
 | Community contribution path | public-safe governance/templates | restricted contribution path 尚未实际使用 |
+| [首轮研究计划](research/first-research-cycle.md)／[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) | proposed programme 与执行边界决定草案 | 没有 accepted 执行范围、已批准预算、新系统运行、发布或部署 |
 
 Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不证明 memory method 有效。语义判断继续 pending，不生成综合分或能力分数。
 
@@ -53,6 +54,8 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 定义并批判性研究 agent memory 的概念、开源架构与证据。比较不同实现保留什么、过去的经验怎样影响当前行为，以及架构选择在什么条件下有用或失效。在通用 agent 和长期 mixed-role 关系中研究这些问题，保留历史依赖 controls、尊重架构差异的观察边界，以及保护隐私的社区参与。
 
 ## Immediate work
+
+[首轮研究计划](research/first-research-cycle.md)是下一轮实质研究 edition 的拟议协调路径：案例发展与真实比较、源码和运行展品、可被推翻的设计实验，以及可以分别交付的综合产出。12–20 个 family 的容量目标与四个候选系统都是规划选择，不是已验证样本量或已经可运行的配置。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)仍为 **proposed**。当前执行限制与下方 promotion gate 保持有效；接受新边界时须明确对齐这些 surfaces，并列明获准研究范围。
 
 - **自己的 benchmark：** 通过现有 [Case Lab](case-lab/README.zh-CN.md) 推进案例、controls 与评价方法。在各自既定范围内使用[离线演练](experiments/offline-rehearsal.md)和[candidate 输入审计](experiments/continuity-input-audit.md)，无需等待第三方交分数。这些工具不授权 provider 调用，也不建立系统质量结论。
 - **系统样本研究空间：** 从[十份源码研究 drafts](systems/source-studies/README.md) 与[架构图集](systems/architecture-atlas/README.md) 推进 [agent-memory inquiry](research/agent-memory-inquiry.md)。Review source fidelity，比较机制与竞争解释，将具体问题带入案例或设计研究。这项工作独立于 live evaluation 与 case promotion gate 推进。

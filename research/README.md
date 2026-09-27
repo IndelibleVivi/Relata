@@ -6,6 +6,8 @@ Under [ADR-0008](../decisions/ADR-0008-three-core-research-functions.md), this w
 
 ## Open comparative inquiry
 
+The proposed [first research cycle](first-research-cycle.md) joins case research, candidate system studies, source/runtime exhibits and mechanism experiments, with independent deliverables and a synthesis path. It records controls, resource planning, evidence requirements and deferred questions. The paired [ADR-0009 proposal](../decisions/ADR-0009-exploratory-research-boundary.md) ([中文](../decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)) addresses a possible bounded exploration exception; neither document grants execution or publication authority or changes evidence status.
+
 The [agent-memory inquiry](agent-memory-inquiry.md) asks what open-source memory projects implement, what their choices enable or constrain, and how conclusions transfer inside and outside adult human–AI intimacy. It connects a standalone article direction, selected public AMS research and [ten bounded source studies](../systems/source-studies/README.md), including two isolated offline diagnostics. A [thirty-view architecture atlas](../systems/architecture-atlas/README.md) connects system boundaries, write-to-use paths and revision/control to pinned source evidence. Definitions and comparative outcomes remain open; no accepted Evidence Card or complete system result is added.
 
 ## Design toward an independently authored system

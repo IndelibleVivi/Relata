@@ -19,6 +19,10 @@ For research toward the independent Tilia goal, read the [candidate memory archi
 
 Current local tooling: use the [RC-002 scripted rehearsal](experiments/offline-rehearsal.md) or the [RC-005 candidate input audit](experiments/continuity-input-audit.md) without waiting for the broader research programme below. Neither authorizes model execution or accepts a case.
 
+## Proposed first research cycle
+
+Read the [complete cycle plan](research/first-research-cycle.md) for questions, candidate subjects, controls, work packages, evidence requirements and unresolved resources. Read [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) for the proposed separation of bounded exploratory execution from benchmark promotion. Both remain proposed; the current authority is [STATUS](STATUS.md). Source exhibits, case refinement and design inquiry retain independent value and need not wait for one shared release. Runtime exhibits require real execution evidence; public hosting and result publication require their own authorization.
+
 ## Foundation now present
 
 - [Charter](CHARTER.md), [research questions](RESEARCH_QUESTIONS.md), and [assumption register](ASSUMPTION_REGISTER.md)
@@ -52,10 +56,10 @@ python3 tools/check_repo.py
 
 ## Work item 2 — Run the first System Census
 
-- [ ] Confirm restricted consent-record storage before collecting community contributions.
-- [ ] Invite a small, varied Founding Circle privately; the source repo is public, but do not collect sensitive community material through public issues or pull requests.
-- [ ] Let each contributor choose Incident Seed, System Card, case review, source review, or governance work without a skill hierarchy.
-- [ ] Complete three contributor-reviewed System Cards using each system’s native vocabulary and boundary.
+- [ ] Choose the [public-source or authorized contributor route](systems/README.md#census-workflow) for each object; public-source research does not require maintainer endorsement or private access.
+- [ ] For restricted contributions, settle consent-record storage and disclosure authority before collection. Any Founding Circle invitation is optional and separately authorized; do not collect sensitive material through public issues or pull requests.
+- [ ] If contributors participate, let each choose Incident Seed, System Card, case review, source review, or governance work without a skill hierarchy.
+- [ ] Complete three reviewed System Cards using each system’s native vocabulary and boundary: source-fidelity review for public-source cards, plus contributor approval for contributor-derived public fields.
 - [ ] Produce one Architecture Pressure Map that distinguishes native, adapter-emulated, opaque, unsupported, unknown, and not-applicable behavior.
 - [ ] List every proposed observation boundary that would privilege or erase a represented architecture.
 
