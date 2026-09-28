@@ -43,7 +43,7 @@ Before subject execution, the envelope must resolve the following facts and choi
 
 Names on a candidate list are not installation or readiness evidence. A subscription, credential, public endpoint or working connector is not permission to use it. Manual browser calls to a model are still subject execution; changing transport does not avoid this boundary. Research inputs must not inherit personal memory, unrelated account context or the evaluator key from the engineering environment.
 
-Acceptance of this ADR and a completed envelope may occur together. An envelope with an unresolved provider, account authorization or spending cap cannot start dependent calls; preparing public inputs and studying source can continue within existing authority.
+The proposed [RC-005 → Mem0 packet](../experiments/rc005-native-execution-packet.md) is a concrete candidate, including preflight-to-native progression, write/ready/probe timing, process-recovery boundaries and resource caps; existing source-study evidence is not native runnability evidence. Acceptance of this ADR and a completed envelope may occur together. An envelope with an unresolved provider, account authorization or spending cap cannot start dependent calls; preparing public inputs and studying source can continue within existing authority.
 
 ### 3. Allow useful iteration within that envelope
 

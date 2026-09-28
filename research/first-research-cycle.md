@@ -6,11 +6,11 @@
 
 ## 中文摘要
 
-本文提出 Relata 第一个实质研究周期的计划：把自有 benchmark 研究、系统样本研究空间（museum 名称仍开放）与未来系统 incubator 三项核心职能，加一条以证据为锚的 comparative synthesis 串起来。三项职能各有独立交付物，可以分别发布，不要求等待一次共同 release。周期围绕三个问题组织：跨 session 的共同／项目工作延续（RC-003/005）；更正如何改变后续影响而不破坏仍有效的邻域（RC-001 与 source-derived propagation 问题）；有用普通回忆与 scope/use/silence 的边界（RC-002/004）。计划把 12–20 个独立 incident families 设为**容量目标**而非科学样本量门槛，给出候选受测对象 readiness matrix、控制纪律、museum 的静态与运行 exhibit 计划（含读者端实现，公开阅读另需授权）、incubator 机制压力测试、一个以 RC-005 现有输入为 calibration anchor 的首个执行包候选，以及分离货币与人工时间的成本口径。prospective memory、companion continuity 与 learning transfer 作为**开放研究**保留其去向与下一个问题。本文全部内容为 `proposed`，不提升任何 case、Source Study 或 Evidence Card 的接受级别。
+本文提出 Relata 第一个实质研究周期的计划：把自有 benchmark 研究、系统样本研究空间（museum 名称仍开放）与未来系统 incubator 三项核心职能，加一条以证据为锚的 comparative synthesis 串起来。三项职能各有独立交付物，可以分别发布，不要求等待一次共同 release。周期围绕三个问题组织：跨 session 的共同／项目工作延续（RC-003/005）；更正如何改变后续影响而不破坏仍有效的邻域（RC-001 与 source-derived propagation 问题）；有用普通回忆与 scope/use/silence 的边界（RC-002/004）。计划把 12–20 个独立 incident families 设为**容量目标**而非科学样本量门槛，给出候选受测对象 readiness matrix、控制纪律、museum 的静态与运行 exhibit 计划（含读者端实现，公开阅读另需授权）、incubator 机制压力测试、一个以 RC-005 现有输入为预检起点、随后进入 native 路径的首个执行包候选，以及分离货币与人工时间的成本口径。prospective memory、companion continuity 与 learning transfer 作为**开放研究**保留其去向与下一个问题。本文全部内容为 `proposed`，不提升任何 case、Source Study 或 Evidence Card 的接受级别。
 
 ## English summary
 
-This proposed first research cycle links Relata's three core functions, its own benchmark research, the system study collection (working museum name still open), and future-system incubation, joined by an evidence-grounded comparative synthesis. Each function keeps an independent deliverable and may ship separately. Three questions organise the cycle: continuing shared/project work across sessions (RC-003/005); how a correction changes later influence without damaging still-valid neighbors (RC-001 plus source-derived propagation); and useful ordinary recall with correct scope, use and silence (RC-002/004). 12–20 independent incident families is a capacity target, not a sample-size gate. The plan gives a candidate-object readiness matrix, control discipline, static and runtime museum exhibits (including reader implementation, with public hosting separately authorized), incubator mechanism tests, a first execution-package candidate anchored on the existing RC-005 inputs, and a cost convention that separates monetary spend from human hours. Prospective memory, companion continuity and learning transfer stay open research with a stated destination. Everything here is `proposed`; no case, source study or Evidence Card changes state.
+This proposed first research cycle links Relata's three core functions, its own benchmark research, the system study collection (working museum name still open), and future-system incubation, joined by an evidence-grounded comparative synthesis. Each function keeps an independent deliverable and may ship separately. Three questions organise the cycle: continuing shared/project work across sessions (RC-003/005); how a correction changes later influence without damaging still-valid neighbors (RC-001 plus source-derived propagation); and useful ordinary recall with correct scope, use and silence (RC-002/004). 12–20 independent incident families is a capacity target, not a sample-size gate. The plan gives a candidate-object readiness matrix, control discipline, static and runtime museum exhibits (including reader implementation, with public hosting separately authorized), incubator mechanism tests, a first execution-package candidate taking existing RC-005 inputs through reader preflight and then a native memory path, and a cost convention that separates monetary spend from human hours. Prospective memory, companion continuity and learning transfer stay open research with a stated destination. Everything here is `proposed`; no case, source study or Evidence Card changes state.
 
 ## 1. 目标与授权边界
 
@@ -113,7 +113,7 @@ museum／样本间／研究室的正式名称仍开放。本周期**建立在现
 incubator 用设计假设、替代方案、反例与获准的研究实验作取舍；实验所需 prototype 也须在执行范围内明确。Tilia 产品实现留在独立项目。保留的[早期实验](../experiments/local-memory-apparatus.md)提供的是局部工程证据，**不因此获得继续实现的 mandate**。
 
 - **A：强语义 raw-source 基线（含向量）＋字面控制。** 向量语义检索是 Tilia 的**既定预期要求**：可以拒绝某个具体的 encoder／rerank／selection 策略或其组合，但不能由此否定向量语义检索本身，也不以字面搜索先失败为引入前提。
-- **B：可修订证据／派生视图／context 编排。** 先证明相对 A 的必要性，再逐步加入加工。为避免 B 的收益只是“检索更好”，须在**相同 raw 输入**上同时比较 B、强语义 raw-source A 与字面控制三者的抽取、检索与使用。
+- **B：可修订证据／派生视图／context 编排。** 先证明相对 A 的必要性，再逐步加入加工。在**相同 raw 输入**上比较 B、强语义 raw-source A 与字面控制三者的抽取、检索与使用。结构使检索更有效本身可以是收益；需要排除的是额外 encoder、reranker、模型、上下文或预算带来的混杂，不能把结构影响的中间结果强行固定。
 - **C：自主组织／学习**是**开放且独立的方向**，不作为第一装置的隐含前提；下表保留条件性判据，具体迁移实验尚未排定。
 
 机制压力测试（`proposed`）：
@@ -122,15 +122,15 @@ incubator 用设计假设、替代方案、反例与获准的研究实验作取�
 2. **最小充分更正传播**如何跨实际 read paths 生效？追溯 source、摘要、画像、embedding、context 各层，定位“抽取丢了／检索没到／检索到但被派生层覆盖”。
 3. **编码器／重排／选择**对中文、英文与混合语言是否成立，含否定、provenance、conditions 与 stale drafts。
 
-比较要求：三方从**相同 raw 输入**开始，任一侧都**不获得作者整理的 correct state 特权**。每个机制都要预先写明：什么结果会**保留**它、什么结果会**简化**它、什么结果会**拒绝**它。
+比较要求：三方从**相同 raw 输入**开始，任一侧都**不获得作者整理的 correct state 特权**。机制比较应让双方共同可用的 encoder、reranker、reader 与模型能力一致，或把差异单列为条件；不能给一侧更强组件后把全部收益归给结构。每次 **retain／simplify／reject** 都须命名被处置的具体假设、实现版本或配置，以及适用条件。检索候选、实际 context 与最终使用是需要观察的作用路径，不是必须固定相同的中介变量。
 
-| 机制 | 会保留它的结果 | 会简化它的结果 | 会拒绝它的结果 |
+| 具体处置对象 | retain | simplify | reject |
 |---|---|---|---|
 | 具体 encoder／rerank／selection 组合 | 相对其他语义配置与字面控制，改善任务完成和来源使用，成本可接受 | 复杂组合的增益有限，更简单语义配置已足够 | 某个策略在相同 raw 输入下带来更多错误或不当使用且无对等收益；这只否定该策略，不否定向量语义检索的设计要求 |
-| 可修订证据＋派生视图（B） | 更正沿 read paths 收敛，且相对 A 减少修复／重复解释 | 收益只来自更多上下文而非结构，退回 A 加显式 context 选择 | 派生层持续以旧值驱动行为，或修复误伤邻域 |
-| 自主组织／学习（C） | 迁移收益可观察、可回滚、可归因 | 收益仅来自提示微调，可由更简单机制实现 | 变化不可归因或不可逆，代价超过收益 |
+| B 的某个修订／派生／编排机制及其“额外结构值得成本”假设 | 在共同组件与相同 raw 输入下，改善任务完成或实验内修复成本，作用路径有证据 | 消融某层后收益仍在，或 A 加较简单选择已满足该条件下需求，则移除该层 | 旧值持续生效／邻域受损先否定该版本在该条件下履约，定位 bug、修复或记录未修复；只有相关比较持续显示额外结构无相应收益且代价更高，才支持停止投入这个有界设计方案 |
+| C 的具体学习／组织机制与迁移假设（尚未排定） | 迁移收益可观察、可回滚、可归因 | 所测收益可由更简单机制实现，则简化该实现 | 该实现不满足回滚／归因要求则停用；有界迁移假设需由对应比较否证，不由一处实现故障否定整个学习方向 |
 
-压力测试允许得出“更复杂机制不值得其成本”的结论；这种结论同样是研究产出，不是失败。
+压力测试允许得出“这个更复杂方案在这些条件下不值得其成本”的结论。单个 bug、配置失败或一次胜出都不是对整类架构的判决；更宽的路线取舍须有能区分实现缺陷、共同组件能力与结构贡献的比较证据。
 
 ## 10. 执行计划
 
@@ -150,9 +150,11 @@ incubator 用设计假设、替代方案、反例与获准的研究实验作取�
 - **F 按批次并行**：synthesis 可为任一已成熟批次先产出 claim-to-evidence trail，不采用“A–E 全部完成才汇总”的 convoy。
 - **D 分叉**：静态 exhibit 从现在起就基于现有 source work 推进；运行 exhibit 等到相关 C／E 证据到位。
 
-**首个执行包候选（`proposed`，需获接受的 envelope）**：以 [RC-005 已实现的输入视图](../experiments/continuity-input-audit.md)作为 readiness anchor。按现有工具重新准备两条历史 × 三个 checkpoint × current-only／full-history／source-excerpt，共 18 份待答输入；在隔离 reader 下检查回答、证据记录、盲包与泄漏边界。Provider／model、模型参数、重复数与费用上限仍待确定；首包不包括 native memory 摄入、任何生产 memory state 或语义评分接受。已有 scripted rehearsal 可验证记录流程，但不能替代这些真实回答，也不建立人类 calibration。
+**首个执行包候选：** [`RC-005 + Mem0 执行包`](../experiments/rc005-native-execution-packet.md) 是本周期的具体下一步。它把 18 份输入的隔离 reader 预检、强原文基线、固定 Mem0 OSS 的 native 摄入／检索、延迟观察和进程恢复纳入同一个 proposed envelope；配置、cell 数、费用估算与硬上限由该包维护，本文不复制一份配置真源。源码核验和离线输入验证不是 native 可运行证明，实际 readiness 的缺口在包内明确列出。
 
-随后将相同材料接入就绪的异质系统，保留其 native 和 fixed-reader 边界，再扩展 Q1–Q3 中具有独立困难来源的 families。RC-005 只承担首包的工程与输入诊断角色，不替代整轮主题、跨系统证据、独立验证或三件展品。新材料若反过来参与调参，重新计入 development。
+预检的退出条件是输入与记录路径检查完成，对具体 case 歧义与 reader 可用性已有处置；不要求高分或全部语义评审完毕才进入 native 阶段。发现实质歧义则处理受影响的 probe，保留原结果，不通过挑选高分来“修好”预检。Native 安装、无网 smoke、首次有界 provider 调用及必要接入修复拟包含在同一范围内，避免完成预检后再设计第二个执行包。
+
+随后按完整周期继续接入其他异质系统，保留其 native 和 fixed-reader 边界，再扩展 Q1–Q3 中具有独立困难来源的 families。RC-005 只有一个 family，首包不能证明跨系统优劣、持续 co-evolution 或更广架构结论；新材料若反过来参与调参，重新计入 development。
 
 ## 11. 运行记录、证据包与成本
 
@@ -165,11 +167,15 @@ run record／evidence bundle 的要求（概念层面，不是 canonical API／s
 
 **answer slot 的枚举**：按 family／world／checkpoint／config／control／repeat 的研究设计列出有意义的 cell，不做完整 Cartesian product，也不根据已经看到的答案挑选条件。**Ingest reset／reuse 策略会改变成本与状态**，须单独记账；twins 和独立重复不能共用可变 memory，冻结前缀的安全快照复用也要记录来源与恢复方式。
 
-一个**说明性**（非承诺）计数：现有 18 份 RC-005 view × 3 次拟定重复 = 54 answer slots。若首包采用这一组合，54 就是计划回答数；实际 API 调用还取决于每个 slot 的 reader 行为、重试与另行选择的诊断。它不是经过科学论证的样本量。缩减或扩展 cell 时重算工作量，并保留未执行条件。
+首包的枚举与数值估算见[执行包](../experiments/rc005-native-execution-packet.md)。其中 18 份 RC-005 view × 3 次重复 = 54 个**预检**回答位置，不是独立案例数，也不是包括 native 摄入／维护在内的全包调用数。缩减或扩展 cell 时重算工作量，并保留未执行条件。
 
 估算货币费用时，先将每个可收费操作归入 ingestion／embedding、maintenance、retrieval、answer、repair／retry／judge 之一，再用计划次数乘以该操作的费用估计，最后加直接基础设施费用；同一次调用不重复计费。执行后用可用的实际 usage／billing 核对，无法取得的记 unknown。人工小时另表相加。先用获准首包测得单位成本与调用数，再估计全周期；扩展到新对象、长历史或后台维护时更新估计，不把首包单价外推成固定承诺。
 
-**cap 记账**：stage cap 必须覆盖**失败尝试、重试与 judge 调用**；每次 dispatch 前预留保守额度，并采用 max-bounded 操作，避免超支。具体 provider／model 与全局 cap 由 owner 决定；**本文不预设单价，也没有已批准预算**。达到约定 cap 或出现 invalid exposure／config 时停止支出，本地分析可以继续。
+**cap 记账**：stage cap 必须覆盖**失败尝试、重试与 judge 调用**；每次 dispatch 前预留保守额度，并采用 max-bounded 操作，避免超支。执行包给出具体 provider／model 与 stage／global cap 的推荐值；**推荐不是已批准预算**。达到约定 cap 或出现 invalid exposure／config 时停止支出，本地分析可以继续。
+
+**观察时序与恢复边界**：每个更正实验记录 write 提交／回执的含义、原生 ready 信号或其缺失、即时与等待后 probe 的实际时间、最长观察期限和期间成本。不按“终于答对”决定何时停止等待。新 reader 请求、持久状态重开与进程重启分开举证；fixture 的 session 数字只表达虚构顺序。具体时点由各执行包固定，未知阶段保持 unknown。
+
+**收益口径**：固定历史重放可报告任务完成情况、已有充分历史仍发生的不必要追问、以及实验内修复所需额外操作／调用／人工时间。它们只是未来使用收益的线索，不证明真实用户长期节省的解释时间或情感劳动。当前研究不因此引入真实参与者长期研究。
 
 争议语义需要**独立人类评审**；model cross-review 不构成人类 calibration。精确检查（token 存在／缺失、twin 绑定）不需要人类仪式。**自动化 semantic judge 只有在被显式选择时才作为诊断**，永不成为已批准的 hard semantic scorer 或人类 calibration 的替代。
 
@@ -189,7 +195,7 @@ run record／evidence bundle 的要求（概念层面，不是 canonical API／s
 处置中要显式保留的取向：
 
 - **complete-system 与 fixed-reader 两条比较线保持分离**，不合成一张总表；
-- 记录**正面收益**（任务完成、恢复工作、减少重复解释）与**全生命周期成本**（ingestion／maintenance／retrieval／answer／repair），而不只记违规；
+- 记录本轮可观察的**正面收益**（任务完成、不必要追问、实验内修复操作与成本）与**全生命周期成本**（ingestion／maintenance／retrieval／answer／repair），而不只记违规；
 - **评审分歧要保留并记录**，不用 human calibration 的虚构来粉饰尚未发生的评审；
 - **exploratory 与 formal claim 明确区分**，前者可先于语义评审，后者仍需相应证据；
 - 三个问题各有**独立 flagship target**；

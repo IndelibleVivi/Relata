@@ -43,7 +43,7 @@ Software now includes the public repository checker and an **offline RC-002 exec
 
 A second offline tool prepares and verifies **18 unanswered inputs for [RC-005 / shared-work authorship](case-lab/cases/seed-005-shared-work-authorship.zh-CN.md)** and audits whether input projections erase the speaker distinction. The case remains an authored candidate with no independent human review or system evaluation. See the [input audit guide](experiments/continuity-input-audit.md).
 
-The proposed [first research cycle](research/first-research-cycle.md) connects a case portfolio, four candidate system configurations, independently deliverable source/runtime exhibits and mechanism tests for future designs. [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) proposes a bounded exploratory execution route. Both are planning artifacts: no live study, approved spending, accepted benchmark result or hosted research site follows from them.
+The proposed [first research cycle](research/first-research-cycle.md) connects a case portfolio, four candidate system configurations, independently deliverable source/runtime exhibits and mechanism tests for future designs. [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) proposes a bounded exploratory execution route. The [RC-005 → Mem0 execution packet](experiments/rc005-native-execution-packet.md) specifies the proposed reader, controls, timed/recovery observations and cost cap; native runnability remains unverified. These are planning artifacts: no live study, approved spending, accepted benchmark result or hosted research site follows from them.
 
 ## Why the platform is deferred
 

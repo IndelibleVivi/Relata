@@ -43,7 +43,7 @@ This proposal would permit bounded exploratory studies before formal benchmark p
 
 进入候选名单不等于已安装或已就绪。订阅、凭据、公开 endpoint 或可用 connector 不构成调用权限。通过浏览器手动调用模型仍属于 subject execution，换通道不能绕过此边界。研究输入不能从工程环境继承私人记忆、无关账号 context 或 evaluator key。
 
-本 ADR 与完整执行范围可以一并接受。Provider、账号授权或费用上限仍未落实的范围，不能启动依赖它们的调用；既有权限内的公开输入准备与源码研究可以继续。
+拟议 [RC-005 → Mem0 执行包](../experiments/rc005-native-execution-packet.md)给出具体候选，包含预检转 native、write／ready／probe 时点、进程恢复边界和资源上限；源码研究记录不能证明 native 可运行。本 ADR 与完整执行范围可以一并接受。Provider、账号授权或费用上限仍未落实的范围，不能启动依赖它们的调用；既有权限内的公开输入准备与源码研究可以继续。
 
 ### 3. 在获准范围内允许有用的迭代
 

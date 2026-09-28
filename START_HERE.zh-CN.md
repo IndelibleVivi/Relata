@@ -21,7 +21,7 @@ Relata 是前沿记忆研究室，[ADR-0008](decisions/ADR-0008-three-core-resea
 
 ## 拟议的首轮研究计划
 
-先读[完整周期计划](research/first-research-cycle.md)，查看问题、候选对象、controls、work packages、证据要求与未定资源；再读 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)，了解把有界探索性执行与 benchmark promotion 分开的提案。两者仍为 proposed，当前权限以 [STATUS](STATUS.zh-CN.md) 为准。源码展品、案例修订与设计研究有独立价值，不必等待共同 release。运行展品需要真实执行证据；公开 hosting 与结果发布需要各自授权。
+先读[完整周期计划](research/first-research-cycle.md)，查看问题、候选对象、controls、work packages、证据要求与未定资源；再读 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)，了解把有界探索性执行与 benchmark promotion 分开的提案。再读 [RC-005 → Mem0 执行包](experiments/rc005-native-execution-packet.md)，查看推荐配置、readiness 缺口、预检转 native 的条件与预算。三者仍为 proposed，当前权限以 [STATUS](STATUS.zh-CN.md) 为准。源码展品、案例修订与设计研究有独立价值，不必等待共同 release。运行展品需要真实执行证据；公开 hosting 与结果发布需要各自授权。
 
 ## 当前已经存在的正式基础
 

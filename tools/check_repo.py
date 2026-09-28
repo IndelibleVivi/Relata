@@ -97,6 +97,7 @@ REQUIRED = [
     "decisions/ADR-0008-three-core-research-functions.md",
     "decisions/ADR-0008-three-core-research-functions.zh-CN.md",
     "research/first-research-cycle.md",
+    "experiments/rc005-native-execution-packet.md",
     "decisions/ADR-0009-exploratory-research-boundary.md",
     "decisions/ADR-0009-exploratory-research-boundary.zh-CN.md",
 ]

@@ -45,7 +45,7 @@ The maintainer’s 2026-09-26 clarification separates the long-term **Tilia** go
 | RC-005 / CT-AUTHORSHIP | seed; selected from the 2026-09-22 proposal; input tooling implemented | 18 unanswered input views; literal speaker-removal collisions at 3 correlated checkpoints in one family; no independent human review, system output, or Memory Necessity Gate acceptance |
 | Evaluator calibration | plan and authored E0 fixtures | no reviewer data or validated evaluator boundary; review packet must retain the governing evidence |
 | Community contribution path | public-safe governance/templates | restricted contribution path not exercised |
-| [First research cycle](research/first-research-cycle.md) / [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) | proposed programme and execution-boundary decision | no accepted execution envelope, approved budget, new system run, publication or deployment |
+| [First research cycle](research/first-research-cycle.md) / [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) | proposed programme, execution-boundary decision and [RC-005 → Mem0 packet](experiments/rc005-native-execution-packet.md) | inputs reverified and existing native source-study evidence reviewed; clean checkout, installation and native runnability unverified; no accepted envelope, approved budget, new system run, publication or deployment |
 
 Templates, corrected contracts, generated fixtures and passing plumbing tests are not evidence that a memory method works. Semantic judgments remain pending; no composite or capability score is generated.
 

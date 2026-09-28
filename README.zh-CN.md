@@ -43,7 +43,7 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 
 新增的离线输入工具为 **[RC-005 / 共同作品来历](case-lab/cases/seed-005-shared-work-authorship.zh-CN.md)** 准备并核验 18 份待答输入，检查输入投影是否抹掉说话者区别。该 case 仍是 authored candidate，没有独立人类 review 或系统评测。命令与边界见[输入审计说明](experiments/continuity-input-audit.md)。
 
-Proposed [首轮研究计划](research/first-research-cycle.md)连接案例组合、四个候选系统配置、可以独立交付的源码／运行展品，以及面向未来设计的机制实验。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)提议有界探索性执行路线。两者都是规划材料，不代表 live study、已批准支出、accepted benchmark result 或已上线研究网站。
+Proposed [首轮研究计划](research/first-research-cycle.md)连接案例组合、四个候选系统配置、可以独立交付的源码／运行展品，以及面向未来设计的机制实验。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)提议有界探索性执行路线。[RC-005 → Mem0 执行包](experiments/rc005-native-execution-packet.md)进一步给出拟议 reader、对照、时序／恢复观察和费用上限，native 可运行性仍未验证。这些都是规划材料，不代表 live study、已批准支出、accepted benchmark result 或已上线研究网站。
 
 ## 为什么暂时不建平台
 

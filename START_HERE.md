@@ -21,7 +21,7 @@ Current local tooling: use the [RC-002 scripted rehearsal](experiments/offline-r
 
 ## Proposed first research cycle
 
-Read the [complete cycle plan](research/first-research-cycle.md) for questions, candidate subjects, controls, work packages, evidence requirements and unresolved resources. Read [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) for the proposed separation of bounded exploratory execution from benchmark promotion. Both remain proposed; the current authority is [STATUS](STATUS.md). Source exhibits, case refinement and design inquiry retain independent value and need not wait for one shared release. Runtime exhibits require real execution evidence; public hosting and result publication require their own authorization.
+Read the [complete cycle plan](research/first-research-cycle.md) for questions, candidate subjects, controls, work packages, evidence requirements and unresolved resources. Read [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) for the proposed separation of bounded exploratory execution from benchmark promotion. Then use the [RC-005 → Mem0 execution packet](experiments/rc005-native-execution-packet.md) for the concrete recommendation, readiness gaps, preflight-to-native transition and costs. All remain proposed; the current authority is [STATUS](STATUS.md). Source exhibits, case refinement and design inquiry retain independent value and need not wait for one shared release. Runtime exhibits require real execution evidence; public hosting and result publication require their own authorization.
 
 ## Foundation now present
 

@@ -11,7 +11,7 @@ Both use public adult synthetic material and local derived artifacts. They retai
 
 ## Proposed model-backed research
 
-The [first research cycle](../research/first-research-cycle.md) plans real-system comparisons and design experiments, including candidate objects, controls, evidence packets and cost accounting. [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md) proposes a named execution envelope so exploratory observations can precede formal benchmark promotion. It remains unaccepted: no connector, provider call, approved spending or published result is supplied by these planning documents. Current available commands and permissions remain those of the offline tools above.
+The [first research cycle](../research/first-research-cycle.md) plans real-system comparisons and design experiments, including candidate objects, controls, evidence packets and cost accounting. [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md) proposes a named execution envelope so exploratory observations can precede formal benchmark promotion. The [RC-005 → Mem0 execution packet](rc005-native-execution-packet.md) joins input/reader preflight, strong raw-source baselines, native-path observations and process recovery under one proposed envelope, with explicit estimates and caps. Static source checks are not native runnability evidence. The proposal remains unaccepted: no connector, provider call, approved spending or published result is supplied by these planning documents. Current available commands and permissions remain those of the offline tools above.
 
 ## Retained early apparatus experiment
 
