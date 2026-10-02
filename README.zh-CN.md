@@ -45,6 +45,8 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 
 Proposed [首轮研究计划](research/first-research-cycle.md)连接案例组合、四个候选系统配置、可以独立交付的源码／运行展品，以及面向未来设计的机制实验。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)提议有界探索性执行路线。[RC-005 → Mem0 执行包](experiments/rc005-native-execution-packet.md)进一步给出拟议 reader、对照、时序／恢复观察和费用上限，native 可运行性仍未验证。这些都是规划材料，不代表 live study、已批准支出、accepted benchmark result 或已上线研究网站。
 
+三份有界研究材料把这些职能接起来：未经评审的 [RC-006 companion 迁移 seed](case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md)、基于既有固定源码研究的[更正传播比较](research/correction-propagation-study.md)，以及[多语言语义检索研究](research/semantic-retrieval-study.md)。它们推进案例、竞争解释与研究选择；没有新增 accepted case、系统结果或已选定的 Tilia 架构。
+
 ## 为什么暂时不建平台
 
 尚未接受 canonical ontology、system protocol、scoring contract、benchmark release、Leaderboard、Arena、SDK、service 或 hosted infrastructure。[历史架构草案](docs/vision/relata-target-architecture-draft-0.1.md) 继续是 non-normative；[assumption register](ASSUMPTION_REGISTER.zh-CN.md) 保留各项处置。

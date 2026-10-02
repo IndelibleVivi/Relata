@@ -14,6 +14,12 @@ The [agent-memory inquiry](agent-memory-inquiry.md) asks what open-source memory
 
 The [own-memory architecture study](own-memory-architecture.md) and [case-to-test map](memory-design-test-map.md) connect source mechanisms, candidate cases and controls to the independent long-term **Tilia** goal. They preserve alternatives and falsification conditions; proposed components and experiments remain design material. The corrected [ADR-0007](../decisions/ADR-0007-local-memory-apparatus.md) withdraws the interpretation that this goal authorized immediate implementation. The [engineering record](../experiments/local-memory-apparatus.md) preserves observations from an already-written early local experiment, without accepting it as Tilia's architecture or the evaluator’s ontology. Existing article and community research continues independently.
 
+## Bounded research studies
+
+- [Correction propagation](correction-propagation-study.md) compares correction entrypoints, derived state and surviving read paths across existing pinned system studies. Its synthetic incidents and competing hypotheses are proposed investigations, not new runtime observations.
+- [Multilingual semantic retrieval](semantic-retrieval-study.md) examines encoder options, raw-source controls and Chinese/English code-switch development examples. It does not select Tilia's implementation or change the first native execution packet.
+- The [RC-006 companion-migration seed](../case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md) gives the Case Lab a bounded authored continuity question. Migration incidents, independent review and system evidence remain missing; D-005 is not promoted.
+
 ## Current evidence spine
 
 | Card | Status | Current use |

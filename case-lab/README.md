@@ -40,8 +40,9 @@ Long worlds may later compose accepted chains. Length is not evidence of validit
 | [`RC-003-zh-CN`](cases/seed-003-project-authority-handoff.zh-CN.md) | operational-project | seed; unreviewed | project authority, supersession, handoff, and neighboring-scope isolation |
 | [`RC-004-zh-CN`](cases/seed-004-private-greeting-public-template.zh-CN.md) | mixed-domain | seed; unreviewed | scope-conditioned private/public routing without treating metadata variation as a pure historical counterfactual |
 | [`RC-005-zh-CN / CT-AUTHORSHIP`](cases/seed-005-shared-work-authorship.zh-CN.md) | shared-relational; operational-project content | seed; AI-assisted integration analysis and offline input audit only | current title and two-party provenance after a late stale import; 18 unanswered checkpoint inputs |
+| [`RC-006-zh-CN`](cases/seed-006-companion-migration-continuity.zh-CN.md) | companion-system | seed; authored-unvalidated | shared-history continuation with a changed declared capability boundary after migration; no real migration or tool observation |
 
-The four seeds establish portfolio objects, not system capability evidence. Each still needs the review work named in its disposition before `clinic-ready` consideration. RC-005 has [exact authored inputs](fixtures/ct-authorship.zh-CN.json) and an [offline preparation/audit guide](../experiments/continuity-input-audit.md); its collision checks do not validate its semantic contract.
+The five seeds establish portfolio objects, not system capability evidence. Each still needs the review work named in its disposition before `clinic-ready` consideration. RC-005 has [exact authored inputs](fixtures/ct-authorship.zh-CN.json) and an [offline preparation/audit guide](../experiments/continuity-input-audit.md); its collision checks do not validate its semantic contract.
 
 ## Evaluator calibration
 

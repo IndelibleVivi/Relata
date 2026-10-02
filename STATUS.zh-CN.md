@@ -43,6 +43,8 @@ Maintainer 于 2026-09-26 澄清：长期 **Tilia** 目标与 Relata 当前研�
 | Mixed-domain routing | question、incident families、scope-conditioned seed | RC-004 仍未经 review；metadata-only 的 prior shortcut 尚未实测 |
 | Offline RC-002 rehearsal | 已实现，scripted-only，两条历史 × 五种条件 | 验证 exposure、隔离、错误记录、证据校验、盲审包生成等工程链路；无 memory-system evidence |
 | RC-005 / CT-AUTHORSHIP | seed；选自 2026-09-22 提案；输入工具已实现 | 18 份待答输入；一个家族的 3 个相关 checkpoint 在去掉 speaker 后发生字面碰撞；无独立人类 review、系统回答或 Memory Necessity Gate acceptance |
+| [RC-006 companion 迁移](case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md) | seed；authored-unvalidated | 一个合成 family；没有真实迁移、能力观察、独立人类 review 或 Memory Necessity Gate acceptance |
+| [更正传播](research/correction-propagation-study.md)／[多语言语义检索](research/semantic-retrieval-study.md) | 比较与设计研究 drafts | 基于来源的比较与 authored 开发表例；没有新系统运行、encoder 定案或 accepted evidence |
 | Evaluator calibration | plan 与 authored E0 fixtures | 无 reviewer data 或 validated boundary；评审包必须保留治理该回答的证据 |
 | Community contribution path | public-safe governance/templates | restricted contribution path 尚未实际使用 |
 | [首轮研究计划](research/first-research-cycle.md)／[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) | proposed programme、执行边界草案与 [RC-005 → Mem0 包](experiments/rc005-native-execution-packet.md) | 输入已重新核验、既有 native 源码研究证据已复核；clean checkout、安装／可运行性未验证；没有 accepted 执行范围、已批准预算、新系统运行、发布或部署 |

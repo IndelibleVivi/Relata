@@ -23,6 +23,8 @@ Current local tooling: use the [RC-002 scripted rehearsal](experiments/offline-r
 
 Read the [complete cycle plan](research/first-research-cycle.md) for questions, candidate subjects, controls, work packages, evidence requirements and unresolved resources. Read [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) for the proposed separation of bounded exploratory execution from benchmark promotion. Then use the [RC-005 → Mem0 execution packet](experiments/rc005-native-execution-packet.md) for the concrete recommendation, readiness gaps, preflight-to-native transition and costs. All remain proposed; the current authority is [STATUS](STATUS.md). Source exhibits, case refinement and design inquiry retain independent value and need not wait for one shared release. Runtime exhibits require real execution evidence; public hosting and result publication require their own authorization.
 
+For a concrete research reading path, start with the [RC-006 migration seed](case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md) to inspect a history-dependent case proposal, the [correction-propagation study](research/correction-propagation-study.md) to compare what existing source paths revise, or the [semantic-retrieval study](research/semantic-retrieval-study.md) to examine encoder choices and multilingual development examples. All retain draft or seed status; none changes the proposed first native execution packet.
+
 ## Foundation now present
 
 - [Charter](CHARTER.md), [research questions](RESEARCH_QUESTIONS.md), and [assumption register](ASSUMPTION_REGISTER.md)

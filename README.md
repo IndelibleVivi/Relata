@@ -45,6 +45,8 @@ A second offline tool prepares and verifies **18 unanswered inputs for [RC-005 /
 
 The proposed [first research cycle](research/first-research-cycle.md) connects a case portfolio, four candidate system configurations, independently deliverable source/runtime exhibits and mechanism tests for future designs. [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) proposes a bounded exploratory execution route. The [RC-005 → Mem0 execution packet](experiments/rc005-native-execution-packet.md) specifies the proposed reader, controls, timed/recovery observations and cost cap; native runnability remains unverified. These are planning artifacts: no live study, approved spending, accepted benchmark result or hosted research site follows from them.
 
+Three bounded research additions connect these functions: an unreviewed [RC-006 companion-migration seed](case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md), a [correction-propagation comparison](research/correction-propagation-study.md) based on existing pinned source studies, and a [multilingual semantic-retrieval study](research/semantic-retrieval-study.md). They develop cases, competing explanations and research choices; they add no accepted case, system result or selected Tilia architecture.
+
 ## Why the platform is deferred
 
 No canonical ontology, system protocol, scoring contract, benchmark release, Leaderboard, Arena, SDK, service or hosted infrastructure is accepted. The [historical architecture draft](docs/vision/relata-target-architecture-draft-0.1.md) remains non-normative; the [assumption register](ASSUMPTION_REGISTER.md) preserves its disposition.

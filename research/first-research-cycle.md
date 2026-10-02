@@ -19,7 +19,7 @@ This proposed first research cycle links Relata's three core functions, its own 
 - 三项职能不要求共同 release。source study、case、exhibit、机制压力测试与文章可以分别成型、分别发布。
 - public hosting 与 live study 属于未来的授权边界，不是本周期已完成的成果，也不能被当作已完成工作。
 - 本周期不建立 benchmark runner、system-under-study API、Leaderboard、Arena、SDK、服务、sealed corpus 或统一 system ontology；也不把任何候选设计提升为 evaluator 的答案格式。
-- 既有五个 Case Cards 是**已知开发表例**。它们能打磨语义与工程设计，但不能自称独立验证；锁定某项设计主张后，验证需使用未参与开发的新变体。
+- 现有 Case Cards 是**已知开发表例**。它们能打磨语义与工程设计，但不能自称独立验证；锁定某项设计主张后，验证需使用未参与开发的新变体。
 - **source study、架构研究、文章与 routine 的 state／链接／引用更新按其自身证据与仓库现有授权发布**，不需要为每次常规文档提交单独申请一次 publication 决定。需要独立授权的是：public hosting、正式 release、license 选择与对外 outreach。
 
 系统样本空间的计划包含基于现有 atlas 的读者端实现，以及 hosting 获授权后的公开可读形态。运行 exhibit 展示保存的真实执行记录；读者浏览展品不触发 provider 调用。
@@ -55,7 +55,7 @@ This proposed first research cycle links Relata's three core functions, its own 
 缺口是**开放研究**，各有去向与下一个问题，而不是永久排除，也不是已排定的测试：
 
 - **prospective memory（D-006）** 仍缺 community-grounded incident 与 architecture-neutral observation boundary。去向：补一条 community-grounded incident、一个有界的 relational counterfactual 与一张 accepted microcase。下一个问题：怎样观察 valid future trigger、expiry 与 withdrawal，而不把 PM-Bench 的 task-handle 架构默默搬进来。
-- **companion continuity（D-005）** 仍为 candidate，缺 source／event evidence。去向：让 System Census、migration 事件类研究与 case 设计相互补充。下一个问题：实例或模型变化后，哪些可观察区别属于 continuity，哪些只是当前 prompt 已提供的信息。
+- **companion continuity（D-005）** 仍为 candidate，缺 source／event evidence。[RC-006](../case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md) 新写一个 synthetic seed，区分历史承接与迁移后的能力声明；它不是实际迁移观察，也不补足 community-grounded 证据。去向：让 System Census、migration 事件类研究与 case 设计相互补充。下一个问题：相同 current probe 与 metadata 下，哪些正确行为确实依赖历史，哪些只是当前 prompt 已提供的信息。
 - **learning transfer** 属 incubator 的 C 方向，保持开放。第 9 节只描述**条件性判据**（若将来实施需要满足什么），不声称本周期已排定或完成此类测试。
 - **evaluator calibration**：RC-001 E0 pack 未 dry-review，中文 semantic-equivalent matcher 尚未成 fixtures；RC-003 的 Twin B rationale 最小区间与 RC-001 的 warmth／overrepair 阈值仍待 human review，不能由精确短语检查代替。
 
@@ -115,6 +115,8 @@ incubator 用设计假设、替代方案、反例与获准的研究实验作取�
 - **A：强语义 raw-source 基线（含向量）＋字面控制。** 向量语义检索是 Tilia 的**既定预期要求**：可以拒绝某个具体的 encoder／rerank／selection 策略或其组合，但不能由此否定向量语义检索本身，也不以字面搜索先失败为引入前提。
 - **B：可修订证据／派生视图／context 编排。** 先证明相对 A 的必要性，再逐步加入加工。在**相同 raw 输入**上比较 B、强语义 raw-source A 与字面控制三者的抽取、检索与使用。结构使检索更有效本身可以是收益；需要排除的是额外 encoder、reranker、模型、上下文或预算带来的混杂，不能把结构影响的中间结果强行固定。
 - **C：自主组织／学习**是**开放且独立的方向**，不作为第一装置的隐含前提；下表保留条件性判据，具体迁移实验尚未排定。
+
+[更正传播研究](correction-propagation-study.md)将 Q2 接到既有固定源码的 read paths 与合成开发表例；[多语言语义检索研究](semantic-retrieval-study.md)补充 encoder 选项、中文/code-switch 材料与比较纪律。两份均为 draft，不构成执行结果，不改变首个 native 包。
 
 机制压力测试（`proposed`）：
 

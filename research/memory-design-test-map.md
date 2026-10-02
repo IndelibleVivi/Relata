@@ -2,17 +2,17 @@
 
 **Status:** proposed research map；不是 accepted ontology、评分表、评测协议或 system 结果。
 **用途:** 连接现有研究与面向独立 Tilia 目标的[自有架构候选](own-memory-architecture.md)，允许竞争设计接受同样的检验；不由某个候选反向决定合格答案。更正后的 ADR-0007 不提供实现授权；保留的[本地工程记录](../experiments/local-memory-apparatus.md) 只记录非常早期实验中明确操作下的机制检查，不表示正式 Tilia、本文四组广义实验或现有 cases 已完成。Tilia 的向量语义检索要求仍待设计和实现。
-**来源版本:** Relata `4bd0603` 的公开研究材料；本图最初仅转移固定版本研究，没有更新上游或运行 system under study。后续本地工程观察单独记录，不回填成来源研究的结果。
-**主要来源:** [STATUS.md](../STATUS.md)、[CHARTER.md](../CHARTER.md)、[ASSUMPTION_REGISTER.md](../ASSUMPTION_REGISTER.md)、[agent-memory-inquiry](../research/agent-memory-inquiry.md)、[distinction-atlas](../case-lab/distinction-atlas.zh-CN.md)、`case-lab/cases/` 五篇、[RC-001 E0 pack](../case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md)、[claim-boundary](../research/claim-boundary-study.zh-CN.md)、[source-studies README](../systems/source-studies/README.md) 与十报告。
+**来源版本:** Relata `4bd0603` 的公开研究材料构成初始映射；2026-10-03 补入 RC-006 seed、更正传播与语义检索研究的链接和覆盖状态，不表示它们已存在于初始版本。本图没有运行 system under study。后续本地工程观察单独记录，不回填成来源研究的结果。
+**主要来源:** [STATUS.md](../STATUS.md)、[CHARTER.md](../CHARTER.md)、[ASSUMPTION_REGISTER.md](../ASSUMPTION_REGISTER.md)、[agent-memory-inquiry](../research/agent-memory-inquiry.md)、[distinction-atlas](../case-lab/distinction-atlas.zh-CN.md)、`case-lab/cases/` 六篇、[RC-001 E0 pack](../case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md)、[claim-boundary](../research/claim-boundary-study.zh-CN.md)、[source-studies README](../systems/source-studies/README.md) 与十报告。
 **标签:** 沿用 [research/README](README.md) 的证据分层；source-observed 在本文只描述固定源码所见，不表示 runtime-observed。本文所有**新维度、实验、自有设计推断均标 `proposed`**；未改动任何 source study、Case Card 或 Evidence Card 的接受级别。
 
 ## 中文摘要
 
-本图把已有测试问题、五张 Case Cards 与十个 source studies 接成一组可检验的设计压力。它提出 10 个 `proposed` 维度，每个维度给出真实来源、当前案例覆盖、要求结果而非内部结构的架构责任、正例与反例/对照、需要保留的观测，以及设计反例与案例／归因限制。它不造总分、不建永久 ontology、不把研究假设写成已证能力；完全机械检查、需语义/人类评审、尚无案例三种状态分开标注。十个项目各提一条可采用/须改变/应拒绝的机制建议，附 repo 相对报告链接与固定源码 evidence。最后给出四个尚未执行的实验设计和比较纪律，为可反驳的架构设计提供依据。当前 RC-001 仍 `clinic-ready` 未运行，RC-002~005 仍为未评审种子，D-006 仍缺 community-grounded authority。
+本图把已有测试问题、六张 Case Cards 与十个 source studies 接成一组可检验的设计压力。它提出 10 个 `proposed` 维度，每个维度给出真实来源、当前案例覆盖、要求结果而非内部结构的架构责任、正例与反例/对照、需要保留的观测，以及设计反例与案例／归因限制。它不造总分、不建永久 ontology、不把研究假设写成已证能力；完全机械检查、需语义/人类评审、尚无案例三种状态分开标注。十个项目各提一条可采用/须改变/应拒绝的机制建议，附 repo 相对报告链接与固定源码 evidence。最后给出四个尚未执行的实验设计和比较纪律，为可反驳的架构设计提供依据。当前 RC-001 仍 `clinic-ready` 未运行，RC-002~006 仍为未评审种子，D-006 仍缺 community-grounded authority。
 
 ## English summary
 
-This proposed map turns existing test questions, five Case Cards and ten pinned source studies into testable design pressure for a future from-scratch memory design. It names 10 `proposed` dimensions, each with real sources, current case coverage, an outcome-level architecture responsibility, positive/negative controls, observations to preserve and design counterexamples and case/attribution limits. No composite score, permanent ontology or formal precision is produced; mechanical checks, semantic/human review and case-free gaps are separated. Each of ten systems contributes one adopt/change/reject mechanism candidate with a pinned source link. Four unexecuted experiment designs keep current-only, full-history, full-search/simple-file, reference-context and native-path controls. RC-001 remains unrun; RC-002~005 remain unreviewed seeds; D-006 still needs community-grounded authority.
+This proposed map turns existing test questions, six Case Cards and ten pinned source studies into testable design pressure for a future from-scratch memory design. It names 10 `proposed` dimensions, each with real sources, current case coverage, an outcome-level architecture responsibility, positive/negative controls, observations to preserve and design counterexamples and case/attribution limits. No composite score, permanent ontology or formal precision is produced; mechanical checks, semantic/human review and case-free gaps are separated. Each of ten systems contributes one adopt/change/reject mechanism candidate with a pinned source link. Four unexecuted experiment designs keep current-only, full-history, full-search/simple-file, reference-context and native-path controls. RC-001 remains unrun; RC-002~006 remain unreviewed seeds; D-006 still needs community-grounded authority.
 
 ## 1. 使用方式与边界
 
@@ -35,7 +35,7 @@ This proposed map turns existing test questions, five Case Cards and ten pinned 
 
 ### X2 跨 session 与重启持久性 · proposed
 - **来源:** [RC-002](../case-lab/cases/seed-002-ordinary-life-location-continuity.zh-CN.md)（cross-session）、[RC-003](../case-lab/cases/seed-003-project-authority-handoff.zh-CN.md)（cross-session handoff）、[RC-005 §5](../case-lab/cases/seed-005-shared-work-authorship.zh-CN.md)（session 仅作者化顺序）、[offline-rehearsal](../experiments/offline-rehearsal.md)（scripted session 非重启）。
-- **现有案例覆盖:** RC-002 view 明确「至少一个新 session 后」；RC-005 与离线 rehearsal 明确声明**无真实等待、重启、压缩或迁移**。无案例验证真正 durability。
+- **现有案例覆盖:** RC-002 view 明确「至少一个新 session 后」；RC-005 与离线 rehearsal 明确声明**无真实等待、重启、压缩或迁移**。RC-006 新增 synthetic migration 与能力声明变化，但不执行真实迁移或工具；无案例验证真正 durability。
 - **架构责任（要求结果）:** 材料越过一个 session 边界（必要时进程重启）后仍可影响后续正确行为；「同一 context 内的连续」不算。
 - **正例 / 反例·对照:** 正例 = 后续 session 独立提问仍正确；反例 = 仅同 session 注入即丢。机制对照见 [Letta messages.jsonl](../systems/source-studies/letta.md)、[OpenViking archive/live](../systems/source-studies/openviking.md)。
 - **需保存观测:** session 边界、restart/reload 事件、写入时刻与复用时刻、可见 message 文本。
@@ -105,7 +105,7 @@ This proposed map turns existing test questions, five Case Cards and ten pinned 
 
 ### X9 派生状态与跨层传播一致性 · proposed
 - **来源:** [agent-memory-inquiry §理解有自己的更新周期](../research/agent-memory-inquiry.md)、[source-studies README 四问题](../systems/source-studies/README.md)、[D-004](../case-lab/distinction-atlas.zh-CN.md)。
-- **现有案例覆盖:** 五个 case 都只评 final response/artifact；**无案例直接测 derived layer**。此维主要靠 source studies 的静态机制与提议探针支撑。
+- **现有案例覆盖:** 六个 case 的 required artifact 均为 final response/artifact；**无案例直接测 derived layer**。此维主要靠 source studies 的静态机制与提议探针支撑。
 - **架构责任（要求结果）:** 派生材料（摘要、画像、observation、embedding、current-state 快照）在来源被修订/撤回后，不得继续以旧值影响当前行为；一次成功修改与「所有后续影响一致」是两个主张。
 - **正例 / 反例·对照:** 正例 = 源改动后各可见层收敛到 current；反例 = 源已改但旧 embedding/摘要/画像仍 surface（[Tideline amendment 与 T1 不同步](../systems/source-studies/tideline-memory.md)、[A-MEM neighbor metadata vs embedding](../systems/source-studies/a-mem.md)、[Hindsight observation invalidation](../systems/source-studies/hindsight.md)、[Aelios 删除跨层不同步](../systems/source-studies/aelios.md)）。
 - **需保存观测:** 每层的 current 值、写入/刷新时刻、哪些层可 reach、最终 response 用的是哪层。
@@ -123,7 +123,7 @@ This proposed map turns existing test questions, five Case Cards and ten pinned 
 - **案例 / 归因限制:** 无法拆开 adapter 与内核时，只描述观测到的整体表现；opaque 系统不因缺少内部 trace 自动失败。
 - **检查类型:** 机械（artifact 绑定）+ 语义/人类评审（归属与不可见边界）。
 
-## 3. RC-001 ~ RC-005 与 D-006 现在的支撑边界
+## 3. RC-001 ~ RC-006 与 D-006 现在的支撑边界
 
 | 资产 | 现状（来源） | 现在能支撑 | 现在不能支撑 |
 |---|---|---|---|
@@ -132,6 +132,7 @@ This proposed map turns existing test questions, five Case Cards and ten pinned 
 | [RC-003-zh-CN](../case-lab/cases/seed-003-project-authority-handoff.zh-CN.md) | seed，unreviewed；无 external review（§19） | 打开 operational-project coverage；supersession twin + 邻近 scope 隔离 distractor | 无 run；handoff realism 未审；Twin B rationale 最小区间未定；merged/scoped fixtures 待补 |
 | [RC-004-zh-CN](../case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md) | seed，unreviewed；**scope-conditioned routing pair**，非 pure twin（§4/§8） | 打开 mixed-domain routing；public/private token 的 disjoint 断言；C0–C6 控制计划 | 非 history-only 因果；C0 prior shortcut 未实测；adapter-created routing 归因未决；frozen private-token set 仅 `{栖灯}` |
 | [RC-005-zh-CN / CT-AUTHORSHIP](../case-lab/cases/seed-005-shared-work-authorship.zh-CN.md) | seed；**18 unanswered input views**；input audit 已实现；MN gate 未通过（§5/§6） | 打开 shared-work provenance + title supersession；exact authored inputs；literal speaker-removal collision 记录 | 无 system/human 证据；三 checkpoint 同属**一个 family**，非独立世界；无 adapter；不得把 scripted output 当结果 |
+| [RC-006-zh-CN](../case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md) | seed；authored-unvalidated；一个 family | 打开 companion-system 的历史承接与能力声明变化问题，区分 stale-profile 与 blanket-reset | 无真实迁移、工具可用性观察、human review 或 MN gate acceptance；不证明 D-005，不单独识别迁移与能力变化的因果作用 |
 | [D-006](../case-lab/distinction-atlas.zh-CN.md) | candidate；仅 [EC-002](../research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) 支撑 state/observation/version/action 分离 | 一条 prospective 研究议程与失败类别（false wake、update、expiry） | **无 accepted microcase、无 community-grounded incident、无 architecture-neutral boundary**；不得虚构案例充当评测资产 |
 
 ## 4. 十项目各一条机制建议（`proposed` 采用/改变/拒绝）
@@ -150,6 +151,8 @@ This proposed map turns existing test questions, five Case Cards and ten pinned 
 | [OpenViking](../systems/source-studies/openviking.md) · [fs_service.py#L401](https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/service/fs_service.py#L401-L474) | **采用**可寻址可编辑 context filesystem + 显式 account/user/peer scope + archive/live/derived 分离 | 归属与授权由上层正确提供 | 删除/摘要/索引非原子；`completed` 回执不保证每项索引更新；配置模式与异步阶段多 |
 | [LangMem](../systems/source-studies/langmem.md) · [extraction.py#L1006](https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L1006-L1084) | **采用** hot-path tools 与 procedural（prompt）同 factual memory 分账 + namespace template | 应用自备 durable store/auth/采用新 prompt | 无内建 provenance/version/durable queue；候选检索上限使旧事实可能不进修订（[tools.py#L263](https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/tools.py#L263-L355)）；两入口 payload 不兼容 |
 | [A-MEM](../systems/source-studies/a-mem.md) · [memory_layer_robust.py#L463](https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L463-L540) | **借鉴并改变**新经验重组旧 note 的邻域演化；验证关联是否帮助后续任务，并补 refresh/provenance/delete 合同 | 新经验确实需要重组旧理解，且刷新契约与实际检索收益可观察 | 旧 note metadata 更新时 embedding 不刷新、默认 evo_threshold=100 才重建（[#L352](https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L352-L409)）；positional links 脆弱；无更正/删除 API |
+
+[更正传播研究](correction-propagation-study.md)进一步展开 X3/X7/X9 的 read-path 比较；[语义检索研究](semantic-retrieval-study.md)补充强 raw-source A 的 encoder 和多语言对照选择。新增研究仍为 proposed，开发表例不计入独立验证。
 
 ## 5. 拟议实验设计（全部 `proposed`、尚未执行）
 

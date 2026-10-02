@@ -67,7 +67,7 @@ A correction should persist without causing the system to avoid the entire relat
 
 Facts and style can survive while companion identity or shared trajectory becomes unrecognizable.
 
-- Candidate only. Requires system census and migration incidents before case design.
+- Candidate only. The authored [RC-006 seed](cases/seed-006-companion-migration-continuity.zh-CN.md) explores a bounded question about shared history and changed capability declarations. It supplies no real migration incident or evidence for identity continuity. System census and migration incidents remain prerequisites for an evidence-grounded case design and this distinction’s promotion.
 
 ## D-006 — Prospective intention without false wake
 

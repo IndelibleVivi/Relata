@@ -67,7 +67,7 @@ Correction 应持续生效，但不能让 system 回避整个 relational domain�
 
 Facts 与 style 可以保留，但 companion identity 或 shared trajectory 仍可能变得不可识别。
 
-- 仍是 candidate；需要 system census 与 migration incidents 后才能做 case design。
+- 仍是 candidate；新写的 [RC-006 seed](cases/seed-006-companion-migration-continuity.zh-CN.md) 只探索共享历史与能力声明变化的有界问题，不补出真实 migration incident，也不证明 identity continuity。以证据为基础的 case design 及本 distinction 的 promotion 仍需要 system census 与 migration incidents。
 
 ## D-006 — Prospective intention without false wake
 
