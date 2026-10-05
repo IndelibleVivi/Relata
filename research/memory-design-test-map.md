@@ -2,7 +2,7 @@
 
 **Status:** proposed research map；不是 accepted ontology、评分表、评测协议或 system 结果。
 **用途:** 连接现有研究与面向独立 Tilia 目标的[自有架构候选](own-memory-architecture.md)，允许竞争设计接受同样的检验；不由某个候选反向决定合格答案。更正后的 ADR-0007 不提供实现授权；保留的[本地工程记录](../experiments/local-memory-apparatus.md) 只记录非常早期实验中明确操作下的机制检查，不表示正式 Tilia、本文四组广义实验或现有 cases 已完成。Tilia 的向量语义检索要求仍待设计和实现。
-**来源版本:** Relata `4bd0603` 的公开研究材料构成初始映射；2026-10-03 补入 RC-006 seed、更正传播与语义检索研究的链接和覆盖状态，不表示它们已存在于初始版本。本图没有运行 system under study。后续本地工程观察单独记录，不回填成来源研究的结果。
+**来源版本:** Relata `4bd0603` 的公开研究材料构成初始映射；2026-10-03 补入 RC-006 seed、更正传播与语义检索研究的链接和覆盖状态，2026-10-05 补入更正并发工作表与 Hindsight 定点保护核查；不表示这些后续材料已存在于初始版本。本图没有运行 system under study。后续本地工程观察单独记录，不回填成来源研究的结果。
 **主要来源:** [STATUS.md](../STATUS.md)、[CHARTER.md](../CHARTER.md)、[ASSUMPTION_REGISTER.md](../ASSUMPTION_REGISTER.md)、[agent-memory-inquiry](../research/agent-memory-inquiry.md)、[distinction-atlas](../case-lab/distinction-atlas.zh-CN.md)、`case-lab/cases/` 六篇、[RC-001 E0 pack](../case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md)、[claim-boundary](../research/claim-boundary-study.zh-CN.md)、[source-studies README](../systems/source-studies/README.md) 与十报告。
 **标签:** 沿用 [research/README](README.md) 的证据分层；source-observed 在本文只描述固定源码所见，不表示 runtime-observed。本文所有**新维度、实验、自有设计推断均标 `proposed`**；未改动任何 source study、Case Card 或 Evidence Card 的接受级别。
 
@@ -151,6 +151,8 @@ This proposed map turns existing test questions, six Case Cards and ten pinned s
 | [OpenViking](../systems/source-studies/openviking.md) · [fs_service.py#L401](https://github.com/volcengine/OpenViking/blob/bbf2e37f88b8b15482edb83be41feb3ed510d03a/openviking/service/fs_service.py#L401-L474) | **采用**可寻址可编辑 context filesystem + 显式 account/user/peer scope + archive/live/derived 分离 | 归属与授权由上层正确提供 | 删除/摘要/索引非原子；`completed` 回执不保证每项索引更新；配置模式与异步阶段多 |
 | [LangMem](../systems/source-studies/langmem.md) · [extraction.py#L1006](https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/extraction.py#L1006-L1084) | **采用** hot-path tools 与 procedural（prompt）同 factual memory 分账 + namespace template | 应用自备 durable store/auth/采用新 prompt | 无内建 provenance/version/durable queue；候选检索上限使旧事实可能不进修订（[tools.py#L263](https://github.com/langchain-ai/langmem/blob/9d033b47d9ce53e37e92c92241b0496c0278932e/src/langmem/knowledge/tools.py#L263-L355)）；两入口 payload 不兼容 |
 | [A-MEM](../systems/source-studies/a-mem.md) · [memory_layer_robust.py#L463](https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L463-L540) | **借鉴并改变**新经验重组旧 note 的邻域演化；验证关联是否帮助后续任务，并补 refresh/provenance/delete 合同 | 新经验确实需要重组旧理解，且刷新契约与实际检索收益可观察 | 旧 note metadata 更新时 embedding 不刷新、默认 evo_threshold=100 才重建（[#L352](https://github.com/WujiangXu/A-mem/blob/0c8039f28fdcc08189a23c07a3437d9d2482f9c2/memory_layer_robust.py#L352-L409)）；positional links 脆弱；无更正/删除 API |
+
+[更正并发 challenge](correction-race-challenge.md)为 X9 / E-B 提供晚到写入、检查后交错与恢复的开发工作表；[Hindsight 核查](stale-write-source-audit.md)检查原生保护。它们没有新增 Case Card、系统运行或已验证的机制。
 
 [更正传播研究](correction-propagation-study.md)进一步展开 X3/X7/X9 的 read-path 比较；[语义检索研究](semantic-retrieval-study.md)补充强 raw-source A 的 encoder 和多语言对照选择。新增研究仍为 proposed，开发表例不计入独立验证。
 

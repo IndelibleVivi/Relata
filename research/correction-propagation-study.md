@@ -155,6 +155,8 @@ This draft is a secondary synthesis over Relata's existing pinned source studies
 - 第 4 节三组 mini incident 全部为 `proposed`、未运行，且明确是既有 family 的 **development adaptations**，**不新增独立 family 计数**；其「应保留邻域」「正面收益」均为设计对象。任何端到端试验仍需独立执行授权、exact 对象/配置与成本口径。
 - 未核查上游 hosted / 托管阶段、未验证中文召回、未验证长期稳定性与任何「更正传播收敛」的端到端效果。Hindsight 的 archive / history 是否可经某条当前 read path 达，以及「保留供审计」是否也是回归通道，均记 `unknown`。
 
+后续的[更正并发 challenge](correction-race-challenge.md)把 H2/H3 的竞争解释展开为任务交错与恢复对照；独立的 [Hindsight 源码核查](stale-write-source-audit.md)寻找已有保护。这些后续材料有自己的证据范围，不改变本文作为既有研究再综合的性质。
+
 ## 8. 参考入口（repo-relative）
 
 - 十份 source studies 与对照表：[systems/source-studies/README.md](../systems/source-studies/README.md)

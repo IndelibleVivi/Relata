@@ -23,6 +23,8 @@ Relata 是前沿记忆研究室，[ADR-0008](decisions/ADR-0008-three-core-resea
 
 先读[完整周期计划](research/first-research-cycle.md)，查看问题、候选对象、controls、work packages、证据要求与未定资源；再读 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)，了解把有界探索性执行与 benchmark promotion 分开的提案。再读 [RC-005 → Mem0 执行包](experiments/rc005-native-execution-packet.md)，查看推荐配置、readiness 缺口、预检转 native 的条件与预算。三者仍为 proposed，当前权限以 [STATUS](STATUS.zh-CN.md) 为准。源码展品、案例修订与设计研究有独立价值，不必等待共同 release。运行展品需要真实执行证据；公开 hosting 与结果发布需要各自授权。
 
+要检查更正之后的晚到写入，可读[作者化 challenge](research/correction-race-challenge.md)，再读 [Hindsight 保护机制核查](research/stale-write-source-audit.md)。前者是推理工作表，后者是有界源码检查，都不是运行结果。
+
 需要具体研究入口时，可从 [RC-006 迁移 seed](case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md) 检查一份依赖历史的案例提议，从[更正传播研究](research/correction-propagation-study.md)比较现有源码路径会修订哪些对象，或从[语义检索研究](research/semantic-retrieval-study.md)检查 encoder 选项和多语言开发表例。它们都保持 draft 或 seed 状态，不改变拟议的首个 native 执行包。
 
 ## 当前已经存在的正式基础

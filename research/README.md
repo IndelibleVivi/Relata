@@ -16,6 +16,7 @@ The [own-memory architecture study](own-memory-architecture.md) and [case-to-tes
 
 ## Bounded research studies
 
+- [Correction-race challenge](correction-race-challenge.md) separates late writes, pre-commit checks, recovery and unchanged-neighbor controls using authored counterexamples. The companion [Hindsight source audit](stale-write-source-audit.md) checks pinned safeguards; neither artifact is a system result or accepted case.
 - [Correction propagation](correction-propagation-study.md) compares correction entrypoints, derived state and surviving read paths across existing pinned system studies. Its synthetic incidents and competing hypotheses are proposed investigations, not new runtime observations.
 - [Multilingual semantic retrieval](semantic-retrieval-study.md) examines encoder options, raw-source controls and Chinese/English code-switch development examples. It does not select Tilia's implementation or change the first native execution packet.
 - The [RC-006 companion-migration seed](../case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md) gives the Case Lab a bounded authored continuity question. Migration incidents, independent review and system evidence remain missing; D-005 is not promoted.

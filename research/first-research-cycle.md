@@ -116,6 +116,8 @@ incubator 用设计假设、替代方案、反例与获准的研究实验作取�
 - **B：可修订证据／派生视图／context 编排。** 先证明相对 A 的必要性，再逐步加入加工。在**相同 raw 输入**上比较 B、强语义 raw-source A 与字面控制三者的抽取、检索与使用。结构使检索更有效本身可以是收益；需要排除的是额外 encoder、reranker、模型、上下文或预算带来的混杂，不能把结构影响的中间结果强行固定。
 - **C：自主组织／学习**是**开放且独立的方向**，不作为第一装置的隐含前提；下表保留条件性判据，具体迁移实验尚未排定。
 
+[更正并发 challenge](correction-race-challenge.md)与 [Hindsight 保护核查](stale-write-source-audit.md)补充 Q2 的调度、恢复、邻域对照与源码反证；前者是作者化推理，后者是有界源码检查，均未执行、不增加独立 family。
+
 [更正传播研究](correction-propagation-study.md)将 Q2 接到既有固定源码的 read paths 与合成开发表例；[多语言语义检索研究](semantic-retrieval-study.md)补充 encoder 选项、中文/code-switch 材料与比较纪律。两份均为 draft，不构成执行结果，不改变首个 native 包。
 
 机制压力测试（`proposed`）：
