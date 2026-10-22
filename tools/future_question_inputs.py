@@ -11,10 +11,12 @@ from __future__ import annotations
 
 import argparse
 from copy import deepcopy
+from fractions import Fraction
 import hashlib
 from itertools import combinations
 import json
 from pathlib import Path
+import secrets
 import sys
 from typing import Any
 
@@ -179,15 +181,82 @@ def make_view(context: str, family: dict[str, Any], world: dict[str, Any],
         view["archive"] = resolve_archive(pointer, store, readable, known_stale)
     return view
 
+INPUT_VIEW_FIELDS = ("context", "current", "memory", "archive_pointer", "archive")
+
+def exported_input_view(view: dict[str, Any]) -> dict[str, Any]:
+    """Return only the provider-consumable field allowlist.
+
+    The authored world, family, question, condition and answer contract are
+    evaluator material and must not be reachable from this object.
+    """
+    require(set(view) == set(INPUT_VIEW_FIELDS), "unexpected input view fields")
+    return deepcopy({field: view[field] for field in INPUT_VIEW_FIELDS})
+
+def fresh_directory(path: Path) -> Path:
+    original = path.expanduser().absolute()
+    require(not any(p.is_symlink() for p in (original, *original.parents)),
+            "output path may not contain symlinks")
+    path = original.resolve()
+    require(path.parent.is_dir(), "output parent must already exist")
+    path.mkdir(mode=0o700, exist_ok=False)
+    return path
+
+def write_new(path: Path, data: bytes) -> None:
+    with path.open("xb") as stream:
+        stream.write(data)
+
+def write_input_packet(source: dict[str, Any], output: Path) -> dict[str, Any]:
+    """Write all fixed-bundle projection cells as opaque input-only files.
+
+    The hidden manifest is a separate file used by offline preparation/review
+    tooling. The input files themselves contain no authored identity, labels,
+    answers, reviewer material or hashes.
+    """
+    validate_histories(source)
+    folder = fresh_directory(output)
+    for name in ("inputs", "hidden"):
+        (folder / name).mkdir()
+    records = []
+    for family in source["families"]:
+        for question in family["questions"]:
+            for world in family["worlds"]:
+                for projection, access in CONDITIONS:
+                    input_id = "I-" + secrets.token_hex(16)
+                    view = exported_input_view(make_view(
+                        source["context"], family, world, question, projection, access))
+                    blob = canonical(view)
+                    write_new(folder / "inputs" / f"{input_id}.json", blob)
+                    records.append({
+                        "input_id": input_id, "family": family["id"],
+                        "question": question["id"], "world_id": world["id"],
+                        "projection": projection, "archive_access": access,
+                        "input_sha256": digest(blob),
+                    })
+    manifest = {
+        "format": "relata-future-question-input-packet-1",
+        "status": "input-only; no subject execution or answer contract",
+        "history_sha256": digest(canonical(source)),
+        "records": records,
+    }
+    write_new(folder / "hidden" / "manifest.json", canonical(manifest))
+    return {"format": manifest["format"], "counts": {"inputs": len(records)},
+            "history_sha256": manifest["history_sha256"]}
+
 
 def group_views(views: dict[str, dict[str, Any]],
-                answer_regions: dict[str, list[str]]) -> list[dict[str, Any]]:
+                answer_regions: dict[str, list[str]],
+                priors: dict[str, Fraction] | None = None) -> list[dict[str, Any]]:
     """Intersect ALL answer regions in each identical-view class.
 
     Nonempty intersections only establish a possible finite lookup assignment;
     they do not show a natural-language reader can infer it. Pairwise overlap is
     reported as a warning diagnostic and never substituted for global overlap.
+    A world prior applies only within each identical-view class. The default is
+    uniform there; all report values remain exact rationals.
     """
+    if priors is None:
+        priors = {world: Fraction(1, len(views)) for world in views}
+    check_world_prior(views, priors)
     groups: dict[bytes, list[str]] = {}
     for world, view in views.items():
         groups.setdefault(canonical(view), []).append(world)
@@ -196,6 +265,17 @@ def group_views(views: dict[str, dict[str, Any]],
         sets = [set(answer_regions[w]) for w in worlds]
         common = set.intersection(*sets)
         pairwise = all(bool(a & b) for a, b in combinations(sets, 2))
+        mass = sum((priors[world] for world in worlds), Fraction(0))
+        require(mass > 0, "each identical-view class needs positive prior mass")
+        world_rows = [{"world_id": world,
+                       "probability": rational_text(priors[world] / mass),
+                       "answer_region": sorted(answer_regions[world])}
+                      for world in worlds]
+        scores = {choice: sum((priors[world] / mass for world in worlds
+                               if choice in answer_regions[world]), Fraction(0))
+                  for choice in set.union(*sets)}
+        best = max(scores.values())
+        choices = sorted(choice for choice, score in scores.items() if score == best)
         result.append({
             "worlds": worlds,
             "view_sha256": digest(material),
@@ -205,8 +285,27 @@ def group_views(views: dict[str, dict[str, Any]],
             "incompatible_answer_contract": not bool(common),
             "witness_kind": "global-only" if not common and pairwise else
                             "pairwise-contrast" if not common else "none",
+            "world_prior_mass": rational_text(mass),
+            "worlds_with_probability": world_rows,
+            "best_choices": choices,
+            "max_correct_probability": rational_text(best),
+            "mass_weighted_accuracy": rational_text(mass * best),
         })
     return result
+
+def rational_text(value: Fraction) -> str:
+    return (str(value.numerator) if value.denominator == 1
+            else f"{value.numerator}/{value.denominator}")
+
+def check_world_prior(views: dict[str, Any], priors: dict[str, Fraction]) -> None:
+    """Validate an explicit world prior without normalizing away missing worlds."""
+    require(set(priors) == set(views), "world prior must name exactly the observed worlds")
+    require(all(isinstance(value, Fraction) and value >= 0 for value in priors.values()),
+            "world prior values must be non-negative Fractions")
+    require(sum(priors.values(), Fraction(0)) == 1, "world prior must sum to 1")
+
+def uniform_prior(worlds: list[dict[str, Any]]) -> dict[str, Fraction]:
+    return {world["id"]: Fraction(1, len(worlds)) for world in worlds}
 
 
 def audit(source: dict[str, Any], contracts: dict[str, Any]) -> dict[str, Any]:
@@ -219,9 +318,13 @@ def audit(source: dict[str, Any], contracts: dict[str, Any]) -> dict[str, Any]:
                 views = {world["id"]: make_view(source["context"], family, world,
                                                 question, projection, access)
                          for world in family["worlds"]}
-                groups = group_views(views, contracts["families"][family["id"]][question["id"]])
+                groups = group_views(views, contracts["families"][family["id"]][question["id"]],
+                                     uniform_prior(family["worlds"]))
                 cells.append({"family": family["id"], "question": question["id"],
                               "projection": projection, "archive_access": access,
+                              "lookup_accuracy": rational_text(
+                                  sum((Fraction(group["mass_weighted_accuracy"])
+                                       for group in groups), Fraction(0))),
                               "groups": groups})
     return {
         "format": "relata-future-question-projection-report-1",
@@ -232,7 +335,7 @@ def audit(source: dict[str, Any], contracts: dict[str, Any]) -> dict[str, Any]:
                    "worlds": sum(len(f["worlds"]) for f in source["families"]),
                    "questions": sum(len(f["questions"]) for f in source["families"]),
                    "cells": len(cells)},
-        "interpretation": "Incompatible means no shared task-fulfilling finite choice under an identical view. Honest requests for more evidence remain legitimate. No collision found is not a semantic-success result. Cells and variants are correlated, not independent trials.",
+        "interpretation": "Incompatible means no shared task-fulfilling finite choice under an identical view. max_correct_probability is the ideal finite lookup bound under a uniform world prior within each identical-view class, not a model score or general theorem. lookup_accuracy is the world-mass-weighted sum of group bounds, not an unweighted average of groups. Honest requests for more evidence remain legitimate. No collision found is not a semantic-success result. Cells and variants are correlated, not independent trials.",
         "cells": cells,
     }
 
@@ -257,7 +360,9 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("check", help="validate bundled sources and exact regenerated report")
     sub.add_parser("write", help="regenerate only research/future-question-memory/results.json")
     audit_parser = sub.add_parser("audit", help="compute the finite projection diagnostic")
-    audit_parser.add_argument("--json", action="store_true")
+    audit_parser.add_argument("--json", action="store_true", help="emit the full report as JSON")
+    export = sub.add_parser("export-inputs", help="write all fixed-bundle input-only cells")
+    export.add_argument("--output", type=Path, required=True, help="new directory")
     show = sub.add_parser("show", help="inspect source-only input views; no answer contract is loaded")
     show.add_argument("--family", choices=FAMILY_IDS, required=True)
     show.add_argument("--question", default="later")
@@ -276,6 +381,11 @@ def main(argv: list[str] | None = None) -> int:
                                                 questions[args.question], args.projection, args.access)}
                        for w in family["worlds"]]
             sys.stdout.buffer.write(canonical(packets))
+            return 0
+        if args.command == "export-inputs":
+            summary = write_input_packet(source, args.output)
+            print(canonical({"status": "input-packet-written",
+                             "output": str(args.output), **summary}).decode(), end="")
             return 0
         report = audit(source, read_json(CONTRACTS))
         if args.command == "write":

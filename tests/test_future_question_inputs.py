@@ -1,5 +1,8 @@
 from copy import deepcopy
+from fractions import Fraction
 import io
+import json
+import tempfile
 import unittest
 from unittest.mock import patch
 
@@ -45,6 +48,51 @@ class FutureQuestionWitnessTests(unittest.TestCase):
         self.assertTrue(group["pairwise_intersections_nonempty"])
         self.assertEqual(group["common_choices"], [])
         self.assertEqual(group["witness_kind"], "global-only")
+        self.assertEqual(group["max_correct_probability"], "2/3")
+        self.assertEqual(self.cell("G-GLOBAL-INTERSECTION")["lookup_accuracy"], "2/3")
+
+    def test_exact_lookup_bounds_and_world_mass_weighting(self):
+        a = self.cell("A-AUTHORSHIP")["groups"][0]
+        self.assertEqual(a["max_correct_probability"], "1/2")
+        self.assertEqual(self.cell("A-AUTHORSHIP")["lookup_accuracy"], "1/2")
+        self.assertEqual(self.cell("G-GLOBAL-INTERSECTION")["groups"][0]
+                         ["mass_weighted_accuracy"], "2/3")
+        self.assertEqual(self.cell("F-UNRESOLVED-ACCOUNTS", "cautious")
+                         ["lookup_accuracy"], "1")
+        self.assertEqual(self.cell("F-UNRESOLVED-ACCOUNTS", "later",
+                                   access="allowed")["lookup_accuracy"], "1")
+
+    def test_explicit_prior_is_validated_and_affects_optimal_choice(self):
+        f = self.families["A-AUTHORSHIP"]
+        views = {world["id"]: self.view(f["id"], i, 1)
+                 for i, world in enumerate(f["worlds"])}
+        regions = self.contracts["families"][f["id"]]["later"]
+        prior = {"A": Fraction(3, 4), "B": Fraction(1, 4)}
+        group, = study.group_views(views, regions, prior)
+        self.assertEqual(group["max_correct_probability"], "3/4")
+        self.assertEqual(group["best_choices"], ["originator-companion"])
+        self.assertEqual([row["probability"] for row in group["worlds_with_probability"]],
+                         ["3/4", "1/4"])
+        for bad in ({"A": Fraction(1, 2)},
+                    {"A": Fraction(-1, 2), "B": Fraction(3, 2)},
+                    {"A": Fraction(1, 2), "B": Fraction(1, 4)}):
+            with self.subTest(bad=bad), self.assertRaises(ValueError):
+                study.group_views(views, regions, bad)
+
+    def test_mass_weighting_is_not_an_unweighted_group_average(self):
+        views = {"A": {"x": 1}, "B": {"x": 1}}
+        regions = {"A": ["one", "two"], "B": ["one"]}
+        prior = {"A": Fraction(3, 4), "B": Fraction(1, 4)}
+        mixed, = study.group_views(views, regions, prior)
+        singleton, = study.group_views({"C": {"x": 2}}, {"C": ["three"]},
+                                       {"C": Fraction(1)})
+        weighted = (Fraction(mixed["mass_weighted_accuracy"]) +
+                    Fraction(1, 4) * Fraction(singleton["mass_weighted_accuracy"]))
+        unweighted = (Fraction(mixed["max_correct_probability"]) +
+                      Fraction(singleton["max_correct_probability"])) / 2
+        self.assertEqual(mixed["max_correct_probability"], "1")
+        self.assertEqual(mixed["world_prior_mass"], "1")
+        self.assertNotEqual(weighted, unweighted)
 
     def test_common_appropriate_uncertainty_is_not_called_an_incompatibility(self):
         group, = self.cell("F-UNRESOLVED-ACCOUNTS", "cautious")["groups"]
@@ -112,6 +160,23 @@ class FutureQuestionWitnessTests(unittest.TestCase):
         with patch.object(study, "read_json", guarded_read), patch.object(study.sys, "stdout", output):
             self.assertEqual(study.main(["show", "--family", "A-AUTHORSHIP"]), 0)
         self.assertNotIn(b"originator-companion", output.buffer.getvalue())
+
+    def test_input_export_allowlist_contains_no_evaluator_identity(self):
+        with tempfile.TemporaryDirectory() as temp:
+            output = study.Path(temp).resolve() / "packet"
+            self.assertEqual(study.main(
+                ["export-inputs", "--output", str(output)]), 0)
+            inputs = list((output / "inputs").iterdir())
+            self.assertEqual(len(inputs), 224)
+            for path in inputs:
+                value = json.loads(path.read_text(encoding="utf-8"))
+                self.assertEqual(set(value), set(study.INPUT_VIEW_FIELDS))
+                self.assertFalse(path.is_symlink())
+            manifest = study.read_json(output / "hidden" / "manifest.json")
+            self.assertEqual({row["family"] for row in manifest["records"]},
+                             set(study.FAMILY_IDS))
+            self.assertNotIn(b"originator-companion", b"".join(
+                path.read_bytes() for path in inputs))
 
     def test_contract_injection_into_event_is_rejected(self):
         source = deepcopy(self.source)

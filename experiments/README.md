@@ -50,3 +50,9 @@ Only a separately reviewed, public-safe packet may later move to a tracked publi
 ## Interpretation rule
 
 A good final response does not prove the memory system succeeded. A bad final response does not identify a failed layer unless observable evidence supports that attribution. Preserve `unknown`, `opaque at this boundary`, case ambiguity, and evaluator failure as separate outcomes.
+
+## Fixed-study offline review
+
+The [future-question study workflow](../research/future-question-memory/README.md#离线-responsereview-闭环) prepares and verifies the fixed authored inputs, imports already supplied response states, exports blind review items, appends reviewer judgments and recomputes per-family counts. It has no subject/model/provider execution seam. `show` is author inspection; input bodies come from the allowlisted export. Keep the hidden mapping out of model input, send reviewers only their blind `items` plus governing evidence, and retain imported records locally in ignored artifacts.
+
+该工具只核验当前固定bundle与本地导入，不能证明外部回答实际来自所声称的系统，也不替代run payload/attempt/state证据。导入provenance如实描述人工测试或外部来源；未执行、失败和未评审分开，不把示例回答发布为系统结果。

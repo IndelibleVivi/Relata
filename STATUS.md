@@ -7,7 +7,7 @@
 **Phase:** R0 — Research Foundation
 **Identity:** frontier memory research lab; general agent memory and adult long-term intimacy are research contexts
 **Core functions:** own benchmark research; system collection (museum / sample-room / lab name open); incubator for future independent memory systems
-**Implementation:** repository checks, an offline synthetic execution rehearsal, candidate input preparation/verification/projection audits, and two isolated source-study diagnostics; a separate early memory experiment is retained as a research artifact, not a Relata product; no accepted benchmark implementation
+**Implementation:** repository checks, an offline synthetic execution rehearsal, fixed-study input/projection analysis and external response/review import, and two isolated source-study diagnostics; a separate early memory experiment is retained as a research artifact, not a Relata product; no accepted benchmark implementation
 **Remote/publication:** public source repository; no formal release
 **Case release:** none
 **Protocol version:** none
@@ -50,6 +50,7 @@ The maintainer's 2026-10-22 commission to propose and implement the next Relata 
 | [Correction-race challenge](research/correction-race-challenge.md) / [Hindsight safeguard audit](research/stale-write-source-audit.md) | draft authored development worksheet and bounded pinned source inspection | interleaving counterexamples and inspected safeguards; no runtime race result, new independent family or accepted evidence |
 | [Correction propagation](research/correction-propagation-study.md) / [multilingual semantic retrieval](research/semantic-retrieval-study.md) | draft comparative and design research | source-based comparisons and authored development examples; no new system run, encoder selection or accepted evidence |
 | Continuity benefit / selective-use materials | 5 authored development families / 10 views; RC-006 eight-condition design | no subject run, independent question author, held-out data or human calibration; accepted-case necessity gate unchanged |
+| [Future-question offline review](research/future-question-memory/README.md) | fixed-bundle input export, exact-rational ideal-lookup analysis, prepare/verify/import/blind-review/recompute tooling | local import and integrity checks only; no subject execution, imported research result, human calibration or accepted scoring contract |
 | Evaluator calibration | plan and authored E0 fixtures | no reviewer data or validated evaluator boundary; review packet must retain the governing evidence |
 | Community contribution path | public-safe governance/templates | restricted contribution path not exercised |
 | [First research cycle](research/first-research-cycle.md) / [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) | proposed programme, execution-boundary decision and [RC-005 → Mem0 packet](experiments/rc005-native-execution-packet.md) | inputs reverified and existing native source-study evidence reviewed; clean checkout, installation and native runnability unverified; no accepted envelope, approved budget, new system run, publication or deployment |

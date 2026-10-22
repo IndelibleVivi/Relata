@@ -7,7 +7,7 @@
 **Phase：** R0 — Research Foundation
 **Identity：** 前沿记忆研究室；通用 agent memory 与成人长期亲密关系都是研究情境
 **Core functions：** 自己的 benchmark 研究；系统样本研究空间（museum／样本间／研究室名称开放）；面向未来独立记忆装置的 incubator
-**Implementation：** repository checks、离线合成执行演练、candidate 输入准备/核验/投影审计与两份局部源码诊断；另保留独立的早期记忆工程实验作为研究材料，不作为 Relata 产品；没有 accepted benchmark implementation
+**Implementation：** repository checks、离线合成执行演练、固定研究的输入/投影分析与外部 response/review 导入、两份局部源码诊断；另保留独立的早期记忆工程实验作为研究材料，不作为 Relata 产品；没有 accepted benchmark implementation
 **Remote/publication：** public source repository；没有 formal release
 **Case release：** none
 **Protocol version：** none
@@ -50,6 +50,7 @@ Maintainer 于 2026-10-22 要求为 Relata + AMS 提出并实现下一研究方�
 | [更正并发 challenge](research/correction-race-challenge.md)／[Hindsight 保护核查](research/stale-write-source-audit.md) | 作者化开发工作表与固定源码定点检查 drafts | 交错反例与已检查的保护；无 runtime race 结果、新独立 family 或 accepted evidence |
 | [更正传播](research/correction-propagation-study.md)／[多语言语义检索](research/semantic-retrieval-study.md) | 比较与设计研究 drafts | 基于来源的比较与 authored 开发表例；没有新系统运行、encoder 定案或 accepted evidence |
 | Continuity benefit / selective-use 材料 | 5 组作者化 development families／10 views；RC-006 八格设计 | 无 subject run、独立问题作者、held-out data 或人类校准；accepted-case 必要性 gate 不变 |
+| [Future-question 离线 review](research/future-question-memory/README.md) | 固定材料 input export、精确有理数 ideal-lookup 分析、prepare/verify/import/盲评/recompute tooling | 仅本地导入与完整性检查；没有 subject执行、导入研究结果、人类校准或accepted scoring contract |
 | Evaluator calibration | plan 与 authored E0 fixtures | 无 reviewer data 或 validated boundary；评审包必须保留治理该回答的证据 |
 | Community contribution path | public-safe governance/templates | restricted contribution path 尚未实际使用 |
 | [首轮研究计划](research/first-research-cycle.md)／[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) | proposed programme、执行边界草案与 [RC-005 → Mem0 包](experiments/rc005-native-execution-packet.md) | 输入已重新核验、既有 native 源码研究证据已复核；clean checkout、安装／可运行性未验证；没有 accepted 执行范围、已批准预算、新系统运行、发布或部署 |
