@@ -41,6 +41,7 @@
 - 不要求 raw chat；
 - case acceptance 前通过 memory necessity 与 counterfactual controls；
 - evidence type 与 provenance 必须 explicit；
+- provider 访问只能由具名范围授权；[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 允许有限兼容性 smoke，但不允许 subject、memory-system 或通用 provider 执行；
 - R0 不做跨系统 runner、API、SDK、service、Leaderboard、Arena 或 hosted infrastructure；独立 Tilia 目标不授权在 Relata 内实现。
 
 ## R0 scope corrections

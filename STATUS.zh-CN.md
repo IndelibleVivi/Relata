@@ -7,7 +7,7 @@
 **Phase：** R0 — Research Foundation
 **Identity：** 前沿记忆研究室；通用 agent memory 与成人长期亲密关系都是研究情境
 **Core functions：** 自己的 benchmark 研究；系统样本研究空间（museum／样本间／研究室名称开放）；面向未来独立记忆装置的 incubator
-**Implementation：** repository checks、离线合成执行演练、固定研究的输入/投影分析与外部 response/review 导入、两份局部源码诊断；另保留独立的早期记忆工程实验作为研究材料，不作为 Relata 产品；没有 accepted benchmark implementation
+**Implementation：** repository checks、离线合成执行演练、固定研究的输入/投影分析与外部 response/review 导入、两份局部源码诊断，以及一项已接受、运行记录保留在私有侧的 operator-owned provider 兼容性检查边界；另保留独立的早期记忆工程实验作为研究材料，不作为 Relata 产品；没有 accepted benchmark implementation
 **Remote/publication：** public source repository；没有 formal release
 **Case release：** none
 **Protocol version：** none
@@ -19,13 +19,15 @@
 
 [ADR-0005](decisions/ADR-0005-offline-pilot-tooling.zh-CN.md) 记录 maintainer 对可替换、内置合成材料演练工具的窄范围授权。它不接受研究协议或系统能力结论。下方正式 implementation-boundary promotion gate 不作为这项离线工程检查的前提。
 
-[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 接受研究室定位扩展、独立的概念、架构和综合研究，以及两份有界离线源码诊断。成人长期亲密关系继续是 founding focus。这项范围决定不提升证据状态、不接受文章论点，也不授权模型/provider 执行。
+[ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 接受研究室定位扩展、独立的概念、架构和综合研究，以及两份有界离线源码诊断。成人长期亲密关系继续是 founding focus。这项范围决定不提升证据状态、不接受文章论点，本身也不授权模型/provider 执行。
 
 Maintainer 于 2026-09-26 澄清：长期 **Tilia** 目标与 Relata 当前研究范围分开。Relata 的[候选设计](research/own-memory-architecture.md)与[测试映射](research/memory-design-test-map.md)可以为未来独立系统提供依据，不授权立即实现，也不锁定架构。[ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) 已纠正协调者先前的范围误读。已经写出的 `relata-memory` 保留为非常早期的本地实验，其证据见[工程记录](experiments/local-memory-apparatus.md)。Tilia 需要向量语义检索；现有实验只有字面搜索，编码器与模型选型仍开放。
 
 [ADR-0008](decisions/ADR-0008-three-core-research-functions.zh-CN.md) 接受三项职责作为 Relata 的核心定位。Benchmark 仍在发展；源码研究与架构图构成已有系统样本积累；候选设计支持未来孵化。这项定位决定不改变证据状态或执行边界。未来 Tilia 的产品源码属于独立项目。Relata 与 AMS 各有独立研究价值，也都能为长篇综合写作提供依据。
 
-Maintainer 于 2026-10-22 要求为 Relata + AMS 提出并实现下一研究方向，本轮在此落成[未来问题研究](research/future-question-memory/README.md)与固定材料的输入有效性诊断。工作只使用原创合成材料，不执行 subject、provider、私人语料或外部服务；不接受 ADR-0009、系统 evaluator、scoring contract 或任何现有 case。
+Maintainer 于 2026-10-22 要求为 Relata + AMS 提出并实现下一研究方向，本轮在此落成[未来问题研究](research/future-question-memory/README.md)与固定材料的输入有效性诊断。该研究只使用原创合成材料，不执行 subject、provider、私人语料或外部服务；不接受 ADR-0009、系统 evaluator、scoring contract 或任何现有 case。
+
+[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 是独立接受的有限兼容性 smoke 例外。协调者为首批选择最多 6 次 generation dispatch，每次 output limit 最多 2,048 tokens；以及最多 4 次 embedding dispatch，每批最多 8 条公开原创合成文本，每条最多 2,000 字符，client 失败也计入。这些是批次限制，不约束 opaque 的 upstream attempts，也不要求后续范围内有限兼容性测试重新索取已有许可。Generation 使用已有 entitlement；embedding 使用已有本地 Qwen 或 Workers AI，不充值、不启用收费 fallback。只观察解析、普通文本与 JSON-object forms、usage／identity 可见性、向量维数、finite values 与批次顺序。它不接受 ADR-0009、RC-005 执行包或系统 memory 评测；本公共记录没有并入运行观察。
 
 ## Evidence state
 
@@ -53,7 +55,8 @@ Maintainer 于 2026-10-22 要求为 Relata + AMS 提出并实现下一研究方�
 | [Future-question 离线 review](research/future-question-memory/README.md) | 固定材料 input export、精确有理数 ideal-lookup 分析、prepare/verify/import/盲评/recompute tooling | 仅本地导入与完整性检查；没有 subject执行、导入研究结果、人类校准或accepted scoring contract |
 | Evaluator calibration | plan 与 authored E0 fixtures | 无 reviewer data 或 validated boundary；评审包必须保留治理该回答的证据 |
 | Community contribution path | public-safe governance/templates | restricted contribution path 尚未实际使用 |
-| [首轮研究计划](research/first-research-cycle.md)／[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) | proposed programme、执行边界草案与 [RC-005 → Mem0 包](experiments/rc005-native-execution-packet.md) | 输入已重新核验、既有 native 源码研究证据已复核；clean checkout、安装／可运行性未验证；没有 accepted 执行范围、已批准预算、新系统运行、发布或部署 |
+| Provider 兼容性 smoke／[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) | 已接受的有限工程检查；operator-owned，repository 无执行入口或公共 replay command | 仅覆盖请求／返回解析、形式处理、usage／identity 可见性、向量维数、finite values 与批次顺序；运行记录保留在私有侧；无 memory-system 结果、语义主张或发布 |
+| [首轮研究计划](research/first-research-cycle.md)／[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) | proposed programme、未获接受的通用执行边界草案与 [RC-005 → Mem0 包](experiments/rc005-native-execution-packet.md) | 输入已重新核验、既有 native 源码研究证据已复核；clean checkout、安装／可运行性未验证；没有 accepted 通用范围、已批准的 RC-005 预算、新系统运行、发布或部署 |
 
 Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不证明 memory method 有效。语义判断继续 pending，不生成综合分或能力分数。
 
@@ -65,15 +68,15 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 
 [未来问题研究 Work A–C](research/future-question-memory/README.md)为现有 programme 提供具体的下一研究入口：追踪真实原文再访问，评审用途变化的合同，再在独立接受的执行范围内，以强原文／文件搜索控制比较保留、检索与使用。当前输入结果已在声明的边界内完成。继续区分有限信息丢失、可恢复的候选遗漏和下游使用；后两项仍需实际系统观察。
 
-[首轮研究计划](research/first-research-cycle.md)是下一轮实质研究 edition 的拟议协调路径：案例发展与真实比较、源码和运行展品、可被推翻的设计实验，以及可以分别交付的综合产出。12–20 个 family 的容量目标与四个候选系统都是规划选择，不是已验证样本量或已经可运行的配置。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)仍为 **proposed**。当前执行限制与下方 promotion gate 保持有效；接受新边界时须明确对齐这些 surfaces，并列明获准研究范围。
+[首轮研究计划](research/first-research-cycle.md)是下一轮实质研究 edition 的拟议协调路径：案例发展与真实比较、源码和运行展品、可被推翻的设计实验，以及可以分别交付的综合产出。12–20 个 family 的容量目标与四个候选系统都是规划选择，不是已验证样本量或已经可运行的配置。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)仍为 **proposed**。当前执行限制与下方 promotion gate 保持有效；接受新边界时须明确对齐这些 surfaces，并列明获准研究范围。已接受的 [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) smoke 更窄，不满足也不替代这一步。
 
-- **自己的 benchmark：** 通过现有 [Case Lab](case-lab/README.zh-CN.md) 推进案例、controls 与评价方法。在各自既定范围内使用[离线演练](experiments/offline-rehearsal.md)和[candidate 输入审计](experiments/continuity-input-audit.md)，无需等待第三方交分数。这些工具不授权 provider 调用，也不建立系统质量结论。
+- **自己的 benchmark：** 通过现有 [Case Lab](case-lab/README.zh-CN.md) 推进案例、controls 与评价方法。在各自既定范围内使用[离线演练](experiments/offline-rehearsal.md)和[candidate 输入审计](experiments/continuity-input-audit.md)，无需等待第三方交分数。这些工具既不执行 subject，也不授予独立兼容性 smoke 的 provider 调用权限，均不建立系统质量结论。
 - **系统样本研究空间：** 从[十份源码研究 drafts](systems/source-studies/README.md) 与[架构图集](systems/architecture-atlas/README.md) 推进 [agent-memory inquiry](research/agent-memory-inquiry.md)。Review source fidelity，比较机制与竞争解释，将具体问题带入案例或设计研究。这项工作独立于 live evaluation 与 case promotion gate 推进。
 - **Incubator：** 用[自有记忆设计研究](research/own-memory-architecture.md)与[测试映射](research/memory-design-test-map.md)，以现有案例和更简单的 controls 检查候选机制，为独立 Tilia 研究向量检索与编码器选项。分开源码观察、设计假设和执行结果；已知案例是开发表例，不能冒充 held-out validation。保留的早期实验是证据，不是继续实现的指令。
 
 围绕三项职责，先取用相关的公开 AMS 成果及其条件和证据限制，再研究具体缺口。定义与长篇综合可以在没有预定论点的情况下发展；写作或其中一项职责都不必等待其余部分全部成熟。
 
-依据 ADR-0001 的 validity/reproducibility tooling 范围，现在可以使用 [RC-005 输入审计](experiments/continuity-input-audit.md)，下一项是 review 作者归属与继续制作手记的 contract。该工具只准备输入，不接受 Continuity Trials 提案的其余内容，也不扩大模型执行权限。
+依据 ADR-0001 的 validity/reproducibility tooling 范围，现在可以使用 [RC-005 输入审计](experiments/continuity-input-audit.md)，下一项是 review 作者归属与继续制作手记的 contract。该工具只准备输入，不接受 Continuity Trials 提案的其余内容，也不扩大 ADR-0010 的兼容性边界。
 
 三张 reviewed public-source System Cards 与一张十系统 Architecture Pressure Map 已经存在，第一轮 census 比较的材料已具备。后续经验性工作仍包括：在使用 E0 语义边界前完成 dry review；review RC-002/003/004，并在 live studies 前明确 history exposure 与 controls。收集 sensitive contributions 前先选择 restricted consent-record stewardship。D-006 仍需要 community-grounded prospective-intention authority，并明确不会偷带 PM-Bench task-handle architecture 的观察边界。
 

@@ -47,7 +47,7 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 
 新增的离线输入工具为 **[RC-005 / 共同作品来历](case-lab/cases/seed-005-shared-work-authorship.zh-CN.md)** 准备并核验 18 份待答输入，检查输入投影是否抹掉说话者区别。该 case 仍是 authored candidate，没有独立人类 review 或系统评测。命令与边界见[输入审计说明](experiments/continuity-input-audit.md)。
 
-Proposed [首轮研究计划](research/first-research-cycle.md)连接案例组合、四个候选系统配置、可以独立交付的源码／运行展品，以及面向未来设计的机制实验。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)提议有界探索性执行路线。[RC-005 → Mem0 执行包](experiments/rc005-native-execution-packet.md)进一步给出拟议 reader、对照、时序／恢复观察和费用上限，native 可运行性仍未验证。这些都是规划材料，不代表 live study、已批准支出、accepted benchmark result 或已上线研究网站。
+Proposed [首轮研究计划](research/first-research-cycle.md)连接案例组合、四个候选系统配置、可以独立交付的源码／运行展品，以及面向未来设计的机制实验。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)提议有界探索性执行路线。[RC-005 → Mem0 执行包](experiments/rc005-native-execution-packet.md)进一步给出拟议 reader、对照、时序／恢复观察和费用上限，native 可运行性仍未验证。这些都是规划材料，不代表已批准的 native study、已批准支出、accepted benchmark result 或已上线研究网站。独立的 [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 只接受有限、operator-owned 的 provider 兼容性 smoke；其运行记录保留在私有侧，不产生 repository 执行入口或 memory-system 结果。
 
 后续[更正并发 challenge](research/correction-race-challenge.md)补充作者化交错顺序、反事实历史与恢复对照；[Hindsight 固定源码核查](research/stale-write-source-audit.md)检查已有保护机制。两份仍为研究 draft，没有系统运行或漏洞结论。
 
@@ -57,7 +57,7 @@ Proposed [首轮研究计划](research/first-research-cycle.md)连接案例组�
 
 尚未接受 canonical ontology、system protocol、scoring contract、benchmark release、Leaderboard、Arena、SDK、service 或 hosted infrastructure。[历史架构草案](docs/vision/relata-target-architecture-draft-0.1.md) 继续是 non-normative；[assumption register](ASSUMPTION_REGISTER.zh-CN.md) 保留各项处置。
 
-[ADR-0005](decisions/ADR-0005-offline-pilot-tooling.zh-CN.md) 允许可替换的离线试验工具，无需等待第三方交分数。它不授权 provider adapters、私人材料或公开表现结论。Accepted cross-system boundary 仍受正式 promotion gate 约束。
+[ADR-0005](decisions/ADR-0005-offline-pilot-tooling.zh-CN.md) 允许可替换的离线试验工具，无需等待第三方交分数。它不授权 provider adapters、私人材料或公开表现结论。ADR-0010 的窄 provider 兼容性 smoke 与这套工具分开，也不授权 memory-system run。Accepted cross-system boundary 仍受正式 promotion gate 约束。
 
 ## 已经开始的研究
 

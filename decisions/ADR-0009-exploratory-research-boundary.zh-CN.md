@@ -67,7 +67,7 @@ Current-only 与 ingest-then-disable 是不同 controls。完整历史、可搜�
 
 ## 与既有 authority 的关系
 
-**仍为 proposed 时：** 既有 gate 不变。[STATUS](../STATUS.zh-CN.md)、[CHARTER](../CHARTER.zh-CN.md)、[ASSUMPTION_REGISTER](../ASSUMPTION_REGISTER.zh-CN.md) 与 [AGENTS](../AGENTS.md)继续管理当前权限。首轮研究计划是 planning material；它与本 ADR 的存在都不允许据此开始实现或模型执行。
+**仍为 proposed 时：** 既有通用 gate 不变。[STATUS](../STATUS.zh-CN.md)、[CHARTER](../CHARTER.zh-CN.md)、[ASSUMPTION_REGISTER](../ASSUMPTION_REGISTER.zh-CN.md) 与 [AGENTS](../AGENTS.md)继续管理当前权限，并保留 accepted [ADR-0010](ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 的独立例外。该兼容性 smoke 不授予 subject、memory-system 或 native 执行，也不会接受本提案或激活本 envelope。首轮研究计划是 planning material；它与本 ADR 的存在都不允许据此在本 proposed envelope 下开始实现或执行。
 
 **接受时：** 在同一改动中更新 STATUS、CHARTER、ASSUMPTION_REGISTER、AGENTS 与受影响双语入口，明确该有名有界的探索例外不要求先完成正式跨系统 implementation promotion gate。该 gate 继续管理可复用评价边界的 promotion 与正式 coverage/comparison claims；不能静默删掉其中 distinctions、System Cards、memory necessity、reviewer disagreement、contribution path 或 adapter pressure 的要求。若这些要求本身需要调整，另记具体变更与理由，不能把本例外当作整体删除。
 

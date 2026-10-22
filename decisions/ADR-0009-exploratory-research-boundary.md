@@ -67,7 +67,7 @@ A public exploratory exhibit requires an explicitly selected, reviewed packet an
 
 ## Relationship to existing authority
 
-**While proposed:** no existing gate changes. [STATUS](../STATUS.md), [CHARTER](../CHARTER.md), [ASSUMPTION_REGISTER](../ASSUMPTION_REGISTER.md) and [AGENTS](../AGENTS.md) remain current authority. The first research cycle is planning material. Neither its existence nor this ADR's presence permits implementation or model execution.
+**While proposed:** no existing general gate changes. [STATUS](../STATUS.md), [CHARTER](../CHARTER.md), [ASSUMPTION_REGISTER](../ASSUMPTION_REGISTER.md) and [AGENTS](../AGENTS.md) remain current authority, with the separate exception in accepted [ADR-0010](ADR-0010-bounded-provider-compatibility-checks.md). That compatibility smoke grants no subject, memory-system or native execution and neither accepts this proposal nor activates this envelope. The first research cycle is planning material. Neither its existence nor this ADR's presence permits implementation or execution under this proposed envelope.
 
 **On acceptance:** update STATUS, CHARTER, ASSUMPTION_REGISTER, AGENTS and affected bilingual reading paths in the same change. State explicitly that this named exploration exception does not require prior completion of the formal cross-system implementation promotion gate. Retain that gate for promotion of a reusable evaluation boundary and formal coverage/comparison claims; do not silently delete its distinctions, System Cards, memory necessity, reviewer-disagreement, contribution-path or adapter-pressure requirements. If those requirements themselves need revision, record the specific change and rationale rather than treating this exception as their removal.
 

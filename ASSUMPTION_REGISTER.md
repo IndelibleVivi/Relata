@@ -41,6 +41,7 @@ This register reclassifies the 22 items presented as “locked” in Target Arch
 - no raw-chat requirement;
 - memory necessity and counterfactual controls before case acceptance;
 - explicit evidence type and provenance;
+- provider access is granted only by its named scope; [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) permits a finite compatibility smoke but no subject, memory-system or general provider execution;
 - no cross-system runner, API, SDK, service, Leaderboard, Arena, or hosted infrastructure during R0; the independent Tilia goal does not authorize implementation within Relata.
 
 ## R0 scope corrections

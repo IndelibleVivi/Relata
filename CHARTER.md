@@ -11,6 +11,8 @@ Its core functions are **its own benchmark research, an inspectable collection o
 
 Relata and [Agent Memory Study (AMS)](https://github.com/IndelibleVivi/agent-memory-study) retain separate research questions and artifacts while exchanging source-grounded lessons. Both may read papers, inspect implementations and conduct appropriately authorized experiments; both can inform long-form synthesis. Imported findings retain their original evidence status, conditions and uncertainty.
 
+Provider access is scoped rather than globally enabled. [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) accepts a finite operator-owned compatibility smoke over public original synthetic text: request/response parsing, ordinary text and JSON-object forms, usage/identity visibility, vector dimension, finite values and embedding batch order only. Its exact caps, input sizes, failure counting and permitted provider categories are stated in the ADR and are not expanded here. It is neither memory-system evaluation nor acceptance of the proposed general exploratory boundary in ADR-0009.
+
 Its research includes general agent use and long-term adult human–AI romantic and intimate relationships. Intimacy remains a founding focus, not an eligibility requirement for every study. Across settings, Relata asks how continuity can respect source, time, authority, scope, permission, change and present relevance. This broader scope is accepted in [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md).
 
 Relata's research may inform a future independently authored memory system named **Tilia**, beginning from an empty repository. This is an independent long-term goal, not an implementation programme within Relata. Existing source studies, cases and controls should inform falsifiable design choices; the [own-memory design study](research/own-memory-architecture.md) remains a proposal. The corrected [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) retains an already-written, very early local experiment without treating it as an accepted Tilia architecture. The intended Tilia system requires vector-based semantic retrieval; that requirement does not define a universal memory architecture. Relata retains plural research objects and an independent evaluator contract.
@@ -125,6 +127,7 @@ Relata will not yet:
 - assume every relevant memory should enter the current context;
 - treat all projects, people, roles, and surfaces as one undifferentiated relationship scope;
 - build a cross-system runner, API, SDK, service, Arena, or hosted infrastructure, or infer an implementation mandate for Tilia from Relata's research goal.
+- turn the [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) compatibility smoke into a general provider adapter, memory-system run, RC-005 native packet, corpus execution or compatibility claim beyond its accepted observations.
 
 ## 5. R0 progress and case-evaluation success
 

@@ -1,27 +1,27 @@
 # RC-005 → Mem0 首个执行包（proposed）
 
-**Status:** proposed，尚未批准或执行。本文是[第一研究周期](../research/first-research-cycle.md)的具体执行建议，受 [STATUS](../STATUS.md) 与 proposed [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md)约束。没有已获准账号、预算、provider 调用或 native 可运行证明。
+**Status:** proposed，尚未批准或执行。本文是[第一研究周期](../research/first-research-cycle.md)的历史执行建议，受 [STATUS](../STATUS.md) 与 proposed [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md)约束。没有已获准的 native 账号、预算或运行，也没有 native 可运行证明。已接受的 [ADR-0010](../decisions/ADR-0010-bounded-provider-compatibility-checks.md) 只允许独立、有限、operator-owned 的兼容性 smoke；它不是本包的授权。
 **Prepared:** 2026-09-28。成本按当日公开标价估算；实际开跑前重核价格与可访问 model identity。
 
 ## 中文摘要
 
-推荐一次授权覆盖 RC-005 输入／reader 预检、强原文对照、固定 Mem0 OSS 的原生摄入与检索、观察时序、进程恢复及范围内接入修复。推荐 OpenAI direct API、固定 `gpt-4.1-2025-04-14` reader／抽取模型和共同的 `text-embedding-3-large` encoder。计划 54 个预检回答、36 个原文检索对照回答、54 个 native 路径回答，共 144 个回答位置；仍只有一个已知开发事件家族。预计 API 支出 USD 2–4，建议全包硬上限 USD 10；安装、接入和人工解释另列。首个对象是有源码核验依据的候选，尚未安装或运行核验，不能称为“已可运行”。同一拟议授权包含从环境 smoke 到真实 native 的验证，失败如实保留，无须把预检修成高分才能继续。
+历史建议为一次授权覆盖 RC-005 输入／reader 预检、强原文对照、固定 Mem0 OSS 的原生摄入与检索、观察时序、进程恢复及范围内接入修复。曾建议 OpenAI direct API、固定 `gpt-4.1-2025-04-14` reader／抽取模型和共同的 `text-embedding-3-large` encoder；这些只保留为规划历史，已由当前 quota-first 方向替代，不是当前 provider 或账号前提。草案仍列 54 个预检回答、36 个原文检索对照回答、54 个 native 路径回答，共 144 个回答位置，以及示意性 USD 10 上限，但两者均未获批准。首个对象仍未安装或运行核验，不能称为“已可运行”。旧文提出把 smoke 与 native 执行并入同一授权；ADR-0010 没有激活这种合并。
 
 ## English summary
 
-This proposed envelope joins RC-005 reader/input preflight, strong raw-source controls, pinned Mem0 OSS ingestion/retrieval, timed observations, process recovery and bounded integration repair. The recommended shared configuration is direct OpenAI API, `gpt-4.1-2025-04-14`, and `text-embedding-3-large`. It plans 144 answer positions across one known development family, with an estimated USD 2–4 API spend and a proposed USD 10 hard cap. Static source inspection and verified unanswered inputs do not establish native runnability. Installation, smoke checks and initial native execution would be covered by the same future authorization; no execution or account authority exists yet.
+This proposed envelope would join RC-005 reader/input preflight, strong raw-source controls, pinned Mem0 OSS ingestion/retrieval, timed observations, process recovery and bounded integration repair. Its former direct OpenAI API, `gpt-4.1-2025-04-14` and `text-embedding-3-large` recommendation is retained as planning history, superseded for the current quota-first direction; it is not a current prerequisite. The 144 answer positions and estimated USD 2–4 spend with an illustrative USD 10 cap are not approved. Static inspection and verified unanswered inputs do not establish native runnability. Installation and native execution would need a new accepted envelope; the separate ADR-0010 compatibility smoke does not authorize them.
 
 ## 1. 一次需要决定的范围
 
-**推荐接受 ADR-0009 的有名探索包例外，并仅激活本文范围。** 维护者另需指定允许使用的 OpenAI API project／凭据来源；秘密留在本地，不写入本文。执行者负责安装、接入、核验和记录，维护者无需再设计实验参数。
+**历史建议：接受 ADR-0009 的有名探索包例外，并仅激活本文范围。** 此建议仍未获批准。旧文中的 OpenAI project／凭据要求属于被当前 quota-first 方向替代的历史规划，不再是当前前提；任何未来 native 包都应重新落实 provider 类别、账号授权与资源上限，秘密留在本地，不写入本文。
 
 | 纳入同一 envelope | 边界 |
 |---|---|
 | 公共成人合成材料 | 仅 RC-005 当前固定 fixture；两条 twin 历史，三个 checkpoint；不含真实聊天、生产 memory 或私有贡献材料 |
-| 对象与 reader | 下文固定 Mem0 OSS；同一独立 reader；原文、字面与语义对照；不接 managed Mem0、其他系统或自动换模型 |
+| 对象与 reader | 下文固定 Mem0 OSS；同一独立 reader；原文、字面与语义对照；不接 managed Mem0、其他系统或自动换模型。历史配置中的 OpenAI 选择不再构成当前 provider 前提 |
 | 实现与本地环境 | 本 study 的窄连接代码、隔离 Python 环境、Qdrant local 文件状态、SQLite history、只读回答进程与本地 evidence 记录；不构造通用 runner／SDK／服务 |
 | 范围内迭代 | 有界重复、一次失败后诊断、接入修复、重建受影响隔离状态并重跑；全部计入总额度和 attempt 记录 |
-| 资源 | API 总上限 USD 10；具体 stage 分配见第 7 节；本地人工预算预计 8–14 小时，达到 14 小时报告未完成项，不自动扩大工程范围 |
+| 资源 | 第 7 节的 USD 10 与调用数仅为未批准的历史估算，不适用 ADR-0010；未来 native 包须重新给出并接受自己的上限。本地人工预算预计 8–14 小时，达到 14 小时报告未完成项，不自动扩大工程范围 |
 | 独立继续的工作 | 静态 museum 从既有 atlas/source studies 推进；不等待本包结果，也不把缺少运行证据的页面标成 runtime exhibit |
 
 不在本包内：Tilia 产品实现、B/C prototype、其他案例家族、Graphiti／Letta／Hindsight 接入、LLM judge、真人长期研究、对外消息、公开结果包、hosting、正式 release 或 license 选择。它们仍保留在整轮研究的各自去向；这次只具体落实先后顺序。
@@ -31,11 +31,11 @@ This proposed envelope joins RC-005 reader/input preflight, strong raw-source co
 - RC-005 精确数据源为 [`ct-authorship.zh-CN.json`](../case-lab/fixtures/ct-authorship.zh-CN.json)，最近修改 commit `b691d142b6fee71aeff54ba331b63cf944fdbff4`。完整历史分别有 8 个事件、241 个正文字符；p1/p2/p3 前缀分别有 4/7/8 个事件。数字不含共同背景、字段标签或 prompt，也不是 token 数。
 - 2026-09-28 已执行 `continuity_inputs.py check`、`build` 与 `verify`：18 份待答输入通过源绑定核验，回答仍为空。使用[现有命令](continuity-input-audit.md)重建；派生输入留在 ignored artifacts，未作为研究结果发布。
 - Mem0 源码与环境核验见下一节。**当前没有安装 smoke、原生模型调用、持久化恢复运行或成功率证据**。不能把 source-ready 写成 locally runnable。
-- 现有执行边界不允许为证明 readiness 先偷偷实现 provider adapter 或调用模型。建议把安装、无网 smoke、首次有界调用和 native 检查都放进本次待批准范围；这是同一执行包内的前几步，不是要求维护者回来设计第二包。
+- 旧文关于执行边界的陈述已被 2026-10-23 的窄决定收窄：ADR-0010 单独允许接口兼容性 smoke；有效且配置仍匹配的观察可复用于后续接线判断，不必重复同一接口检查，但不能代替 pinned native 的安装、摄入、检索与恢复核验。安装、接入修复与本包的真实 native 运行仍须符合本包自己的授权。
 
 ## 2026-10-23 评审增量与本包限度
 
-首包仍固定 RC-005 一族、原有144回答位置与建议USD10 cap；本轮没有批准预算或扩到七个E方向。新增 [benefit/control材料](../research/continuity-benefit-study.md) 与 future-question 离线分析不自动进入本包。
+首包草案仍固定 RC-005 一族、原有 144 回答位置与历史 USD 10 估算；这些内容未获批准，ADR-0010 的 6／4 次兼容性请求不能替代它们，也不能扩到七个 E 方向。新增 [benefit/control材料](../research/continuity-benefit-study.md) 与 future-question 离线分析不自动进入本包。
 
 - 这里的4/7/8事件前缀很短；dense top-10近乎暴露完整历史，只能预检输入／记录，不能据此声称语义检索筛选能力。更长历史、模糊指针、未知stale与独立未来问题进入后续E1设计，先冻结选择方法再独立出题。
 - 候选返回、最终context admission、reader实际使用分开留证；author-selected excerpt仍为诊断参照。候选／最终暴露／最小原文rescue不自动构成无偏误差分解。
@@ -48,15 +48,15 @@ This proposed envelope joins RC-005 reader/input preflight, strong raw-source co
 
 | 项目 | 推荐值与理由 |
 |---|---|
-| Provider／endpoint | OpenAI direct API；Chat Completions 与 Embeddings。不用 ChatGPT/Codex 工程会话充当 reader，不继承项目文件、tools、hooks 或个人 memory |
-| Reader | `gpt-4.1-2025-04-14`；选固定 snapshot、非 reasoning 的简单请求形态和可核算 output，作为本包 reader；并不声称它是当前最强模型 |
+| Provider／endpoint | **历史建议，已被当前 quota-first 方向替代**：OpenAI direct API、Chat Completions 与 Embeddings。未来包须重新说明已授权 provider 类别。任何 reader 都不得继承工程会话、项目文件、tools、hooks 或个人 memory |
+| Reader | 历史建议为 `gpt-4.1-2025-04-14`；它不再是当前前提。未来包须固定实际 reader identity，并说明可核算的 output |
 | Reader 参数 | `temperature=0`、`top_p=1`、单个回答、非流式、output limit 1024 tokens；不设 seed 保证，不把 temperature 0 当作确定性；3 个独立重复 |
-| Native 抽取模型 | 同一 `gpt-4.1-2025-04-14`，temperature 0，output limit 2048；保留 upstream 原生 prompt，不注入 case 答案或额外 provenance 推理 |
-| Encoder | A 与 Mem0 同用 `text-embedding-3-large`，3072 维；不缩维，不额外 reranker；model 未提供日期 snapshot，保留实际返回 identity 与本批向量，不能保证未来重算相同 |
+| Native 抽取模型 | 历史建议为 temperature 0、output limit 2048；未来配置可随新授权改变，须记录实际 identity。保留 upstream 原生 prompt，不注入 case 答案或额外 provenance 推理 |
+| Encoder | 历史建议为 A 与 Mem0 同用 3072 维外部 embedding；未来以已授权 embedding 路径为准，不缩维、不额外 reranker，并保留实际返回 identity 与本批向量，不能保证未来重算相同 |
 | Reader context | 固定共同背景＋该条件允许的历史／检索文本＋当前请求。精确保留角色、来源表面与先后关系；tool 旧稿作为带来源标签的历史材料，不伪造 API tool-call turn |
 | 隔离 | reader 只得到已投影的请求 body，没有 filesystem／shell／MCP／web tools；不传 branch、condition、作者 review key、未来事件或先前 probe；每次是独立 API 请求 |
 
-[GPT-4.1 官方模型页](https://developers.openai.com/api/docs/models/gpt-4.1)列出该 snapshot、Chat Completions 和标准 token 标价；[embedding 模型页](https://developers.openai.com/api/docs/models/text-embedding-3-large)列出 USD 0.13／百万输入 tokens；[官方 embedding 指南](https://developers.openai.com/api/docs/guides/embeddings)说明默认 3072 维。这里据此做配置选择，不把产品描述当作本案例能力证据。Reader 若不能理解 full-history，应定位模型／材料／角色表达问题；本包不自动切换更强模型然后只保留较好结果。
+[GPT-4.1模型页](https://developers.openai.com/api/docs/models/gpt-4.1)、[embedding模型页](https://developers.openai.com/api/docs/models/text-embedding-3-large)与[embedding指南](https://developers.openai.com/api/docs/guides/embeddings)及对应数值保留为历史配置理由，不把产品描述当作案例能力证据。Reader 若不能理解 full-history，应定位模型／材料／角色表达问题；未来 native 包不自动切换更强模型然后只保留较好结果。
 
 ### 首个 native 对象的已有研究依据
 
@@ -72,9 +72,9 @@ This proposed envelope joins RC-005 reader/input preflight, strong raw-source co
 | [`write fallback`](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/main.py#L1045-L1084)逐条重试；history/recent-message 为独立 SQLite 状态 | add 返回与 history 不能证明每条向量已落库；观察返回、存储和 query 分别成功与否。同步返回是拟用完成边界，没有额外 durable job ready 信号 |
 | [`storage`](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/storage.py#L102-L344)持有 history 与 recent messages；[telemetry 控制](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/mem0/memory/telemetry.py#L14-L20) | 每个 world/repeat 的 DB 隔离且重启时复用；`MEM0_TELEMETRY=false`，运行期不允许 telemetry 或未声明模型下载 |
 
-推荐 Qdrant local `path`＋`on_disk=true`、`embedding_model_dims=3072`，每份状态独立 `collection_name`，同时明确 `history_db_path`；不配置 host/url，不接生产数据库。根据本地保留的 [Qdrant 配置文档路径](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/docs/components/vectordbs/dbs/qdrant.mdx)提出此配置，**其与 pinned 实现的兼容性和重启行为仍待直接核验**。保持 `infer=True`，不启用 graph store 或可选 reranker。Scope 用 opaque synthetic `user_id`，在一份轨迹的 checkpoint／重启之间不变；不要把 fixture session 号码改成不同 scope 而意外切断记忆。
+历史建议为 Qdrant local `path`＋`on_disk=true`、与实际 encoder 一致的 `embedding_model_dims`、每份状态独立 `collection_name`，同时明确 `history_db_path`；不配置 host/url，不接生产数据库。根据本地保留的 [Qdrant 配置文档路径](https://github.com/mem0ai/mem0/blob/a39a802bbc93e85b820078cd3c4dbaf53af25dbe/docs/components/vectordbs/dbs/qdrant.mdx)提出此配置，**其与 pinned 实现的兼容性和重启行为仍待直接核验**。保持 `infer=True`，不启用 graph store 或可选 reranker。Scope 用 opaque synthetic `user_id`，在一份轨迹的 checkpoint／重启之间不变；不要把 fixture session 号码改成不同 scope 而意外切断记忆。
 
-本轮检查的 Python 3.13.3 环境未安装 `mem0ai`、`qdrant-client` 或 `openai`。获准后先检查 pinned `requires-python` 并选兼容解释器／隔离 venv，冻结这些依赖与实际 NLP/keyword 版本；现有解释器版本不等于兼容性证据。初始化中的模型下载和 SDK 自动重试必须先显式定位，再开启收费出口。
+本轮检查的 Python 3.13.3 环境未安装 `mem0ai`、`qdrant-client` 或 `openai`。未来获准后进行 native 工作时，先检查 pinned `requires-python` 并选兼容解释器／隔离 venv，冻结这些依赖与实际 NLP/keyword 版本；现有解释器版本不等于兼容性证据。初始化中的模型下载和 SDK 自动重试必须先显式定位，再开启任何计费出口。
 
 ## 4. 条件与枚举
 
@@ -126,7 +126,7 @@ p1 在 e4 后，p2 在 e7 后，p3 在 e8 后取观察。Query 就是当前 prob
 
 ## 7. 消耗估计、硬上限与停机
 
-按 2026-09-28 官方标准标价，GPT-4.1 输入 USD 2／百万 tokens、输出 USD 8／百万 tokens，embedding USD 0.13／百万输入 tokens。不预支缓存／Batch 折扣。价格来源见第 3 节；这是一项可核算估计，不是 provider 账单。
+以下按 2026-09-28 官方标准标价形成的历史估算只说明旧方案如何得到 USD 10 上限；它不批准该方案，也不是当前 provider 前提或 ADR-0010 的预算。GPT-4.1 输入 USD 2／百万 tokens、输出 USD 8／百万 tokens，embedding USD 0.13／百万输入 tokens。不预支缓存／Batch 折扣；这些是估算，不是 provider 账单。
 
 | 成本项 | 估算依据 | 估计 USD | 拟议 stage cap |
 |---|---|---:|---:|
@@ -138,7 +138,7 @@ p1 在 e4 后，p2 在 e7 后，p3 在 e8 后取观察。Query 就是当前 prob
 
 24 次 add 的 2 倍 chat 余量是估算假设，不是原生每次调用两次的声明；源码核验或首次运行若给出不同值就更新；不能把每个 add 当作一个 API call，也不能把 54 个预检答案单价外推为整轮成本。此包不租用云资源；本地文件 DB 无计划中的云资源租金。人工单独估计：环境与窄连接 4–6 小时、数据／观测核验 2–4 小时、结果整理 2–4 小时，共 8–14 小时；不换算成 token 费用或声称已经花费。
 
-**硬上限必须由 dispatch 前的本地账本执行，尚未实现。** 批准后先验证以下拒绝路径，再发收费请求：
+**以下硬上限只属于未获批准的历史 native 包，尚未实现。** 未来若单独获准，必须先验证拒绝路径，再发收费请求：
 
 - 全包最多 USD 10 API 费用；stage cap 加总等于总 cap。另最多 300 次 chat attempts、500 次 embedding requests；哪个限制先到就先停，并保留未执行位置。
 - 所有 client（包括 Mem0 内部）经过同一收费出口；关闭 SDK 隐藏 retries，串行收费请求或原子预留。Chat 每次 input 最多 8,192 tokens，output 不超过上面的 1,024／2,048；embedding 每 request 累计最多 8,192 input tokens。先按完整输入和 output 上界预留，失败／timeout 在确认账单前不释放预留。
@@ -148,7 +148,7 @@ p1 在 e4 后，p2 在 e7 后，p3 在 e8 后取观察。Query 就是当前 prob
 
 ## 8. 开始、退出与本轮意见处置
 
-接受时一起更新 ADR-0009、STATUS、CHARTER、ASSUMPTION_REGISTER、AGENTS 及对应双语入口，明确只激活本包。先锁定受测源码／依赖和独立目录，完成离线隔离／预算／恢复 smoke，再执行 P → B/N。安装或配置失败在同一包内诊断；无法做到原生语义不变、预算有界或输入隔离则停相关路径，保留证据；不另挑一个候选假装原推荐已经核验。
+未来若接受本包，一起更新 ADR-0009、STATUS、CHARTER、ASSUMPTION_REGISTER、AGENTS 及对应双语入口，明确只激活本包，并重新指定已授权 provider、账号使用与预算。先锁定受测源码／依赖和独立目录，完成离线隔离／预算／恢复 smoke，再执行 P → B/N。ADR-0010 的接口检查只能覆盖 API 兼容性层；配置仍匹配的证据可复用，native 摄入／检索／恢复仍需各自核验。安装或配置失败在同一包内诊断；无法做到原生语义不变、预算有界或输入隔离则停相关路径，保留证据；不另挑一个候选假装原推荐已经核验。
 
 本包在所列 cells 全部完成或有具体未执行原因、账本对齐、输入／输出／条件绑定可检查后收口。语义好坏不影响是否如实交付，不能以提高分数为由无限修正／重跑。
 

@@ -17,11 +17,11 @@ Relata 是前沿记忆研究室，[ADR-0008](decisions/ADR-0008-three-core-resea
 
 围绕独立 Tilia 目标的研究，先读[候选记忆架构](research/own-memory-architecture.md)，再读[案例—测试映射](research/memory-design-test-map.md)，把机制、覆盖、替代方案和推翻条件接起来，不据此锁定未来系统。更正后的 [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) 分开长期目标与实现权限。[工程记录](experiments/local-memory-apparatus.md) 描述已经写出的非常早期独立实验：明确输入、字面搜索与脚本消费；它不是正式 Tilia，也不是语义评测结果。
 
-当前本地工具：[RC-002 scripted rehearsal](experiments/offline-rehearsal.md) 与 [RC-005 candidate 输入审计](experiments/continuity-input-audit.md) 不必等待下方完整研究计划；两者都不授权模型执行，也不接受 case。
+当前本地工具：[RC-002 scripted rehearsal](experiments/offline-rehearsal.md) 与 [RC-005 candidate 输入审计](experiments/continuity-input-audit.md) 不必等待下方完整研究计划；两者都不执行 subject，也不接受 case。另行接受的 [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) provider 兼容性 smoke 由 operator 管理，repository 无执行入口或 replay command，运行记录保留在私有侧。
 
 ## 拟议的首轮研究计划
 
-先读[完整周期计划](research/first-research-cycle.md)，查看问题、候选对象、controls、work packages、证据要求与未定资源；再读 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)，了解把有界探索性执行与 benchmark promotion 分开的提案。再读 [RC-005 → Mem0 执行包](experiments/rc005-native-execution-packet.md)，查看推荐配置、readiness 缺口、预检转 native 的条件与预算。三者仍为 proposed，当前权限以 [STATUS](STATUS.zh-CN.md) 为准。源码展品、案例修订与设计研究有独立价值，不必等待共同 release。运行展品需要真实执行证据；公开 hosting 与结果发布需要各自授权。
+先读[完整周期计划](research/first-research-cycle.md)，查看问题、候选对象、controls、work packages、证据要求与未定资源；再读 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)，了解把有界探索性执行与 benchmark promotion 分开的提案。再读 [RC-005 → Mem0 执行包](experiments/rc005-native-execution-packet.md)，查看历史提议的配置、readiness 缺口与费用依据；该包仍未获批准。三者仍为 proposed，当前权限以 [STATUS](STATUS.zh-CN.md) 为准。源码展品、案例修订与设计研究有独立价值，不必等待共同 release。运行展品需要真实执行证据；公开 hosting 与结果发布需要各自授权。
 
 要检查更正之后的晚到写入，可读[作者化 challenge](research/correction-race-challenge.md)，再读 [Hindsight 保护机制核查](research/stale-write-source-audit.md)。前者是推理工作表，后者是有界源码检查，都不是运行结果。
 
