@@ -63,6 +63,19 @@ P 技术执行成功后，允许以明确的“未评审探索性继续”处置
 
 源码入口是 [`rc005_native.py`](rc005_native.py)，child 为 [`rc005_native_child.py`](rc005_native_child.py)，共同 HTTP／ledger 为 [`rc005_common.py`](rc005_common.py)。Orchestration 只需 stdlib，child 使用 operator 指定的隔离 Python。以下值全部为占位符；真实配置、secret 与 artifacts 不入 Git：
 
+该入口要求 POSIX file locking 和 subprocess pipes；本轮环境为 macOS，Linux 未实测，Windows 不支持此入口。Operator 先准备 Python 3.13 与专用 venv，再安装 clean pin 的基础依赖；不安装 `nlp`／`extras`，避免可选模型下载和改变当前 native 配置。与本包准备环境一致的核心版本示例：
+
+```bash
+git clone --no-checkout https://github.com/mem0ai/mem0.git /PRIVATE/PINNED_CLEAN_CHECKOUT
+git -C /PRIVATE/PINNED_CLEAN_CHECKOUT checkout --detach a39a802bbc93e85b820078cd3c4dbaf53af25dbe
+python3.13 -m venv /PRIVATE/VENV
+/PRIVATE/VENV/bin/python -m pip install /PRIVATE/PINNED_CLEAN_CHECKOUT 'openai==3.37.0' 'qdrant-client==1.20.0'
+/PRIVATE/VENV/bin/python -m pip check
+/PRIVATE/VENV/bin/python -m pip freeze > /PRIVATE/dependencies.txt
+```
+
+`python3.13` 指 operator 已准备的 interpreter；本轮实际版本为 3.13.5。示例不是 transitive dependency lock，实际完整版本清单随私有运行记录保留。不要把已有个人 memory 环境当作本 study 的 venv 或 state。
+
 ```json
 {
   "chat": {"base_url": "https://generation.example.invalid/v1", "model": "AUTHORIZED_MODEL_ALIAS", "key_file": "/PRIVATE/GENERATION_KEY"},
