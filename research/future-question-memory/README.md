@@ -1,6 +1,6 @@
 # 未来问题变了，旧记忆还够用吗？
 
-**状态：** bounded research study / authored input witnesses，2026-10-22。本文完成一项机制论证、七组完整合成材料与可重算的输入投影检查；自然语言合同尚未经过独立人类评审。没有执行 memory system、encoder、reader 或模型，也没有接受新 Case Card 或 benchmark。
+**状态：** bounded research study / authored input witnesses，2026-10-22；offline response/review tooling added 2026-10-23。本文完成一项机制论证、七组完整合成材料、可重算的输入投影检查与有限 ideal lookup 分析，并提供离线 response/review 导入和统计闭环；自然语言合同尚未经过独立人类评审。没有执行 memory system、encoder、reader 或模型；tracked 材料没有真实 response/review，也没有接受新 Case Card 或 benchmark。
 
 **来源基线：** Relata public `a53b916bacefeed39c00b2e95de1bf47809efc73`。研究属于现有概念、比较与 case-validity 工作；未来真实系统比较沿用其独立执行边界。材料都是原创成年人合成情境，A / E 明确承认与 RC-005 / RC-006 的开发亲缘，G 是有限逻辑控制。
 
@@ -10,7 +10,7 @@
 
 ## English summary
 
-A retained note may support the task for which it was written while losing distinctions needed by a later question. This study relates write-time projection, query-time selection, source re-access and downstream use. Its finite diagnostic asks whether every identical-input class admits a shared task-fulfilling answer choice. Seven authored families contain fifteen worlds and fifteen questions, producing 105 correlated projection cells. Seven later questions have incompatible answer regions under the retained note. A three-world control has pairwise overlap but an empty global intersection. Supplying the actual permitted current source removes those particular collisions; a missing, denied or known-stale archive does not. These are computed properties of authored inputs and finite answer contracts, not system failures, semantic success or evidence of a superior architecture. Current papers already study unknown future queries and delayed compression; Relata's contribution here is a bounded mechanism argument and mixed-domain witnesses that expose the obligations behind source re-access and legitimate unresolved accounts.
+A retained note may support the task for which it was written while losing distinctions needed by a later question. This study relates write-time projection, query-time selection, source re-access and downstream use. Its finite diagnostic asks whether every identical-input class admits a shared task-fulfilling answer choice and computes the ideal finite-lookup ceiling under exact rational arithmetic. Seven authored families contain fifteen worlds and fifteen questions, producing 105 correlated projection cells. Seven later questions have incompatible answer regions under the retained note. A three-world control has pairwise overlap but an empty global intersection. Supplying the actual permitted current source removes those particular collisions; a missing, denied or known-stale archive does not. The new offline packet path supports manually imported response/review records and keeps pending, technical failure and semantic error separate, but no system or human result is included. These are computed properties of authored inputs and finite answer contracts, not system failures, semantic success or evidence of a superior architecture. Current papers already study unknown future queries and delayed compression; Relata's contribution here is a bounded mechanism argument and mixed-domain witnesses that expose the obligations behind source re-access and legitimate unresolved accounts.
 
 ## 1. 从一张足够实用的便条开始
 
@@ -112,6 +112,12 @@ A / E 与既有 cases 有明确亲缘，其他情境也是本轮作者化开发�
 
 以上数值来自[results.json](results.json)，可用 `check` 精确重算。七个 `present` 问题和 F 的 `cautious` 正控制都保留共同选项。G 的 `later` 在未回查、缺失、拒绝和旧副本四种相关条件中形成 global-only witness。
 
+### 有限 lookup 上限
+
+对每个相同 `input_view` 等价类 \(g\)，报告给出类内每个 world 的条件概率、共同答案、最大化有限合同正确率的 choices，以及该最大值。默认在每个类内使用均匀 world 先验；也可向 `group_views` 传入显式的非负 `Fraction` 先验，要求恰好覆盖 worlds 且总和为 1。单 cell 的 `lookup_accuracy` 按 world 质量加权汇总类的上限，不是 groups 的简单平均。三世界 G control 因此是 \(2/3\)，不是“三分之二组通过”；A–F 的六个 `later` retained collisions 是 \(1/2\)，F 的 `later` 在获准回查后和 `cautious` 正控制都是 \(1\)。
+
+这些是**给定七个 authored families、有限 answer contracts 与指定 prior 的 ideal lookup 上限**。它们不是任何 memory system、reader 或模型的实际得分，也不构成一般定理；先验改变时 `best_choices` 和最优化数值可以改变。exact rational 让碰撞与加权关系可审计，不把有限枚举升级成能力结论。
+
 再访问有可检查的内容。`resolve_archive` 接受 source store、可读 pointer 集合与已知过期集合，先检查 permission，再检查对象存在，最后返回实际事件。`allowed` 装入该世界当前原文；`stale` 装入另写的旧记录；`missing` 的 store 没有该对象；`denied` 的许可集合没有该对象。代码不接受答案合同，也不通过一个 `success` 标志假定任务已解决。
 
 这里的许可是来源再访问的模拟条件，不是完整权限系统。它没有检验已保留副本在权限撤回后如何处理，也没有模拟身份认证、跨用户访问或数据擦除。`known-stale` 是作者设定的已知旧副本，不是假装工具已经学会检测任何未知过期内容。
@@ -144,7 +150,7 @@ A / E 与既有 cases 有明确亲缘，其他情境也是本轮作者化开发�
 
 先让独立 reviewer 判断本轮自然语言合同：明确哪些问题需要完成信息任务，哪些允许共同谨慎行动；指出不自然的 query、当前信息泄露、过度依赖作者隐含解释的地方。修订后冻结 retention policy 与问题类别，再为未参与设计的新情境准备不同未来问题。保持题材变体与机制独立性的区别。
 
-**具体交付：** 一份讨论过分歧的 review disposition、一组冻结输入和保留策略、改变研究判断的 counterexample。C 的历史不变而问题变化，适合连接日常研究与项目工作的重新理解；F 检查系统能否保留 unresolved accounts。现有七组全部继续标为 development，不自称 held-out。
+**具体交付：** 一份讨论过分歧的 review disposition、一组冻结输入和保留策略、改变研究判断的 counterexample。当前离线 packet 可绑定 exact prepared inputs、导入多 reviewer 判断并保留分歧，但仓库尚无 independent human review。C 的历史不变而问题变化，适合连接日常研究与项目工作的重新理解；F 检查系统能否保留 unresolved accounts。现有七组全部继续标为 development，不自称 held-out。
 
 ### Work C：比较保留、检索与再访问的实际贡献
 
@@ -161,6 +167,8 @@ A / E 与既有 cases 有明确亲缘，其他情境也是本轮作者化开发�
 
 共同 reader、相同 source history 与 query 有助于解释机制；各系统 native 最佳配置可以单独报告，不能混成同一比较。reader 的 reference-context rescue 是归因诊断，不可冒充正常 retrieval。范围受限的来源若不得进入当前 trust boundary，就不能用 author-only full-history 当作合法部署方案。
 
+Work C 的 response import 现在有独立于语义结果的 state：`pending` 与 `not-run` 不会被计成回答错误，`technical_failure` 不进入 conditional error 分母；只有 completed 且获得 review judgments 的 cells 才进入语义误差统计。这只防止“缺少运行”被伪装成“答错”，不会让工具自己执行 subject，也不会验证作者 answer contract。
+
 报告保持多个可解释结果：完成当前任务、保留原始归属、承认未决、回查次数／内容量／延迟、人工补充负担。文字 token 不能直接换算为关系中的情感劳动。对正确性和成本先观察，不预设复杂或简洁方案胜出。
 
 ## 9. 什么结果会让这个方向改变
@@ -174,11 +182,13 @@ A / E 与既有 cases 有明确亲缘，其他情境也是本轮作者化开发�
 
 ## 10. 文件、运行与复查
 
-实现仅依赖 Python 3.10+ 标准库。它固定读取本目录两个 authored JSON，不导入用户语料，不调用外部程序或网络。源码投影与 evaluator contract 分文件；`show` 路径完全不加载答案合同。外层 `authoring_world` 用于人类对照，不属于 `input_view`，也没有进入等价类计算。
+实现仅依赖 Python 3.10+ 标准库。它固定读取本目录两个 authored JSON，不导入用户语料，不调用外部程序或网络。源码投影与 evaluator contract 分文件；`show` 是人类检查路径，完全不加载答案合同，输出仍有 `authoring_world` 包装。`export-inputs` 才是 provider 可消费的 allowlist 入口：每个正文只有 `context`、`current`、`memory`、`archive_pointer`、`archive`，不含 authored world/family/question/condition、answers 或 reviewer keys；opaque ID 与答案留在隔离的 hidden manifest。二者不可互相替代。
 
 ```sh
 python3 -B tools/future_question_inputs.py audit
 python3 -B tools/future_question_inputs.py check
+python3 -B tools/future_question_inputs.py export-inputs \
+  --output experiments/artifacts/future-question-inputs-01
 python3 -B tools/future_question_inputs.py show --family C-DISCARDED-RATIONALE --question later --access closed
 python3 -B tools/future_question_inputs.py show --family C-DISCARDED-RATIONALE --question later --access allowed
 ```
@@ -186,6 +196,44 @@ python3 -B tools/future_question_inputs.py show --family C-DISCARDED-RATIONALE -
 对照最后两条命令：相同便条和相同问题，在回查后附加了不同的真实源段落。再用 `--access missing`、`denied` 或 `stale` 检查所需区别有没有回来。试 `G-GLOBAL-INTERSECTION` 查看三世界控制，试 F 的 `--question cautious` 查看共同的谨慎行动。
 
 修改材料后先检查语义，再运行 `python3 -B tools/future_question_inputs.py write` 重建[结果](results.json)。这一步只写本目录的派生报告。测试验证投影隔离、实际 source lookup、无权限／丢失／旧副本路径、global intersection 以及未决正控制；它们不验证作者合同的自然语言充分性。
+
+### 离线 response/review 闭环
+
+[`tools/future_question_review.py`](../../tools/future_question_review.py) 只负责 fixed bundled study 的准备、导入与统计，不运行 subject/provider/adapter。所有 command 都覆盖完整固定矩阵：105 个相关分析 cells 展开为全部 224 个 actual world-cells。运行产物应放入 `experiments/artifacts/`；命令不会创建模型数据，示例 input 必须明确标为 synthetic plumbing。
+
+```sh
+python3 -B tools/future_question_review.py prepare \
+  experiments/artifacts/future-question-review-01
+python3 -B tools/future_question_review.py verify \
+  experiments/artifacts/future-question-review-01
+python3 -B tools/future_question_review.py import-responses \
+  experiments/artifacts/future-question-review-01 --input /tmp/responses.json
+python3 -B tools/future_question_review.py export-review \
+  experiments/artifacts/future-question-review-01 \
+  --output experiments/artifacts/future-question-blind-01
+python3 -B tools/future_question_review.py import-review \
+  experiments/artifacts/future-question-review-01 \
+  --review-packet experiments/artifacts/future-question-blind-01 \
+  --input /tmp/reviews.json
+python3 -B tools/future_question_review.py recompute \
+  experiments/artifacts/future-question-review-01
+```
+
+`responses.json` batch 形状为：
+
+```json
+{"format": "relata-future-question-responses-1", "provenance": "...",
+ "records": [{"input_id": "I-...", "status": "completed",
+              "response": "...", "failure": null}]}
+```
+
+`reviews.json` 使用 `relata-future-question-reviews-1`，形状为 `{"format": "...", "records": [{"alias": "V-...", "reviewer_id": "...", "decision": "...", "reason": "...", "evidence_refs": ["current"]}]}`。response input ID 只用于 hidden manifest 绑定；review 文件只接收 blind alias，不能携带 authoring input ID。
+
+状态只用 `completed`、`pending`、`technical_failure`、`not-run`；completed 必须有正文，technical failure 必须有 failure 且无正文，其余状态不得携带二者。每项 review 须含 hidden alias、`reviewer_id`、合同内 `decision`、非空 `reason` 与 exact input view 内可定位的 `evidence_refs`。alias 是 blind link；绝不能放进 provider input。
+
+`prepare`、`export-review` 都要求新目录，拒绝覆盖与 symlink 路径。response batch 在 `responses/` 下按 `000001.json`… append-only；review batch 在 `reviews/` 下 append-only，并在 `review-keys/` 保存 exact key 的 immutable copy。同一 input 的同一 reviewer 不能覆盖旧判断；不同 reviewer 可复用同一 blind alias，也保留不同 decision。旧 batch、blind packet、alias→input、completed response、input/response digest 或 contract 漂移都会使 `verify` 失败。review key 与 item 绑定 exact input digest、response digest、decision options 与 history/contract digest。
+
+`recompute` 按 family 报告 `attempted`、`completed`、`scorable`、`reviewed_inputs`、`reviewers`、`pending`、`technical_failure`、`not_run`、`review_pending`。attempt coverage 是 attempted / total；answer coverage 是 completed / attempted。`judgment_contract_match_rate` 与 `judgment_contract_mismatch_rate` 分别是 correct、incorrect judgments / 全部 review judgments；它们不是 response accuracy/error，也不会进行 majority vote。多个 reviewer 的每个合法 judgment 都保留。pending 与 technical failure 不进入语义 0，未审查的 completed response 仍是 `review_pending`。当前 tracked 材料**没有** imported responses 或 human reviews；空 packet 显示 224 pending 与 `null` 比率，任何测试 response 都是 synthetic plumbing，不是系统或人的数据。
 
 ```sh
 python3 -B -m unittest discover -s tests -v
