@@ -25,6 +25,8 @@ The maintainer’s 2026-09-26 clarification separates the long-term **Tilia** go
 
 [ADR-0008](decisions/ADR-0008-three-core-research-functions.md) accepts the three functions as Relata's core identity. The benchmark remains under development; source studies and architecture views form the existing system collection; candidate designs support incubation. This identity decision changes no evidence status or execution boundary. Future Tilia product source belongs in a separate project. Relata and AMS retain independent research value and can both inform long-form synthesis.
 
+The maintainer's 2026-10-22 commission to propose and implement the next Relata + AMS direction is realized here as the [future-question study](research/future-question-memory/README.md) and its fixed-bundle input-validity diagnostic. This bounded work uses original synthetic material and no subject, provider, private corpus or external service. It does not accept ADR-0009, a system evaluator, a scoring contract or any existing case.
+
 ## Evidence state
 
 | Artifact | State | Accepted evidence |
@@ -38,6 +40,7 @@ The maintainer’s 2026-09-26 clarification separates the long-term **Tilia** go
 | Claim boundaries | bilingual candidate study | CL0–CL6, lanes, cells and adapter classes remain proposals; no accepted result unit or publication policy |
 | System Cards / Architecture Pressure Maps | 3 source-reviewed public-source cards ([Mem0](systems/system-cards/SC-001-mem0.md), [Graphiti](systems/system-cards/SC-002-graphiti.md), [Letta](systems/system-cards/SC-003-letta.md)) and 1 ten-system [pressure map](systems/architecture-pressure-map.md) | static source review only; no contributor review, accepted-for-census promotion, runtime result or comparative claim |
 | Distinction Atlas | 8 seed hypotheses (7 with multi-source source corroboration) | 0 supported distinctions; promotion still needs a community Incident Seed and an accepted microcase |
+| [Future questions and memory](research/future-question-memory/README.md) | mechanism argument, seven authored families and input-only projection tool | 15 questions / 15 worlds / 105 correlated cells; seven later-question retained-view collisions, including one global-only intersection witness; current-source re-access removes these collisions, while missing/denied/stale conditions retain them; no model output, semantic validation, accepted case or architecture ranking |
 | Pilot 001 | clinic-ready case, manual plan and candidate E0 pack | no system run, acceptance or human calibration; authored anchors only |
 | RC-002 / RC-003 / RC-004 | unreviewed seeds | no model/system evaluation or balanced pilot set; RC-003 probe and RC-004 explicit accord revised without promotion |
 | Mixed-domain routing | question, incident families and scope-conditioned seed | RC-004 remains unreviewed; metadata-only prior shortcut remains untested |
@@ -58,6 +61,8 @@ Templates, corrected contracts, generated fixtures and passing plumbing tests ar
 Define and critically examine agent memory across concepts, open-source architectures and evidence. Compare what different implementations preserve, how past experience affects current behavior, and the conditions under which their choices help or fail. Study these questions in general agent settings and in long-term mixed-role relationships, retaining history-dependent controls, architecture-sensitive observation and privacy-preserving community participation.
 
 ## Immediate work
+
+The [future-question study, Work A–C](research/future-question-memory/README.md) supplies a concrete next inquiry within the existing programme: trace real source re-access, review task-changing contracts, then compare retention/retrieval/use with strong raw-history and file-search controls under a separately accepted execution envelope. The current input result is complete at its declared boundary. Preserve the difference between finite information loss, recoverable candidate omission and downstream use; the latter two still need actual system observations.
 
 The [first research cycle plan](research/first-research-cycle.md) is the proposed coordination path for the next substantive edition: case development and real comparison, source and runtime exhibits, falsifiable design experiments, and synthesis with independently deliverable outputs. Its 12–20-family capacity target and four system candidates are planning choices, not validated sample sizes or runnable configurations. [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) remains **proposed**. Current execution limits and the promotion gate below remain in force; any acceptance must explicitly reconcile those surfaces and name the authorized study envelope.
 

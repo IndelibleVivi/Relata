@@ -35,7 +35,7 @@ Style-halo 校准应另有“事实相同、语气不同”和“语气相同、
 
 | 方向 | 进入既有工作的位置 | 实施／验证状态 |
 |---|---|---|
-| E1 未知未来用途与回源 | [future-question study](https://github.com/IndelibleVivi/Relata/blob/344a2cfb86794ea8a863d574e3858946fb6b11f4/research/future-question-memory/README.md)；原始历史、有限合同与 `u*` | 输入分析可重算；自动保留器、语义检索与 reader 收益未测 |
+| E1 未知未来用途与回源 | [future-question study](future-question-memory/README.md)；原始历史、有限合同与 `u*` | 输入分析可重算；自动保留器、语义检索与 reader 收益未测 |
 | E2 probe reactivity | first-cycle 的 frozen replay / co-evolution 边界 | 从同快照配对 no-probe、中性回忆、反思、自然接续与 token/轮数匹配 sham；交叉 writeback 开关并用 fresh reader。无差异须报告区间与等效界，不能直接宣布无干扰；尚未建真实快照装置 |
 | E3 来源升级 | RC-005 与本材料的来源诚实性要求 | 将提出者、接受状态、当前决定权独立操纵；角色效应区组保持措辞、确定性和言语行为相同；重复、最近性与顺序单独控制。不是 user 身份自动拥有一切权威 |
 | E4 更正后的持续影响 | [race challenge](correction-race-challenge.md)、[safeguard audit](stale-write-source-audit.md) | 接收、durable write、derived ready、read observed、action 分开；A→B→A、部分撤回、历史题与有效邻域保留。未运行时序；原有 Hindsight 保障是反证，非已发现 race |

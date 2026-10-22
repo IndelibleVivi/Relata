@@ -39,6 +39,8 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 
 **R0 — Research Foundation。** 两张窄范围的 source Evidence Cards 已 accepted。RC-001 为 clinic-ready；RC-002/003/004 仍是未经 review 的 seeds。三张 public-source System Cards 与十系统 pressure map 已按既有研究做有界 source-fidelity review。尚无 accepted cases、validated evaluators、语义系统评测结果或排名。证据限定见[系统集合](systems/system-cards/README.md)。
 
+2026-10-22 的[未来问题与记忆研究](research/future-question-memory/README.md)推进下一方向：后来任务改变时，保留表示需要支持哪些区别，以及重新访问来源何时能找回它们。七组作者化材料、十五个问题与可重算的 input-only 诊断，展示答案区域冲突、三世界全体交集控制，以及来源缺失／拒绝／旧副本条件。这些是输入的计算性质，语义合同尚待独立评审；没有给记忆系统评分。运行 `python3 -B tools/future_question_inputs.py audit` 可查看结果。
+
 软件现有 public repository checker 和一个**离线 RC-002 执行演练**：用明确标识的脚本替身，在两条合成历史下分别运行五种条件，保存证据并导出盲审包。测试只建立工程链路行为，不调用模型，也不产生语义分数或能力分数。完整证据状态见 [STATUS](STATUS.zh-CN.md)。
 
 新增的离线输入工具为 **[RC-005 / 共同作品来历](case-lab/cases/seed-005-shared-work-authorship.zh-CN.md)** 准备并核验 18 份待答输入，检查输入投影是否抹掉说话者区别。该 case 仍是 authored candidate，没有独立人类 review 或系统评测。命令与边界见[输入审计说明](experiments/continuity-input-audit.md)。

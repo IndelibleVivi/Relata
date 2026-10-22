@@ -1,0 +1,62 @@
+{
+  "format": "relata-future-question-contracts-1",
+  "status": "authored-unvalidated; answer regions for this finite diagnostic only",
+  "interpretation": "These labels describe task-fulfilling informative decisions under the full authored history. They are not a semantic scorer, exhaustive natural-language answers, or a rule forbidding honest uncertainty. A reader lacking sources may correctly request them without completing the informative task. F/cautious explicitly includes common defer/request actions; G/later intentionally has a restricted three-choice alphabet for a logical control.",
+  "decisions": {
+    "title-yuanting": "当前标题为《远汀》。",
+    "originator-companion": "《慢潮》的首次提案来自AI伙伴澄。",
+    "originator-human": "《慢潮》的首次提案来自人类溪宁。",
+    "recorder-blue-drawer": "录音机在玄关蓝色抽屉。",
+    "do-not-lend-until-sunday": "周五不外借，请朋友周日再来。",
+    "friday-one-day-loan": "已有约定允许周五借一天，周六放回。",
+    "deliver-printable-pdf": "当前交付形式是可打印PDF。",
+    "reassess-budget-blocker": "原弃选理由是经费；经费补齐后可重新评估已有离线搜索交互样机，不自动决定改版。",
+    "reassess-network-design": "原弃选理由是搜索依赖联网；经费变化未解决该理由，新增离线目标要求检查或更换搜索设计。",
+    "exhibition-thursday-topic": "讨论的话题是周四灯展报名，不声称提醒已经成立。",
+    "reminder-accepted": "用户已经接受周四提醒一次；本题仍只解释约定，不执行。",
+    "reminder-not-accepted": "用户明确暂不接受提醒；保留活动话题不等于接受安排。",
+    "finish-section-four": "《线索册》第四节待补弃名来历。",
+    "declared-read-only-unverified": "新实例声明只读且不继承写入授权；不能据旧实例声称现在可修改，声明未实测。",
+    "declared-read-write-unverified": "新实例声明可读可写且此项目授权继承；仍明确这是未实测声明。",
+    "title-echo": "音频名为《回声》。",
+    "preserve-unresolved-accounts": "两条猜测仍未解决；保留未决，不断言任何一边。",
+    "request-production-record": "请求核对可靠生产记录，不编造归属。",
+    "companion-per-adopted-record": "根据后来用户明确采用的生产记录，录音者是澄；不把用户报告冒充独立实测。",
+    "defer-attribution": "先暂缓公开署名。",
+    "not-selected": "最终颜色尚未选定。",
+    "blue": "选择蓝。",
+    "green": "选择绿。",
+    "red": "选择红。"
+  },
+  "families": {
+    "A-AUTHORSHIP": {
+      "present": {"A": ["title-yuanting"], "B": ["title-yuanting"]},
+      "later": {"A": ["originator-companion"], "B": ["originator-human"]}
+    },
+    "B-CONDITIONAL-USE": {
+      "present": {"A": ["recorder-blue-drawer"], "B": ["recorder-blue-drawer"]},
+      "later": {"A": ["do-not-lend-until-sunday"], "B": ["friday-one-day-loan"]}
+    },
+    "C-DISCARDED-RATIONALE": {
+      "present": {"A": ["deliver-printable-pdf"], "B": ["deliver-printable-pdf"]},
+      "later": {"A": ["reassess-budget-blocker"], "B": ["reassess-network-design"]}
+    },
+    "D-INTENTION-STATUS": {
+      "present": {"A": ["exhibition-thursday-topic"], "B": ["exhibition-thursday-topic"]},
+      "later": {"A": ["reminder-accepted"], "B": ["reminder-not-accepted"]}
+    },
+    "E-MIGRATION-CAPABILITY": {
+      "present": {"A": ["finish-section-four"], "B": ["finish-section-four"]},
+      "later": {"A": ["declared-read-only-unverified"], "B": ["declared-read-write-unverified"]}
+    },
+    "F-UNRESOLVED-ACCOUNTS": {
+      "present": {"A": ["title-echo"], "B": ["title-echo"]},
+      "later": {"A": ["preserve-unresolved-accounts", "request-production-record"], "B": ["companion-per-adopted-record"]},
+      "cautious": {"A": ["defer-attribution", "request-production-record"], "B": ["defer-attribution", "request-production-record"]}
+    },
+    "G-GLOBAL-INTERSECTION": {
+      "present": {"A": ["not-selected"], "B": ["not-selected"], "C": ["not-selected"]},
+      "later": {"A": ["blue", "green"], "B": ["green", "red"], "C": ["red", "blue"]}
+    }
+  }
+}

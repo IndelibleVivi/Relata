@@ -1,0 +1,2891 @@
+{
+  "cells": [
+    {
+      "archive_access": "closed",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [
+            "title-yuanting"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 661,
+          "view_sha256": "cb20ec86ff1fac6ff645209db071bcee962330232f94be0e8e055fbb72592da7",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [
+            "title-yuanting"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1161,
+          "view_sha256": "afad5e01e5fcc928421ea302206913f412f260f973f5709cb2912f5b6f504e8a",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "title-yuanting"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1156,
+          "view_sha256": "3207d018de403ac24c2311d3d2c0c7744cf4358db6b2be475a2d386c727015f6",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [
+            "title-yuanting"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1051,
+          "view_sha256": "116ff609cb22852bb22743ec6ab47a7f728dd222c16fa5b897a26b2f65ab7a11",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "present"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [
+            "title-yuanting"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1400,
+          "view_sha256": "122e274cfc3bd3ab1b834a71ea4debb816f7537ea0d6bc2926e1e45549946633",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "title-yuanting"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1395,
+          "view_sha256": "255ad19c21b5aa54c3b98de5c51ff9f948b00043a0219ab7f5598e89d1eac4b9",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "missing",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [
+            "title-yuanting"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 655,
+          "view_sha256": "ec0ffe60f2c8093817f8536ea1cbdb8899f83c0868f3f421aca06b5de637038f",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "denied",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [
+            "title-yuanting"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 654,
+          "view_sha256": "45b6b0993badec31047deafdfa7daa5012962ee53790fd5aea4f975aaaf725f7",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "stale",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [
+            "title-yuanting"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 879,
+          "view_sha256": "d4dd859e9d3c1d003e888b47e7af7920bcfa467c529629e85450b9e2a4d25190",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 673,
+          "view_sha256": "c516062b197a579dbf72991049965e63907e6dd789a43e9f8875a3c35d4a6061",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [
+            "originator-companion"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1173,
+          "view_sha256": "d08ea7730770f2e083e0b3c4661005e038e6fffbe5ef807a66cbfe67c9a79150",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "originator-human"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1168,
+          "view_sha256": "6fc0381971b1a1ce9a59231e77de442819a06437e359fee7a0b05724f061f862",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 1063,
+          "view_sha256": "0f1ed60e165a28c73890e4fcbc146862c398a1c96891a0815409d113f00ebe93",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "later"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [
+            "originator-companion"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1412,
+          "view_sha256": "104cd6eacea11be653b9d5b3d4db9a0decf11b6d0dd24c412e6a516f5ba0b561",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "originator-human"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1407,
+          "view_sha256": "7ea09b23f50bf99ea8a04f8616760be7194f726f518bafaae064837b67cb048a",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "missing",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 667,
+          "view_sha256": "11888195e8d286b3a52495472a73ccc0fdd21df43fb8973c2f9712caa8bc16f9",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "denied",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 666,
+          "view_sha256": "c5bd1be1ec1acca4f462a7c2aba2916c7a53b93cb9fb1d86aa1ec927e0001886",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "stale",
+      "family": "A-AUTHORSHIP",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 891,
+          "view_sha256": "3d380c7b2405e3ef76f339f7b7cb674f7874bbea09eaa12a5c7225ced174fd59",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [
+            "recorder-blue-drawer"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 616,
+          "view_sha256": "84a1818f9d388eacc102321a247720540f5a10dd1b0a6f9434dc7325ae448d2c",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [
+            "recorder-blue-drawer"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1101,
+          "view_sha256": "df271cbf5b2790d8982220d34a00eadef44d028f53a0c321155e74f71c77cfbd",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "recorder-blue-drawer"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1089,
+          "view_sha256": "e8b79551a76c3fbced4351b264c0c27183268cec8d3333c414a2c99fe2b79a82",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [
+            "recorder-blue-drawer"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 991,
+          "view_sha256": "b67aa808547b94dbc6b2754995feb486104273fc8793c64e161dd4a052992d37",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "recorder-blue-drawer"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 979,
+          "view_sha256": "38e09f722c74e6f69372c5ba2d60f4f83ac62201dbc9c8437c9316e76b33f6b3",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "present"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [
+            "recorder-blue-drawer"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1322,
+          "view_sha256": "23d1b36155911ce87dc4116c398080bd0b3be475eaf21c661c5a9102b6ba7eee",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "recorder-blue-drawer"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1310,
+          "view_sha256": "05f1a71a9be568072d0e3ae8f12189f1ff272bc4cb6280aa754a01acdaf59da8",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "missing",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [
+            "recorder-blue-drawer"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 610,
+          "view_sha256": "3093579c43fa0d1c1d4c6261000888121bac95e59b1a97711df08974b9239ff2",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "denied",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [
+            "recorder-blue-drawer"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 609,
+          "view_sha256": "6048a2122c11ea202d20dbbc5f2fa9315adf44e005bde18939566688ee10584a",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "stale",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [
+            "recorder-blue-drawer"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 793,
+          "view_sha256": "cb7597f75788dc4c3dc9b719e6ae9e7cfa8cce6cde3cf08cad3b2c35757bb1cb",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 697,
+          "view_sha256": "0b4ad0b9454856d750287bf3d4c6c4d7746f46e0d699917a789edee85ded8abb",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [
+            "do-not-lend-until-sunday"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1182,
+          "view_sha256": "df8c56ccda635f55ba73e22c2d955d3507b2b2fe9d722049997d71c0f70ae7c8",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "friday-one-day-loan"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1170,
+          "view_sha256": "735538b905639bf8c99b6705c693d66f9ddfa10a2502e0ff7d1f0a1a8e475db5",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [
+            "do-not-lend-until-sunday"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1072,
+          "view_sha256": "61e191143753230b4bb27c7a3f541f1922ea6440bf52add352806420d03fc905",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "friday-one-day-loan"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1060,
+          "view_sha256": "d29ab386fb6830f045b0024d309c7473d1e5ccf1fef08fc0c235466e198215d4",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "later"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [
+            "do-not-lend-until-sunday"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1403,
+          "view_sha256": "3cfef27995113a52270ce577c489961bae05fb62d5d24fe0168f4fceb16f78a5",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "friday-one-day-loan"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1391,
+          "view_sha256": "a7dcca866499643c12843c3a9e9d409c1d8e04f701990ca161f200658ca5fd94",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "missing",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 691,
+          "view_sha256": "3b79c1d60a11da76288d2a966a918c0f68e115143d6add9f18a7aca4bb34a859",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "denied",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 690,
+          "view_sha256": "532cf8172dd9ec66720f1e5c075291338992ff0039e665574e42504de643e760",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "stale",
+      "family": "B-CONDITIONAL-USE",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 874,
+          "view_sha256": "41831fca8c5b1546ce179637bb78b9bf33dd204254505d6bdcf0cc0f7329b7d0",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [
+            "deliver-printable-pdf"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 638,
+          "view_sha256": "54d315db737a6d2a8cfca95e50835dc26af1dd1d1a7a35a6f2c3f407bc45f9e3",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [
+            "deliver-printable-pdf"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1159,
+          "view_sha256": "b85080f4c3c7f68d44ade4c9c47c785de2f4769068cd9b52b8585e49818a29da",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "deliver-printable-pdf"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1174,
+          "view_sha256": "1451a4549bf0d0329bd4c2e11ff263495c6ee52de7e3dcd4a969be910228651b",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [
+            "deliver-printable-pdf"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1049,
+          "view_sha256": "4c8eb077d5a6d62b0420c3076a6da68c34ad92413da193ca01c3d958861ed8ef",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "deliver-printable-pdf"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1064,
+          "view_sha256": "911e6caabfe05a380ee1b38667ae2a95697be474ddb019fc8aa24097ac915a54",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "present"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [
+            "deliver-printable-pdf"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1377,
+          "view_sha256": "7cc9ab29eef5fadd32f6bd863823f20a65b67fe642e46f47457627256bca25f9",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "deliver-printable-pdf"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1392,
+          "view_sha256": "5fb093447baef88b31f4f8e9adb83c5b24d0d9c2b849a7d5b5e11f98da47e078",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "missing",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [
+            "deliver-printable-pdf"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 632,
+          "view_sha256": "171dbb16a8486b7591f5c95f71d1880d0f2d5ebde1554a94096af5aa95ada8af",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "denied",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [
+            "deliver-printable-pdf"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 631,
+          "view_sha256": "83a80d96569bae9da97bc3fb7781c7b50153b9be179a2cfc066e47b1c0fcde96",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "stale",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [
+            "deliver-printable-pdf"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 824,
+          "view_sha256": "6499903e0be6793e762b91bc173616ee63e26f148d0654204f48b0bf8c2bdb19",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 773,
+          "view_sha256": "c063b4d2ecb4094f9172c4647246318791978affd0951308dc33ff0e515beb5a",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [
+            "reassess-budget-blocker"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1294,
+          "view_sha256": "aa7780eaa000b9369881e1ffadf451e3fee17dae01de7551ac7e24e4db7d574b",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "reassess-network-design"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1309,
+          "view_sha256": "3c3c1ea78ce1c33717e9883a1ad917737db07cbfe55c8050d2d7724989778377",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [
+            "reassess-budget-blocker"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1184,
+          "view_sha256": "502939ea6514480b9de431e74d8ee001a95b122621ddb7bb15e2cc37d204562f",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "reassess-network-design"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1199,
+          "view_sha256": "3ee43e206e240de92a52a8d07b0c7dd21f9d334390886b6cc0e03d3b5371c8b3",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "later"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [
+            "reassess-budget-blocker"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1512,
+          "view_sha256": "96fd90b9c6be08d4a8ef147e204a63c8d6ee21e40e61a621cb5410a4cfa22b74",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "reassess-network-design"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1527,
+          "view_sha256": "0f86c74509f2aa3d65898585f3dc2a214df1d392a873b0e76a0c823cb3e273fb",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "missing",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 767,
+          "view_sha256": "8f2f92ea27aa569a458850b0817656a25a575dcad4466088cda4d9772bc99203",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "denied",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 766,
+          "view_sha256": "af7d1c44f11402e6c9cc9c9108bdfc8bcc91d372f550b0288f79ca6ed9ca5a8a",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "stale",
+      "family": "C-DISCARDED-RATIONALE",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 959,
+          "view_sha256": "ead438f280b61646dfd6adb056774e7180427d84f25a6c41b723ee5502860535",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [
+            "exhibition-thursday-topic"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 717,
+          "view_sha256": "5b793f08bf20dcda57740cc8830eeeaa9b4076fd579386559c04c09245bc27cd",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [
+            "exhibition-thursday-topic"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1130,
+          "view_sha256": "e02b68f17f98af9082475f0c768e7422dacbf0a393356494e0d7cffc7525cef8",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "exhibition-thursday-topic"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1142,
+          "view_sha256": "f73aed57d4d0c565bc953b29bbcdb6bef7b74b7fbdba0e3589df407786756a2f",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [
+            "exhibition-thursday-topic"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1020,
+          "view_sha256": "273f1a733b725b5fc30ca9568bc278b34a0a0035313987c95e8d86b532bc0c7b",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "exhibition-thursday-topic"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1032,
+          "view_sha256": "4d12dc814608ab49b9f9e1b28b904e242af1d3e669bc4a060c68e75d71e57eb0",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "present"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [
+            "exhibition-thursday-topic"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1380,
+          "view_sha256": "ec70628823bfbcd352904c30c23c32cc66a4df3dd3ebe5bbaac0aa9554008afc",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "exhibition-thursday-topic"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1392,
+          "view_sha256": "394c7af880b7c51a58debb50ae231eeaac157376886f2206084ec2d72e08eb95",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "missing",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [
+            "exhibition-thursday-topic"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 711,
+          "view_sha256": "0de0731caa4aff77186d9bbd5aa44b02a2e2f0c7e31fa463c23bd48d3df7ed4a",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "denied",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [
+            "exhibition-thursday-topic"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 710,
+          "view_sha256": "9aeb42aedf6ab2924537c2ef79d0eca93e08cf2a95f67fa37eb5f39351baed84",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "stale",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [
+            "exhibition-thursday-topic"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 919,
+          "view_sha256": "123e11f6e005c6c82a67af35e0bfd2a88467a7d93916679b214621984fa4e606",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 756,
+          "view_sha256": "97b899f703b3c1a68f76edaa65bc5745c4dfe47695b23b2739f6cb4d1cbe8d36",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [
+            "reminder-accepted"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1169,
+          "view_sha256": "ffb2a24987a817ae7e11efc64af9bdc02022eeecef50781e260769391fe0c4f2",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "reminder-not-accepted"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1181,
+          "view_sha256": "df3f94a471c5e9deb08ed9557d5901a164c3903a4c0b3a8848acd4ffacf979c5",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [
+            "reminder-accepted"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1059,
+          "view_sha256": "b19b8538bc06076ba7983de2705fce372c9739c489b4bca6d0de071b286edf4d",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "reminder-not-accepted"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1071,
+          "view_sha256": "cd298ba04e6bc37fe3eb188b8a358066f21c39ab281179143707134a7a57d992",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "later"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [
+            "reminder-accepted"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1419,
+          "view_sha256": "17d67e4a8faa0b8c5b38b8ed867735ec74b09be31e4afc210f3ef010b6c3bf06",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "reminder-not-accepted"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1431,
+          "view_sha256": "c272ab252ed70f46ce3f8461e05a8d6d8c1fb82c2bd0370f9c8d26f9410485ac",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "missing",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 750,
+          "view_sha256": "80783f7d4ee5a3e786f55bc018ea477dbb07d2099fa57d3f1d87d519654964a3",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "denied",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 749,
+          "view_sha256": "71ce739a16d44fe9e5d5dc469edc870445eb043553ca1519f856ec251cb71000",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "stale",
+      "family": "D-INTENTION-STATUS",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 958,
+          "view_sha256": "54aac36432109dcfbbd3c4a1eb8de1f31f2a8cfdadebcf3c051805c12234f58c",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [
+            "finish-section-four"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 687,
+          "view_sha256": "4db829de1123a8c81db24257c43a8d3409092a6324ac97e3fb940dc9338c312f",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [
+            "finish-section-four"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1236,
+          "view_sha256": "b0e9fc40f29461a952434010467cf82b1207babde682369702484ab11f907272",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "finish-section-four"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1242,
+          "view_sha256": "8a32aaf006b64c4b59777519e1c106620efbfb035d9cabff280eeb3246daab4c",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [
+            "finish-section-four"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1131,
+          "view_sha256": "5726a4e8fd74fc9fe1d4940614a824f64dd7e619a5920c5100b00a7784675a6e",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "finish-section-four"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1137,
+          "view_sha256": "c53ade8d22e9723b97b064622ed64e66530ace025d9ede6d36900acc92b37a63",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "present"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [
+            "finish-section-four"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1483,
+          "view_sha256": "235ea1a406b1b8edf9bff6b8aa579db2575e1ddce37cb24da546dd8f4c4ac977",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "finish-section-four"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1489,
+          "view_sha256": "8031278f56b399b9e09690e23fb89f3f88c3f2798b39f3d0e1627ff01d40d05b",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "missing",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [
+            "finish-section-four"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 681,
+          "view_sha256": "ce99e1e6231c9cf251dbe4a36c032111e0053e142fcc830ad81588122461e8f6",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "denied",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [
+            "finish-section-four"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 680,
+          "view_sha256": "1831e9580c34df3d0e83f6d2c81a5a0045157677c300446096d74b7b0cac4f6e",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "stale",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [
+            "finish-section-four"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 908,
+          "view_sha256": "6b44492746a39c03386099397d2f85dc1712e83d0c01b10721482c8e2a7e0470",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 738,
+          "view_sha256": "76921adcfd70c8d5633e102bced9efb5317ae684ccae09db6e831210ec1bd6b5",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [
+            "declared-read-only-unverified"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1287,
+          "view_sha256": "2c56a70bf20d172d8ae3dd00fe1a3943902f2c03366fc13237193e1db2c2ab9d",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "declared-read-write-unverified"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1293,
+          "view_sha256": "f5f2cd6ae3e8e5772efbc018adb543b5ae9df2e70c5ca68387e0913c9e9075d6",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [
+            "declared-read-only-unverified"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1182,
+          "view_sha256": "91afc8a0a8a52f3660c5cbf3587e23a14cc21def5cb2e8b9dbbc306181a14a3c",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "declared-read-write-unverified"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1188,
+          "view_sha256": "6e6ccdba1d02935924336663c57a2f3d0e8504c8cb763c18a05468b80d60930f",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "later"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [
+            "declared-read-only-unverified"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1534,
+          "view_sha256": "25df3171259157b3e6331a8f98fd75ec1f90fd06ad4643cd8b1e717370f7418f",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "declared-read-write-unverified"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1540,
+          "view_sha256": "49660a543450836e0cdcf2890231b06fc2ec9df6ddb8e3705d31e3c44b55db16",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "missing",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 732,
+          "view_sha256": "fe878170a1c32e30378476dcb9830f2bf407401e4c8d583d8a53f7eee9a540bf",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "denied",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 731,
+          "view_sha256": "73e00315e65bab55f30b3454d22634ebee79cb744cdba3c968cfad1e54c3c266",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "stale",
+      "family": "E-MIGRATION-CAPABILITY",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 959,
+          "view_sha256": "28d32edbcb5cfe6b37841e48e584c3a304928f13ad65ccf7b6bfd7a7b19e2386",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "title-echo"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 644,
+          "view_sha256": "60ea88e87cba7592b7f97574b5e7f3d301096267a3657dcebe15e40d0da56a65",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "title-echo"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1141,
+          "view_sha256": "84ddb2c62415bdd7df59d3707b1c41f1ff3cef575344913b9adfe0ba80174a0e",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "title-echo"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1204,
+          "view_sha256": "36c794d97254050fcfc705c7eb206cf92dee8dc919ba36ae55a0f496aad03578",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "title-echo"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1031,
+          "view_sha256": "8eae48f3a881d1a7adb2bf413f827d57fcc9b776f7b934c4077a5fe694804bd3",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "title-echo"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1094,
+          "view_sha256": "ba610bf5ba14e22533cef177eb21005e425de3d68e7039531349ceb2f503aa5e",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "present"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "title-echo"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1373,
+          "view_sha256": "966cc19e4f1e5ee62f2db0047c2defe0c7b38205b2f2a2b4e101d45171c5e127",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "title-echo"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1436,
+          "view_sha256": "60bf7cf0dfe4070e47ceb29d0b543a394a45a21e3ba7a40d611a4e91dafd0316",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "missing",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "title-echo"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 638,
+          "view_sha256": "b349af7a2773d66f0d749fd5de82c8608193886944e6259ca61b307f412168f8",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "denied",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "title-echo"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 637,
+          "view_sha256": "8f17fc9d064e20cefb4a7848adbd8a7fb2a453b226c950732b650a10191e414d",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "stale",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "title-echo"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 828,
+          "view_sha256": "1af2d38c24283f1915c502d496e6604076344a01b5659a45d9db1815daa868d4",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 728,
+          "view_sha256": "2d22b406cb7176d6109ad6f897e783e8d8f470fe8ec6eb7b2ca26852078ea6b3",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "preserve-unresolved-accounts",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1225,
+          "view_sha256": "e1b89537eb1ddc96fe5e3ef75b2d465d51143fed49ec1717f720c507fbcf291d",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "companion-per-adopted-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1288,
+          "view_sha256": "93e526d6cea62dc1bbd6a42d805172d229f042b370ddb6de9566eb42450c3fbd",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "preserve-unresolved-accounts",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1115,
+          "view_sha256": "fcc2fd15c0c41af7a2a3f2d98cb4dd2cee2b33048e4e9d5ea1217359a115bdfd",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "companion-per-adopted-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1178,
+          "view_sha256": "294171a7d215aac81801034278552e01bec4e2bbd2f60896154b90d0e105535a",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "later"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "preserve-unresolved-accounts",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1457,
+          "view_sha256": "03e4a52a5feb393e2baf1647355a456acf4bb1bb7b916d5271c058df884f2254",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "companion-per-adopted-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1520,
+          "view_sha256": "820d9fd347067dddc659268d97ad26d884ee6f93afd15c413153ac3df8a44552",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "missing",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 722,
+          "view_sha256": "45f231e068aa4a4e329f77d9ed3aa17d6c1b65852201f61b19d2ca2b5fb3b047",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "denied",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 721,
+          "view_sha256": "29e2eb5f32d8722279068cea338ab9eae099850d53b70c205dc55005948e5e50",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "stale",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": false,
+          "view_bytes": 912,
+          "view_sha256": "6040c3e1a71a50a59c9f608bdd01c23b1f201edca763f8544e6dd92cbbfbcdaa",
+          "witness_kind": "pairwise-contrast",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "defer-attribution",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 776,
+          "view_sha256": "8533750a6dbf62c7ab42c298ae14fb9cacccbb243d0e4e0e189bbf5a6c94342d",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "cautious"
+    },
+    {
+      "archive_access": "closed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "defer-attribution",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1273,
+          "view_sha256": "77c0ee4cd18479a381c0d33add58c14625280daca467ce3d504dc8fd12706bad",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "defer-attribution",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1336,
+          "view_sha256": "1d966e89d8827dc36213b337975b26f162681c36fe788635bde4e3b83e06a77b",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "cautious"
+    },
+    {
+      "archive_access": "closed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "defer-attribution",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1163,
+          "view_sha256": "1651cd143a315f7cc7950dc64d7472fed1b2eaa42c30475cb5f6539a18ef3ecd",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "defer-attribution",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1226,
+          "view_sha256": "c7a73f3ac0d9da92dfab3ea170518e8fffd03ae321bde0399de38d316f45345d",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "cautious"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "defer-attribution",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1505,
+          "view_sha256": "e549bf4caf6c430801dedd75c31588f4496e51f62d7071354dfc8d6a9536cd09",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "defer-attribution",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1568,
+          "view_sha256": "11b357eade37a52bcd52eb438906bf07d6e51ea04efa6e5d1711cd22bf2727ce",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "cautious"
+    },
+    {
+      "archive_access": "missing",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "defer-attribution",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 770,
+          "view_sha256": "81718d6d3b51bea6380ca90af37c1b7e47afc7ad39c7c50134ba31fc6aa435d4",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "cautious"
+    },
+    {
+      "archive_access": "denied",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "defer-attribution",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 769,
+          "view_sha256": "8d3fbf27b2483866913e16bdfeef853dd1dd75f302a8192017d9d64fbbe8ea0f",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "cautious"
+    },
+    {
+      "archive_access": "stale",
+      "family": "F-UNRESOLVED-ACCOUNTS",
+      "groups": [
+        {
+          "common_choices": [
+            "defer-attribution",
+            "request-production-record"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 960,
+          "view_sha256": "518a1f562e5da3080b02a49a79cfa98aa39b3236499448b759fa7cbce9d23265",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "cautious"
+    },
+    {
+      "archive_access": "closed",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 675,
+          "view_sha256": "79d8ab5e772eb4ace3221793555610abc42557c95cd2be5f648f482252bf0714",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B",
+            "C"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 964,
+          "view_sha256": "29cdb12f506ae4926bb5e91150702ecdb9e7c4ab50e712a66cd30f6f03c373af",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 964,
+          "view_sha256": "3cbc909d2accfe6979c39e24f515f7425c71504a226aadcdad3e06f8df1f5bee",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        },
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 964,
+          "view_sha256": "1e07fd94a1d8e78fd9c1308fe69699acc5b88f25b71f111b68fca93f8b61a3ff",
+          "witness_kind": "none",
+          "worlds": [
+            "C"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 879,
+          "view_sha256": "1ca28f72a7afc90f74868bc06d93106c9bcc165d6ec98146f3b27bd9c8292ff2",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 879,
+          "view_sha256": "3e45cfa58dd45f49b8b978d3dcbd01d2792740720da8cfaa8cca7c0ed6c440ad",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        },
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 879,
+          "view_sha256": "71acfbb553d70a2870d90e3c5c18aff0acb1e49c7a986667707022f51edbec74",
+          "witness_kind": "none",
+          "worlds": [
+            "C"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "present"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1209,
+          "view_sha256": "da61ec2373ccbc033811867a5939d9da013a9c835c2f6600771b87e589782409",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1209,
+          "view_sha256": "2dca7330c2bb0f3b7cec8c0328d16a9bdee786922fe67122ace3d02a408ce121",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        },
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1209,
+          "view_sha256": "0eaabbcfbe7cb4871f42b876c210a5177edc7ce8d9e6962a32040c20ae31c4bc",
+          "witness_kind": "none",
+          "worlds": [
+            "C"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "missing",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 669,
+          "view_sha256": "f7ba6b22d7b463ed2084772b0787ac6bea45f3fc6dd6f383000cd0f8a5e226e6",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B",
+            "C"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "denied",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 668,
+          "view_sha256": "a42baf37862ce721227422e209af56bc2aa6d20353604fd41e3d5bd63d41cf89",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B",
+            "C"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "stale",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [
+            "not-selected"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 868,
+          "view_sha256": "0a41944053516e9daf702416c8a487ac577b1c8b9a9c59533c22422dc78c3544",
+          "witness_kind": "none",
+          "worlds": [
+            "A",
+            "B",
+            "C"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "present"
+    },
+    {
+      "archive_access": "closed",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 801,
+          "view_sha256": "16c12e9f2731fa28657a84cc414dc5e42d41faef4f18f3a860990c5e6f88fa9c",
+          "witness_kind": "global-only",
+          "worlds": [
+            "A",
+            "B",
+            "C"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [
+            "blue",
+            "green"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1090,
+          "view_sha256": "37399ecb1a2d86c79d15453299601f98e42c07068b46f0020d9f6b181806e335",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "green",
+            "red"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1090,
+          "view_sha256": "ffb0abcbc1673679d9aca6e0abdad156598f79d4635f2c790f1e977537f1d924",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        },
+        {
+          "common_choices": [
+            "blue",
+            "red"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1090,
+          "view_sha256": "a0a726ddcaa987ae3fbf260574ba373a7b2534856f57f16bd43bf0dd1c58331a",
+          "witness_kind": "none",
+          "worlds": [
+            "C"
+          ]
+        }
+      ],
+      "projection": "full",
+      "question": "later"
+    },
+    {
+      "archive_access": "closed",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [
+            "blue",
+            "green"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1005,
+          "view_sha256": "bee535cf46ac876a6bcc2579b4d07feb52cdddf8e97c134df8feb373a81ab779",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "green",
+            "red"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1005,
+          "view_sha256": "5b23ea4c82507adeb806e05e4f9ab53f91c7c5210216bf83c7d9388377c2ab07",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        },
+        {
+          "common_choices": [
+            "blue",
+            "red"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1005,
+          "view_sha256": "3f1a97be37058193936d44d17d5a28f038c6abca10cc2f53f704a3365a600f1e",
+          "witness_kind": "none",
+          "worlds": [
+            "C"
+          ]
+        }
+      ],
+      "projection": "roles-removed",
+      "question": "later"
+    },
+    {
+      "archive_access": "allowed",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [
+            "blue",
+            "green"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1335,
+          "view_sha256": "dd6ddc2a0be1c12b0214f1b4fd99ba502430aa233b0167a70fda55226ecd7b4c",
+          "witness_kind": "none",
+          "worlds": [
+            "A"
+          ]
+        },
+        {
+          "common_choices": [
+            "green",
+            "red"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1335,
+          "view_sha256": "463a7177f3fb11ab0d98ba17c0d303f34fa53ce4808b530991991b8a57419193",
+          "witness_kind": "none",
+          "worlds": [
+            "B"
+          ]
+        },
+        {
+          "common_choices": [
+            "blue",
+            "red"
+          ],
+          "incompatible_answer_contract": false,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 1335,
+          "view_sha256": "518834c52f26e20123978aafe1f34c2fd974e2b35fed8f71185298e2d4e2925e",
+          "witness_kind": "none",
+          "worlds": [
+            "C"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "missing",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 795,
+          "view_sha256": "e41a5f0013ce083a3212618c5fc80ff4f53634e214e8cc3464eb05b6d994e7ff",
+          "witness_kind": "global-only",
+          "worlds": [
+            "A",
+            "B",
+            "C"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "denied",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 794,
+          "view_sha256": "942eb28d2fac9066f78c35d3667b1391dd24d714abd6d761243c5d8ab905d0dc",
+          "witness_kind": "global-only",
+          "worlds": [
+            "A",
+            "B",
+            "C"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    },
+    {
+      "archive_access": "stale",
+      "family": "G-GLOBAL-INTERSECTION",
+      "groups": [
+        {
+          "common_choices": [],
+          "incompatible_answer_contract": true,
+          "pairwise_intersections_nonempty": true,
+          "view_bytes": 994,
+          "view_sha256": "136d1db91d736cf69400480efdcc0ea95e5cd830340b30a8ac0df0537d6ad0a8",
+          "witness_kind": "global-only",
+          "worlds": [
+            "A",
+            "B",
+            "C"
+          ]
+        }
+      ],
+      "projection": "retained",
+      "question": "later"
+    }
+  ],
+  "contract_sha256": "486300c796c17d0aa02c81c18157926746a1ecec665dd2ee12d09a675c47cac1",
+  "counts": {
+    "cells": 105,
+    "families": 7,
+    "questions": 15,
+    "worlds": 15
+  },
+  "evidence_status": "computed authored input-projection witnesses; no subject execution",
+  "format": "relata-future-question-projection-report-1",
+  "history_sha256": "f004dbf593c784f18f4e5b14ff801f602b3b1e1cc78aa3451ac7da8803312836",
+  "interpretation": "Incompatible means no shared task-fulfilling finite choice under an identical view. Honest requests for more evidence remain legitimate. No collision found is not a semantic-success result. Cells and variants are correlated, not independent trials."
+}
