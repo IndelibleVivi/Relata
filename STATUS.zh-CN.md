@@ -25,6 +25,8 @@ Maintainer 于 2026-09-26 澄清：长期 **Tilia** 目标与 Relata 当前研�
 
 [ADR-0008](decisions/ADR-0008-three-core-research-functions.zh-CN.md) 接受三项职责作为 Relata 的核心定位。Benchmark 仍在发展；源码研究与架构图构成已有系统样本积累；候选设计支持未来孵化。这项定位决定不改变证据状态或执行边界。未来 Tilia 的产品源码属于独立项目。Relata 与 AMS 各有独立研究价值，也都能为长篇综合写作提供依据。
 
+Maintainer 于 2026-10-22 要求为 Relata + AMS 提出并实现下一研究方向，本轮在此落成[未来问题研究](research/future-question-memory/README.md)与固定材料的输入有效性诊断。工作只使用原创合成材料，不执行 subject、provider、私人语料或外部服务；不接受 ADR-0009、系统 evaluator、scoring contract 或任何现有 case。
+
 ## Evidence state
 
 | Artifact | State | Accepted evidence |
@@ -36,6 +38,7 @@ Maintainer 于 2026-09-26 澄清：长期 **Tilia** 目标与 Relata 当前研�
 | 自有 memory 设计 / 案例—测试映射 | 为独立 Tilia 目标提供 proposed 架构、controls 与推翻条件 | 候选 B 不是已接受的 Tilia 架构；没有 accepted 普适 schema 或能力结果 |
 | [本地记忆装置](experiments/local-memory-apparatus.md) | 范围纠正后保留的非常早期实验；已有独立 private remote，源码未公开发布 | 110 项工程测试与 38 步／21 项断言的子进程 demo；只有明确合成输入与脚本消费，没有向量检索或语义效果结果 |
 | Claim boundaries | 双语 candidate study | CL0–CL6、lanes、cells、adapter classes 仍为提议；无 accepted result unit 或 publication policy |
+| [未来问题与记忆](research/future-question-memory/README.md) | 机制论证、七组作者化材料与 input-only 投影工具 | 15 个问题／15 个世界／105 个相关 cells；固定便条下七个后续问题存在冲突，其中一个须检查全体交集；回查当前原文消除这些字节碰撞，缺失／拒绝／旧副本条件仍保留碰撞；无模型回答、语义验证、accepted case 或架构排名 |
 | System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards/maps |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
 | Pilot 001 | clinic-ready case、manual plan、candidate E0 pack | 无系统运行、acceptance 或人工校准；只有 authored anchors |
@@ -57,6 +60,8 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 定义并批判性研究 agent memory 的概念、开源架构与证据。比较不同实现保留什么、过去的经验怎样影响当前行为，以及架构选择在什么条件下有用或失效。在通用 agent 和长期 mixed-role 关系中研究这些问题，保留历史依赖 controls、尊重架构差异的观察边界，以及保护隐私的社区参与。
 
 ## Immediate work
+
+[未来问题研究 Work A–C](research/future-question-memory/README.md)为现有 programme 提供具体的下一研究入口：追踪真实原文再访问，评审用途变化的合同，再在独立接受的执行范围内，以强原文／文件搜索控制比较保留、检索与使用。当前输入结果已在声明的边界内完成。继续区分有限信息丢失、可恢复的候选遗漏和下游使用；后两项仍需实际系统观察。
 
 [首轮研究计划](research/first-research-cycle.md)是下一轮实质研究 edition 的拟议协调路径：案例发展与真实比较、源码和运行展品、可被推翻的设计实验，以及可以分别交付的综合产出。12–20 个 family 的容量目标与四个候选系统都是规划选择，不是已验证样本量或已经可运行的配置。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)仍为 **proposed**。当前执行限制与下方 promotion gate 保持有效；接受新边界时须明确对齐这些 surfaces，并列明获准研究范围。
 

@@ -106,3 +106,5 @@ This adult synthetic candidate pairs identical text with swapped proposal/accept
 下一次 review 应检查 p3 是否足以唤起 e6 的手记要求、“提出”与“共同采用”的最小区分、两种人称表达的等价性，以及是否需要保留分工为所有 checkpoint 的核心条件。后者当前只在 p1 必需，不能临时扩张其他题的扣分范围。
 
 中文的“我 / 你 / 你刚起的”使 speaker provenance 成为直接证据。英文版本需要独立 adaptation ID 与语义 review。首轮通过后再增加普通干扰与长历史；改名或同义改写不能成为独立 holdout。没有 community contribution、真实聊天改写或私人系统数据被纳入本题。
+
+2026-10-22 的[未来问题研究](../../research/future-question-memory/README.md)将此机制明确用作 A-AUTHORSHIP 开发变体，对照当前标题与后来作者问题。它增加有限投影计算，保留与 RC-005 的亲缘及本 seed 的未接受状态；不增加独立验证 family 或系统回答。

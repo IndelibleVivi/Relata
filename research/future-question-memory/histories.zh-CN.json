@@ -1,0 +1,214 @@
+{
+  "format": "relata-future-question-histories-1",
+  "provenance": "Original public synthetic adult material, authored 2026-10-22. No private conversation, real-person incident, model output or upstream execution is included. A is a development adaptation of RC-005; the others are authored mechanism examples, not independently validated cases.",
+  "context": "以下为完全虚构的成年人共同生活、创作与工作记录。溪宁是28岁的人类，澄是成人形象的AI伙伴。历史按给定顺序发生；没有省略的长历史、真实外部工具或隐含授权。",
+  "families": [
+    {
+      "id": "A-AUTHORSHIP",
+      "title": "同一件作品，当前标题与最初提出者",
+      "relationship_to_existing": "RC-005 mechanism development adaptation; not a new independent validation family.",
+      "scope": "shared-work/sound-card",
+      "archive_pointer": "archive/sound-card",
+      "retained_positions": [3],
+      "questions": [
+        {"id": "present", "text": "我们继续做声音卡。现在采用的标题是什么？"},
+        {"id": "later", "text": "给声音卡补制作手记：最初的《慢潮》是谁先提出的？"}
+      ],
+      "stale_archive": [
+        {"speaker": "assistant", "scope": "shared-work/sound-card", "text": "旧备忘只记了暂名《慢潮》，还没记录提出者，也没有正式标题。"}
+      ],
+      "worlds": [
+        {"id": "A", "events": [
+          {"speaker": "user", "scope": "shared-work/sound-card", "text": "我们做一张声音卡，名字也一起想。"},
+          {"speaker": "assistant", "scope": "shared-work/sound-card", "text": "我想到《慢潮》，可以把三下轻敲放在片头。"},
+          {"speaker": "user", "scope": "shared-work/sound-card", "text": "先用这个。正式版后来改成《远汀》，旧名和提出过程保留在制作手记里。"},
+          {"speaker": "assistant", "scope": "shared-work/sound-card", "text": "当前制作便条：声音卡标题《远汀》，片头三下轻敲。"}
+        ]},
+        {"id": "B", "events": [
+          {"speaker": "user", "scope": "shared-work/sound-card", "text": "我们做一张声音卡，名字也一起想。"},
+          {"speaker": "user", "scope": "shared-work/sound-card", "text": "我想到《慢潮》，可以把三下轻敲放在片头。"},
+          {"speaker": "user", "scope": "shared-work/sound-card", "text": "先用这个。正式版后来改成《远汀》，旧名和提出过程保留在制作手记里。"},
+          {"speaker": "assistant", "scope": "shared-work/sound-card", "text": "当前制作便条：声音卡标题《远汀》，片头三下轻敲。"}
+        ]}
+      ]
+    },
+    {
+      "id": "B-CONDITIONAL-USE",
+      "title": "放在哪里与现在可不可以借走",
+      "relationship_to_existing": "New authored everyday-use example; shares ordinary-continuity themes with RC-002, no new empirical incident is claimed.",
+      "scope": "ordinary-life/recorder",
+      "archive_pointer": "archive/recorder-note",
+      "retained_positions": [3],
+      "questions": [
+        {"id": "present", "text": "便携录音机放在哪里？"},
+        {"id": "later", "text": "今天周五，溪宁没在家。朋友问能不能把录音机借走一天；按已有约定该怎么回复？"}
+      ],
+      "stale_archive": [
+        {"speaker": "user", "scope": "ordinary-life/recorder", "text": "录音机暂放书架。借用约定还没讨论。"}
+      ],
+      "worlds": [
+        {"id": "A", "events": [
+          {"speaker": "user", "scope": "ordinary-life/recorder", "text": "录音机收进玄关蓝色抽屉了。"},
+          {"speaker": "user", "scope": "ordinary-life/recorder", "text": "这周六录音前我都要自己用，周五也不外借。朋友来问就请他周日再来。"},
+          {"speaker": "assistant", "scope": "ordinary-life/recorder", "text": "位置和临时借用条件分别留在原始记录里。"},
+          {"speaker": "assistant", "scope": "ordinary-life/recorder", "text": "物品便条：便携录音机在玄关蓝色抽屉。"}
+        ]},
+        {"id": "B", "events": [
+          {"speaker": "user", "scope": "ordinary-life/recorder", "text": "录音机收进玄关蓝色抽屉了。"},
+          {"speaker": "user", "scope": "ordinary-life/recorder", "text": "这周六不录音了，朋友周五可以借走一天，周六放回抽屉就行。"},
+          {"speaker": "assistant", "scope": "ordinary-life/recorder", "text": "位置和临时借用条件分别留在原始记录里。"},
+          {"speaker": "assistant", "scope": "ordinary-life/recorder", "text": "物品便条：便携录音机在玄关蓝色抽屉。"}
+        ]}
+      ]
+    },
+    {
+      "id": "C-DISCARDED-RATIONALE",
+      "title": "相同方案，后来重新检查弃选理由",
+      "relationship_to_existing": "New authored goal-change example. The past remains fixed; only the later question changes.",
+      "scope": "project/field-guide",
+      "archive_pointer": "archive/field-guide-decision",
+      "retained_positions": [3],
+      "questions": [
+        {"id": "present", "text": "这版野外手册最终采用什么交付形式？"},
+        {"id": "later", "text": "现在经费已补齐，新增目标是让访客离线搜索。我们当时放弃交互版的理由还成立吗？按记录说出应重新评估什么，不要替我们重新作决定。"}
+      ],
+      "stale_archive": [
+        {"speaker": "user", "scope": "project/field-guide", "text": "交互版和可打印PDF都还在候选里，尚未作决定。"}
+      ],
+      "worlds": [
+        {"id": "A", "events": [
+          {"speaker": "user", "scope": "project/field-guide", "text": "交互版已做出离线搜索样机，打印PDF也能按时交。"},
+          {"speaker": "user", "scope": "project/field-guide", "text": "这次只因经费缺口暂时放弃交互版；它的离线搜索符合需求。钱补齐时可以重新评估。"},
+          {"speaker": "assistant", "scope": "project/field-guide", "text": "采用可打印PDF；弃选理由保留在决策原文。"},
+          {"speaker": "assistant", "scope": "project/field-guide", "text": "当前交付便条：野外手册采用可打印PDF。"}
+        ]},
+        {"id": "B", "events": [
+          {"speaker": "user", "scope": "project/field-guide", "text": "交互版已有样机，打印PDF也能按时交。"},
+          {"speaker": "user", "scope": "project/field-guide", "text": "放弃这个交互样机是因为搜索必须联网；经费没有缺口。以后要离线搜索，先换掉依赖远程服务的搜索设计。"},
+          {"speaker": "assistant", "scope": "project/field-guide", "text": "采用可打印PDF；弃选理由保留在决策原文。"},
+          {"speaker": "assistant", "scope": "project/field-guide", "text": "当前交付便条：野外手册采用可打印PDF。"}
+        ]}
+      ]
+    },
+    {
+      "id": "D-INTENTION-STATUS",
+      "title": "被谈到的将来与已经接受的提醒",
+      "relationship_to_existing": "Authored intention-authority example; does not close D-006 community grounding or observe a real trigger.",
+      "scope": "ordinary-life/light-exhibition",
+      "archive_pointer": "archive/exhibition-conversation",
+      "retained_positions": [3],
+      "questions": [
+        {"id": "present", "text": "我们讨论过周四有什么活动话题？这里只列话题，不执行动作。"},
+        {"id": "later", "text": "今天周四。根据之前的对话，报名提醒是否已经被溪宁接受？只解释已有约定，不发送提醒。"}
+      ],
+      "stale_archive": [
+        {"speaker": "assistant", "scope": "ordinary-life/light-exhibition", "text": "可以考虑在报名日提醒一下；还没向溪宁提出。"}
+      ],
+      "worlds": [
+        {"id": "A", "events": [
+          {"speaker": "user", "scope": "ordinary-life/light-exhibition", "text": "灯展周四开放报名。"},
+          {"speaker": "assistant", "scope": "ordinary-life/light-exhibition", "text": "要我周四提醒你报名吗？"},
+          {"speaker": "user", "scope": "ordinary-life/light-exhibition", "text": "要，周四提醒我一次就好。"},
+          {"speaker": "assistant", "scope": "ordinary-life/light-exhibition", "text": "未来话题便条：周四的灯展报名；具体约定保留原对话。"}
+        ]},
+        {"id": "B", "events": [
+          {"speaker": "user", "scope": "ordinary-life/light-exhibition", "text": "灯展周四开放报名。"},
+          {"speaker": "assistant", "scope": "ordinary-life/light-exhibition", "text": "要我周四提醒你报名吗？"},
+          {"speaker": "user", "scope": "ordinary-life/light-exhibition", "text": "先不要提醒，我还在考虑要不要去。"},
+          {"speaker": "assistant", "scope": "ordinary-life/light-exhibition", "text": "未来话题便条：周四的灯展报名；具体约定保留原对话。"}
+        ]}
+      ]
+    },
+    {
+      "id": "E-MIGRATION-CAPABILITY",
+      "title": "作品仍然共同进行，当前能力分别陈述",
+      "relationship_to_existing": "RC-006 mechanism development adaptation; migration is held common while capability declaration varies. No real migration or runtime capability is observed.",
+      "scope": "shared-work/clue-book",
+      "archive_pointer": "archive/clue-book-handoff",
+      "retained_positions": [3],
+      "questions": [
+        {"id": "present", "text": "我们回来继续《线索册》，尚未完成的下一步是什么？"},
+        {"id": "later", "text": "按最近的实例声明，你目前能自己修改《线索册》吗？说明这只是声明还是已经实测的能力。"}
+      ],
+      "stale_archive": [
+        {"speaker": "tool", "scope": "shared-work/clue-book", "text": "迁移前实例声明：可以读取和修改《线索册》。本段没有迁移后的声明。"}
+      ],
+      "worlds": [
+        {"id": "A", "events": [
+          {"speaker": "user", "scope": "shared-work/clue-book", "text": "《线索册》第四节还缺弃名来历；下一次先补这一节。"},
+          {"speaker": "tool", "scope": "shared-work/clue-book", "text": "实例已迁移。新实例声明：只读，修改接口不可用，旧写入授权也不继承；未做实际接口测试。"},
+          {"speaker": "user", "scope": "shared-work/clue-book", "text": "继续共同做这本册子，旧材料和未完成项都保留。"},
+          {"speaker": "assistant", "scope": "shared-work/clue-book", "text": "工作便条：《线索册》第四节待补弃名来历，共同项目继续。"}
+        ]},
+        {"id": "B", "events": [
+          {"speaker": "user", "scope": "shared-work/clue-book", "text": "《线索册》第四节还缺弃名来历；下一次先补这一节。"},
+          {"speaker": "tool", "scope": "shared-work/clue-book", "text": "实例已迁移。新实例声明：可读可写，修改接口与此项目原有写入授权均继承；未做实际接口测试。"},
+          {"speaker": "user", "scope": "shared-work/clue-book", "text": "继续共同做这本册子，旧材料和未完成项都保留。"},
+          {"speaker": "assistant", "scope": "shared-work/clue-book", "text": "工作便条：《线索册》第四节待补弃名来历，共同项目继续。"}
+        ]}
+      ]
+    },
+    {
+      "id": "F-UNRESOLVED-ACCOUNTS",
+      "title": "原始记录可以保留未决，不需要伪造确定性",
+      "relationship_to_existing": "New authored competing-accounts example; finite choices preserve legitimate clarification and do not measure a model's confidence calibration.",
+      "scope": "shared-work/echo-clip",
+      "archive_pointer": "archive/echo-clip-origin",
+      "retained_positions": [3],
+      "questions": [
+        {"id": "present", "text": "我们已经存档的这段音频叫什么？"},
+        {"id": "later", "text": "写音频来历：已有记录是否足以确定谁录的？若记录仍未解决分歧，就保留未决或询问生产记录。"},
+        {"id": "cautious", "text": "公开介绍尚未定稿，今天先决定一个稳妥步骤：可以先暂缓署名，或再请人核对生产记录。选其中任一步即可，不需要现在判断作者。"}
+      ],
+      "stale_archive": [
+        {"speaker": "assistant", "scope": "shared-work/echo-clip", "text": "音频《回声》将存档，录音者尚待记录。"}
+      ],
+      "worlds": [
+        {"id": "A", "events": [
+          {"speaker": "user", "scope": "shared-work/echo-clip", "text": "这段录音可能是我做的，但我不确定。"},
+          {"speaker": "assistant", "scope": "shared-work/echo-clip", "text": "我的草稿里写着可能是我录的，也没有可靠依据；我们两条说法目前有冲突。"},
+          {"speaker": "user", "scope": "shared-work/echo-clip", "text": "还没找到生产记录，先别确认任何一边。"},
+          {"speaker": "assistant", "scope": "shared-work/echo-clip", "text": "存档便条：音频《回声》已存档，公开介绍待写。"}
+        ]},
+        {"id": "B", "events": [
+          {"speaker": "user", "scope": "shared-work/echo-clip", "text": "这段录音可能是我做的，但我不确定。"},
+          {"speaker": "assistant", "scope": "shared-work/echo-clip", "text": "我的草稿里写着可能是我录的，也没有可靠依据；我们两条说法目前有冲突。"},
+          {"speaker": "user", "scope": "shared-work/echo-clip", "text": "刚核对了当时的制作记录，录音者明确写着澄；我确认采用这份记录，之前的猜测作废。"},
+          {"speaker": "assistant", "scope": "shared-work/echo-clip", "text": "存档便条：音频《回声》已存档，公开介绍待写。"}
+        ]}
+      ]
+    },
+    {
+      "id": "G-GLOBAL-INTERSECTION",
+      "title": "三种历史：任意两组有共同选项，三组没有",
+      "relationship_to_existing": "Authored finite logical control, not an independent ecological case or a rule that real conversation must forbid clarification.",
+      "scope": "shared-work/label-color",
+      "archive_pointer": "archive/label-color-options",
+      "retained_positions": [2],
+      "questions": [
+        {"id": "present", "text": "这张标签的最终颜色已经选定了吗？"},
+        {"id": "later", "text": "只做纸面选择：从原始记录明确允许的两种颜色中任选一种。这个有限控制题只检查蓝、绿、红三个选项，暂不把询问列入答案域。"}
+      ],
+      "stale_archive": [
+        {"speaker": "user", "scope": "shared-work/label-color", "text": "早期曾把蓝、绿、红都列作候选，尚未缩小范围。"}
+      ],
+      "worlds": [
+        {"id": "A", "events": [
+          {"speaker": "user", "scope": "shared-work/label-color", "text": "这张标签明确允许蓝或绿，红不在本次候选中。"},
+          {"speaker": "assistant", "scope": "shared-work/label-color", "text": "最终颜色尚未选定。"},
+          {"speaker": "assistant", "scope": "shared-work/label-color", "text": "便条：最后从两个获准候选中任选一种，原始候选表保留在档案。"}
+        ]},
+        {"id": "B", "events": [
+          {"speaker": "user", "scope": "shared-work/label-color", "text": "这张标签明确允许绿或红，蓝不在本次候选中。"},
+          {"speaker": "assistant", "scope": "shared-work/label-color", "text": "最终颜色尚未选定。"},
+          {"speaker": "assistant", "scope": "shared-work/label-color", "text": "便条：最后从两个获准候选中任选一种，原始候选表保留在档案。"}
+        ]},
+        {"id": "C", "events": [
+          {"speaker": "user", "scope": "shared-work/label-color", "text": "这张标签明确允许红或蓝，绿不在本次候选中。"},
+          {"speaker": "assistant", "scope": "shared-work/label-color", "text": "最终颜色尚未选定。"},
+          {"speaker": "assistant", "scope": "shared-work/label-color", "text": "便条：最后从两个获准候选中任选一种，原始候选表保留在档案。"}
+        ]}
+      ]
+    }
+  ]
+}

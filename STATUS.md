@@ -25,6 +25,8 @@ The maintainer’s 2026-09-26 clarification separates the long-term **Tilia** go
 
 [ADR-0008](decisions/ADR-0008-three-core-research-functions.md) accepts the three functions as Relata's core identity. The benchmark remains under development; source studies and architecture views form the existing system collection; candidate designs support incubation. This identity decision changes no evidence status or execution boundary. Future Tilia product source belongs in a separate project. Relata and AMS retain independent research value and can both inform long-form synthesis.
 
+The maintainer's 2026-10-22 commission to propose and implement the next Relata + AMS direction is realized here as the [future-question study](research/future-question-memory/README.md) and its fixed-bundle input-validity diagnostic. This bounded work uses original synthetic material and no subject, provider, private corpus or external service. It does not accept ADR-0009, a system evaluator, a scoring contract or any existing case.
+
 ## Evidence state
 
 | Artifact | State | Accepted evidence |
@@ -36,6 +38,7 @@ The maintainer’s 2026-09-26 clarification separates the long-term **Tilia** go
 | Own-memory design / case-to-test map | proposed architecture, controls and falsification conditions for the independent Tilia goal | candidate B is not an accepted Tilia architecture; no accepted universal schema or capability result |
 | [Local memory apparatus](experiments/local-memory-apparatus.md) | very early experiment retained after scope correction; separate private remote, code not publicly published | 110 engineering tests and a 38-step / 21-assertion subprocess demo; explicit synthetic inputs and scripted consumption only, no vector retrieval or semantic result |
 | Claim boundaries | bilingual candidate study | CL0–CL6, lanes, cells and adapter classes remain proposals; no accepted result unit or publication policy |
+| [Future questions and memory](research/future-question-memory/README.md) | mechanism argument, seven authored families and input-only projection tool | 15 questions / 15 worlds / 105 correlated cells; seven later-question retained-view collisions, including one global-only intersection witness; current-source re-access removes these collisions, while missing/denied/stale conditions retain them; no model output, semantic validation, accepted case or architecture ranking |
 | System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards or maps |
 | Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
 | Pilot 001 | clinic-ready case, manual plan and candidate E0 pack | no system run, acceptance or human calibration; authored anchors only |
@@ -57,6 +60,8 @@ Templates, corrected contracts, generated fixtures and passing plumbing tests ar
 Define and critically examine agent memory across concepts, open-source architectures and evidence. Compare what different implementations preserve, how past experience affects current behavior, and the conditions under which their choices help or fail. Study these questions in general agent settings and in long-term mixed-role relationships, retaining history-dependent controls, architecture-sensitive observation and privacy-preserving community participation.
 
 ## Immediate work
+
+The [future-question study, Work A–C](research/future-question-memory/README.md) supplies a concrete next inquiry within the existing programme: trace real source re-access, review task-changing contracts, then compare retention/retrieval/use with strong raw-history and file-search controls under a separately accepted execution envelope. The current input result is complete at its declared boundary. Preserve the difference between finite information loss, recoverable candidate omission and downstream use; the latter two still need actual system observations.
 
 The [first research cycle plan](research/first-research-cycle.md) is the proposed coordination path for the next substantive edition: case development and real comparison, source and runtime exhibits, falsifiable design experiments, and synthesis with independently deliverable outputs. Its 12–20-family capacity target and four system candidates are planning choices, not validated sample sizes or runnable configurations. [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) remains **proposed**. Current execution limits and the promotion gate below remain in force; any acceptance must explicitly reconcile those surfaces and name the authorized study envelope.
 

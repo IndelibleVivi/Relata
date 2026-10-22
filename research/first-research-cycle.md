@@ -26,6 +26,8 @@ This proposed first research cycle links Relata's three core functions, its own 
 
 ## 2. 本周期要回答的三个问题
 
+**2026-10-22 的具体推进：** [未来问题与记忆研究](future-question-memory/README.md)把 Q1／Q3 的工作延续、原文基线与 scope 条件接到一个新问题：后来用途改变时，旧表示还能支持什么判断？本轮已经完成有界论证、七组完整合成材料和可重算的输入投影结果；其 Work A–C 提出下一步源码回查、合同评审及真实比较。这不替换下列三个问题，不改变 RC-005 native 首包的状态，也不把作者化材料计作独立验证或系统运行。
+
 **Q1 跨 session 的共同／项目工作延续。** 一个系统或 pipeline 能否在 session、revise、handoff 与迟到旧稿之间延续当前 authority，而不被“最新收到”或“最像目标”的材料改写。落点：RC-003 的 project supersession 与邻近 scope 隔离，RC-005 的当前标题与原始提出者 provenance。边界：RC-005 的三个 checkpoint 属于**一个 family** 且相互相关，不是三个独立世界；它测 fixed-history replay，不测持续 co-evolution。
 
 **Q2 更正改变后续影响的范围。** 一次更正如何沿实际 read paths 改变后续行为，同时不抹掉未被撤回的邻域。落点：RC-001 的 current-state-without-erasure，加上第 9 节的 source-derived propagation 问题（哪一层仍以旧值驱动行为）。这里要同时观察 required 与 prohibited 两侧，以及 positive task completion 与生命周期成本，而不是只统计违规。

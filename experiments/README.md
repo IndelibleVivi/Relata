@@ -4,6 +4,8 @@ R0 experiments are local, small, and evidence-producing. They investigate cases,
 
 ## Available offline tools
 
+The [future-question input diagnostic](../research/future-question-memory/README.md) computes task-relative collisions and global answer-region intersections for seven fixed authored families. Run `python3 -B tools/future_question_inputs.py audit` and `check`; `show` exposes source-only views without loading the separate answer contract. Source lookup returns actual current, missing, denied or known-stale material. No subject or semantic scorer is executed, and no benchmark case is promoted.
+
 - [RC-002 execution rehearsal](offline-rehearsal.md) — bundled scripted subject, transport/evidence checks; no model evaluation.
 - [RC-005 input preparation and audit](continuity-input-audit.md) — 18 unanswered speaker-preserving checkpoint inputs, source-bound verification, and literal projection collisions; no subject execution.
 
