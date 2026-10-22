@@ -1,16 +1,16 @@
 # Relata 第一研究周期计划（proposed）
 
 **Status:** proposed research programme plan。它不是 accepted 执行决定、结果论文、排定日程或已批准预算；任何 live study、部署与发布仍需各自授权。
-**Authority:** 依次遵循 [STATUS](../STATUS.md)、[CHARTER](../CHARTER.md)、[ASSUMPTION_REGISTER](../ASSUMPTION_REGISTER.md) 与 accepted decisions；[AGENTS.md](../AGENTS.md)将其落实为工程边界。[ADR-0008](../decisions/ADR-0008-three-core-research-functions.md) 已接受三项核心职能。有关探索性执行的边界见 proposed [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md)，它在被接受前不授予执行权限。
+**Authority:** 依次遵循 [STATUS](../STATUS.md)、[CHARTER](../CHARTER.md)、[ASSUMPTION_REGISTER](../ASSUMPTION_REGISTER.md) 与 accepted decisions；[AGENTS.md](../AGENTS.md)将其落实为工程边界。[ADR-0008](../decisions/ADR-0008-three-core-research-functions.md) 已接受三项核心职能。有关探索性执行的边界见 accepted [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md)，它仅激活具名 RC-005 → Mem0 包，整轮计划不因此获得通用执行权限。
 **Reuse:** 复用现有 cases、[十份 source studies](../systems/source-studies/README.md)、[architecture atlas](../systems/architecture-atlas/README.md) 与 [设计／测试映射](memory-design-test-map.md)；不新建 topology、运行接口或评分契约。
 
 ## 中文摘要
 
-本文提出 Relata 第一个实质研究周期的计划：把自有 benchmark 研究、系统样本研究空间（museum 名称仍开放）与未来系统 incubator 三项核心职能，加一条以证据为锚的 comparative synthesis 串起来。三项职能各有独立交付物，可以分别发布，不要求等待一次共同 release。周期围绕三个问题组织：跨 session 的共同／项目工作延续（RC-003/005）；更正如何改变后续影响而不破坏仍有效的邻域（RC-001 与 source-derived propagation 问题）；有用普通回忆与 scope/use/silence 的边界（RC-002/004）。计划把 12–20 个独立 incident families 设为**容量目标**而非科学样本量门槛，给出候选受测对象 readiness matrix、控制纪律、museum 的静态与运行 exhibit 计划（含读者端实现，公开阅读另需授权）、incubator 机制压力测试、一个以 RC-005 现有输入为预检起点、随后进入 native 路径的首个执行包候选，以及分离货币与人工时间的成本口径。prospective memory、companion continuity 与 learning transfer 作为**开放研究**保留其去向与下一个问题。本文全部内容为 `proposed`，不提升任何 case、Source Study 或 Evidence Card 的接受级别。
+本文提出 Relata 第一个实质研究周期的计划：把自有 benchmark 研究、系统样本研究空间（museum 名称仍开放）与未来系统 incubator 三项核心职能，加一条以证据为锚的 comparative synthesis 串起来。三项职能各有独立交付物，可以分别发布，不要求等待一次共同 release。周期围绕三个问题组织：跨 session 的共同／项目工作延续（RC-003/005）；更正如何改变后续影响而不破坏仍有效的邻域（RC-001 与 source-derived propagation 问题）；有用普通回忆与 scope/use/silence 的边界（RC-002/004）。计划把 12–20 个独立 incident families 设为**容量目标**而非科学样本量门槛，给出候选受测对象 readiness matrix、控制纪律、museum 的静态与运行 exhibit 计划（含读者端实现，公开阅读另需授权）、incubator 机制压力测试、一个以 RC-005 现有输入为预检起点、随后进入 native 路径的首个执行包候选，以及分离货币与人工时间的成本口径。prospective memory、companion continuity 与 learning transfer 作为**开放研究**保留其去向与下一个问题。整轮计划仍为 `proposed`，具名 RC-005 → Mem0 包已另行接受；不提升任何 case、Source Study 或 Evidence Card 的接受级别。
 
 ## English summary
 
-This proposed first research cycle links Relata's three core functions, its own benchmark research, the system study collection (working museum name still open), and future-system incubation, joined by an evidence-grounded comparative synthesis. Each function keeps an independent deliverable and may ship separately. Three questions organise the cycle: continuing shared/project work across sessions (RC-003/005); how a correction changes later influence without damaging still-valid neighbors (RC-001 plus source-derived propagation); and useful ordinary recall with correct scope, use and silence (RC-002/004). 12–20 independent incident families is a capacity target, not a sample-size gate. The plan gives a candidate-object readiness matrix, control discipline, static and runtime museum exhibits (including reader implementation, with public hosting separately authorized), incubator mechanism tests, a first execution-package candidate taking existing RC-005 inputs through reader preflight and then a native memory path, and a cost convention that separates monetary spend from human hours. Prospective memory, companion continuity and learning transfer stay open research with a stated destination. Everything here is `proposed`; no case, source study or Evidence Card changes state.
+This proposed first research cycle links Relata's three core functions, its own benchmark research, the system study collection (working museum name still open), and future-system incubation, joined by an evidence-grounded comparative synthesis. Each function keeps an independent deliverable and may ship separately. Three questions organise the cycle: continuing shared/project work across sessions (RC-003/005); how a correction changes later influence without damaging still-valid neighbors (RC-001 plus source-derived propagation); and useful ordinary recall with correct scope, use and silence (RC-002/004). 12–20 independent incident families is a capacity target, not a sample-size gate. The plan gives a candidate-object readiness matrix, control discipline, static and runtime museum exhibits (including reader implementation, with public hosting separately authorized), incubator mechanism tests, a first execution-package candidate taking existing RC-005 inputs through reader preflight and then a native memory path, and a cost convention that separates monetary spend from human hours. Prospective memory, companion continuity and learning transfer stay open research with a stated destination. The programme remains proposed except for the separately accepted named RC-005 → Mem0 execution packet; no case, source study or Evidence Card is promoted.
 
 ## 1. 目标与授权边界
 
@@ -153,7 +153,7 @@ incubator 用设计假设、替代方案、反例与获准的研究实验作取�
 | WP0–2 执行核心、原文基线与 exposure | B/C；唯一 concrete config 仍在 Mem0 packet | 输入/review 可离线推进；runner、adapter、自动保留/语义搜索需 accepted envelope |
 | WP3 family 与合同、有限 `u*` | A；future-question 与 benefit 材料 | 有界输入计算与开发对照，不算模型score；独立未来问题作者与held-out仍缺 |
 | WP4 review 与分析 | A/C；离线导入已提供的回答与判断 | 显式分母、理由、分歧与版本；没有输出时保持 pending，不造数据 |
-| WP5 native subject | B/C；RC-005 → Mem0 packet | 安装、预检、实际subject行为仍未获准／未验证 |
+| WP5 native subject | B/C；RC-005 → Mem0 packet | RC-005 包已授权；源码已实现，真实运行与语义结论需各自证据 |
 | WP6 快照与probe写回 | C；E2/E3 | snapshot/restore capability表、writeback lineage、fresh reader、token-matched sham，待执行范围 |
 | WP7 源版本与调度 | C/E；E4 | 版本/权限epoch、确定性交错、等待与重启分开，保留Hindsight保障成功；未实现scheduler |
 | WP8 真实能力环境 | A/C；RC-006扩展 | 独立capability/entitlement的合成文件环境与真实工具结果；八格材料不是sandbox |
@@ -175,14 +175,14 @@ incubator 用设计假设、替代方案、反例与获准的研究实验作取�
 | E incubator 机制压力测试 | design owner ＋ execution engineer | 获接受的 execution envelope；相关 case exposure 与实验配置就绪 | A/B、加工、更正传播与选择机制的执行性观察和设计处置 | executed mechanism evidence 支撑 retain／simplify／reject，或具体说明证据不足；C 的迁移研究继续开放 |
 | F synthesis | 编辑 ＋ 独立评审 | A–E 中**任何**已成熟批次 | comparative essay 的 claim-to-evidence trail | 每条 claim 有证据类型与范围；按批次独立成型 |
 
-- **C 的前置**：一次获接受的 execution envelope（参见 proposed [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md) 的 study envelope 概念）与相关 case exposure。**exploratory、未评审的输出不必等待全部 semantic review** 才能记录；但 accepted claim、case acceptance 与语义结论仍需相应评审。
+- **C 的前置**：一次获接受的 execution envelope（参见 accepted [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md) 的 study envelope 概念）与相关 case exposure。**exploratory、未评审的输出不必等待全部 semantic review** 才能记录；但 accepted claim、case acceptance 与语义结论仍需相应评审。
 - **E 的验收**需要已执行的机制证据与对应设计处置。若证据不能区分竞争解释，记录未决与下一项能区分它们的观察，不强迫产出架构胜负。
 - **F 按批次并行**：synthesis 可为任一已成熟批次先产出 claim-to-evidence trail，不采用“A–E 全部完成才汇总”的 convoy。
 - **D 分叉**：静态 exhibit 从现在起就基于现有 source work 推进；运行 exhibit 等到相关 C／E 证据到位。
 
-**首个执行包候选：** [`RC-005 + Mem0 执行包`](../experiments/rc005-native-execution-packet.md) 是本周期的具体下一步。它把 18 份输入的隔离 reader 预检、强原文基线、固定 Mem0 OSS 的 native 摄入／检索、延迟观察和进程恢复纳入同一个 proposed envelope；配置、cell 数、费用估算与硬上限由该包维护，本文不复制一份配置真源。源码核验和离线输入验证不是 native 可运行证明，实际 readiness 的缺口在包内明确列出。
+**首个获准执行包：** [`RC-005 + Mem0 执行包`](../experiments/rc005-native-execution-packet.md) 是本周期的具体下一步。它把 18 份输入的隔离 reader 预检、强原文基线、固定 Mem0 OSS 的 native 摄入／检索、延迟观察和进程恢复纳入同一个 accepted named envelope；配置、cell 数、费用估算与硬上限由该包维护，本文不复制一份配置真源。源码核验和离线输入验证不是 native 可运行证明，实际 readiness 的缺口在包内明确列出。
 
-预检的退出条件是输入与记录路径检查完成，对具体 case 歧义与 reader 可用性已有处置；不要求高分或全部语义评审完毕才进入 native 阶段。发现实质歧义则处理受影响的 probe，保留原结果，不通过挑选高分来“修好”预检。Native 安装、无网 smoke、首次有界 provider 调用及必要接入修复拟包含在同一范围内，避免完成预检后再设计第二个执行包。
+预检的退出条件是输入与记录路径检查完成，对具体 case 歧义与 reader 可用性已有处置；不要求高分或全部语义评审完毕才进入 native 阶段。发现实质歧义则处理受影响的 probe，保留原结果，不通过挑选高分来“修好”预检。Native 安装、无网 smoke、首次有界 provider 调用及必要接入修复已纳入该具名范围，避免完成预检后再设计第二个执行包。
 
 随后按完整周期继续接入其他异质系统，保留其 native 和 fixed-reader 边界，再扩展 Q1–Q3 中具有独立困难来源的 families。RC-005 只有一个 family，首包不能证明跨系统优劣、持续 co-evolution 或更广架构结论；新材料若反过来参与调参，重新计入 development。
 
@@ -232,4 +232,4 @@ run record／evidence bundle 的要求（概念层面，不是 canonical API／s
 - **轻量外部贡献**（reproduction／counterexample／review）在获授权后进行，且不依赖私有数据；
 - **leaderboard 雄心推迟**，直到跨系统可比性被论证。
 
-进入实测前需要决定：是否接受 [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md) 所提例外，以及确切执行包的 provider／model、账号使用与 stage／global cap。这些可以在一次完整范围决定中落实，不必逐次审批已纳入的条件。Public hosting、公开探索性结果包、正式 release、license 与 outreach 保留各自权限；常规公开源码文档维护沿用既有 repo 授权。
+本轮已接受 [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md) 所提的具名例外，仅限 RC-005 → Mem0；确切资源与总额度以执行包为准，范围内修复与重复不必逐项重新审批。Public hosting、公开探索性结果包、正式 release、license 与 outreach 保留各自权限；常规公开源码文档维护沿用既有 repo 授权。

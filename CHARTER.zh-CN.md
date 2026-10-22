@@ -3,6 +3,8 @@
 
 # Relata Working Charter
 
+[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) 于 2026-10-23 接受，仅激活 [RC-005 → pinned Mem0 执行包](experiments/rc005-native-execution-packet.md)。固定 study CLI 覆盖 54 个 reader 预检、36 个强原文对照和 54 个 native 回答位置；源码实现与离线 plumbing 检查不证明真实可运行性或语义成功。选用既有 generation entitlement 与本地 Qwen3-Embedding-0.6B-Q8_0/1024；全包最多 300 chat／500 embedding client dispatch，包含失败及诊断，不充值、不走收费 fallback。Native state、attempts、回答和未评审盲包留在 ignored local artifacts。正式 benchmark promotion、其他 study、Tilia 产品实现、公开结果、hosting、外联与 license 保留各自边界。[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 仍是独立兼容性例外；配置匹配的接口证据可复用。
+
 ## 1. Mission
 
 Relata 是前沿记忆研究室。它研究 agent memory 的含义、开源系统怎样保留、重建、使用与修订过去的材料或经验，以及哪些架构长处与局限有证据支持。
@@ -11,7 +13,7 @@ Relata 是前沿记忆研究室。它研究 agent memory 的含义、开源系�
 
 Relata 与 [Agent Memory Study（AMS）](https://github.com/IndelibleVivi/agent-memory-study) 各自保留研究问题与材料，并交流有来源支持的经验。两者都可以读论文、检查实现与开展获得相应授权的实验，也都可以为长篇综合写作提供依据。取用的结论保留原有证据状态、适用条件与不确定性。
 
-Provider 访问按明确范围授权，并非全局开放。[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 接受一项由 operator 管理的有限兼容性 smoke，只使用公开原创合成文本，检查请求／返回解析、普通文本与 JSON-object 形式、usage／identity 可见性、向量维数、finite values 与 embedding 批次顺序；确切调用上限、输入长度、失败计数与允许的 provider 类别以该 ADR 为准，本文不复述完整限制表。它不是 memory-system 评测，也不接受 ADR-0009 的 proposed 通用探索边界。
+Provider 访问按明确范围授权，并非全局开放。[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 接受一项由 operator 管理的有限兼容性 smoke，只使用公开原创合成文本，检查请求／返回解析、普通文本与 JSON-object 形式、usage／identity 可见性、向量维数、finite values 与 embedding 批次顺序；确切调用上限、输入长度、失败计数与允许的 provider 类别以该 ADR 为准，本文不复述完整限制表。它本身不授予 native study 权限；ADR-0009 另行接受具名 RC-005 → Mem0 包。
 
 它同时研究通用 agent 使用情境与成人长期人机亲密、浪漫关系。亲密关系继续是 founding focus，不是每项研究的准入条件。在不同情境中，Relata 都追问 continuity 怎样尊重 source、time、authority、scope、permission、change 与 present relevance。这次范围扩展由 [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md) 接受。
 

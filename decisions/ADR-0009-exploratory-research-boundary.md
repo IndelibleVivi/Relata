@@ -3,17 +3,17 @@
 
 # ADR-0009 — Separate Bounded Exploratory Execution from Benchmark Promotion
 
-**Status:** proposed; not accepted or activated
+**Status:** accepted; 2026-10-23; only the named RC-005 → Mem0 packet activated
 **Prepared:** 2026-09-27
-**Scope:** a candidate execution boundary for the [first research cycle](../research/first-research-cycle.md); no execution, spending, hosting or result-publication authority is granted by this draft
+**Scope:** accepted named [RC-005 → Mem0 packet](../experiments/rc005-native-execution-packet.md) only; no general execution, hosting or result-publication authority
 
 ## 中文摘要
 
-建议为有明确对象、公开成人合成材料、配置、预算与停止条件的探索性实测建立独立边界，使其能够先于正式 benchmark promotion 产生有界观察。一个获准研究包内的重复运行、诊断与条件变化无需逐项重新审批；越出对象、数据、费用或外部操作范围才需要新决定。本文仍为 proposed；既有 STATUS、CHARTER 与 AGENTS 的执行限制保持有效。计划、代码、运行证据、案例接受、比较主张和公开发布是不同状态。
+建议为有明确对象、公开成人合成材料、配置、预算与停止条件的探索性实测建立独立边界，使其能够先于正式 benchmark promotion 产生有界观察。一个获准研究包内的重复运行、诊断与条件变化无需逐项重新审批；越出对象、数据、费用或外部操作范围才需要新决定。本文已接受，仅激活 RC-005 → pinned Mem0 执行包；正式 promotion 与其他执行边界保持有效。计划、代码、运行证据、案例接受、比较主张和公开发布是不同状态。
 
 ## English summary
 
-This proposal would permit bounded exploratory studies before formal benchmark promotion, through a named study envelope covering exact subjects, public adult synthetic material, configurations, resource limits and stopping conditions. Authorized repetitions, diagnostics and condition changes would not need individual approvals. The draft changes no current authority: execution, case acceptance, comparative claims and publication remain distinct decisions with their own evidence.
+This accepted decision permits the named RC-005 → pinned Mem0 study before formal benchmark promotion, through a named study envelope covering exact subjects, public adult synthetic material, configurations, resource limits and stopping conditions. Authorized repetitions, diagnostics and condition changes would not need individual approvals. Only that packet is activated: execution, case acceptance, comparative claims and publication remain distinct decisions with their own evidence.
 
 ## Context and evidence
 
@@ -21,11 +21,11 @@ This proposal would permit bounded exploratory studies before formal benchmark p
 
 [ADR-0005](ADR-0005-offline-pilot-tooling.md) permits a narrow scripted rehearsal; it supplies neither a provider adapter nor permission to run real systems. The present cross-system implementation gate protects a broader evaluation programme. A separate bounded exploration route could produce the observations needed to revise cases, expose adapter contributions and challenge candidate designs, while leaving formal comparison requirements intact. This is a governance proposal, not evidence that any selected system or evaluator is ready.
 
-## Proposed decision
+## Accepted decision
 
 ### 1. Accept a narrow exception, not a general platform
 
-If accepted and reflected in the current authority surfaces, this ADR would allow study-specific connectors, isolated subject environments, model calls and evidence recording **only within a maintainer-authorized study envelope**. A local database or process required by a named subject may be part of that envelope. It would not authorize a stable cross-system API, general benchmark runner, SDK, hosted orchestration, public service, Leaderboard, Arena or canonical ontology.
+As accepted and reflected in the current authority surfaces, this ADR allows study-specific connectors, isolated subject environments, model calls and evidence recording **only within a maintainer-authorized study envelope**. A local database or process required by a named subject may be part of that envelope. It would not authorize a stable cross-system API, general benchmark runner, SDK, hosted orchestration, public service, Leaderboard, Arena or canonical ontology.
 
 The envelope belongs in the relevant study's record, using the existing [pilot record](../experiments/pilot-record-template.md) where suitable. It is a human-readable agreement, not a new mandatory runtime schema. One envelope may cover several named subjects, cases and configuration ranges; it need not be renewed for every run or condition already inside those ranges.
 
@@ -43,7 +43,7 @@ Before subject execution, the envelope must resolve the following facts and choi
 
 Names on a candidate list are not installation or readiness evidence. A subscription, credential, public endpoint or working connector is not permission to use it. Manual browser calls to a model are still subject execution; changing transport does not avoid this boundary. Research inputs must not inherit personal memory, unrelated account context or the evaluator key from the engineering environment.
 
-The proposed [RC-005 → Mem0 packet](../experiments/rc005-native-execution-packet.md) is a concrete candidate, including preflight-to-native progression, write/ready/probe timing, process-recovery boundaries and resource caps; existing source-study evidence is not native runnability evidence. Acceptance of this ADR and a completed envelope may occur together. An envelope with an unresolved provider, account authorization or spending cap cannot start dependent calls; preparing public inputs and studying source can continue within existing authority.
+The accepted [RC-005 → Mem0 packet](../experiments/rc005-native-execution-packet.md) is the only activated envelope, including preflight-to-native progression, write/ready/probe timing, process-recovery boundaries and resource caps; existing source-study evidence is not native runnability evidence. This ADR and that completed envelope were accepted together on 2026-10-23. An envelope with an unresolved provider, account authorization or spending cap cannot start dependent calls; preparing public inputs and studying source can continue within existing authority.
 
 ### 3. Allow useful iteration within that envelope
 
@@ -67,9 +67,7 @@ A public exploratory exhibit requires an explicitly selected, reviewed packet an
 
 ## Relationship to existing authority
 
-**While proposed:** no existing general gate changes. [STATUS](../STATUS.md), [CHARTER](../CHARTER.md), [ASSUMPTION_REGISTER](../ASSUMPTION_REGISTER.md) and [AGENTS](../AGENTS.md) remain current authority, with the separate exception in accepted [ADR-0010](ADR-0010-bounded-provider-compatibility-checks.md). That compatibility smoke grants no subject, memory-system or native execution and neither accepts this proposal nor activates this envelope. The first research cycle is planning material. Neither its existence nor this ADR's presence permits implementation or execution under this proposed envelope.
-
-**On acceptance:** update STATUS, CHARTER, ASSUMPTION_REGISTER, AGENTS and affected bilingual reading paths in the same change. State explicitly that this named exploration exception does not require prior completion of the formal cross-system implementation promotion gate. Retain that gate for promotion of a reusable evaluation boundary and formal coverage/comparison claims; do not silently delete its distinctions, System Cards, memory necessity, reviewer-disagreement, contribution-path or adapter-pressure requirements. If those requirements themselves need revision, record the specific change and rationale rather than treating this exception as their removal.
+**Accepted activation, 2026-10-23:** only the fixed RC-005 → pinned Mem0 packet is activated. Existing generation entitlement and local Qwen3-Embedding-0.6B-Q8_0/1024, 300 chat / 500 embedding client dispatches, complete-body 65,536 UTF8 byte preflight and reported prompt_tokens >32,768 postflight stop are the selected bounds. Reader/native output limits are 1,024/2,048. All diagnostics and failures share the same bound ledger; no recharge or paid fallback. This exception requires no prior completion of the formal cross-system promotion gate. That gate remains binding for a reusable evaluation boundary and formal coverage/comparison claims, including distinctions, System Cards, memory necessity, reviewer disagreement, contribution paths and adapter pressure. ADR-0010 is independently accepted for compatibility only; it does not itself authorize this study. See the packet for execution details and private artifact policy.
 
 ADR-0007's correction remains in force. This proposal does not accept candidate B as Tilia's architecture, authorize continued product development in the retained `relata-memory` experiment, import private memory, or make a system's internal schema the evaluator's answer format. A separately authorized research prototype is a system under study, not an accepted product design.
 
@@ -81,10 +79,10 @@ ADR-0007's correction remains in force. This proposal does not accept candidate 
 | **Recommended: named exploratory envelopes** | Enables targeted observations and iteration while preserving cost/data ownership, architectural differences and evidence status |
 | Authorize a general evaluation platform now | Commits to shared interfaces and operations before their distortions and maintenance needs are demonstrated; not recommended by this proposal |
 
-The proposed exception reduces repeated permission questions inside a settled experiment, while requiring the initial packet to be concrete. Public-source studies do not need maintainer endorsement from the studied project. Community participation remains optional; restricted contributions retain consent and stewardship requirements, and this ADR authorizes no outreach or human-participant study.
+The accepted exception reduces repeated permission questions inside a settled experiment, while requiring the initial packet to be concrete. Public-source studies do not need maintainer endorsement from the studied project. Community participation remains optional; restricted contributions retain consent and stewardship requirements, and this ADR authorizes no outreach or human-participant study.
 
 ## Review, acceptance and reversal
 
-The maintainer can accept, revise or reject the proposed boundary after reviewing the research plan and a concrete execution envelope. Acceptance must name scope and update the authority surfaces above; a source commit or passing test is insufficient. Study execution then stops at its own resource/evidence limits, rather than remaining perpetually enabled.
+The maintainer accepted only the named RC-005 → Mem0 packet on 2026-10-23. Later envelopes need their own concrete scope and authority-surface updates; a source commit or passing test is insufficient. Study execution then stops at its own resource/evidence limits, rather than remaining perpetually enabled.
 
 At the cycle review, decide whether the exception should expire, continue within a new envelope, or inform a later implementation decision. Retain observations that contradict the plan and document material exclusions. Acceptance of a later platform, ranking policy, release, website deployment or Tilia implementation remains separately identifiable.

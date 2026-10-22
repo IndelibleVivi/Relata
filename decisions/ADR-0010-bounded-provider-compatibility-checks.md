@@ -9,17 +9,17 @@
 
 ## 中文摘要
 
-Maintainer 另行接受一项很窄的 provider 兼容性检查，用于确认已授权接口能否解析普通请求与返回、呈现 usage 与模型或服务身份，并返回具有稳定批量顺序的有限 embedding 结果。它只使用公开原创合成文本，不做记忆能力、案例、排名或语义正确性评估。本文不激活 proposed [ADR-0009](ADR-0009-exploratory-research-boundary.md) 的通用探索包，也不批准 [RC-005 → Mem0 执行包](../experiments/rc005-native-execution-packet.md) 的 native 路径、144 个回答位置或 USD 10 预算。精确运行观察留在私有 operator 记录；本公共决定不发布运行结果。
+Maintainer 另行接受一项很窄的 provider 兼容性检查，用于确认已授权接口能否解析普通请求与返回、呈现 usage 与模型或服务身份，并返回具有稳定批量顺序的有限 embedding 结果。它只使用公开原创合成文本，不做记忆能力、案例、排名或语义正确性评估。本兼容性决定本身不授予 native 权限；另行接受的 [ADR-0009](ADR-0009-exploratory-research-boundary.md) 仅激活 [RC-005 → Mem0 执行包](../experiments/rc005-native-execution-packet.md) 的 144 个回答位置与该包现行资源限制，旧 USD 10 方案已被替代。精确运行观察留在私有 operator 记录；本公共决定不发布运行结果。
 
 ## English summary
 
-The maintainer separately accepted a narrow provider compatibility check. It verifies that authorized interfaces can parse ordinary requests and returns, expose usage and model or service identity when available, and return bounded embeddings with stable batch order. It uses only public original synthetic text and evaluates no memory capability, case, ranking or semantic correctness. This decision does not activate proposed [ADR-0009](ADR-0009-exploratory-research-boundary.md) as a general exploratory envelope or approve the native path, 144 answer positions or USD 10 budget in the [RC-005 → Mem0 packet](../experiments/rc005-native-execution-packet.md). Exact runtime observations stay in private operator records; this public decision publishes no runtime result.
+The maintainer separately accepted a narrow provider compatibility check. It verifies that authorized interfaces can parse ordinary requests and returns, expose usage and model or service identity when available, and return bounded embeddings with stable batch order. It uses only public original synthetic text and evaluates no memory capability, case, ranking or semantic correctness. This compatibility decision itself grants no native authority; separately accepted [ADR-0009](ADR-0009-exploratory-research-boundary.md) activates only the 144-position [RC-005 → Mem0 packet](../experiments/rc005-native-execution-packet.md) under that packet’s current resource limits, superseding its historical USD 10 plan. Exact runtime observations stay in private operator records; this public decision publishes no runtime result.
 
 ## Context and authority
 
 The maintainer allowed limited test model calls on 2026-10-23. Generation should use an already available generation entitlement without replenishment or a paid fallback. Embeddings should use an already available local Qwen model or Workers AI, with no recharge or alternative paid provider. Actual account identity, credentials, endpoint details, balances and private configuration stay outside this public record.
 
-This is a new, self-contained engineering exception for compatibility evidence. It is not acceptance of ADR-0009, which remains **proposed**, and does not convert the RC-005 packet into an authorized study. The existing prohibition on a general runner, adapter, service or system evaluation remains in force.
+ADR-0010 remains a self-contained compatibility exception. ADR-0009 was separately accepted on 2026-10-23 solely for the RC-005 → pinned Mem0 packet; its 144 positions, native execution and resource limits derive from that packet, not this smoke. Matching protocol observations may be reused. No general runner, paid fallback, result publication or capability claim follows.
 
 ## Decision
 
@@ -65,7 +65,7 @@ This decision does not authorize:
 
 ## Relationship to ADR-0009 and the RC-005 packet
 
-ADR-0009 remains proposed and grants no exploratory envelope. The RC-005 packet remains proposed and unapproved as a whole. Its OpenAI direct API setup, named model configuration, 144 answer positions and USD 10 cap are historical planning recommendations, superseded for the current direction by the quota-first bounds above; they are not current provider or account prerequisites. A future native packet would need its own acceptance and complete reconciliation of provider, budget, data and observation terms.
+ADR-0010 remains a self-contained compatibility exception. ADR-0009 was separately accepted on 2026-10-23 solely for the RC-005 → pinned Mem0 packet; its 144 positions, native execution and resource limits derive from that packet, not this smoke. Matching protocol observations may be reused. No general runner, paid fallback, result publication or capability claim follows.
 
 [ADR-0005](ADR-0005-offline-pilot-tooling.md)'s scripted rehearsal remains offline. The input-only RC-005 audit also remains input-only. This compatibility exception extends neither into a subject execution facility.
 

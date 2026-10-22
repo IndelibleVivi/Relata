@@ -3,6 +3,8 @@
 
 # Relata Working Charter
 
+[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) is accepted on 2026-10-23, activating only the [RC-005 → pinned Mem0 execution packet](experiments/rc005-native-execution-packet.md). Its fixed-study CLI covers 54 reader preflight, 36 raw-source control and 54 native answer positions; source implementation and offline plumbing checks do not prove live runnability or semantic success. Existing generation entitlement and local Qwen3-Embedding-0.6B-Q8_0/1024 are the selected resources, with 300 chat / 500 embedding client dispatches including failures and diagnostics, no recharge or paid fallback. Native states, attempts, responses and unreviewed blind packets remain ignored local artifacts. Formal benchmark promotion, other study envelopes, Tilia product implementation, publication, hosting, outreach and licensing retain their separate boundaries. [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) remains the independent compatibility-only exception; matching protocol evidence may be reused.
+
 ## 1. Mission
 
 Relata is a frontier memory research lab. It studies what agent memory means, how open-source systems preserve, reconstruct, use and revise past material or experience, and which architectural strengths and limitations are supported by evidence.
@@ -11,7 +13,7 @@ Its core functions are **its own benchmark research, an inspectable collection o
 
 Relata and [Agent Memory Study (AMS)](https://github.com/IndelibleVivi/agent-memory-study) retain separate research questions and artifacts while exchanging source-grounded lessons. Both may read papers, inspect implementations and conduct appropriately authorized experiments; both can inform long-form synthesis. Imported findings retain their original evidence status, conditions and uncertainty.
 
-Provider access is scoped rather than globally enabled. [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) accepts a finite operator-owned compatibility smoke over public original synthetic text: request/response parsing, ordinary text and JSON-object forms, usage/identity visibility, vector dimension, finite values and embedding batch order only. Its exact caps, input sizes, failure counting and permitted provider categories are stated in the ADR and are not expanded here. It is neither memory-system evaluation nor acceptance of the proposed general exploratory boundary in ADR-0009.
+Provider access is scoped rather than globally enabled. [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) accepts a finite operator-owned compatibility smoke over public original synthetic text: request/response parsing, ordinary text and JSON-object forms, usage/identity visibility, vector dimension, finite values and embedding batch order only. Its exact caps, input sizes, failure counting and permitted provider categories are stated in the ADR and are not expanded here. It grants no native study authority itself. ADR-0009 separately accepts only the named RC-005 → Mem0 packet.
 
 Its research includes general agent use and long-term adult human–AI romantic and intimate relationships. Intimacy remains a founding focus, not an eligibility requirement for every study. Across settings, Relata asks how continuity can respect source, time, authority, scope, permission, change and present relevance. This broader scope is accepted in [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md).
 

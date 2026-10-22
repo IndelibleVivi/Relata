@@ -21,7 +21,7 @@ Relata 是前沿记忆研究室，[ADR-0008](decisions/ADR-0008-three-core-resea
 
 ## 拟议的首轮研究计划
 
-先读[完整周期计划](research/first-research-cycle.md)，查看问题、候选对象、controls、work packages、证据要求与未定资源；再读 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md)，了解把有界探索性执行与 benchmark promotion 分开的提案。再读 [RC-005 → Mem0 执行包](experiments/rc005-native-execution-packet.md)，查看历史提议的配置、readiness 缺口与费用依据；该包仍未获批准。三者仍为 proposed，当前权限以 [STATUS](STATUS.zh-CN.md) 为准。源码展品、案例修订与设计研究有独立价值，不必等待共同 release。运行展品需要真实执行证据；公开 hosting 与结果发布需要各自授权。
+较广的[首轮研究计划](research/first-research-cycle.md)仍为 proposed。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) 于 2026-10-23 接受，仅激活 [RC-005 → pinned Mem0 执行包](experiments/rc005-native-execution-packet.md)。固定 study CLI 覆盖 54 个 reader 预检、36 个强原文对照和 54 个 native 回答位置；源码实现与离线 plumbing 检查不证明真实可运行性或语义成功。选用既有 generation entitlement 与本地 Qwen3-Embedding-0.6B-Q8_0/1024；全包最多 300 chat／500 embedding client dispatch，包含失败及诊断，不充值、不走收费 fallback。Native state、attempts、回答和未评审盲包留在 ignored local artifacts。正式 benchmark promotion、其他 study、Tilia 产品实现、公开结果、hosting、外联与 license 保留各自边界。[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 仍是独立兼容性例外；配置匹配的接口证据可复用。
 
 要检查更正之后的晚到写入，可读[作者化 challenge](research/correction-race-challenge.md)，再读 [Hindsight 保护机制核查](research/stale-write-source-audit.md)。前者是推理工作表，后者是有界源码检查，都不是运行结果。
 

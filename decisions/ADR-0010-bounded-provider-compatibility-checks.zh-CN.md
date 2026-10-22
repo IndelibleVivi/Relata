@@ -9,17 +9,17 @@
 
 ## 中文摘要
 
-Maintainer 另行接受一项很窄的 provider 兼容性检查，用于确认已授权接口能否解析普通请求与返回、呈现 usage 与模型或服务身份，并返回具有稳定批量顺序的有限 embedding 结果。它只使用公开原创合成文本，不做记忆能力、案例、排名或语义正确性评估。本文不激活 proposed [ADR-0009](ADR-0009-exploratory-research-boundary.zh-CN.md) 的通用探索包，也不批准 [RC-005 → Mem0 执行包](../experiments/rc005-native-execution-packet.md) 的 native 路径、144 个回答位置或 USD 10 预算。精确运行观察留在私有 operator 记录；本公共决定不发布运行结果。
+Maintainer 另行接受一项很窄的 provider 兼容性检查，用于确认已授权接口能否解析普通请求与返回、呈现 usage 与模型或服务身份，并返回具有稳定批量顺序的有限 embedding 结果。它只使用公开原创合成文本，不做记忆能力、案例、排名或语义正确性评估。本兼容性决定本身不授予 native 权限；另行接受的 [ADR-0009](ADR-0009-exploratory-research-boundary.zh-CN.md) 仅激活 [RC-005 → Mem0 执行包](../experiments/rc005-native-execution-packet.md) 的 144 个回答位置与该包现行资源限制，旧 USD 10 方案已被替代。精确运行观察留在私有 operator 记录；本公共决定不发布运行结果。
 
 ## English summary
 
-The maintainer separately accepted a narrow provider compatibility check. It verifies that authorized interfaces can parse ordinary requests and returns, expose usage and model or service identity when available, and return bounded embeddings with stable batch order. It uses only public original synthetic text and evaluates no memory capability, case, ranking or semantic correctness. This decision does not activate proposed [ADR-0009](ADR-0009-exploratory-research-boundary.md) as a general exploratory envelope or approve the native path, 144 answer positions or USD 10 budget in the [RC-005 → Mem0 packet](../experiments/rc005-native-execution-packet.md). Exact runtime observations stay in private operator records; this public decision publishes no runtime result.
+The maintainer separately accepted a narrow provider compatibility check. It verifies that authorized interfaces can parse ordinary requests and returns, expose usage and model or service identity when available, and return bounded embeddings with stable batch order. It uses only public original synthetic text and evaluates no memory capability, case, ranking or semantic correctness. This compatibility decision itself grants no native authority; separately accepted [ADR-0009](ADR-0009-exploratory-research-boundary.md) activates only the 144-position [RC-005 → Mem0 packet](../experiments/rc005-native-execution-packet.md) under that packet’s current resource limits, superseding its historical USD 10 plan. Exact runtime observations stay in private operator records; this public decision publishes no runtime result.
 
 ## 背景与授权
 
 Maintainer 于 2026-10-23 允许有限测试模型调用。Generation 应使用已可用的 generation entitlement，不充值、不使用收费 fallback。Embedding 应使用已可用的本地 Qwen 或 Workers AI，不充值，也不选择其他收费 provider。实际账号身份、凭据、endpoint 细节、余额与私有配置不进入本公共记录。
 
-这是一项独立、自足的工程兼容性例外。它不是对 ADR-0009 的接受，后者仍为 **proposed**；它也不把 RC-005 执行包变成已获授权的 study。对通用 runner、adapter、service 或系统评测的既有禁止继续有效。
+ADR-0010 保持独立兼容性例外。ADR-0009 于 2026-10-23 另行接受，仅激活 RC-005 → pinned Mem0 包；其 144 个位置、native 执行和资源界限来自该包。配置匹配的协议观察可以复用；不授予通用 runner、收费 fallback、结果发布或能力主张。
 
 ## 决定
 
@@ -65,7 +65,7 @@ Maintainer 于 2026-10-23 允许有限测试模型调用。Generation 应使用�
 
 ## 与 ADR-0009 和 RC-005 执行包的关系
 
-ADR-0009 仍为 proposed，不授予 exploratory envelope。RC-005 执行包整体仍为 proposed、未获批准。其 OpenAI direct API 配置、具名模型设置、144 个回答位置与 USD 10 cap 是历史规划建议；对于当前方向，它们已被上文 quota-first 界限取代，不是当前 provider 或 account 的前提。未来的 native 执行包仍需单独接受，并完整对齐 provider、预算、数据与观察条件。
+ADR-0010 保持独立兼容性例外。ADR-0009 于 2026-10-23 另行接受，仅激活 RC-005 → pinned Mem0 包；其 144 个位置、native 执行和资源界限来自该包。配置匹配的协议观察可以复用；不授予通用 runner、收费 fallback、结果发布或能力主张。
 
 [ADR-0005](ADR-0005-offline-pilot-tooling.zh-CN.md) 的 scripted rehearsal 仍为离线；RC-005 input-only audit 也仍只处理输入。本兼容性例外不会把任一项扩展成 subject execution facility。
 
