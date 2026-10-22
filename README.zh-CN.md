@@ -37,7 +37,7 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 
 ## 当前阶段
 
-**R0 — Research Foundation。** 两张窄范围的 source Evidence Cards 已 accepted。RC-001 为 clinic-ready；RC-002/003/004 仍是未经 review 的 seeds。尚无 reviewed System Cards、accepted cases、validated evaluators、语义系统评测结果或排名。
+**R0 — Research Foundation。** 两张窄范围的 source Evidence Cards 已 accepted。RC-001 为 clinic-ready；RC-002/003/004 仍是未经 review 的 seeds。三张 public-source System Cards 与十系统 pressure map 已按既有研究做有界 source-fidelity review。尚无 accepted cases、validated evaluators、语义系统评测结果或排名。证据限定见[系统集合](systems/system-cards/README.md)。
 
 软件现有 public repository checker 和一个**离线 RC-002 执行演练**：用明确标识的脚本替身，在两条合成历史下分别运行五种条件，保存证据并导出盲审包。测试只建立工程链路行为，不调用模型，也不产生语义分数或能力分数。完整证据状态见 [STATUS](STATUS.zh-CN.md)。
 

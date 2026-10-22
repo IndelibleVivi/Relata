@@ -33,7 +33,7 @@ Relata 是前沿记忆研究室，[ADR-0008](decisions/ADR-0008-three-core-resea
 - [原 architecture 的 adversarial review](docs/reviews/target-architecture-draft-0.1-adversarial-review.md)
 - [source / evidence workflow](research/README.md) 与 Evidence Card template
 - community co-research、consent、attribution 与 withdrawal 材料
-- System Census 与 Architecture Pressure Map templates
+- [三张 source-reviewed System Cards](systems/system-cards/README.md) 与[十系统 Architecture Pressure Map](systems/architecture-pressure-map.zh-CN.md)，保留静态证据限定
 - Distinction Atlas、case method、Pilot 001 与 manual pilot plan
 - [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.zh-CN.md) 确立的 mixed-domain scope authority
 - [`ADR-0006`](decisions/ADR-0006-frontier-memory-research-lab.md) 确立的研究室整体范围，保留 relational Case Lab
@@ -63,8 +63,8 @@ python3 tools/check_repo.py
 - [ ] 为每个对象选择[公开源码或获准 contributor 路线](systems/README.zh-CN.md)；公开源码研究不要求 maintainer 背书或 private access。
 - [ ] Restricted contributions 收集前先确定 consent-record storage 与 disclosure authority。Founding Circle 邀请可选且需对应授权；不通过 public issue / PR 收 sensitive material。
 - [ ] 若有 contributors 参与，每个人可以自由选择 Incident Seed、System Card、case review、source review 或 governance，不设技能等级。
-- [ ] 用系统自己的 vocabulary 与 boundary，完成三张 reviewed System Cards：公开源码 card 做 source-fidelity review；来自 contributor 的公开字段另需其批准。
-- [ ] 做一张 Architecture Pressure Map，分清 native、adapter-emulated、opaque、unsupported、unknown 与 not applicable。
+- [x] 用系统自己的 vocabulary 与 boundary，完成三张 reviewed System Cards：公开源码 card 做 source-fidelity review；来自 contributor 的公开字段另需其批准。
+- [x] 做一张 Architecture Pressure Map，分清 native、adapter-emulated、opaque、unsupported、unknown 与 not applicable。
 - [ ] 单独列出每个拟议 observation boundary 会偏爱或抹掉哪类 architecture。
 
 **完成标志：** 三种 materially different systems + 一份明确的 protocol-bias record；不产生排名。

@@ -138,6 +138,30 @@ incubator 用设计假设、替代方案、反例与获准的研究实验作取�
 
 ## 10. 执行计划
 
+### 2026-10-23 评审整合：现有周期中的增量
+
+[continuity benefit study](continuity-benefit-study.md) 承接本轮评审的 E1–E7：必要性与收益分开、probe 写回反应性、来源升级、更正时序、迁移/能力/授权、使用与沉默、局部规范与修复成本。既有 Q1–Q3 是有界组织方式，不取代更广的研究问题或三项核心职能。原有 fixed-reader/native、强 raw-source、family 分析、生命周期成本纪律继续复用，不作为新发现重复建设。
+
+本轮源内可交付是 future-question 的有限输入分析与离线 review 路径、五组 development 材料、RC-006 八格设计，以及有界静态 System Cards / pressure map。它们不构成下面 C/E 的真实系统执行验收，也没有完成 independent question authorship 或 human calibration。12–20-family 仍为容量目标；评审提出的 E1 12组、每组8–40事件只是可行性起点，不能据此声称统计功效或用当前短历史补足检索选择压力。
+
+两份评审的工程建议归入现有 owners，不新建竞争总计划：
+
+| 评审建议 | 本周期 owner / dependency | 当前处置 |
+|---|---|---|
+| WP0–2 执行核心、原文基线与 exposure | B/C；唯一 concrete config 仍在 Mem0 packet | 输入/review 可离线推进；runner、adapter、自动保留/语义搜索需 accepted envelope |
+| WP3 family 与合同、有限 `u*` | A；future-question 与 benefit 材料 | 有界输入计算与开发对照，不算模型score；独立未来问题作者与held-out仍缺 |
+| WP4 review 与分析 | A/C；离线导入已提供的回答与判断 | 显式分母、理由、分歧与版本；没有输出时保持 pending，不造数据 |
+| WP5 native subject | B/C；RC-005 → Mem0 packet | 安装、预检、实际subject行为仍未获准／未验证 |
+| WP6 快照与probe写回 | C；E2/E3 | snapshot/restore capability表、writeback lineage、fresh reader、token-matched sham，待执行范围 |
+| WP7 源版本与调度 | C/E；E4 | 版本/权限epoch、确定性交错、等待与重启分开，保留Hindsight保障成功；未实现scheduler |
+| WP8 真实能力环境 | A/C；RC-006扩展 | 独立capability/entitlement的合成文件环境与真实工具结果；八格材料不是sandbox |
+| WP9 行为与HCI校准 | A/E；benefit study | 语气光环、自然任务、修复成本与分歧；新fixture未获独立人类校准 |
+| WP10 证据进入集合 | D/F；相关C/E和公开选择 | 静态集合独立推进；runtime exhibit将claim链接到实际trace和可复算附录，尚无运行证据 |
+
+外部论文/API线索保留为待pin并核查的来源方向；附件作者的核查不自动变成Relata accepted evidence。特别是 memory tool 默认提示、context editing、file-search results 与另一Hindsight revision，只有明确选择接入时才重新核实有效版本和本地适用性；本轮不声称已接通这些能力。
+
+### 既有执行分工
+
 角色用职责而非虚构人名。work packages 的目标是产生**实际周期产出**，而不只是计划片段或验收判据；它们可在平行 track 上推进。
 
 | WP | 负责角色 | 依赖 | 周期产出 | acceptance evidence |

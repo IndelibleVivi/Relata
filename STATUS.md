@@ -36,8 +36,8 @@ The maintainer’s 2026-09-26 clarification separates the long-term **Tilia** go
 | Own-memory design / case-to-test map | proposed architecture, controls and falsification conditions for the independent Tilia goal | candidate B is not an accepted Tilia architecture; no accepted universal schema or capability result |
 | [Local memory apparatus](experiments/local-memory-apparatus.md) | very early experiment retained after scope correction; separate private remote, code not publicly published | 110 engineering tests and a 38-step / 21-assertion subprocess demo; explicit synthetic inputs and scripted consumption only, no vector retrieval or semantic result |
 | Claim boundaries | bilingual candidate study | CL0–CL6, lanes, cells and adapter classes remain proposals; no accepted result unit or publication policy |
-| System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards or maps |
-| Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
+| System Cards / Architecture Pressure Maps | 3 source-reviewed public-source cards ([Mem0](systems/system-cards/SC-001-mem0.md), [Graphiti](systems/system-cards/SC-002-graphiti.md), [Letta](systems/system-cards/SC-003-letta.md)) and 1 ten-system [pressure map](systems/architecture-pressure-map.md) | static source review only; no contributor review, accepted-for-census promotion, runtime result or comparative claim |
+| Distinction Atlas | 8 seed hypotheses (7 with multi-source source corroboration) | 0 supported distinctions; promotion still needs a community Incident Seed and an accepted microcase |
 | Pilot 001 | clinic-ready case, manual plan and candidate E0 pack | no system run, acceptance or human calibration; authored anchors only |
 | RC-002 / RC-003 / RC-004 | unreviewed seeds | no model/system evaluation or balanced pilot set; RC-003 probe and RC-004 explicit accord revised without promotion |
 | Mixed-domain routing | question, incident families and scope-conditioned seed | RC-004 remains unreviewed; metadata-only prior shortcut remains untested |
@@ -46,6 +46,7 @@ The maintainer’s 2026-09-26 clarification separates the long-term **Tilia** go
 | [RC-006 companion migration](case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md) | seed; authored-unvalidated | one synthetic family; no real migration, capability observation, independent human review or Memory Necessity Gate acceptance |
 | [Correction-race challenge](research/correction-race-challenge.md) / [Hindsight safeguard audit](research/stale-write-source-audit.md) | draft authored development worksheet and bounded pinned source inspection | interleaving counterexamples and inspected safeguards; no runtime race result, new independent family or accepted evidence |
 | [Correction propagation](research/correction-propagation-study.md) / [multilingual semantic retrieval](research/semantic-retrieval-study.md) | draft comparative and design research | source-based comparisons and authored development examples; no new system run, encoder selection or accepted evidence |
+| Continuity benefit / selective-use materials | 5 authored development families / 10 views; RC-006 eight-condition design | no subject run, independent question author, held-out data or human calibration; accepted-case necessity gate unchanged |
 | Evaluator calibration | plan and authored E0 fixtures | no reviewer data or validated evaluator boundary; review packet must retain the governing evidence |
 | Community contribution path | public-safe governance/templates | restricted contribution path not exercised |
 | [First research cycle](research/first-research-cycle.md) / [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) | proposed programme, execution-boundary decision and [RC-005 → Mem0 packet](experiments/rc005-native-execution-packet.md) | inputs reverified and existing native source-study evidence reviewed; clean checkout, installation and native runnability unverified; no accepted envelope, approved budget, new system run, publication or deployment |
@@ -68,7 +69,7 @@ Across these functions, draw on relevant existing public AMS work with its condi
 
 The [RC-005 input audit](experiments/continuity-input-audit.md) is available under ADR-0001’s validity/reproducibility tooling scope. Review its authorship and continuing-production-note contract next. This input-only tool neither accepts the rest of the Continuity Trials proposal nor extends model execution authority.
 
-The next empirical work remains: obtain materially different reviewed System Cards and an Architecture Pressure Map; dry-review E0 before using its semantic boundary; review RC-002/003/004 and specify history exposure/controls before live studies. Select restricted consent-record stewardship before sensitive contributions. D-006 still needs community-grounded prospective-intention authority and an observation boundary that does not silently import PM-Bench's task-handle architecture.
+Three reviewed public-source System Cards and one ten-system Architecture Pressure Map now exist, so the material for a first census comparison is present. The next empirical work remains: dry-review E0 before using its semantic boundary; review RC-002/003/004 and specify history exposure/controls before live studies. Select restricted consent-record stewardship before sensitive contributions. D-006 still needs community-grounded prospective-intention authority and an observation boundary that does not silently import PM-Bench's task-handle architecture.
 
 ## Not yet claimed
 

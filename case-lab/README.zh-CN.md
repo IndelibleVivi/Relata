@@ -47,3 +47,5 @@ Case Lab 在成人长期人机关系中构建最小 synthetic cases，每次只�
 ## Evaluator calibration
 
 中文优先的 [`RC-001 E0 calibration pack`](reviews/RC-001-e0-calibration-pack.zh-CN.md) 提出一条收窄的 exact-phrase normalization rule、randomized-ready anchors、reviewer questions 与 disagreement categories。它尚未 dry-review，不含 system outputs，也不改变 RC-001 的 state。
+
+[Continuity benefit study](../research/continuity-benefit-study.md) 补充五组作者化 development 材料／十份 input views：无需回忆、承接收益、未知版本、选择性披露与局部例外。它们不是 accepted cases、held-out data 或人类校准。RC-006 另有未执行的迁移 × 能力 × 授权八格设计。

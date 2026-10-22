@@ -33,7 +33,7 @@ For a concrete research reading path, start with the [RC-006 migration seed](cas
 - [adversarial architecture review](docs/reviews/target-architecture-draft-0.1-adversarial-review.md)
 - [source/evidence workflow](research/README.md) and Evidence Card template
 - community co-research, consent, attribution, and withdrawal materials
-- System Census and Architecture Pressure Map templates
+- [Three source-reviewed System Cards](systems/system-cards/README.md) and a [ten-system Architecture Pressure Map](systems/architecture-pressure-map.md), with static evidence limits
 - Distinction Atlas, case method, Pilot 001, and a manual pilot plan
 - mixed-domain scope authority under [ADR-0003](decisions/ADR-0003-mixed-domain-memory-ecology.md)
 - broader research-lab scope under [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md), retaining the relational Case Lab
@@ -63,8 +63,8 @@ python3 tools/check_repo.py
 - [ ] Choose the [public-source or authorized contributor route](systems/README.md#census-workflow) for each object; public-source research does not require maintainer endorsement or private access.
 - [ ] For restricted contributions, settle consent-record storage and disclosure authority before collection. Any Founding Circle invitation is optional and separately authorized; do not collect sensitive material through public issues or pull requests.
 - [ ] If contributors participate, let each choose Incident Seed, System Card, case review, source review, or governance work without a skill hierarchy.
-- [ ] Complete three reviewed System Cards using each system’s native vocabulary and boundary: source-fidelity review for public-source cards, plus contributor approval for contributor-derived public fields.
-- [ ] Produce one Architecture Pressure Map that distinguishes native, adapter-emulated, opaque, unsupported, unknown, and not-applicable behavior.
+- [x] Complete three reviewed System Cards using each system’s native vocabulary and boundary: source-fidelity review for public-source cards, plus contributor approval for contributor-derived public fields.
+- [x] Produce one Architecture Pressure Map that distinguishes native, adapter-emulated, opaque, unsupported, unknown, and not-applicable behavior.
 - [ ] List every proposed observation boundary that would privilege or erase a represented architecture.
 
 **Exit:** three materially different systems and one explicit protocol-bias record. No ranking follows.

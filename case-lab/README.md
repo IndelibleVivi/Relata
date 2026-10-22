@@ -47,3 +47,5 @@ The five seeds establish portfolio objects, not system capability evidence. Each
 ## Evaluator calibration
 
 The Chinese-first [`RC-001 E0 calibration pack`](reviews/RC-001-e0-calibration-pack.zh-CN.md) proposes one narrow exact-phrase normalization rule, randomized-ready anchors, reviewer questions, and disagreement categories. It has not been dry-reviewed, contains no system outputs, and does not change RC-001's state.
+
+The [continuity benefit study](../research/continuity-benefit-study.md) adds five authored development families / ten input views for no-recall, benefit, unknown freshness, selective disclosure and local exceptions. These are unvalidated controls, not accepted cases, held-out data or human calibration. RC-006 now also carries an unexecuted migration × capability × entitlement factorial design.

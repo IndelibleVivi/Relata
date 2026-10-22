@@ -33,6 +33,15 @@ This proposed envelope joins RC-005 reader/input preflight, strong raw-source co
 - Mem0 源码与环境核验见下一节。**当前没有安装 smoke、原生模型调用、持久化恢复运行或成功率证据**。不能把 source-ready 写成 locally runnable。
 - 现有执行边界不允许为证明 readiness 先偷偷实现 provider adapter 或调用模型。建议把安装、无网 smoke、首次有界调用和 native 检查都放进本次待批准范围；这是同一执行包内的前几步，不是要求维护者回来设计第二包。
 
+## 2026-10-23 评审增量与本包限度
+
+首包仍固定 RC-005 一族、原有144回答位置与建议USD10 cap；本轮没有批准预算或扩到七个E方向。新增 [benefit/control材料](../research/continuity-benefit-study.md) 与 future-question 离线分析不自动进入本包。
+
+- 这里的4/7/8事件前缀很短；dense top-10近乎暴露完整历史，只能预检输入／记录，不能据此声称语义检索筛选能力。更长历史、模糊指针、未知stale与独立未来问题进入后续E1设计，先冻结选择方法再独立出题。
+- 候选返回、最终context admission、reader实际使用分开留证；author-selected excerpt仍为诊断参照。候选／最终暴露／最小原文rescue不自动构成无偏误差分解。
+- 首包保持独立reader与不写回probe；未来E2需记录snapshot lineage、probe写回来源、匹配轮数/token的sham与fresh-reader终点，不能把关闭写回的人工配置冒充native能力。
+- 按family组织分析；attempted、completed、pending review与technical failure分开，技术失败不静默记语义零分。review导入保存判断版本、理由、分歧与exact evidence binding；尚无真实输出或独立human calibration。
+
 ## 3. 推荐配置与原生对象
 
 ### 共同 reader 与 encoder

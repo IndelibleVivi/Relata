@@ -36,8 +36,8 @@ Maintainer 于 2026-09-26 澄清：长期 **Tilia** 目标与 Relata 当前研�
 | 自有 memory 设计 / 案例—测试映射 | 为独立 Tilia 目标提供 proposed 架构、controls 与推翻条件 | 候选 B 不是已接受的 Tilia 架构；没有 accepted 普适 schema 或能力结果 |
 | [本地记忆装置](experiments/local-memory-apparatus.md) | 范围纠正后保留的非常早期实验；已有独立 private remote，源码未公开发布 | 110 项工程测试与 38 步／21 项断言的子进程 demo；只有明确合成输入与脚本消费，没有向量检索或语义效果结果 |
 | Claim boundaries | 双语 candidate study | CL0–CL6、lanes、cells、adapter classes 仍为提议；无 accepted result unit 或 publication policy |
-| System Cards / Architecture Pressure Maps | templates only | 0 reviewed cards/maps |
-| Distinction Atlas | 6 seed hypotheses | 0 supported distinctions |
+| System Cards / Architecture Pressure Maps | 3 张 source-reviewed public-source cards（[Mem0](systems/system-cards/SC-001-mem0.zh-CN.md)、[Graphiti](systems/system-cards/SC-002-graphiti.zh-CN.md)、[Letta](systems/system-cards/SC-003-letta.zh-CN.md)）与 1 张十系统 [pressure map](systems/architecture-pressure-map.zh-CN.md) | 仅静态源码 review；无 contributor review、accepted-for-census 提升、运行结果或比较结论 |
+| Distinction Atlas | 8 seed hypotheses（7 条具 multi-source source corroboration） | 0 supported distinctions；promotion 仍需 community Incident Seed 与 accepted microcase |
 | Pilot 001 | clinic-ready case、manual plan、candidate E0 pack | 无系统运行、acceptance 或人工校准；只有 authored anchors |
 | RC-002 / RC-003 / RC-004 | 未经 review 的 seeds | 无模型/系统评测或 balanced pilot set；已修 RC-003 probe 和 RC-004 explicit accord，没有提升状态 |
 | Mixed-domain routing | question、incident families、scope-conditioned seed | RC-004 仍未经 review；metadata-only 的 prior shortcut 尚未实测 |
@@ -46,6 +46,7 @@ Maintainer 于 2026-09-26 澄清：长期 **Tilia** 目标与 Relata 当前研�
 | [RC-006 companion 迁移](case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md) | seed；authored-unvalidated | 一个合成 family；没有真实迁移、能力观察、独立人类 review 或 Memory Necessity Gate acceptance |
 | [更正并发 challenge](research/correction-race-challenge.md)／[Hindsight 保护核查](research/stale-write-source-audit.md) | 作者化开发工作表与固定源码定点检查 drafts | 交错反例与已检查的保护；无 runtime race 结果、新独立 family 或 accepted evidence |
 | [更正传播](research/correction-propagation-study.md)／[多语言语义检索](research/semantic-retrieval-study.md) | 比较与设计研究 drafts | 基于来源的比较与 authored 开发表例；没有新系统运行、encoder 定案或 accepted evidence |
+| Continuity benefit / selective-use 材料 | 5 组作者化 development families／10 views；RC-006 八格设计 | 无 subject run、独立问题作者、held-out data 或人类校准；accepted-case 必要性 gate 不变 |
 | Evaluator calibration | plan 与 authored E0 fixtures | 无 reviewer data 或 validated boundary；评审包必须保留治理该回答的证据 |
 | Community contribution path | public-safe governance/templates | restricted contribution path 尚未实际使用 |
 | [首轮研究计划](research/first-research-cycle.md)／[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) | proposed programme、执行边界草案与 [RC-005 → Mem0 包](experiments/rc005-native-execution-packet.md) | 输入已重新核验、既有 native 源码研究证据已复核；clean checkout、安装／可运行性未验证；没有 accepted 执行范围、已批准预算、新系统运行、发布或部署 |
@@ -68,7 +69,7 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 
 依据 ADR-0001 的 validity/reproducibility tooling 范围，现在可以使用 [RC-005 输入审计](experiments/continuity-input-audit.md)，下一项是 review 作者归属与继续制作手记的 contract。该工具只准备输入，不接受 Continuity Trials 提案的其余内容，也不扩大模型执行权限。
 
-后续经验性工作仍包括：获得不同架构的 reviewed System Cards 与 Architecture Pressure Map；在使用 E0 语义边界前完成 dry review；review RC-002/003/004，并在 live studies 前明确 history exposure 与 controls。收集 sensitive contributions 前先选择 restricted consent-record stewardship。D-006 仍需要 community-grounded prospective-intention authority，并明确不会偷带 PM-Bench task-handle architecture 的观察边界。
+三张 reviewed public-source System Cards 与一张十系统 Architecture Pressure Map 已经存在，第一轮 census 比较的材料已具备。后续经验性工作仍包括：在使用 E0 语义边界前完成 dry review；review RC-002/003/004，并在 live studies 前明确 history exposure 与 controls。收集 sensitive contributions 前先选择 restricted consent-record stewardship。D-006 仍需要 community-grounded prospective-intention authority，并明确不会偷带 PM-Bench task-handle architecture 的观察边界。
 
 ## 尚未声称
 

@@ -37,7 +37,7 @@ A very early explicit-input experiment already exists in a separate repository u
 
 ## Current stage
 
-**R0 — Research Foundation.** Two narrow source Evidence Cards are accepted. RC-001 is clinic-ready; RC-002/003/004 are unreviewed seeds. There are no reviewed System Cards, accepted cases, validated evaluators, semantic system-evaluation results or rankings.
+**R0 — Research Foundation.** Two narrow source Evidence Cards are accepted. RC-001 is clinic-ready; RC-002/003/004 are unreviewed seeds. Three public-source System Cards and a ten-system pressure map have bounded source-fidelity review against existing studies. There are no accepted cases, validated evaluators, semantic system-evaluation results or rankings. See the [system collection](systems/system-cards/README.md) for evidence limits.
 
 Software now includes the public repository checker and an **offline RC-002 execution rehearsal**. It runs two synthetic histories across five conditions with a deliberately scripted subject, preserving evidence and exporting a blind packet. Its tests establish plumbing behavior only. No model is called, and no semantic or capability score is generated. Exact evidence status is in [STATUS](STATUS.md).
 
