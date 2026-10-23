@@ -97,6 +97,7 @@ python3 -B experiments/rc005_native.py plan
 python3 -B experiments/rc005_native.py --runtime-config /PRIVATE/runtime.json --out experiments/artifacts/rc005-native/RUN quick
 python3 -B experiments/rc005_native.py --runtime-config /PRIVATE/runtime.json --out experiments/artifacts/rc005-native/RUN run
 python3 -B experiments/rc005_native.py --runtime-config /PRIVATE/runtime.json --out experiments/artifacts/rc005-native/RUN report
+python3 -B experiments/rc005_native.py --out experiments/artifacts/rc005-native/RUN export-review
 ```
 
 `quick`、完整运行、失败诊断及修复共用同一个 ledger 和 output。Ledger 绑定 source、模型配置与 output，换 output 拒绝，不能靠新目录重置预算。已完成 operation 直接复用；failed／started 状态保留并阻止盲重发。只有基于证据完成修复、明确处置可能的重复请求或部分写入后，operator 才用 `retry-operation --operation NAME --reason "REPAIR_AND_STATE_DISPOSITION"` 将旧记录移入 `prior-attempts`，保留 ledger，再显式运行。已完成操作不能解锁；原 ACK 时点不能重造。若 child/state 已部分写入而无法恢复同一含义，停止该分支、记录缺口，不能静默重建后称原始轨迹。
@@ -111,7 +112,11 @@ python3 -B experiments/rc005_native.py --runtime-config /PRIVATE/runtime.json --
 
 ## 7. 证据、评审与关闭
 
-ignored `experiments/artifacts/rc005-native/<run>/` 保存 plan/effective config、operation 状态、native-inputs、state、stderr、captures、contexts、reader response/usage、coverage、blind-review；统一 ledger 另按 private runtime 指定保存，不含 auth headers。重跑不能覆盖先前失败与争议。Coverage 对 144 个位置保存 complete／pending／technical failure 状态，语义一律 unreviewed；盲包只含 governing history/current/response，不含作者 key。没有 hard semantic scorer 或自动能力分。
+ignored `experiments/artifacts/rc005-native/<run>/` 保存 plan/effective config、operation 状态、native-inputs、state、stderr、captures、contexts、reader response/usage、coverage、blind-review；统一 ledger 另按 private runtime 指定保存，不含 auth headers。重跑不能覆盖先前失败与争议。Coverage 对 144 个位置保存 complete／pending／technical failure 状态，语义一律 unreviewed。原 `blind-review/<cell-id>.json` 因文件名含 condition，属于内部 condition-visible source records，整个目录不适合作盲评交接。
+
+固定的纯离线 `export-review` 不读 runtime config、不初始化或写 ledger、不触发 provider。它要求 coverage 精确覆盖全部 144 位置且每个都为 complete 或有 native capture 错误证据的 technical-failure；pending、blocked、started、uncertain 以及 failed-or-uncertain 均拒绝导出，须先明确处置。Complete response 从已完成 operation 读取，并将当前 fixture 重建的 `reviewer_packet`＋实际 response／unreviewed 与运行时保存的内部 `blind-review/<cell-id>.json` 逐字段结构比对；首次 export 前 fixture 或回答发生变化也拒绝，不把新 history 配给旧回答。Technical-failure 必须有同 variant／probe 的已完成 run-bound record 通过上述校验，才可使用对应 governing history。技术失败的 `response` 明确为 JSON null，空字符串回答仍是空字符串，以 `response_state` 区分，所有语义一律 unreviewed，不把无答案视作语义错误。
+
+只交付单个通用文件 `review-packet.json`：144 项随机打乱，各有随机 opaque `review_id`，不含 cell、condition、stage、variant ID、provider、作者 key 或具体错误文字。对应表另存 `review-map.private.json`，绑定 review ID、原 cell 与准确导出内容，不能随 packet 交给 reviewer；也不能交付整个 output root。重复导出复用同一随机顺序和 ID，核对当前来源与既有 packet 等价；内容变化、缺失对应表或已有冲突文件时拒绝覆盖。已有 ledger/source binding 继续保留，不再增加 hash 或通用 registry。没有 hard semantic scorer 或自动能力分。
 
 Private 报告逐项观察标题、提出者、分工、旧稿使用、任务完成、不必要追问、ingestion/retrieval/answer/maintenance/repair 成本与人工处置。Current-only 的合理澄清不自动算不必要追问。按 family 解释相关 repeats；judgment 比例不等于 response accuracy 或 independent human calibration。坏结果定位到可见配置／阶段，不能推翻整个架构类别。
 

@@ -170,6 +170,103 @@ class RC005Tests(unittest.TestCase):
                 value=json.loads(path.read_text())
                 self.assertEqual(value['review_status'],'unreviewed')
                 self.assertNotIn('required_meanings',json.dumps(value))
+    def review_sources(self, root, failure=False):
+        out=root/'out'
+        coverage=[]
+        bundle=study.source.load_case()
+        for cell in study.cells():
+            failed=failure and cell['id']=='N-A-p1-1-recovered'
+            coverage.append(dict(cell,status='technical-failure' if failed else 'complete'))
+            if failed:
+                save(out/'captures'/'N-A-p1-1.json',{'recovered':{'error':'PRIVATE PID recovery condition detail'}})
+            else:
+                # Provider and internal keys must never cross the review export boundary.
+                save(out/'operations'/(cell['id']+'.json'), {'status':'complete','result':{
+                    'response':{'model':'PRIVATE_PROVIDER','choices':[{'message':{'content':'' if cell['id']=='P-A-p1-1-current-only' else 'synthetic answer'}}],
+                    'usage':{'prompt_tokens':100}},'internal_cell':cell['id']}})
+                variant=next(v for v in study.source.the_family(bundle)['variants'] if v['id']==cell['variant'])
+                probe=next(p for p in variant['probes'] if p['id']==cell['probe'])
+                record=study.source.reviewer_packet(bundle,variant,probe)
+                record.update(response='' if cell['id']=='P-A-p1-1-current-only' else 'synthetic answer',review_status='unreviewed')
+                save(out/'blind-review'/(cell['id']+'.json'),record)
+        save(out/'coverage.json',coverage)
+        return out
+
+    def test_review_export_blinding_binding_nulls_and_stable_repeat(self):
+        with tempfile.TemporaryDirectory() as d:
+            out=self.review_sources(Path(d),failure=True)
+            with patch.object(HTTP,'call',side_effect=AssertionError('offline export cannot call provider')), patch.object(Ledger,'note',side_effect=AssertionError('offline export cannot write ledger')):
+                result=study.Study.export_review(out)
+                packet_path=Path(result['packet']);map_path=Path(result['private_mapping'])
+                initial=packet_path.read_bytes();mapping_bytes=map_path.read_bytes()
+                second=study.Study.export_review(out)
+            self.assertEqual(result,second)
+            self.assertEqual(initial,packet_path.read_bytes())
+            self.assertEqual(mapping_bytes,map_path.read_bytes())
+            packet=json.loads(initial)
+            self.assertEqual(set(packet),{'format','review_status','items'})
+            self.assertEqual(len(packet['items']),144)
+            self.assertEqual(len({item['review_id'] for item in packet['items']}),144)
+            self.assertEqual(sum(item['response'] is None for item in packet['items']),1)
+            self.assertEqual(sum(item['response']=='' for item in packet['items']),1)
+            self.assertEqual(next(item for item in packet['items'] if item['response'] is None)['response_state'],'technical-failure')
+            self.assertNotIn('PRIVATE',initial.decode())
+            for item in packet['items']:
+                self.assertEqual(set(item),set(study.source.REVIEW_FIELDS)|{'review_id','response_state'})
+                self.assertRegex(item['review_id'],r'^[0-9a-f]{32}$')
+                self.assertEqual(item['review_status'],'unreviewed')
+            mapping=json.loads(mapping_bytes)
+            self.assertEqual({item['cell_id'] for item in mapping['items']},{cell['id'] for cell in study.cells()})
+            self.assertNotEqual([item['cell_id'] for item in mapping['items']],[cell['id'] for cell in study.cells()])
+            # An underlying response mutation invalidates binding without overwriting either file.
+            target=out/'operations'/'P-A-p1-1-full-history.json'
+            record=json.loads(target.read_text())
+            record['result']['response']['choices'][0]['message']['content']='changed after export'
+            save(target,record)
+            with self.assertRaisesRegex(ValueError,'run-bound|source changed'):study.Study.export_review(out)
+            self.assertEqual(initial,packet_path.read_bytes())
+            self.assertEqual(mapping_bytes,map_path.read_bytes())
+
+    def test_review_export_refuses_unclosed_or_conflicting_packet(self):
+        for status in ('pending','started','uncertain','blocked','failed-or-uncertain'):
+            with tempfile.TemporaryDirectory() as d:
+                out=self.review_sources(Path(d))
+                coverage=json.loads((out/'coverage.json').read_text());coverage[0]['status']=status
+                save(out/'coverage.json',coverage)
+                with self.assertRaises(ValueError):study.Study.export_review(out)
+                self.assertFalse((out/'review-packet.json').exists())
+        with tempfile.TemporaryDirectory() as d:
+            out=self.review_sources(Path(d))
+            study.Study.export_review(out)
+            (out/'review-packet.json').write_text('{"conflict":true}\n')
+            with self.assertRaisesRegex(ValueError,'refusing overwrite'):study.Study.export_review(out)
+            self.assertEqual((out/'review-packet.json').read_text(),'{"conflict":true}\n')
+
+    def test_first_review_export_rejects_fixture_change_since_run(self):
+        import copy
+        with tempfile.TemporaryDirectory() as d:
+            out=self.review_sources(Path(d),failure=True)
+            changed=copy.deepcopy(study.source.load_case())
+            changed['common_context']+=' 本句是在运行后新增的背景。'
+            with patch.object(study.source,'load_case',return_value=changed):
+                with self.assertRaisesRegex(ValueError,'run-bound'):
+                    study.Study.export_review(out)
+            self.assertFalse((out/'review-packet.json').exists())
+            self.assertFalse((out/'review-map.private.json').exists())
+            # Restoring the actual run source permits normal export and stable reuse.
+            first=study.Study.export_review(out)
+            before=(out/'review-packet.json').read_bytes()
+            self.assertEqual(first,study.Study.export_review(out))
+            self.assertEqual(before,(out/'review-packet.json').read_bytes())
+
+    def test_review_export_cli_needs_no_runtime_or_ledger(self):
+        with tempfile.TemporaryDirectory() as d:
+            out=self.review_sources(Path(d))
+            with patch.object(sys,'argv',['rc005_native.py','--out',str(out),'export-review']), patch.object(study.Study,'__init__',side_effect=AssertionError('runtime initialization forbidden')), patch('builtins.print'):
+                study.main()
+            self.assertTrue((out/'review-packet.json').exists())
+            self.assertFalse((out/'dispatches.jsonl').exists())
+
     def test_ledger_failures_budget_and_binding(self):
         with tempfile.TemporaryDirectory() as d:
             ledger=Ledger(Path(d)/'ledger')

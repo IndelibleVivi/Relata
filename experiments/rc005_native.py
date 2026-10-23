@@ -304,6 +304,96 @@ class Study:
             coverage.append(dict(cell,status=status,semantic_status='unreviewed',error=reason,evidence=evidence))
         save(self.out/'coverage.json',coverage)
         return dict(Counter(row['status'] for row in coverage))
+    @staticmethod
+    def export_review(out):
+        """Export only the closed fixed study; never initialize a runtime or ledger.
+
+        Existing condition-visible blind-review/ files remain internal records.
+        Only review-packet.json is a reviewer handoff; the sibling mapping is private.
+        """
+        import secrets
+        out = Path(out).resolve()
+        bundle = source.load_case()
+        source.validate(bundle)
+        coverage = json.loads((out/'coverage.json').read_text())
+        expected = {cell['id']: cell for cell in cells()}
+        if (not isinstance(coverage, list) or len(coverage) != 144 or
+                {row.get('id') for row in coverage} != set(expected)):
+            raise ValueError('export requires exact coverage of all 144 positions')
+        snapshots = {}
+        bound_histories, failure_histories = set(), set()
+        for row in coverage:
+            name = row['id']
+            cell = expected[name]
+            if row.get('status') not in ('complete', 'technical-failure'):
+                raise ValueError('export requires closed complete/technical-failure positions')
+            variant = next(v for v in source.the_family(bundle)['variants'] if v['id']==cell['variant'])
+            probe = next(p for p in variant['probes'] if p['id']==cell['probe'])
+            body = source.reviewer_packet(bundle, variant, probe)
+            if row['status']=='complete':
+                record = json.loads((out/'operations'/(name+'.json')).read_text())
+                if record.get('status') != 'complete':
+                    raise ValueError('coverage disagrees with answer operation')
+                response = record['result']['response']['choices'][0]['message']['content']
+                if not isinstance(response, str):
+                    raise ValueError('complete answer must have a string response, including empty string')
+                expected_record = dict(body, response=response, review_status='unreviewed')
+                run_record = json.loads((out/'blind-review'/(name+'.json')).read_text())
+                if run_record != expected_record:
+                    raise ValueError('run-bound review record disagrees with current source or actual response')
+                bound_histories.add((cell['variant'], cell['probe']))
+            else:
+                # A missing response is a technical state, never a semantic zero.
+                base = f"N-{cell['variant']}-{cell['probe']}-{cell['repeat']}"
+                capture_path = out/'captures'/(base+'.json')
+                if cell['stage']!='N' or not capture_path.exists():
+                    raise ValueError('technical failure lacks its native capture evidence')
+                capture = json.loads(capture_path.read_text()).get(cell['condition'], {})
+                if not isinstance(capture.get('error'), str) or not capture['error']:
+                    raise ValueError('technical failure lacks an explicit captured error')
+                if (out/'operations'/(name+'.json')).exists():
+                    raise ValueError('technical-failure position also has an answer operation; reconcile first')
+                response = None
+                failure_histories.add((cell['variant'], cell['probe']))
+            body.update(response=response, review_status='unreviewed', response_state=row['status'])
+            snapshots[name] = body
+        if not failure_histories <= bound_histories:
+            raise ValueError('technical failure history lacks a matching completed run-bound review record')
+        packet_path, map_path = out/'review-packet.json', out/'review-map.private.json'
+        if packet_path.exists() and not map_path.exists():
+            raise ValueError('existing review packet has no private binding map; refusing replacement')
+        if map_path.exists():
+            mapping = json.loads(map_path.read_text())
+            if not isinstance(mapping, dict) or mapping.get('format')!='rc005-private-review-map-1':
+                raise ValueError('invalid existing private review map')
+            entries = mapping.get('items', [])
+            if (len(entries)!=144 or {item.get('cell_id') for item in entries}!=set(expected) or
+                    len({item.get('review_id') for item in entries})!=144):
+                raise ValueError('private review map does not bind exact 144 positions')
+            for item in entries:
+                if item.get('body') != snapshots[item['cell_id']]:
+                    raise ValueError('review source changed since export; existing packet retained')
+                if not re.fullmatch(r'[0-9a-f]{32}', item['review_id']):
+                    raise ValueError('invalid opaque review ID')
+        else:
+            entries = [{'review_id': secrets.token_hex(16), 'cell_id': name, 'body': body}
+                       for name,body in snapshots.items()]
+            secrets.SystemRandom().shuffle(entries)
+            mapping = {'format':'rc005-private-review-map-1', 'items':entries}
+        packet = {'format':'review-packet-1', 'review_status':'unreviewed',
+                  'items':[dict(item['body'], review_id=item['review_id']) for item in entries]}
+        if packet_path.exists():
+            if json.loads(packet_path.read_text()) != packet:
+                raise ValueError('existing review packet differs from bound sources; refusing overwrite')
+        else:
+            # Persist mapping first. A crash before packet creation is recoverable from it.
+            if not map_path.exists():
+                with map_path.open('x') as stream:
+                    stream.write(dump(mapping)+'\n')
+            with packet_path.open('x') as stream:
+                stream.write(dump(packet)+'\n')
+        return {'packet': str(packet_path), 'private_mapping': str(map_path), 'items':144,
+                'review_status':'unreviewed', 'handoff':'share only the packet file, never the output directory or private map'}
     def run(self, quick=False):
         selected = [c for c in cells() if not quick or (c['variant']=='A' and c['repeat']==1 and c['probe']=='p1' and c['stage'] in ('P','N'))]
         try:
@@ -321,12 +411,17 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--runtime-config',type=Path)
     parser.add_argument('--out',type=Path)
-    parser.add_argument('command',choices=['plan','run','quick','report','retry-operation'])
+    parser.add_argument('command',choices=['plan','run','quick','report','retry-operation','export-review'])
     parser.add_argument('--operation', help='failed/uncertain operation name only')
     parser.add_argument('--reason', help='evidence-based repair and duplicate/state-risk disposition')
     args = parser.parse_args()
     if args.command=='plan':
         print(dump(cells()))
+        return
+    if args.command=='export-review':
+        if not args.out:
+            parser.error('export-review requires out; no runtime configuration is read')
+        print(dump(Study.export_review(args.out)))
         return
     if not args.runtime_config or not args.out:
         parser.error('runtime-config and out are required')
