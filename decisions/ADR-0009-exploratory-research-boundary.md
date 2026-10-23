@@ -7,6 +7,8 @@
 **Prepared:** 2026-09-27
 **Scope:** accepted named [RC-005 → Mem0 packet](../experiments/rc005-native-execution-packet.md) only; no general execution, hosting or result-publication authority
 
+**P0 extension (2026-10-23):** the named RC-005 study also includes the [fixed-capture reader follow-up](../experiments/rc005-exposure-followup.md): 18 original immediate captures × three projections, at most 54 additional DSF reader dispatches, 4096 completion cap for all new arms, no new ingestion/search/embedding, and the same cumulative 300 chat / 500 embedding ledger. The original 144 positions and outputs remain unchanged. The [Relata × AMS campaign](../research/relata-ams-campaign.md) retains separate research questions and evidence; P1–P6 designs do not activate other provider or human studies.
+
 ## 中文摘要
 
 建议为有明确对象、公开成人合成材料、配置、预算与停止条件的探索性实测建立独立边界，使其能够先于正式 benchmark promotion 产生有界观察。一个获准研究包内的重复运行、诊断与条件变化无需逐项重新审批；越出对象、数据、费用或外部操作范围才需要新决定。本文已接受，仅激活 RC-005 → pinned Mem0 执行包；正式 promotion 与其他执行边界保持有效。计划、代码、运行证据、案例接受、比较主张和公开发布是不同状态。

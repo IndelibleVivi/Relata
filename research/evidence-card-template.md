@@ -68,6 +68,8 @@ observed input
 
 List assumptions about retained objects, update semantics, activation, context, state, identity, timing, system interfaces, and adapter capabilities. Mark architecture-specific conclusions.
 
+For an experimental claim also name the estimand, independent family/participant unit and lineage, primary endpoints, actual versus planned evidence, separate completion/semantic/sufficient-input denominators, strongest competing explanation, failed counterexamples and next observation that could reverse the claim. Identity checks, semantic validity, causal attribution and generalization require different evidence. Keep negative results in the same claim record.
+
 ## 9. Claim ledger
 
 | ID | Claim | Label | Exact evidence location | Limitation / counter-evidence | Relata consumer |

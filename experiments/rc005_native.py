@@ -24,6 +24,15 @@ def cells():
             for stage, conditions in CONDITIONS.items() for v in ('A', 'B')
             for p in ('p1', 'p2', 'p3') for r in (1, 2, 3) for c in conditions]
 
+def historical_native_history(result):
+    """Historical RC-005 projection: retain field order, defaults and values.
+
+    This deliberately drops native fields; P0 audits it without changing this run.
+    Native roles are not chat roles. Missing metadata/score become historical nulls.
+    """
+    entries = result.get('results',[]) if isinstance(result,dict) else result
+    return [{'role':'memory','surface':'native-search','text':item.get('memory',item.get('text','')),'metadata':item.get('metadata'),'score':item.get('score')} for item in entries]
+
 def terms(text):
     result = re.findall(r'[a-z0-9]+', text.lower())
     for run in re.findall(r'[\u3400-\u9fff]+', text):
@@ -261,8 +270,7 @@ class Study:
                             if name not in wanted or condition not in captures or 'error' in captures[condition]:
                                 continue
                             result = captures[condition]['native']['result']
-                            entries = result.get('results',[]) if isinstance(result,dict) else result
-                            history = [{'role':'memory','surface':'native-search','text':item.get('memory',item.get('text','')),'metadata':item.get('metadata'),'score':item.get('score')} for item in entries]
+                            history = historical_native_history(result)
                             admitted = {'context':self.bundle['common_context'],'history':history,'current':probe['current']}
                             cell = next(c for c in selected if c['id']==name)
                             try:

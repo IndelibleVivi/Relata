@@ -3,6 +3,8 @@
 
 # Relata 从这里开始：Research Foundation 执行路径
 
+**P0 扩展（2026-10-23）：** 指定 RC-005 研究另含[固定 capture 的 reader 后续包](experiments/rc005-exposure-followup.md)：18 份原 immediate capture × 三种投影，最多新增 54 次 DSF reader dispatch，新增三臂统一 4096 completion 上限，不重新摄入／检索／embedding，共用原 300 chat／500 embedding 累计账本。原 144 位置和回答不改写。[Relata × AMS campaign](research/relata-ams-campaign.md)保留各自研究问题与证据；P1–P6 设计不激活其他 provider 或真人研究。
+
 Relata 是前沿记忆研究室，[ADR-0008](decisions/ADR-0008-three-core-research-functions.zh-CN.md) 确立三项核心职责。按研究问题选择入口；它们并行存在，不要求固定先后顺序。
 
 | 职责 | 阅读路径 |

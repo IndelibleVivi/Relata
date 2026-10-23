@@ -1,5 +1,7 @@
 # Relata 第一研究周期计划（proposed）
 
+本轮交叉研究入口：[Relata × AMS campaign](relata-ams-campaign.md)。P0 的[offline audit](../experiments/rc005-exposure-audit.md)解释实际暴露边界；[reader-only 后续包](../experiments/rc005-exposure-followup.md)在原累计账本内最多新增 54 次请求，原 144 位置保持不变。P1–P6 保留独立研究设计，未由此启动其他系统或人的研究。
+
 **Status:** proposed research programme plan。它不是 accepted 执行决定、结果论文、排定日程或已批准预算；任何 live study、部署与发布仍需各自授权。
 **Authority:** 依次遵循 [STATUS](../STATUS.md)、[CHARTER](../CHARTER.md)、[ASSUMPTION_REGISTER](../ASSUMPTION_REGISTER.md) 与 accepted decisions；[AGENTS.md](../AGENTS.md)将其落实为工程边界。[ADR-0008](../decisions/ADR-0008-three-core-research-functions.md) 已接受三项核心职能。有关探索性执行的边界见 accepted [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md)，它仅激活具名 RC-005 → Mem0 包，整轮计划不因此获得通用执行权限。
 **Reuse:** 复用现有 cases、[十份 source studies](../systems/source-studies/README.md)、[architecture atlas](../systems/architecture-atlas/README.md) 与 [设计／测试映射](memory-design-test-map.md)；不新建 topology、运行接口或评分契约。

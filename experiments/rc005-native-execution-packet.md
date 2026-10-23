@@ -1,5 +1,7 @@
 # RC-005 → Mem0 首个执行包（accepted named envelope）
 
+本轮交叉研究入口：[Relata × AMS campaign](../research/relata-ams-campaign.md)。P0 的[offline audit](rc005-exposure-audit.md)解释实际暴露边界；[reader-only 后续包](rc005-exposure-followup.md)在原累计账本内最多新增 54 次请求，原 144 位置保持不变。P1–P6 保留独立研究设计，未由此启动其他系统或人的研究。
+
 **Status:** 2026-10-23 maintainer 接受 [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md)，仅激活本包。固定 study 源码与 offline plumbing 已实现；真实 native 可运行性、执行完成和语义判断各自需要运行证据。公共文档不承载私人运行状态或 raw 结果。[STATUS](../STATUS.md) 为当前权限入口。
 
 ## 中文摘要

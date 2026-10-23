@@ -3,6 +3,8 @@
 
 # ADR-0009 — 分开有界探索性执行与 Benchmark Promotion
 
+**P0 扩展（2026-10-23）：** 指定 RC-005 研究另含[固定 capture 的 reader 后续包](../experiments/rc005-exposure-followup.md)：18 份原 immediate capture × 三种投影，最多新增 54 次 DSF reader dispatch，新增三臂统一 4096 completion 上限，不重新摄入／检索／embedding，共用原 300 chat／500 embedding 累计账本。原 144 位置和回答不改写。[Relata × AMS campaign](../research/relata-ams-campaign.md)保留各自研究问题与证据；P1–P6 设计不激活其他 provider 或真人研究。
+
 **Status：** accepted；2026-10-23；仅激活 RC-005 → Mem0 包
 **Prepared：** 2026-09-27
 **Scope：** 仅激活[RC-005 → Mem0 包](../experiments/rc005-native-execution-packet.md)；不授予通用执行、hosting 或结果发布权限

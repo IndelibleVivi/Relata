@@ -3,6 +3,8 @@
 
 # Relata Research Foundation: Start Here
 
+**P0 extension (2026-10-23):** the named RC-005 study also includes the [fixed-capture reader follow-up](experiments/rc005-exposure-followup.md): 18 original immediate captures × three projections, at most 54 additional DSF reader dispatches, 4096 completion cap for all new arms, no new ingestion/search/embedding, and the same cumulative 300 chat / 500 embedding ledger. The original 144 positions and outputs remain unchanged. The [Relata × AMS campaign](research/relata-ams-campaign.md) retains separate research questions and evidence; P1–P6 designs do not activate other provider or human studies.
+
 Relata is a frontier memory research lab with three core functions under [ADR-0008](decisions/ADR-0008-three-core-research-functions.md). Choose an entrypoint by the research question; these are parallel responsibilities, not a required sequence.
 
 | Function | Reading path |

@@ -1,5 +1,7 @@
 # Relata Source and Evidence Workflow
 
+本轮交叉研究入口：[Relata × AMS campaign](relata-ams-campaign.md)。P0 的[offline audit](../experiments/rc005-exposure-audit.md)解释实际暴露边界；[reader-only 后续包](../experiments/rc005-exposure-followup.md)在原累计账本内最多新增 54 次请求，原 144 位置保持不变。P1–P6 保留独立研究设计，未由此启动其他系统或人的研究。
+
 Relata research connects conceptual questions, architecture judgments, synthesis, decisions and cases. Under [ADR-0006](../decisions/ADR-0006-frontier-memory-research-lab.md), source research and critical articles are independent outputs; they need not first become benchmark cases. A source name, paper title, repository, or benchmark mentioned in Draft 0.1 carries no current evidentiary weight until the exact object is pinned and reviewed in an Evidence Card.
 
 Under [ADR-0008](../decisions/ADR-0008-three-core-research-functions.md), this workflow serves Relata's own benchmark research, system collection and incubation for future memory systems. Start from a concrete Relata question, draw on relevant existing AMS work with its conditions and evidence limits, and investigate remaining gaps. Both projects can inform long-form synthesis without becoming the same research programme.

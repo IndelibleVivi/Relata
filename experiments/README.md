@@ -1,5 +1,7 @@
 # Relata Experiments
 
+本轮交叉研究入口：[Relata × AMS campaign](../research/relata-ams-campaign.md)。P0 的[offline audit](rc005-exposure-audit.md)解释实际暴露边界；[reader-only 后续包](rc005-exposure-followup.md)在原累计账本内最多新增 54 次请求，原 144 位置保持不变。P1–P6 保留独立研究设计，未由此启动其他系统或人的研究。
+
 R0 experiments are local, small, and evidence-producing. They investigate cases, observation boundaries and authorized state mechanisms; they do not create benchmark releases or rankings.
 
 ## Available offline tools
