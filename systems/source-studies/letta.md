@@ -12,7 +12,7 @@
 
 A bounded source study of current Letta local memory: transcripts, Git-backed MemFS and compiled context, with local, Cloud and historical API boundaries kept separate.
 
-研究日：2026-09-22。对象是官方 `letta-ai/letta-code`，固定 commit **`f5c5bbce6e9394b30c626909315c2b3acc665672`**（提交时间 2026-09-22T02:02:42-04:00），`package.json` 标注 **0.32.17**；这是源码快照，不等于已发布 npm 包或线上部署版本。[版本证据][E1]
+首读：2026-09-22；编译与消费时序回查：2026-10-24。对象是官方 `letta-ai/letta-code`，固定 commit **`f5c5bbce6e9394b30c626909315c2b3acc665672`**（提交时间 2026-09-22T02:02:42-04:00），`package.json` 标注 **0.32.17**；这是源码快照，不等于已发布 npm 包或线上部署版本。[版本证据][E1]
 
 入口仓库 `letta-ai/letta` 当前 README 将 active source 指向 `letta-code`，把 `archive` 称为 retired V1 API server；入口 main 已解析为 `5bcdd177d70fa2b31a754cfcd801e77b2e1ab16a`。本研究不读取 archive 实现，不把旧 MemGPT 工具、数据库层次或论文实验当成当前机制。[官方入口](https://github.com/letta-ai/letta/blob/5bcdd177d70fa2b31a754cfcd801e77b2e1ab16a/README.md)
 
@@ -44,7 +44,7 @@ A bounded source study of current Letta local memory: transcripts, Git-backed Me
 
 ## 修改、删除及派生影响
 
-**SOURCE-OBSERVED**：`memory delete` 删除目标文件或目录并提交，rename 移动目标路径；在该工具调用路径中没有同步清除 transcript、既存摘要、其他记忆中的复述或 Git 历史的级联逻辑。[删除分支][E17] 新编译可停止注入已删除文件，但“从活动记忆消失”与“不可再恢复/全系统遗忘”不同。Cloud 同步可出现 dirty、conflict、push_failed；非快进时尝试 rebase 后 push，失败状态会返回。[同步状态][E18]
+**SOURCE-OBSERVED**：`memory delete` 删除目标文件或目录并提交，rename 移动目标路径；在该工具调用路径中没有同步清除 transcript、既存摘要、其他记忆中的复述或 Git 历史的级联逻辑。[删除分支][E17] 删除后的文件不会进入新一次完整编译，但常规 turn 的 revision 检测有另一条路：raw system hash 相同而 MemFS revision 改变时，dry-run 编译产生新 core，持久化更新 core/revision，却保留旧 compiled `content`，再向调用追加 memory update。新 conversation、显式 `recompileConversation` 或 compaction 的完整编译路径才会替换该 content。因而同一 conversation 可以同时带着旧 prompt 文字和新的覆盖指示；不能仅凭删除回执宣称旧文字已退出当前输入，更不能宣称全系统遗忘。[revision 检测][E10]、[调用桥接][E11]及[完整重编译入口](https://github.com/letta-ai/letta-code/blob/f5c5bbce6e9394b30c626909315c2b3acc665672/src/backend/local/local-backend.ts)。Cloud 同步可出现 dirty、conflict、push_failed；非快进时尝试 rebase 后 push，失败状态会返回。[同步状态][E18]
 
 **INFERRED**：修改正确规则时，旧 summary、未更新的别名文件或再次 recall 到旧消息仍可能竞争；删除要求应区分纠错、撤回可用性和数据清除。这里没有证据证明全系统语义级撤销闭包，也没有证据证明产品做不到；后者需要更广源码和托管端调查。
 

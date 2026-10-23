@@ -36,7 +36,7 @@ flowchart TB
   active -->|"取当前 in-context 消息"| backend
   backend -->|"送历史＋已解析 prompt"| bridge
   memfs -->|"读取 git HEAD 内容"| compiler
-  compiler -->|"保存编译内容与 revision"| compiled
+  compiler -->|"初编译／完整重编译保存 content"| compiled
   compiled -->|"system prompt／memory update"| bridge
   bridge -->|"context＋tools＋model options"| model
   model -->|"返回生成 stream"| bridge

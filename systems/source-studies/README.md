@@ -79,6 +79,8 @@ python3 -B systems/source-studies/observations/graphiti-observe.py \
 
 每份报告保留 exact commit、pinned blob/行号、覆盖与未读范围、竞争解释和未验证效果。报告通过并行 agent 源码研究形成，协调者完成跨报告边界检查、引用定位检查与上述观察的复跑；这不代替独立人类 review，不提升 accepted Evidence Card 数量。
 
+2026-10-24 的[Mem0 论证深化](mem0.md#形成记忆时系统已经作了一次解释)回查同一固定版本的写入与返回路径，并与 Letta、Graphiti 的责任边界及允许原文基线对照。它讨论较短表示何时足以支持当前任务、何时需要重新区分历史，以及应用和 reader 还承担哪些工作。新增内容是静态源码解释与显式推演，没有新增效果实验；独立 RC-005 执行材料不在这里转为公开比较结果。
+
 图集将每个节点、关系、区域与状态归属接到固定源码锚点；图中 `observed` 仅表示静态 source-observed。阅读方式和 source/generated 关系见[图集说明](../architecture-atlas/README.md)。
 
 从[研究室 inquiry](../../research/agent-memory-inquiry.md)继续连接 AMS、文章主问题与后续证据；从 [System Census](../README.zh-CN.md)查看正式 System Card 的路径。

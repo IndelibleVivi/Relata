@@ -55,7 +55,7 @@ What persists: raw messages (role, timestamp, provider/model metadata, `parentId
 ## 4. Change and repair
 
 - The `memory` tool edits files and commits by path with a required non-empty reason and the agent author. `memory delete` removes a target file or directory and commits; `rename` moves a path. That tool path has no cascade to the transcript, existing summaries, recollections in other memory files or Git history.
-- A new compile stops injecting a deleted file, but disappearing from active memory is not the same as being unrecoverable or forgotten everywhere.
+- A full compile excludes the deleted file from the new content. When only the MemFS revision changes under the same raw system hash, a normal turn instead keeps the old content, updates core/revision and appends a memory update. Old text can therefore remain in the same conversation input; full recompilation and an appended override instruction are distinct, and neither establishes forgetting everywhere.
 - Cloud sync can return dirty, conflict or push_failed; a non-fast-forward attempts rebase then push, and a failure state is returned.
 - What can fail silently: if the model condenses “a colleague likes coffee” into “the user likes coffee”, Git faithfully records the wrong condensation; the structure does not correct attribution unless the file text keeps its own reference.
 
@@ -85,7 +85,7 @@ Memory evolution is ordinary file and Git operations, which is inspectable, amen
 
 ## 11. Known successes and failures
 
-Source-observed (static, pinned version): three persistent objects with a clear compile step; model-and-human editable memory with committed reasons; revision-triggered recompilation; raw transcript separated from compressed context; FTS-lite local search (explicitly not vector/hybrid). A competing reading is that this is programmable context management, and “learning” may mean future prompt change; that does not diminish the engineering value but cannot replace evidence of behaviour improvement. UNVERIFIED: online performance, recall rate, cross-process consistency, long-term relational effect, managed deletion guarantees and global permission safety.
+Source-observed (static, pinned version): three persistent objects with a clear compile step; model-and-human editable memory with committed reasons; revision-triggered appended updates or full recompilation; raw transcript separated from compressed context; FTS-lite local search (explicitly not vector/hybrid). A competing reading is that this is programmable context management, and “learning” may mean future prompt change; that does not diminish the engineering value but cannot replace evidence of behaviour improvement. UNVERIFIED: online performance, recall rate, cross-process consistency, long-term relational effect, managed deletion guarantees and global permission safety.
 
 ## 12. Observability at candidate Relata boundaries
 

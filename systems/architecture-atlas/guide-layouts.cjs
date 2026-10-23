@@ -18,7 +18,7 @@ module.exports={
  'letta':{
   overview:chain(['memfs','compiler','compiled','bridge','model','edit'],['读已提交 HEAD','保存编译状态','装配 prompt','交付本次 context','模型选择工具'],'先读 committed memory，再看模型能否选择 memory tool；工具提交会回到 MemFS。'),
   flow:chain(['entry','backend','active','bridge','model','edit'],['进入 turn','加入活动消息','提供当前消息','发送 context','可选工具调用'],'这是 local turn 的使用路径；MemFS 编译与后台 reflection 分别补入和修订状态。'),
-  revision:chain(['edit','working','memfs','check','compiler','compiled'],['编辑工作区','stage 后 commit','读取 revision','变更才重编译','保存新 prompt'],'修改只有进入 Git HEAD 才被编译；历史 transcript 和旧版本不自动清除。')
+  revision:chain(['edit','working','memfs','check','compiler','compiled'],['编辑工作区','stage 后 commit','读取 revision','变更才编译','更新编译状态'],'普通 revision 变化追加新 memory 指示；完整 recompile 才替换 content，历史 transcript 与旧版本不自动清除。')
  },
  'lmc-5':{
   overview:{rows:[['min_curated','min_read','runtime'],['pg_curated','pipeline']],edges:[['min_curated','min_read','live 候选与 M'],['min_read','runtime','返回 recall'],['pg_curated','pipeline','curated 候选'],['pipeline','runtime','注入来源分层文本']],note:'Minimal 与 Production 是两条独立实现路径，均交给外部 runtime 使用。'},

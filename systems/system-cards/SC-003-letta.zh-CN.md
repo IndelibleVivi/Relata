@@ -55,7 +55,7 @@ turn input -> message {id, role, timestamp, agent_id, conversation_id}
 ## 4. 变更与修复
 
 - `memory` 工具按路径改文件并 commit，要求非空 reason 与 agent author。`memory delete` 删除目标文件或目录并 commit；`rename` 移动路径。该工具路径没有到 transcript、既存摘要、其他 memory 文件中的复述或 Git history 的级联。
-- 新编译会停止注入已删除文件，但“从活动记忆消失”不等于“不可恢复或全系统遗忘”。
+- 完整编译会从新 content 中排除已删除文件；常规 turn 在 raw system hash 相同、MemFS revision 变化时则保留旧 content，更新 core/revision 并追加 memory update。同一 conversation 的旧文字因此未必退出输入，完整重编译与追加覆盖指示应分开；两者都不等于全系统遗忘。
 - Cloud 同步可出现 dirty、conflict 或 push_failed；非快进时尝试 rebase 后 push，失败状态会返回。
 - 可静默失败之处：若模型把“同事喜欢咖啡”概括成“用户喜欢咖啡”，Git 会忠实记录错误概括；除非正文自觉保留引用，结构不会纠正归属。
 
@@ -85,7 +85,7 @@ Git revision、diff、commit reason、文件正文、conversation/message ID 与
 
 ## 11. 已知成功与失败
 
-SOURCE-OBSERVED（静态、固定版本）：三个持久对象与清晰编译步骤；模型与人可编辑且带 reason 的 memory；revision 触发的重编译；原始 transcript 与压缩上下文分离；FTS-lite 本地检索（明确不是向量/hybrid）。竞争解释是：它是一套可编程 context management，“学习”可指未来提示改变；这不贬低工程价值，但不能替代行为改善的证据。UNVERIFIED：线上性能、召回率、跨进程一致性、长期关系效果、托管删除保证与全局权限安全。
+SOURCE-OBSERVED（静态、固定版本）：三个持久对象与清晰编译步骤；模型与人可编辑且带 reason 的 memory；revision 触发的追加 update 或完整重编译；原始 transcript 与压缩上下文分离；FTS-lite 本地检索（明确不是向量/hybrid）。竞争解释是：它是一套可编程 context management，“学习”可指未来提示改变；这不贬低工程价值，但不能替代行为改善的证据。UNVERIFIED：线上性能、召回率、跨进程一致性、长期关系效果、托管删除保证与全局权限安全。
 
 ## 12. 候选 Relata 边界上的可观察性
 

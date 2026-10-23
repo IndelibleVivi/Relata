@@ -39,7 +39,7 @@ flowchart TB
   active -->|"当前 conversation 消息"| bridge
   messages -->|"筛 scope／日期，匹配词句"| recall
   memfs -->|"HEAD 的 core 正文／目录"| compiler
-  compiler -->|"生成与持久 prompt"| compiled
+  compiler -->|"编译或更新 core／revision"| compiled
   compiled -->|"prompt＋可选 revision update"| bridge
   bridge -->|"发送本次 context"| model
   edit -->|"memory 命令→commit"| memfs

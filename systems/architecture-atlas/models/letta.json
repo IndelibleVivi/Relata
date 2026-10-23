@@ -385,7 +385,7 @@
             "S21",
             "S8"
           ],
-          "note": "持久 content/coreMemory/revision；revision 变化可产生 midConversationSystemPrompt，不能推断旧 text 已全局消除。"
+          "note": "普通 revision update 保留旧 content、更新 coreMemory/revision 并追加新指示；完整 recompile 才替换 content。"
         },
         {
           "id": "bridge",
@@ -543,7 +543,7 @@
         {
           "from": "compiler",
           "to": "compiled",
-          "label": "保存编译内容与 revision",
+          "label": "初编译／完整重编译保存 content",
           "status": "observed",
           "evidence": [
             "S8",
@@ -838,7 +838,7 @@
             "S21",
             "S8"
           ],
-          "note": "持久 content/coreMemory/revision；revision 变化可产生 midConversationSystemPrompt，不能推断旧 text 已全局消除。"
+          "note": "普通 revision update 保留旧 content、更新 coreMemory/revision 并追加新指示；完整 recompile 才替换 content。"
         },
         {
           "id": "bridge",
@@ -1071,7 +1071,7 @@
         {
           "from": "compiler",
           "to": "compiled",
-          "label": "生成与持久 prompt",
+          "label": "编译或更新 core／revision",
           "status": "observed",
           "evidence": [
             "S8",
@@ -1284,7 +1284,7 @@
       "id": "revision",
       "title": "修订、删除与派生状态",
       "question": "改写或删除 memory 后，哪些状态进入新 context，哪些历史或派生内容不会由此路径自动清除？",
-      "reading_guide": "沿命令→工作区→Git HEAD→revision 检查→重编译读取生效边界。下方 reflection 用候选分支合并修订；历史 transcript、旧摘要及既存 Git 版本仍有各自生命周期，删除命令不是跨层清除事务。",
+      "reading_guide": "沿命令→工作区→Git HEAD→revision 检查，区分追加 update 与完整 recompile 的生效边界。下方 reflection 用候选分支合并修订；历史 transcript、旧摘要及既存 Git 版本仍有各自生命周期，删除命令不是跨层清除事务。",
       "omissions": [
         "未审阅全产品删除/导出、备份清除、Cloud 保留策略，不能据此声称全系统做不到遗忘。",
         "未展开所有 Git hook、read-only enforcement、权限保护或并发一致性实现。",
@@ -1398,7 +1398,7 @@
           "evidence": [
             "S8"
           ],
-          "note": "旧 raw system hash 相同时，变更 revision 返回 mid-conversation update；其他情况重新编译。"
+          "note": "旧 raw system hash 相同时，变更 revision 保留原 content 并返回 mid-conversation update；完整 recompile 替换 content。"
         },
         {
           "id": "compiler",
@@ -1424,7 +1424,7 @@
             "S21",
             "S8"
           ],
-          "note": "持久 content/coreMemory/revision；revision 变化可产生 midConversationSystemPrompt，不能推断旧 text 已全局消除。"
+          "note": "普通 revision update 保留旧 content、更新 coreMemory/revision 并追加新指示；完整 recompile 才替换 content。"
         },
         {
           "id": "messages",
@@ -1713,7 +1713,7 @@
         {
           "owner": "MemFS 工作区、Git HEAD、conversation compiled state",
           "writers": "memory tool 改目标；Git commit 发布当前版本；compiler 读取 committed HEAD",
-          "changes": "删除文件形成新提交；下一次 revision 解析或显式 recompile 更新可用 memory context",
+          "changes": "删除形成新提交；普通 revision 分支追加 update 并保留原 content，显式完整 recompile 替换 content",
           "limits": "该路径不重写 Git 历史，也不遍历 transcript、旧摘要、别处复述；是有界调用路径结论。",
           "evidence": [
             "S6",
