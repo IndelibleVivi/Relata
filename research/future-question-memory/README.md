@@ -233,6 +233,8 @@ python3 -B tools/future_question_review.py recompute \
 
 `prepare`、`export-review` 都要求新目录，拒绝覆盖与 symlink 路径。response batch 在 `responses/` 下按 `000001.json`… append-only；review batch 在 `reviews/` 下 append-only，并在 `review-keys/` 保存 exact key 的 immutable copy。同一 input 的同一 reviewer 不能覆盖旧判断；不同 reviewer 可复用同一 blind alias，也保留不同 decision。旧 batch、blind packet、alias→input、completed response、input/response digest 或 contract 漂移都会使 `verify` 失败。review key 与 item 绑定 exact input digest、response digest、decision options 与 history/contract digest。
 
+新导出的盲评使用中英说明，`decision_options` 只列同一 family 在**全部问题、全部世界**中用到的选项；不是当前问题或当前世界的正确答案区域，不导出 family/world 标识或答案映射。导入须从该 item 实际提供的选项中选择，不能把其他 family 的颜色或地点标签用于归属判断。既有全局 24 选项、英文说明的旧 packet 保留 exact-byte 核验与导入，以便重放已有评审；不改写旧 item、key 或已导入判断。该兼容路径仅服务旧导出，默认不再生成，待旧 packet 不再需要导入/重放时才能退役。较清楚的评审输入不等于人类 calibration，判断比例的解释不变。
+
 `recompute` 按 family 报告 `attempted`、`completed`、`scorable`、`reviewed_inputs`、`reviewers`、`pending`、`technical_failure`、`not_run`、`review_pending`。attempt coverage 是 attempted / total；answer coverage 是 completed / attempted。`judgment_contract_match_rate` 与 `judgment_contract_mismatch_rate` 分别是 correct、incorrect judgments / 全部 review judgments；它们不是 response accuracy/error，也不会进行 majority vote。多个 reviewer 的每个合法 judgment 都保留。pending 与 technical failure 不进入语义 0，未审查的 completed response 仍是 `review_pending`。当前 tracked 材料**没有** imported responses 或 human reviews；空 packet 显示 224 pending 与 `null` 比率，任何测试 response 都是 synthetic plumbing，不是系统或人的数据。
 
 ```sh

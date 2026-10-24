@@ -53,11 +53,19 @@ REVIEW_KEY_FIELDS = {"format", "packet_id", "history_sha256", "contract_sha256",
 REVIEW_KEY_RECORD_FIELDS = {
     "alias", "input_id", "input_sha256", "response_sha256", "item_sha256",
 }
-REVIEW_INSTRUCTIONS = (
+LEGACY_REVIEW_INSTRUCTIONS = (
     "Judge whether the response completes the current information task using the "
     "shown input. Select one finite decision, cite evidence locators from this "
     "packet, and give a substantive reason. Honest uncertainty may be appropriate "
     "without completing the task."
+)
+REVIEW_INSTRUCTIONS = (
+    "请根据此处提供的输入，判断回答怎样完成当前信息任务。从所列有限选项中选择一项，"
+    "引用本输入内的 evidence locators，并说明实质理由。诚实表达不确定性可能适当，"
+    "但不一定完成该信息任务。选项覆盖同一家族的全部问题与世界，不表示本题正确答案区域。 "
+    "Judge the response against the shown input and current task; select one listed "
+    "decision, cite evidence locators, and explain why. Options span all questions "
+    "and worlds in this family, not this item's correct answer region."
 )
 
 def require(condition: bool, message: str) -> None:
@@ -182,13 +190,15 @@ def _stored_keys(folder: Path) -> dict[str, dict[str, Any]]:
 
 def _check_stored_key(key: dict[str, Any], manifest: dict[str, Any],
                       by_id: dict[str, dict[str, Any]],
-                      responses: dict[str, dict[str, Any]]) -> None:
+                      responses: dict[str, dict[str, Any]],
+                      source: dict[str, Any]) -> dict[str, dict[str, str]]:
     """Rebind a stored blind key to the exact contract, inputs and responses."""
     require(key["history_sha256"] == manifest["history_sha256"] and
             key["contract_sha256"] == manifest["contract_sha256"],
             "stored review key contract revision mismatch")
     seen_aliases: set[str] = set()
     seen_inputs: set[str] = set()
+    options_by_alias: dict[str, dict[str, str]] = {}
     for record in key["records"]:
         record = require_shape(record, REVIEW_KEY_RECORD_FIELDS,
                                "stored review key record")
@@ -207,8 +217,24 @@ def _check_stored_key(key: dict[str, Any], manifest: dict[str, Any],
         require(isinstance(record["item_sha256"], str) and
                 re.fullmatch(r"[0-9a-f]{64}", record["item_sha256"]),
                 "invalid stored review item digest")
+        # Reconstruct the exact exported contract without requiring the external
+        # reviewer folder to remain on disk. This also preserves old exports.
+        item = {
+            "alias": alias,
+            "input_view": _input_view(by_id[identifier], source),
+            "response": response["response"],
+            "decision_options": decision_options_for(by_id[identifier], manifest["contract"]),
+            "instructions": REVIEW_INSTRUCTIONS,
+        }
+        if digest(canonical(item)) != record["item_sha256"]:
+            item["decision_options"] = manifest["contract"]["decisions"]
+            item["instructions"] = LEGACY_REVIEW_INSTRUCTIONS
+            require(digest(canonical(item)) == record["item_sha256"],
+                    "stored review item contract digest mismatch")
+        options_by_alias[alias] = item["decision_options"]
         seen_aliases.add(alias)
         seen_inputs.add(identifier)
+    return options_by_alias
 
 def _load_manifest(folder: Path, source: dict[str, Any], contracts: dict[str, Any]
                    ) -> tuple[dict[str, Any], dict[str, dict[str, Any]]]:
@@ -318,6 +344,15 @@ def _input_view(record: dict[str, Any], source: dict[str, Any]) -> dict[str, Any
         source["context"], family, world, question,
         record["projection"], record["archive_access"]))
 
+def decision_options_for(record: dict[str, Any], contracts: dict[str, Any]
+                         ) -> dict[str, str]:
+    """Use the family-wide vocabulary, never the current world's answer key."""
+    family = contracts["families"][record["family"]]
+    used = {decision for worlds in family.values()
+            for region in worlds.values() for decision in region}
+    return {key: value for key, value in contracts["decisions"].items()
+            if key in used}
+
 def _check_review_payload(review: dict[str, Any], identifier: str,
                           packet: dict[str, Any], label: str) -> None:
     """Validate a review payload from either import or persisted replay."""
@@ -354,7 +389,8 @@ def _load_reviews(folder: Path, by_id: dict[str, dict[str, Any]],
                 "invalid review batch")
         key = keys_by_hash.get(batch["review_key_sha256"])
         require(key is not None, "review batch does not name a stored blind packet")
-        _check_stored_key(key, packet["manifest"], by_id, packet["responses"])
+        options_by_alias = _check_stored_key(
+            key, packet["manifest"], by_id, packet["responses"], packet["source"])
         key_by_alias = {record["alias"]: record for record in key["records"]}
         require(isinstance(batch["records"], list) and batch["records"], "empty review batch")
         for record in batch["records"]:
@@ -364,6 +400,8 @@ def _load_reviews(folder: Path, by_id: dict[str, dict[str, Any]],
                     key_by_alias[alias]["input_id"] == record["input_id"],
                     "stored review alias does not bind its input")
             _check_review_payload(record, record["input_id"], packet, "stored review")
+            require(record["decision"] in options_by_alias[alias],
+                    "stored review decision is not among the exported item options")
             pair = (record["input_id"], record["reviewer_id"])
             require(pair not in seen, "reviewer already reviewed this input")
             seen.add(pair)
@@ -462,7 +500,7 @@ def export_review(path: Path, output: Path) -> dict[str, Any]:
             "alias": alias,
             "input_view": read_json(packet["folder"] / "inputs" / f"{identifier}.json"),
             "response": response["response"],
-            "decision_options": deepcopy(packet["contracts"]["decisions"]),
+            "decision_options": decision_options_for(record, packet["contracts"]),
             "instructions": REVIEW_INSTRUCTIONS,
         }
         blob = canonical(item)
@@ -508,7 +546,8 @@ def _load_review_packet(path: Path, packet: dict[str, Any]
             key["contract_sha256"] == packet["manifest"]["contract_sha256"] and
             key["packet_id"] in packet["keys"],
             "invalid review key")
-    _check_stored_key(key, packet["manifest"], packet["by_id"], packet["responses"])
+    _check_stored_key(key, packet["manifest"], packet["by_id"],
+                      packet["responses"], packet["source"])
     require(key == packet["keys"][key["packet_id"]],
             "blind review key differs from its stored immutable copy")
     by_alias = {}
@@ -529,9 +568,16 @@ def _load_review_packet(path: Path, packet: dict[str, Any]
         except (UnicodeDecodeError, json.JSONDecodeError) as error:
             raise ValueError("invalid blind review item JSON") from error
         item = require_shape(decoded, REVIEW_ITEM_FIELDS, "blind review item")
-        require(item["alias"] == alias and
-                item["decision_options"] == packet["contracts"]["decisions"] and
-                item["instructions"] == REVIEW_INSTRUCTIONS, "blind review item changed")
+        current_options = decision_options_for(
+            packet["by_id"][record["input_id"]], packet["contracts"])
+        current = (item["decision_options"] == current_options and
+                   item["instructions"] == REVIEW_INSTRUCTIONS)
+        # Exact old exports remain bound to their original bytes and vocabulary.
+        # They are retained for existing callers/reviews, not generated anew.
+        legacy = (item["decision_options"] == packet["contracts"]["decisions"] and
+                  item["instructions"] == LEGACY_REVIEW_INSTRUCTIONS)
+        require(item["alias"] == alias and (current or legacy),
+                "blind review item changed")
         response = packet["responses"].get(record["input_id"])
         require(response is not None and response["status"] == "completed" and
                 item["response"] == response["response"] and
@@ -575,6 +621,8 @@ def import_reviews(path: Path, review_packet: Path, source_file: Path) -> dict[s
         existing.add(pair)
         seen_reviews.add(pair)
         _check_review_payload(review, identifier, packet, "imported review")
+        require(review["decision"] in by_alias[alias]["item"]["decision_options"],
+                "review decision is not among the exported item options")
         records.append({"alias": alias, "input_id": identifier,
                         "reviewer_id": reviewer, "decision": review["decision"],
                         "reason": review["reason"],

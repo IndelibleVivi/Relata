@@ -165,6 +165,58 @@ class FutureQuestionReviewTests(unittest.TestCase):
                 review.import_reviews(self.packet, out,
                                       self.review_batch([bad], "bad-review.json"))
 
+    def test_new_review_options_are_family_wide_not_world_or_question_keys(self):
+        review.import_responses(self.packet, self.response_batch([self.response()]))
+        _, _, item = self.export()
+        self.assertEqual(set(item["decision_options"]), {
+            "title-yuanting", "originator-human", "originator-companion"})
+        self.assertIn("请根据", item["instructions"])
+        self.assertIn("Judge", item["instructions"])
+        self.assertNotIn("A-AUTHORSHIP", json.dumps(item))
+
+    def test_new_review_rejects_an_unrelated_family_option(self):
+        review.import_responses(self.packet, self.response_batch([self.response()]))
+        out, _, item = self.export()
+        with self.assertRaisesRegex(ValueError, "exported item options"):
+            review.import_reviews(self.packet, out, self.review_batch([{
+                "alias": item["alias"], "reviewer_id": "synthetic-reviewer",
+                "decision": "blue", "reason": "Synthetic off-task option.",
+                "evidence_refs": ["current"],
+            }]))
+        self.assertEqual(review.verify(self.packet)["reviews"], 0)
+
+    def test_old_global_vocabulary_exports_remain_replayable(self):
+        review.import_responses(self.packet, self.response_batch([self.response()]))
+        with patch.object(review, "REVIEW_INSTRUCTIONS", review.LEGACY_REVIEW_INSTRUCTIONS), \
+             patch.object(review, "decision_options_for",
+                          side_effect=lambda record, contracts: deepcopy(contracts["decisions"])):
+            out, _, item = self.export()
+        review.import_reviews(self.packet, out, self.review_batch([{
+            "alias": item["alias"], "reviewer_id": "synthetic-legacy-reviewer",
+            "decision": "blue", "reason": "Synthetic legacy mismatch retained.",
+            "evidence_refs": ["current"],
+        }]))
+        self.assertEqual(review.verify(self.packet)["reviews"], 1)
+        self.assertEqual(review.recompute(self.packet)["overall"]["judgments"]["incorrect"], 1)
+
+    def test_persisted_new_review_cannot_switch_to_an_off_family_decision(self):
+        review.import_responses(self.packet, self.response_batch([self.response()]))
+        out, _, item = self.export()
+        review.import_reviews(self.packet, out, self.review_batch([{
+            "alias": item["alias"], "reviewer_id": "synthetic-reviewer",
+            "decision": "originator-human", "reason": "Synthetic disagreement.",
+            "evidence_refs": ["current"],
+        }]))
+        # Verification must not read the external reviewer folder again.
+        with patch.object(review, "_load_review_packet", side_effect=AssertionError("external folder read")):
+            self.assertEqual(review.verify(self.packet)["reviews"], 1)
+        path = self.packet / "reviews" / "000001.json"
+        body = review.read_json(path)
+        body["records"][0]["decision"] = "blue"
+        path.write_text(json.dumps(body, ensure_ascii=False), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "exported item options"):
+            review.verify(self.packet)
+
     def test_review_is_append_only_and_retains_disagreement(self):
         review.import_responses(self.packet, self.response_batch([
             self.response(),
@@ -185,7 +237,7 @@ class FutureQuestionReviewTests(unittest.TestCase):
                               self.review_batch(rows, "first-review.json"))
         review.import_reviews(self.packet, second, self.review_batch([{
             "alias": first_alias, "reviewer_id": "synthetic-reviewer-2",
-            "decision": "request-production-record",
+            "decision": "originator-human",
             "reason": "Synthetic reviewer 2 records disagreement.",
             "evidence_refs": ["current"],
         }], "second-review.json"))
@@ -265,9 +317,10 @@ class FutureQuestionReviewTests(unittest.TestCase):
         out, key, item = self.export()
         rows = []
         for key_record in key["records"]:
+            exported = review.read_json(out / "items" / f"{key_record['alias']}.json")
             rows.append({"alias": key_record["alias"],
                          "reviewer_id": "synthetic-reviewer-1",
-                         "decision": "title-yuanting",
+                         "decision": next(iter(exported["decision_options"])),
                          "reason": "Synthetic valid persisted review.",
                          "evidence_refs": ["current"]})
         review.import_reviews(self.packet, out, self.review_batch(rows))
