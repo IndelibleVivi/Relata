@@ -68,6 +68,19 @@ class InventoryTests(unittest.TestCase):
         failures, count, links = c.check_markdown_links()
         self.assertEqual((failures, count, links), ([], 3, 2))
 
+    def test_explicit_exhibit_anchor_resolves_without_changing_heading(self):
+        self.write("README.md", "[exhibit](doc.md#future-use)\n")
+        self.write("doc.md", '<a id="future-use"></a>\n\n## 后来想问的事变了\n')
+        self.assertFalse(c.check_markdown_links()[0])
+
+    def test_example_and_commented_anchors_do_not_hide_a_broken_link(self):
+        self.write("README.md", "[exhibit](doc.md#future-use)\n")
+        for body in ('```html\n<a id="future-use"></a>\n```\n',
+                     '<!-- <a id="future-use"></a> -->\n'):
+            self.write("doc.md", body)
+            with self.subTest(body=body):
+                self.assertTrue(c.check_markdown_links()[0])
+
     def test_ignored_records_are_never_opened(self):
         hidden = self.write("experiments/artifacts/run/pilot.md", "[PRIVATE-CANARY](missing.md)")
         other = self.write("ignored/record.md", "[ANOTHER-CANARY](missing.md)")

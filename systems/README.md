@@ -11,6 +11,8 @@ The [ten source studies](source-studies/README.md) cover Mem0, current Letta, Gr
 
 The census, source studies and atlas together support Relata's **system collection** under [ADR-0008](../decisions/ADR-0008-three-core-research-functions.md). Museum, sample room and research lab remain possible names. The collection makes mechanisms and tradeoffs inspectable, supplies questions for Relata's own benchmark and contributes alternatives for future-system incubation. Its studies also have independent value; source inspection alone does not establish runtime performance.
 
+The [question-led offline reader](architecture-atlas/index.html#questions) and [generated GitHub exhibits](architecture-atlas/exhibits.md) connect five concrete questions to these ten models: changing future uses, delivery after retrieval, correction, timely resurfacing and experience-driven understanding or practice. Reading conditions, source evidence, graph nodes, controls and destinations remain linked. These are static syntheses, not new System Cards, runtime exhibits or a fixed taxonomy.
+
 Three [public-source System Cards](system-cards/README.md) and a ten-system [Architecture Pressure Map](architecture-pressure-map.md) now have bounded fidelity review against the existing studies and atlas. This is static research, not independent human review, accepted-for-census promotion or native execution.
 
 ## Classification

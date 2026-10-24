@@ -3,8 +3,6 @@
 
 # Relata
 
-**P0 扩展（2026-10-23）：** 指定 RC-005 研究另含[固定 capture 的 reader 后续包](experiments/rc005-exposure-followup.md)：18 份原 immediate capture × 三种投影，最多新增 54 次 DSF reader dispatch，新增三臂统一 4096 completion 上限，不重新摄入／检索／embedding，共用原 300 chat／500 embedding 累计账本。原 144 位置和回答不改写。[Relata × AMS campaign](research/relata-ams-campaign.md)保留各自研究问题与证据；P1–P6 设计不激活其他 provider 或真人研究。
-
 **Relata** 是一个开放、由社区活经验参与塑造的**前沿记忆研究室**。它定义、综合与评判 agent memory、开源架构及其长处与局限的证据，研究范围同时包含长期人机关系内外的使用情境。中文是 R0 的主要工作与社区语言，英文入口同步维护。
 
 > Agent 记住过去究竟意味着什么，不同系统怎样实现它，又怎样在变化的任务、生活和关系中支持连续性？
@@ -22,6 +20,12 @@ Relata 将**自己的 benchmark 研究、系统样本研究空间，以及面向
 系统研究可以暴露案例问题，评价可以挑战架构主张，两者又为未来设计提供依据；每项职责也有独立的研究价值。Benchmark 正在发展，现有系统样本包含研究 drafts，未来 Tilia 的产品源码属于独立项目。
 
 [Agent Memory Study（AMS）](https://github.com/IndelibleVivi/agent-memory-study) 的阅读、源码调查与实验可以带着原有证据限制进入 Relata。两个项目都可以支持长篇综合写作，同时保留各自的问题与研究材料。
+
+## 从一个具体问题开始
+
+[研究室愿景与能力版图](research/lab-development.md)解释当前阶段、方向风险与连续建设结构。要检查一个 memory 问题，打开[五问题离线 reader](systems/architecture-atlas/index.html#questions)，或直接阅读 [GitHub 版展品](systems/architecture-atlas/exhibits.md)：未来用途变化、检索后的交付、更正传播、适时浮现、经验如何改变理解与做法。它把十个固定源码模型接到具体情境、条件对照、节点证据与研究去向。
+
+Clone 后直接在浏览器打开 `systems/architecture-atlas/index.html`；无需 server、账号或网络。条件切换展示静态编辑分析，点击节点可进入既有三视图再返回原问题。GitHub 文件页不执行 HTML，可读同源生成的 Markdown 与 SVG。展品没有模拟回答或发布私有运行结果。
 
 ## 记忆生态
 
@@ -50,6 +54,8 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 新增的离线输入工具为 **[RC-005 / 共同作品来历](case-lab/cases/seed-005-shared-work-authorship.zh-CN.md)** 准备并核验 18 份待答输入，检查输入投影是否抹掉说话者区别。该 case 仍是 authored candidate，独立人类 review 与 case acceptance 尚未完成。命令与边界见[输入审计说明](experiments/continuity-input-audit.md)。
 
 较广的[首轮研究计划](research/first-research-cycle.md)仍为 proposed。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) 于 2026-10-23 接受，仅激活 [RC-005 → pinned Mem0 执行包](experiments/rc005-native-execution-packet.md)。固定 study CLI 覆盖 54 个 reader 预检、36 个强原文对照和 54 个 native 回答位置；源码实现与离线 plumbing 检查不证明真实可运行性或语义成功。选用既有 generation entitlement 与本地 Qwen3-Embedding-0.6B-Q8_0/1024；全包最多 300 chat／500 embedding client dispatch，包含失败及诊断，不充值、不走收费 fallback。Native state、attempts、回答和未评审材料留在 ignored local artifacts。纯离线 `export-review` 可生成单独匿名包；private 对应表和带条件标签的内部记录由 operator 保留。正式 benchmark promotion、其他 study、Tilia 产品实现、公开结果、hosting、外联与 license 保留各自边界。[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 仍是独立兼容性例外；配置匹配的接口证据可复用。
+
+**P0 扩展（2026-10-23）：** 指定 RC-005 研究另含[固定 capture 的 reader 后续包](experiments/rc005-exposure-followup.md)：18 份原 immediate capture × 三种投影，最多新增 54 次 DSF reader dispatch，新增三臂统一 4096 completion 上限，不重新摄入／检索／embedding，共用原 300 chat／500 embedding 累计账本。原 144 位置和回答不改写。[Relata × AMS campaign](research/relata-ams-campaign.md)保留各自研究问题与证据；P1–P6 设计不激活其他 provider 或真人研究。
 
 后续[更正并发 challenge](research/correction-race-challenge.md)补充作者化交错顺序、反事实历史与恢复对照；[Hindsight 固定源码核查](research/stale-write-source-audit.md)检查已有保护机制。两份仍为研究 draft，没有系统运行或漏洞结论。
 

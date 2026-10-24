@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 from collections import defaultdict
+from html.parser import HTMLParser
 from pathlib import Path
 import re
 import subprocess
@@ -259,17 +260,34 @@ def github_anchor(text: str) -> str:
     return re.sub(r"\s+", "-", text)
 
 
+class ExplicitAnchorParser(HTMLParser):
+    """Recognize real Markdown HTML anchors, excluding comments and code fences."""
+
+    def __init__(self):
+        super().__init__()
+        self.anchors: set[str] = set()
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "a":
+            identifier = dict(attrs).get("id")
+            if identifier:
+                self.anchors.add(identifier)
+
+
 def anchors_for(path: Path) -> set[str]:
-    text = path.read_text(encoding="utf-8")
+    text = markdown_without_fenced_code(path.read_text(encoding="utf-8"))
     counts: dict[str, int] = defaultdict(int)
     anchors: set[str] = set()
-    for heading in HEADING.findall(markdown_without_fenced_code(text)):
+    for heading in HEADING.findall(text):
         base = github_anchor(heading)
         if not base:
             continue
         index = counts[base]
         anchors.add(base if index == 0 else f"{base}-{index}")
         counts[base] += 1
+    explicit = ExplicitAnchorParser()
+    explicit.feed(text)
+    anchors.update(explicit.anchors)
     return anchors
 
 

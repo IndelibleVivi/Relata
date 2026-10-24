@@ -24,6 +24,8 @@ Relata 的 benchmark、系统样本研究空间与 incubator 都可以为写作�
 
 ## 用同一组问题读不同系统
 
+现在可以沿[五个问题导向展品](../systems/architecture-atlas/exhibits.md)或[离线 reader](../systems/architecture-atlas/index.html#questions)实际走一遍：从合成情境改变当前任务，比较机制、查看固定源码，再定位到模型中的具体节点。它复用本文及十份 source studies 的研究，不增加运行结果。五个问题是可修订的阅读入口，不是新的完整定义或永久 tracks；更广的发展结构见[研究室能力版图](lab-development.md)。
+
 | 问题 | 要检查什么 | 能形成怎样的判断 |
 |---|---|---|
 | 它承诺记住什么？ | 原始经历、抽取断言、偏好、状态、技能、经验或其他对象；内容来自谁 | 保存粒度与信息损失，来源保留与解释负担 |

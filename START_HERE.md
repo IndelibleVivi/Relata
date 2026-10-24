@@ -3,8 +3,6 @@
 
 # Relata Research Foundation: Start Here
 
-**P0 extension (2026-10-23):** the named RC-005 study also includes the [fixed-capture reader follow-up](experiments/rc005-exposure-followup.md): 18 original immediate captures × three projections, at most 54 additional DSF reader dispatches, 4096 completion cap for all new arms, no new ingestion/search/embedding, and the same cumulative 300 chat / 500 embedding ledger. The original 144 positions and outputs remain unchanged. The [Relata × AMS campaign](research/relata-ams-campaign.md) retains separate research questions and evidence; P1–P6 designs do not activate other provider or human studies.
-
 Relata is a frontier memory research lab with three core functions under [ADR-0008](decisions/ADR-0008-three-core-research-functions.md). Choose an entrypoint by the research question; these are parallel responsibilities, not a required sequence.
 
 | Function | Reading path |
@@ -15,15 +13,19 @@ Relata is a frontier memory research lab with three core functions under [ADR-00
 
 The [agent-memory inquiry](research/agent-memory-inquiry.md) connects definitions, comparisons, writing and relevant existing AMS work across these functions. General agent use and adult long-term intimacy remain in scope under [ADR-0006](decisions/ADR-0006-frontier-memory-research-lab.md). Source research and writing can proceed independently of case evaluation.
 
+For a concrete memory question, start with the [five-question reader](systems/architecture-atlas/index.html#questions) or [GitHub exhibits](systems/architecture-atlas/exhibits.md), compare mechanisms, follow source evidence, then continue through the case/control/incubator links. The [vision and capability map](research/lab-development.md) preserves the full programme and current gaps; recent RC-005, future-question or correction work does not replace it.
+
 The foundation work below also preserves the operational path from the non-normative Target Architecture Draft 0.1 to evidence-backed cases.
 
 For research toward the independent Tilia goal, read the [candidate memory architecture](research/own-memory-architecture.md), then the [case-to-test map](research/memory-design-test-map.md). They connect mechanisms, coverage, alternatives and falsification conditions without settling the future system. The corrected [ADR-0007](decisions/ADR-0007-local-memory-apparatus.md) separates that goal from implementation authority. The [engineering record](experiments/local-memory-apparatus.md) describes an already-written, very early separate experiment with explicit inputs, literal search and a scripted consumer; it is not formal Tilia or a semantic evaluation result.
 
-Current local tooling: use the [RC-002 scripted rehearsal](experiments/offline-rehearsal.md) or the [RC-005 candidate input audit](experiments/continuity-input-audit.md) without waiting for the broader research programme below. Neither executes a subject or accepts a case. The separately accepted [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) provider compatibility smoke is operator-owned, has no repository executable entrypoint or replay command, and keeps runtime records private.
+Current local tooling: use the [RC-002 scripted rehearsal](experiments/offline-rehearsal.md) or the [RC-005 candidate input audit](experiments/continuity-input-audit.md) without waiting for the broader research programme below. The former executes a clearly labelled scripted double; the latter handles inputs only. Neither establishes real memory-system outcomes or accepts a case. The separately accepted [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) provider compatibility smoke is operator-owned, has no repository executable entrypoint or replay command, and keeps runtime records private.
 
 ## Proposed first research cycle
 
 The broader [first research cycle](research/first-research-cycle.md) remains proposed. [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) is accepted on 2026-10-23, activating only the [RC-005 → pinned Mem0 execution packet](experiments/rc005-native-execution-packet.md). Its fixed-study CLI covers 54 reader preflight, 36 raw-source control and 54 native answer positions; source implementation and offline plumbing checks do not prove live runnability or semantic success. Existing generation entitlement and local Qwen3-Embedding-0.6B-Q8_0/1024 are the selected resources, with 300 chat / 500 embedding client dispatches including failures and diagnostics, no recharge or paid fallback. Native states, attempts, responses and unreviewed blind packets remain ignored local artifacts. Formal benchmark promotion, other study envelopes, Tilia product implementation, publication, hosting, outreach and licensing retain their separate boundaries. [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) remains the independent compatibility-only exception; matching protocol evidence may be reused.
+
+**P0 extension (2026-10-23):** the named RC-005 study also includes the [fixed-capture reader follow-up](experiments/rc005-exposure-followup.md): 18 original immediate captures × three projections, at most 54 additional DSF reader dispatches, 4096 completion cap for all new arms, no new ingestion/search/embedding, and the same cumulative 300 chat / 500 embedding ledger. The original 144 positions and outputs remain unchanged. The [Relata × AMS campaign](research/relata-ams-campaign.md) retains separate research questions and evidence; P1–P6 designs do not activate other provider or human studies.
 
 To examine late writes after a correction, read the [authored challenge](research/correction-race-challenge.md), then the [Hindsight safeguard audit](research/stale-write-source-audit.md). The former is a reasoning worksheet; the latter is bounded source inspection, not a runtime result.
 

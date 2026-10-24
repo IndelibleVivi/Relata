@@ -11,6 +11,8 @@ Census object 可以是 memory engine、context compiler、完整 companion agen
 
 Census、源码研究与图集共同支撑 [ADR-0008](../decisions/ADR-0008-three-core-research-functions.zh-CN.md) 下的**系统样本研究空间**；museum、样本间、研究室仍是可选名称。这里让机制与取舍可以被检查，为 Relata 自己的 benchmark 提出问题，也为未来系统孵化提供替代方案。样本研究本身有独立价值；仅有源码检查不建立 runtime 性能结论。
 
+[问题导向离线 reader](architecture-atlas/index.html#questions)与[生成的 GitHub 展品](architecture-atlas/exhibits.md)把五个具体问题接到这十份模型：未来用途变化、检索后交付、更正、适时浮现，以及经验怎样改变理解和做法。阅读条件、源码证据、图中节点、controls 与研究去向相互连接。这些是静态综合，不新增 System Card、运行展品或固定分类。
+
 三张 [public-source System Cards](system-cards/README.md) 与十系统 [Architecture Pressure Map](architecture-pressure-map.zh-CN.md) 已对既有 studies/atlas 做有界忠实性核对。这是静态研究，不是独立人类 review、accepted-for-census 提升或 native execution。
 
 ## Classification

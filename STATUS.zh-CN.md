@@ -39,6 +39,7 @@ Maintainer 于 2026-10-22 要求为 Relata + AMS 提出并实现下一研究方�
 | Agent-memory inquiry / 文章方向 | 开放研究问题、AMS 连接与初步综合 | 无 accepted definition、穷尽综述或文章正文 |
 | 开源架构研究 | 10 份有界 drafts：Mem0、Letta、Graphiti、lmc-5、Tideline Memory、Aelios、Hindsight、OpenViking、LangMem、A-MEM | 固定源码观察；lmc-5 与 Graphiti 另有窄范围离线诊断；无独立人类 review、accepted System Card 或模型参与的比较结果 |
 | [架构图集](systems/architecture-atlas/README.md) | 10 份模型、30 幅 SVG/Mermaid 与离线交互 reader | 绑定源码的图示；没有新增上游运行或能力测量 |
+| [问题导向系统集合](systems/architecture-atlas/exhibits.md) | 五个静态展品覆盖十个既有固定模型；离线搜索、任务条件、图／节点深链与生成 Markdown 版本 | 仅为源码综合与阅读路径检查；没有新增上游运行、公开运行展品、人类 review 或排名 |
 | 自有 memory 设计 / 案例—测试映射 | 为独立 Tilia 目标提供 proposed 架构、controls 与推翻条件 | 候选 B 不是已接受的 Tilia 架构；没有 accepted 普适 schema 或能力结果 |
 | [本地记忆装置](experiments/local-memory-apparatus.md) | 范围纠正后保留的非常早期实验；已有独立 private remote，源码未公开发布 | 110 项工程测试与 38 步／21 项断言的子进程 demo；只有明确合成输入与脚本消费，没有向量检索或语义效果结果 |
 | Claim boundaries | 双语 candidate study | CL0–CL6、lanes、cells、adapter classes 仍为提议；无 accepted result unit 或 publication policy |
@@ -67,6 +68,8 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 定义并批判性研究 agent memory 的概念、开源架构与证据。比较不同实现保留什么、过去的经验怎样影响当前行为，以及架构选择在什么条件下有用或失效。在通用 agent 和长期 mixed-role 关系中研究这些问题，保留历史依赖 controls、尊重架构差异的观察边界，以及保护隐私的社区参与。
 
 ## Immediate work
+
+[愿景与能力版图](research/lab-development.md)把完整目标接到当前可用能力。已实现的[五问题 collection reader](systems/architecture-atlas/index.html#questions)与[同源 GitHub 版](systems/architecture-atlas/exhibits.md)提供情境／任务条件 → 跨系统解释 → 固定源码节点／来源 → controls 与研究去向的阅读路径。这是静态源码展品，不新增运行结果或 case acceptance。完整 programme 继续保留概念研究、收益与使用、学习、companion continuity 和社区参与，不被具名 study 取代。
 
 [未来问题研究 Work A–C](research/future-question-memory/README.md)为现有 programme 提供具体的下一研究入口：追踪真实原文再访问，评审用途变化的合同，再在独立接受的执行范围内，以强原文／文件搜索控制比较保留、检索与使用。当前输入结果已在声明的边界内完成。继续区分有限信息丢失、可恢复的候选遗漏和下游使用；后两项仍需实际系统观察。
 

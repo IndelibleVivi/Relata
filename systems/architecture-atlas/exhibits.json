@@ -1,0 +1,243 @@
+{
+  "title": "从一个问题，走进 memory 的不同实现",
+  "updated": "2026-10-25",
+  "boundary": "五个静态研究展品使用既有十个固定版本的源码模型。情境是原创合成推演，所有人物均为成年人；条件切换改变阅读问题，不生成或模拟系统回答。源码观察、条件性解释与仍需观察的行为分别展示；没有运行结果、性能排名或 accepted case promotion。",
+  "exhibits": [
+    {
+      "id": "future-use",
+      "title": "当后来想问的事变了",
+      "question": "一份为当前任务整理好的记忆，还保得住后来需要的区别吗？",
+      "summary": "短表示可以把重复经历整理成有用理解。要判断它是否足够，必须知道后来做什么、还能否回到来源，以及 reader 实际读到了什么。",
+      "scenario": "原创合成情境：两位成年人共同做一份声音作品。Lin 最初提出《潮窗》，Jun 接受；后来双方采用新名《夜航》，旧制作说明仍保留。今天的首页只需现用名，下周的制作手记却要交代旧名由谁提出。这里没有为任何系统编造保存内容或回答。",
+      "conditions": [
+        {"id": "current", "title": "写当前首页", "task": "使用现用名继续写首页。", "focus": "较短的当前理解可能已经够用；关注实际省去的重建工作及其代价。"},
+        {"id": "origin", "title": "追问原始来历", "task": "解释旧名由谁提出、谁接受、为何改名。", "focus": "当前状态与事件来历是不同信息需求。检查来源是否仍在、是否可找回、是否进入 reader。"},
+        {"id": "proposal", "title": "继续共同创作", "task": "提出下一版的两个新名字，同时准确承接已发生的共同工作。", "focus": "允许新提案；把创作自由与对过去完成事实的声明分开，避免把合理建议误判成虚构历史。"}
+      ],
+      "comparisons": [
+        {
+          "project": "mem0", "view": "flow", "nodes": ["context", "batch", "messages"], "sources": ["S4", "S5", "S18", "S31"],
+          "observation": "默认 V3 路径从最近十条消息和相关十条事实组织抽取上下文，保存模型抽取的条目；近期消息缓冲不是完整长期原文档案。parse_messages 的结构化 name/tool role 边界另需保留。",
+          "benefit": "可检索事实让应用较容易复用当前安排；抽取可以减少每轮重读整段对话的负担。",
+          "limit": "抽取出的短事实与近期缓冲是否保留具体来历，取决于实际形成内容；不能从字段存在推出归属正确。",
+          "reading": {"current": "检查现用名是否形成可用条目，以及应用需要多少材料便能继续任务。", "origin": "先看原始区别有没有进入保存对象，再看检索；不要用偶然答对替代来源保真。", "proposal": "模型可以提出新名；对谁已做过哪些工序的断言仍需来源支持。"},
+          "check": "保存实际抽取输入、抽取返回和后来交付材料，区分形成时丢失、仍在但未检索到、已经暴露却未使用。"
+        },
+        {
+          "project": "letta", "view": "flow", "nodes": ["messages", "memfs", "compact", "recall"], "sources": ["S3", "S4", "S6", "S17"],
+          "observation": "追加的 messages.jsonl 与活动摘要分开；MemFS 从已提交 Markdown 编译，原 transcript 可经本地 FTS-lite 搜索。文件记忆不等于全文始终在当前 context。",
+          "benefit": "当前理解可以写成可编辑文件，具体事件仍有另外的回查路径，二者可以承担不同用途。",
+          "limit": "原文存在不保证 query、结果窗口或模型读用成功；文件整理质量与回查成本需要各自观察。",
+          "reading": {"current": "看已编译文件是否足以直接延续首页，而不要求每次调用历史搜索。", "origin": "追到 transcript 的角色、顺序与明确接受事件；当前摘要不足时检查是否真的重访原文。", "proposal": "当前理解可支持创作，原文回查可支持历史声明；两条路径不必每次一起全量注入。"},
+          "check": "在相同历史下记录文件内容、活动摘要、搜索调用、返回窗口和实际 provider context；分别计入整理与在线使用成本。"
+        },
+        {
+          "project": "openviking", "view": "flow", "nodes": ["archive", "summary", "retrieve", "assemble"], "sources": ["S8", "S17", "S25", "S27", "S29", "S30"],
+          "observation": "会话 archive、memory 文件、L0/L1 摘要与向量是不同对象；find 固定 QUICK，search 可走其他模式，assembler 按 tier 和预算读取。L2 解析内容也不自动等于原始文件字节。",
+          "benefit": "可寻址来源与分层读取允许先用概括定位，再按需展开细节；不必把所有历史同时放进 context。",
+          "limit": "读取哪层、摘要是否新鲜、查询模式与预算共同决定实际曝光；保存原文不等于每次选择原文。",
+          "reading": {"current": "检查当前安排能否由较短 tier 支持，避免把完整展开当作唯一正确路径。", "origin": "检查 query 是否找到 archive 或具体来源、是否升级读取，以及 reader 获得的字段和窗口。", "proposal": "记录 assembly 中当前概括与原始事件各占多少预算，再区分新提案和过去事实。"},
+          "check": "比较实际 tier、URI、检索候选与 assembled context；保留查询成本、遗漏与预算竞争，不从目录结构推断效果。"
+        }
+      ],
+      "controls": [
+        {"title": "完整历史", "detail": "保留同样的角色与顺序，允许 reader 直接读原文；证据机会更完整，但查找、冲突与长上下文使用仍可能失败。"},
+        {"title": "可搜索原文", "detail": "从相同 raw 输入构建字面或语义搜索，公开 query、窗口与预算；语义 encoder 不应只给复杂方案。"},
+        {"title": "概括与原文并存", "detail": "可能兼得快速理解与细节回查，也可能引入重复、冲突和预算挤占。检查净收益，不把并存自动视作最佳方案。"}
+      ],
+      "takeaways": {"benchmark": "把当前任务、历史来历和新创作分开设计；同一家族的多个 checkpoint 不增加独立案例数。", "collection": "比较保存对象与回查机会，不用一个 recall 指标合并信息损失和读用困难。", "incubator": "按用途选择何时概括、何时重访、何时并存；候选结构必须相对强原文方案说明收益。"},
+      "links": [{"label": "未来问题与有限输入研究", "path": "../../research/future-question-memory/README.md"}, {"label": "RC-005 共同作品来历 seed", "path": "../../case-lab/cases/seed-005-shared-work-authorship.zh-CN.md"}],
+      "revisions": [{"date": "2026-10-25", "summary": "首次静态综合；复用既有固定源码研究，未引入私有 RC-005 回答或效果判断。"}]
+    },
+    {
+      "id": "delivery",
+      "title": "搜到了，然后呢？",
+      "question": "一个项目把 memory 交付到哪里，接下来谁负责把它变成当前行动？",
+      "summary": "可组合库、上下文编排与完整 agent 各有价值。比较必须看到它们各自结束工作的地方，以及调用方实际加了什么。",
+      "scenario": "原创合成情境：项目成员已更换交付负责人，同时保留旧负责人的历史贡献。用户先问今天找谁，再问上月谁完成了交付。存储中可能同时有时间、来源和 fact 文本；需要检查哪些部分真正到达回答者。",
+      "conditions": [
+        {"id": "support", "title": "固定 reader 的支撑比较", "task": "让同一个 reader 使用不同 memory 层交付的材料。", "focus": "固定共同 reader 与组件条件，记录各自实际材料和 adapter 增补；不把中介结果强行设成相同。"},
+        {"id": "native", "title": "原生完整配置", "task": "按系统自身支持的方式完成当前与历史任务。", "focus": "保留各自工具、context policy 与模型边界；结果不能与库的检索返回直接合成一张排名。"}
+      ],
+      "comparisons": [
+        {
+          "project": "mem0", "view": "flow", "nodes": ["select", "results", "use"], "sources": ["S8", "S9", "S16"],
+          "observation": "search 返回可检索条目及相关 metadata；此版本 chat 未实现，最终 context 与行动由应用组织。",
+          "benefit": "调用方可以组合自己的 reader、预算与应用语义，检索层不必绑定某一完整 agent。",
+          "limit": "调用时机、query、冲突处理与最后使用仍需集成；search 成功不证明这些责任已经完成。",
+          "reading": {"support": "明确保留了哪些返回字段，哪些被 adapter 丢弃或重建；共同 reader 只是本次比较条件。", "native": "先声明完整应用配置；不能把外加的回答与权限策略算作 Mem0 library 的原生机制。"},
+          "check": "保存 search 返回与实际 provider 请求两份证据，比较条目、标签、顺序和预算的变化。"
+        },
+        {
+          "project": "graphiti", "view": "flow", "nodes": ["facts", "filter", "projection", "generation"], "sources": ["S20", "S22", "S27", "S29", "S30"],
+          "observation": "事实边带来源和时间字段；默认 SearchFilters 的时间条件为空。所读 agent 示例只拼接 edge.fact，再交给生成模型。",
+          "benefit": "同一图可以支持当前和历史两类查询；调用者可选择不同投影而不改写原图对象。",
+          "limit": "图中存在的字段不一定进入 context；默认不滤历史也不能单独判为缺陷，要看查询承诺。",
+          "reading": {"support": "检查固定 reader 实际获得 fact 还是完整的时间/来源投影，避免把 adapter 补出的标签当成默认返回使用。", "native": "检查应用为当前与历史任务选择的过滤和投影；完整 agent 的成功归于已声明整体。"},
+          "check": "对同一事实保存图对象、搜索参数、投影和输出；分别判断时间选择与后续读用。"
+        },
+        {
+          "project": "letta", "view": "flow", "nodes": ["compiler", "compiled", "bridge", "model"], "sources": ["S6", "S8", "S10", "S11"],
+          "observation": "MemFS 的已提交内容经过编译和 conversation 状态进入 provider context；常规同 conversation revision 可以保留旧编译内容并追加 memory update。",
+          "benefit": "context 与工具循环接成完整 agent 路径，持续背景不完全依赖每次主动搜索。",
+          "limit": "编译版本、活动摘要和追加更新共同影响模型看到什么；Git 最新文件不等于 provider 只读了新值。",
+          "reading": {"support": "若只取文件交给外部 reader，这是新声明的支撑边界，不能冒称完整 Letta 行为。", "native": "沿真实 turn 装配检查旧编译内容、update 与活动消息；保留其原生上下文策略。"},
+          "check": "比较同 conversation 与新 conversation 的实际 context；检查已提交 revision 和模型请求，而非仅看磁盘文件。"
+        },
+        {
+          "project": "hindsight", "view": "flow", "nodes": ["recall", "reflect", "integration", "appmodel"], "sources": ["S14", "S17", "S29", "S30"],
+          "observation": "recall 返回选择材料，reflect 是使用只读 tools 的推理路径；可选集成在应用模型调用前注入，之后按配置 retain 对话。",
+          "benefit": "调用方可分别选择证据召回与更深的有依据综合，适应不同任务负担。",
+          "limit": "reflect 的文本不是新的持久学习；回写对话还可能改变未来证据，需要独立记录。",
+          "reading": {"support": "明确共同 reader 消费 recall 材料还是 reflect 综合；额外推理的模型与成本是条件差异。", "native": "检查选用的 integration 与回写配置，不将一次 reflect 成功当成未来行为已改变。"},
+          "check": "记录 recall/reflect 的具体输入输出、实际注入和是否回写；将 probe 反应性与原历史条件分开。"
+        }
+      ],
+      "controls": [{"title": "同样输入与共同组件", "detail": "固定 reader 比较从相同 raw 输入开始，编码器、模型、预算差异需显式列出；不要求每个系统产出同一种内部 schema。"}, {"title": "原生与外加责任分别归因", "detail": "完整配置与 memory-support 是不同问题。未知阶段留未知，不因系统没有承诺生成回答而判失败。"}],
+      "takeaways": {"benchmark": "先命名受测对象与估计目标，再决定观察终点；adapter 重建会改变归因。", "collection": "把真实交付终点接到同一阅读问题中，保留库与完整 agent 的独立价值。", "incubator": "先考虑宿主已有工具和 context 能力，再决定独立 memory 层应承担哪些工作。"},
+      "links": [{"label": "十系统 Architecture Pressure Map", "path": "../architecture-pressure-map.zh-CN.md"}, {"label": "Claim boundary 研究", "path": "../../research/claim-boundary-study.zh-CN.md"}],
+      "revisions": [{"date": "2026-10-25", "summary": "首次静态综合；保留 2026-10-24 已核对的 Letta 同 conversation update 时序。"}]
+    },
+    {
+      "id": "revision",
+      "title": "更正之后，哪些过去还在起作用？",
+      "question": "改变一个对象，如何影响原文、当前理解、索引和已经生成的上下文？",
+      "summary": "保留历史、修正当前使用、撤回未来影响与物理清除是不同要求。机制的优势和风险，都要沿实际 read path 看。",
+      "scenario": "原创合成情境：Lin 暂停了周五共同散步，但仍珍视过去的散步经历，项目周报安排也未改变。后来只撤回一条未经认可的转述。需要同时维护当前安排、历史可读性和仍然有效的邻域。",
+      "conditions": [
+        {"id": "current", "title": "改变当前安排", "task": "今天不要继续发出周五散步邀约。", "focus": "观察新影响何时进入实际使用，保留延迟、失败与旧值并存的证据。"},
+        {"id": "history", "title": "回看旧经历", "task": "解释过去为什么喜欢周五散步。", "focus": "旧材料可作为历史使用；不把一切旧值都视为污染，也不因保留历史而断言当前更正失败。"},
+        {"id": "withdrawal", "title": "撤回一条来源", "task": "不再依据未经认可的转述行动，同时保留独立有效来源。", "focus": "区分只撤一项依据、撤事实、删对象与全库擦除；检查剩余来源和派生理解。"}
+      ],
+      "comparisons": [
+        {
+          "project": "graphiti", "view": "revision", "nodes": ["temporal", "removal", "derivative_gap"], "sources": ["S10", "S11", "S13", "S31"],
+          "observation": "矛盾候选可触发有效区间变化；remove_episode 按首来源等条件请求删除，该入口不重算保留实体的摘要。",
+          "benefit": "保留带时间的事实边为历史与当前查询提供了结构，也让来源连接可检查。",
+          "limit": "候选与 LLM 语义裁决影响更正路径；删除 episode 的合同不等同只撤一项支持或刷新全部派生理解。",
+          "reading": {"current": "检查被比较的候选和时间过滤，再问实际使用是否转向新安排。", "history": "允许查询旧有效区间；明确历史问题的时间语义。", "withdrawal": "分别检查首来源和次来源，保留共享摘要与幸存支持的状态。"},
+          "check": "所存离线观察只触发指定函数分支；真实自然语言与数据库路径仍需单独观察，不能扩成线上故障结论。"
+        },
+        {
+          "project": "hindsight", "view": "revision", "nodes": ["cleanup", "observations", "mmrefresh", "mentalmodels"], "sources": ["S23", "S24", "S26", "S27", "S37"],
+          "observation": "来源删除或事实编辑可以使受影响 observations 失效并重排幸存来源，自动 mental model 有后续刷新路径；手动模型仍由 owner 决定。",
+          "benefit": "派生理解有显式来源依赖与失效机制，可以保留概括带来的便利，同时重新打开依据。",
+          "limit": "刷新是分阶段且可能失败的；不能把已有 safeguard 忽略为全无保护，也不能由其存在推出同步完成。",
+          "reading": {"current": "分开事实修改、observation 失效与 mental model 刷新时间，检查实际读取哪一层。", "history": "检查历史快照与失效档案用途，不把历史记录当作当前 live 事实。", "withdrawal": "检查幸存来源、自动/手动模型和失败保留内容；不预设所有派生物同一时刻消失。"},
+          "check": "保留正常 safeguard 成功条件与可区分的交错顺序；已有 source audit 不等于运行 race 结果。"
+        },
+        {
+          "project": "tideline-memory", "view": "revision", "nodes": ["amendments", "explicit_search", "auto_recall"], "sources": ["S5", "S7", "S8", "S11", "S12"],
+          "observation": "修订追加到 amendments；主动 search/recall 回显修订，而所读自动 prefetch 仍按原 narrative 向量或 FTS 选择。",
+          "benefit": "原叙事与后来理解可以并存，读者能够看见认识如何变化，而不是每次覆盖过去。",
+          "limit": "显式读取和自动唤起是不同路径；修订可被找到，不保证所有使用入口都带修订。",
+          "reading": {"current": "分别检查自动注入与主动读取的实际文本，避免只验证一个入口。", "history": "保留原叙事，同时标明后来修订；历史表达与当前接受可以共存。", "withdrawal": "检查修订如何表达停止使用，并另查原文、派生索引和注入路径；追加说明不是物理清除。"},
+          "check": "同一 narrative 在自动与显式入口各捕获一次；分别记录选择依据与返回正文，不能用命中计数代替使用。"
+        },
+        {
+          "project": "a-mem", "view": "revision", "nodes": ["update", "notes", "gate", "rebuild", "index"], "sources": ["S4", "S6", "S7", "S8"],
+          "observation": "新 note 可直接演化旧邻居的 context/tags；旧 note metadata 与全量 embedding 索引重建有不同更新时点。",
+          "benefit": "新经历可以改变已有内容的组织和关联，为跨事件理解提供明确可检查的机制。",
+          "limit": "组织变化是否改善未来检索要测；邻域修改与索引刷新不同步的后果不能仅从 metadata 新值判断。",
+          "reading": {"current": "检查新旧 note 与实际索引表示，别只读保存后的 note。", "history": "检查原 content、演化 metadata 与可追溯程度分别保留了什么。", "withdrawal": "此研究边界未见专用撤回链；这意味着还需明确应用合同，不是已有完整遗忘产品。"},
+          "check": "在重建前后比较具体候选和上下文，保留不应改变的邻居，不把单个实现问题升级为对自组织路线的否定。"
+        }
+      ],
+      "controls": [{"title": "仍有效的邻域", "detail": "更正共同散步不应抹掉无关周报；既要观察旧影响停止，也要观察合法任务继续完成。"}, {"title": "重新读原文", "detail": "允许强 raw-source 对照直接重建当前与历史区别；记录它能否解决问题，以及额外整理或追问负担。"}],
+      "takeaways": {"benchmark": "把当前使用、历史使用、撤一来源和擦除分成不同 probe contract；按实际暴露层定位。", "collection": "同时展示机制已提供的保护、派生依赖与未覆盖部分。", "incubator": "只为实际 read paths 维护必要传播；比较更简单的重新取证与额外派生结构。"},
+      "links": [{"label": "更正传播研究", "path": "../../research/correction-propagation-study.md"}, {"label": "Hindsight safeguard 源码核查", "path": "../../research/stale-write-source-audit.md"}, {"label": "RC-001 current state without erasure", "path": "../../case-lab/cases/pilot-001-current-state-without-erasure.md"}],
+      "revisions": [{"date": "2026-10-25", "summary": "首次静态综合；Graphiti 已存离线函数观察与其他静态路径分开，不导入运行结果。"}]
+    },
+    {
+      "id": "presence",
+      "title": "有用的过去，何时来到眼前？",
+      "question": "什么值得保留，什么该自动浮现，什么应等到主动寻找？",
+      "summary": "普通生活、共同关系和工程工作都可能承载连续性。筛选策略体现具体产品目标；后台维护、会话注入和未来触发承担不同工作。",
+      "scenario": "原创合成情境：两位成年人同时有私人约定、一个工程项目和一条等待资料到齐的开放线索。今天进入工作窗口，晚上回到私人对话。相关历史的用途和允许出现的位置并不相同。",
+      "conditions": [
+        {"id": "work", "title": "进入共同工作", "task": "继续项目交付，保留决策与未完事项。", "focus": "普通工程工作无需浪漫象征；检查采集、保留与当前注入是否覆盖它。"},
+        {"id": "private", "title": "回到私人对话", "task": "自然承接私人共同经历，同时按需要谈工作。", "focus": "私人风格与相关过去可以有价值；不能把自动多提记忆等同更好的关系连续性。"},
+        {"id": "later", "title": "等待未来时机", "task": "资料到齐后重新打开那条未完成线索。", "focus": "存有 open thread、运行维护 cron 与真正按条件醒来是不同能力；未知的触发机制要留白。"}
+      ],
+      "comparisons": [
+        {
+          "project": "aelios", "view": "flow", "nodes": ["night", "candidates", "recall", "patch"], "sources": ["S2", "S6", "S8", "S14", "S28"],
+          "observation": "网关配置写入/召回空间并注入所选材料；夜间 Dream 默认否决工程主体，保留重大关系/亲密例外。显式 API 是另一条写入路径。",
+          "benefit": "针对明确关系产品目标筛选，能控制长期库被工程噪声占据的倾向，原话窗口也可进入召回。",
+          "limit": "这种目标不等于 Relata 的 mixed-domain 需要；不能把默认筛选扩大成整个系统无法保存工作。",
+          "reading": {"work": "分别检查默认 Dream 与显式入口，不把工程内容缺席统一归为检索失败。", "private": "检查实际空间、选择理由与原文窗口；保留产品目标的正当性和过度曝光可能。", "later": "夜间维护调度不等于对任意未来条件进行任务唤醒；需要找到具体触发与行动链。"},
+          "check": "对相同混合历史记录哪些内容被提议、丢弃、写入、召回和注入；结果需按入口和产品目标解释。"
+        },
+        {
+          "project": "lmc-5", "view": "flow", "nodes": ["hooks", "pipeline", "runner", "context"], "sources": ["S12", "S13", "S18", "S19", "S24"],
+          "observation": "production reference 的 hooks 与召回 builder 有实际源码接线；DreamRunner 调度 callbacks，缺失可跳过，空 CLI runner 不是完整生产管线。minimal 与 production 是不同边界。",
+          "benefit": "采集、召回、主动 surface、review 与维护可分别组织，启动时的 identity/open threads 能支持接续。",
+          "limit": "机制是否可用取决于选择了哪条路径和 callbacks；scope key 与过滤也不能自行证明认证隔离。",
+          "reading": {"work": "选定 production 或 minimal 后追踪真实接线，检查当前工作是否进入有限 context。", "private": "检查 raw/curated、redact 与注入边界，不把某个搜索 API 当成整个关系体验。", "later": "open threads 是可供 agent 继续的材料；另查未来触发 owner，不把维护 runner 名称当提醒保障。"},
+          "check": "固定入口和部署接线再做观察；不能混用 minimal 的通过结果与 production 的能力主张。"
+        },
+        {
+          "project": "tideline-memory", "view": "flow", "nodes": ["identity_state", "identity_inject", "auto_recall", "current_model"], "sources": ["S10", "S11", "S20", "S22"],
+          "observation": "会话入口可注入身份、画像、快照与开放线索；自动唤起和显式查询是另两条路径，DREAM 维护指令不等于内建调度器。",
+          "benefit": "把当前是谁、在延续什么放进会话开始，可支持超出单题事实回忆的持续背景。",
+          "limit": "持续背景是否及时、有帮助、不挤占当前任务，需要看实际注入与读用；attention hit 也不是主观重要性。",
+          "reading": {"work": "检查 snapshot/threads 是否保留当前任务与阻塞点，而不只检查偏好事实。", "private": "身份与叙事可支持熟悉感；仍需依具体关系和当前 turn 判断使用是否合适。", "later": "检查宿主是否重新触发、线索是否仍有效；存储与唤醒不要合并成一项能力。"},
+          "check": "捕获会话入口、自动回忆与主动工具结果，分别评价具体任务帮助，避免把注入量当收益。"
+        },
+        {
+          "project": "langmem", "view": "overview", "nodes": ["scope", "search", "context", "executor"], "sources": ["S2", "S3", "S13", "S14", "S22"],
+          "observation": "namespace 从应用 config 插值，检索可以由工具或 prompt callback 使用；本地 reflection queue 延迟任务，不验证用户身份，也不自动合并先前 payload。",
+          "benefit": "应用可以按项目、角色与 surface 组合主动查询和预先注入，保留宿主自己的使用策略。",
+          "limit": "身份绑定、权限、任务持续性和实际采纳由具体集成承担；工具存在不保证 agent 选择调用。",
+          "reading": {"work": "检查工作 namespace 和实际搜索/注入条件，而不只看模板里有 user_id。", "private": "允许共享上下文，也检查不应跨 scope 的材料；同一用户并不意味着每个 surface 都同样可用。", "later": "进程内延迟反思与耐久未来意图不同；确定 payload、重启和外部触发责任。"},
+          "check": "记录认证主体到 namespace 的绑定及实际工具调用；对照主动搜索与自动注入，不预设某种方式普遍更好。"
+        }
+      ],
+      "controls": [{"title": "无需历史的任务", "detail": "加入当前 turn 已充分提供的信息；检查 memory 是否只是增加延迟、干扰或不必要的私人曝光。"}, {"title": "主动打开与自动出现", "detail": "分别观察可查回、实际自动出现、正确使用和不该出现时保持沉默；后台维护回执不替代这些证据。"}],
+      "takeaways": {"benchmark": "保留普通生活、工作、私人和 companion continuity 的不同需求，加入 no-recall 和 scope/use/silence 对照。", "collection": "解释筛选服务的产品目的、原生入口和宿主接线，既不强加统一关系目标，也不遗漏混合领域。", "incubator": "研究持续背景、主动回访和按需读取各自的效用；未来意图需要独立触发与有效期设计。"},
+      "links": [{"label": "Continuity benefit 与 selective-use 研究", "path": "../../research/continuity-benefit-study.md"}, {"label": "RC-004 scope-conditioned seed", "path": "../../case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md"}, {"label": "Distinction Atlas 开放问题", "path": "../../case-lab/distinction-atlas.zh-CN.md"}],
+      "revisions": [{"date": "2026-10-25", "summary": "首次静态综合；持续背景、主动回忆、维护与未来唤醒分别保留，不把 cron 视为 prospective 成功。"}]
+    },
+    {
+      "id": "learning",
+      "title": "过去怎样长成新的理解与做法？",
+      "question": "修改 note、形成综合、改写 prompt 与真正学会新任务，有什么联系和区别？",
+      "summary": "Memory 的潜力不止是保存事实。经历也可能重组旧理解或改变以后怎样行动；这些作用可以研究，但必须检查实际采用与迁移。",
+      "scenario": "原创合成情境：共同做完三次访谈整理后，agent 希望把反复出现的困难整理成一种更好的工作方法。第四次换了材料与要求，某次旧经验只是局部例外。需要保留帮助、迁移、误泛化和回滚的可能。",
+      "conditions": [
+        {"id": "understand", "title": "形成可复用理解", "task": "整理多次经验之间的联系，为以后寻找和理解材料提供帮助。", "focus": "看新旧材料怎样被组织，允许短综合有价值，不预设每次都重读原文。"},
+        {"id": "act", "title": "改变以后做法", "task": "把一种候选方法用于新材料，并确认仍有效的旧能力没有受损。", "focus": "区分提出、保存、启用和实际改善；独立新任务与负面对照才能支持迁移。"}
+      ],
+      "comparisons": [
+        {
+          "project": "hindsight", "view": "overview", "nodes": ["consolidator", "observations", "mentalmodels", "reflect"], "sources": ["S11", "S17", "S18", "S19", "S20"],
+          "observation": "consolidation 可形成带来源的 observations，问题驱动 mental model 有持久刷新；reflect 自身是只读查询与推理。",
+          "benefit": "跨事件综合可以成为可重复取用的理解，减少每次重新整理同一问题的需要。",
+          "limit": "有总结不等于新任务能力提升；错误概括、刷新延迟与反复自引用都要按具体路径检查。",
+          "reading": {"understand": "检查综合是否保留关键区别和来源，并比较重新读原文的工作负担。", "act": "记录应用是否采用该综合、怎样改变行为；不要把 refresh 完成当成训练或迁移结果。"},
+          "check": "锁定具体综合或配置，再用未参与整理的新材料与例外条件观察实际帮助和成本。"
+        },
+        {
+          "project": "langmem", "view": "revision", "nodes": ["optimizer", "promptout", "stateful", "promptstore"], "sources": ["S16", "S17", "S18", "S20", "S21", "S33"],
+          "observation": "公开 optimizers 从 prompt、轨迹与 feedback 返回更新后的指令；另有可选 stateful graph 保存 prompt，部署 wrapper 返回 updated_prompts，不自动在 agent 启用。",
+          "benefit": "经历可以改变以后使用的工作指令，形成与事实库不同的适应路径；各模块可分别比较。",
+          "limit": "prompt 修改不是权重训练；格式校验不证明语义改进，候选保存和部署采用也不是同一事实。",
+          "reading": {"understand": "比较反思出的建议与保留证据，检查是否过度概括局部例外。", "act": "查到实际启用的 prompt 与新任务行为；保留旧 prompt、原文方法和回滚对照。"},
+          "check": "在固定新任务上比较原 prompt、候选 prompt 与可搜索旧经验；分开反思成本和在线收益。"
+        },
+        {
+          "project": "a-mem", "view": "flow", "nodes": ["evolve", "notes", "rebuild", "expand"], "sources": ["S4", "S5", "S6", "S7"],
+          "observation": "新 note 可产生链接和邻居 metadata 演化，检索由 embedding top-k 与单跳链接扩展组成；这是 note 组织的变化。",
+          "benefit": "后来的经历可以重新组织已有材料，让跨事件联系进入检索路径，而不只增加独立条目。",
+          "limit": "链接、索引位置与稳定 UUID 的区别，以及 metadata/embedding 的不同更新周期会影响实际使用；不能由演化命名推出学习成功。",
+          "reading": {"understand": "看哪些邻居真的被改变、哪些新联系可被读者找到，并保留无关邻居。", "act": "比较新增链接在独立问题上是否改善取证与使用；结果不等于所有 agent 行为都发生改变。"},
+          "check": "消融具体组织机制并保留相同 encoder/reader；记录重建时点、调用成本与错误传播。"
+        }
+      ],
+      "controls": [{"title": "原文经验与人工可读方法", "detail": "让同样 reader 检索旧经验或读取明确写出的简短方法，比较复杂整理到底额外带来了什么；不向其中一边泄漏正确答案。"}, {"title": "局部例外与保持能力", "detail": "新方法在新任务上可能有用，也可能把一次例外泛化；保留旧任务、不适用情境与恢复旧方法的检查。"}],
+      "takeaways": {"benchmark": "迁移要有独立任务、实际采用证据和不变对照，不能把摘要质量当行为学习质量。", "collection": "让知识整理、只读推理、指令适应与参数变化各自保持对象边界，后者仍是样本覆盖缺口。", "incubator": "自组织与学习保持独立开放方向；先问要改善哪种使用，再比较机制、回滚与维护成本。"},
+      "links": [{"label": "Agent-memory inquiry", "path": "../../research/agent-memory-inquiry.md"}, {"label": "候选设计与替代方案", "path": "../../research/own-memory-architecture.md"}, {"label": "案例—测试映射", "path": "../../research/memory-design-test-map.md"}],
+      "revisions": [{"date": "2026-10-25", "summary": "首次静态综合；learning transfer 保持开放，没有执行新任务或将某个候选确认为 Tilia 架构。"}]
+    }
+  ]
+}

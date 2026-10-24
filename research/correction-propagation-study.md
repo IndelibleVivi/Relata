@@ -138,7 +138,7 @@ This draft is a secondary synthesis over Relata's existing pinned source studies
 - **落在既有维度上，不新建 ontology。** X3（supersession/coexistence）、X7（修复后保留与过度纠正）、X9（派生状态与跨层传播一致性）已覆盖本主题；[test map §5 E-B](memory-design-test-map.md) 的「修订 → 派生传播切片」正是本文三组 development incident 的通用形式。本文不新增维度、不改写它们，只提供可 dry-review 的具体 incident。
 - **派生层要分别记时间。** H2/H3 的区分要求记录每层 current 值与刷新时刻；这与 test map X9「每层的 current 值、写入/刷新时刻」一致，也与 [first-cycle §11](first-research-cycle.md) 的「原生 ready 信号或其缺失」一致。
 - **邻域要用不变性检查，而非只查违规。** Incident I-A/I-C 的「应保留邻域」问题就是对未撤回材料的 invariance check，对应 [first-cycle §5](first-research-cycle.md) 的「邻域保留可用 invariance checks」。
-- **不要把一个候选宣判胜出。** 本文机制表是横向机制对照，不是评分表；H1/H2/H3 是竞争假设空间，不是三种架构的名次。若将来进入实测，应保留 [first-cycle §9](first-research-cycle.md) 的 retain / simplify / reject 处置语言与 [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md)（proposed，未接受）的执行边界。
+- **不要把一个候选宣判胜出。** 本文机制表是横向机制对照，不是评分表；H1/H2/H3 是竞争假设空间，不是三种架构的名次。若将来进入实测，应保留 [first-cycle §9](first-research-cycle.md) 的 retain / simplify / reject 处置语言。[ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md) 已接受，但仅激活 RC-005 → Mem0 具名包及其规定的 P0 后续范围，不激活本文其余传播实验。
 
 ## 6. 最值得优先研究的问题与取舍
 

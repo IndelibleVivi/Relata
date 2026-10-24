@@ -7,40 +7,151 @@
   <style>/* ATLAS_STYLES */</style>
 </head>
 <body>
+  <a class="skip-link" href="#main-content">跳到主要内容</a>
   <aside class="sidebar">
-    <a class="brand" href="../../README.zh-CN.md">relata<span>前沿记忆研究室</span></a>
-    <div class="collection">ARCHITECTURE ATLAS <span id="project-count"></span></div>
-    <label class="search-label" for="project-search">寻找项目或机制</label>
-    <input id="project-search" type="search" placeholder="搜索 memory 的不同形状" autocomplete="off">
-    <nav id="project-list" aria-label="研究项目"></nav>
-    <p id="search-empty" hidden>没有匹配项目。试试「检索」「文件」或项目名。</p>
-    <div class="sidebar-foot"><span class="small-dot"></span> SOURCE STUDIES · 2026.09.22<br><a href="README.md">阅读与复现说明 ↗</a></div>
+    <a class="brand" href="#questions">relata<span>前沿记忆研究室</span></a>
+    <nav id="mode-nav" aria-label="图集入口">
+      <a id="questions-mode-link" href="#questions">研究问题</a>
+      <a id="systems-mode-link" href="#mem0/overview">系统图集</a>
+    </nav>
+    <div class="collection"><span>ARCHITECTURE ATLAS</span><span id="project-count"></span></div>
+    <label class="search-label" for="project-search" id="search-label">寻找研究问题或系统</label>
+    <input id="project-search" type="search" placeholder="搜索问题、系统或机制" autocomplete="off">
+    <nav id="project-list" aria-label="研究问题"></nav>
+    <p id="search-empty" hidden>没有匹配内容。试试系统名、检索、文件或问题中的词。</p>
+    <div class="sidebar-foot"><span class="small-dot"></span> SOURCE STUDIES · 固定版本<br><a href="README.md">阅读与复现说明 ↗</a></div>
   </aside>
-  <main>
-    <header class="page-top"><span>过去如何进入现在</span><a href="../../research/agent-memory-inquiry.md">研究问题与 AMS ↗</a></header>
-    <section class="project-heading">
-      <div><div class="eyebrow" id="project-number"></div><h1 id="project-name"></h1><p id="project-summary"></p></div>
-      <div class="identity"><a id="upstream-link" target="_blank" rel="noreferrer">公开 upstream ↗</a><a id="commit-link" target="_blank" rel="noreferrer"></a><a id="report-link">阅读完整研究 ↗</a></div>
+
+  <main id="main-content" tabindex="-1">
+    <header class="page-top">
+      <span id="page-kicker">从问题进入实现</span>
+      <nav class="top-links" aria-label="辅助入口">
+        <a id="github-reader-link" href="exhibits.md">GitHub 可读版 ↗</a>
+        <a href="../../research/agent-memory-inquiry.md">研究问题与 AMS ↗</a>
+      </nav>
+    </header>
+
+    <section id="questions-view" class="questions-view" hidden>
+      <header class="questions-heading">
+        <div class="eyebrow">RESEARCH QUESTIONS / 研究问题目录</div>
+        <h1 id="questions-title">从一个问题，走进 memory 的不同实现</h1>
+        <p id="questions-boundary" class="questions-boundary"></p>
+        <p class="questions-route-note"><span id="questions-updated"></span><a href="#mem0/overview">直接进入系统图集 →</a></p>
+      </header>
+      <p id="questions-search-context" class="search-context" aria-live="polite"></p>
+      <div id="exhibit-list" class="exhibit-list"></div>
+      <p id="questions-empty" class="empty-state" hidden>没有匹配的研究问题。搜索会检查问题标题、正文、涉及的系统和状态；清除搜索可查看全部五项。</p>
     </section>
-    <p class="boundary" id="boundary"></p>
-    <nav id="view-tabs" aria-label="架构视图"></nav>
-    <section class="diagram-section" aria-labelledby="view-title">
-      <div class="view-heading"><div><h2 id="view-title"></h2><p id="view-question"></p></div><div class="exports"><button id="export-svg" type="button">SVG ↓</button><a id="export-source" download>Mermaid ↓</a></div></div>
-      <div class="diagram-toolbar"><span id="view-instruction" role="status">点击节点，沿源码查看它的职责</span><div class="zoom-controls"><button id="zoom-out" type="button" aria-label="缩小">−</button><output id="zoom-value">100%</output><button id="zoom-in" type="button" aria-label="放大">＋</button><button id="fit-reading" type="button">阅读</button><button id="fit-width" type="button">适宽</button><button id="fit-all" type="button">全图</button></div></div>
-      <div id="diagram-viewport" tabindex="0" aria-label="可滚动架构图"><div id="diagram-stage"></div></div>
-      <div class="legend"><span><i class="store-swatch"></i>状态 / 存储</span><span><i class="model-swatch"></i>模型参与</span><span><i class="decision-swatch"></i>选择 / 控制</span><span>实线：已读源码路径</span><span>虚线：推断 / 未知，见标签</span></div>
-      <p class="reading-guide" id="reading-guide"></p>
+
+    <section id="exhibit-view" class="exhibit-view" hidden>
+      <nav id="exhibit-breadcrumbs" class="breadcrumbs" aria-label="面包屑"></nav>
+      <header class="exhibit-heading">
+        <div>
+          <div class="eyebrow" id="exhibit-number"></div>
+          <h1 id="exhibit-title"></h1>
+          <p id="exhibit-question" class="exhibit-question"></p>
+        </div>
+        <div class="exhibit-actions">
+          <button id="copy-reading-link" type="button">复制当前阅读链接</button>
+          <p id="copy-feedback" role="status" aria-live="polite"></p>
+          <a id="exhibit-github-link">GitHub 可读版 ↗</a>
+        </div>
+      </header>
+      <p id="exhibit-summary" class="exhibit-summary"></p>
+      <div class="scenario">
+        <div class="eyebrow">SYNTHETIC SCENARIO / 合成情境</div>
+        <p id="exhibit-scenario"></p>
+      </div>
+      <section class="condition-section" aria-labelledby="condition-heading">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">READING CONDITION</div>
+            <h2 id="condition-heading">换一个当前问题</h2>
+          </div>
+          <p>条件切换改变编辑分析，不生成系统回答。</p>
+        </div>
+        <div id="condition-switcher" class="condition-switcher" role="tablist" aria-label="当前阅读条件"></div>
+        <div id="condition-panel" class="condition-panel" role="tabpanel" aria-labelledby="condition-tab-0" tabindex="0">
+          <div>
+            <span class="condition-label">TASK</span>
+            <p id="condition-task"></p>
+          </div>
+          <div>
+            <span class="condition-label">FOCUS</span>
+            <p id="condition-focus"></p>
+          </div>
+        </div>
+      </section>
+
+      <section class="comparison-section" aria-labelledby="comparison-heading">
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow">MECHANISM COMPARISON</div>
+            <h2 id="comparison-heading">同一问题下的源码机制</h2>
+          </div>
+          <p id="comparison-count"></p>
+        </div>
+        <div id="comparison-list" class="comparison-list"></div>
+      </section>
+
+      <section class="controls-takeaways" aria-labelledby="controls-heading">
+        <div class="controls-block">
+          <div class="eyebrow">CONTROLS</div>
+          <h2 id="controls-heading">对照与替代解释</h2>
+          <div id="exhibit-controls" class="control-list"></div>
+        </div>
+        <div class="takeaway-block">
+          <div class="eyebrow">THREE FUNCTIONS</div>
+          <h2>三项职能分别留下什么</h2>
+          <dl id="exhibit-takeaways" class="takeaway-list"></dl>
+        </div>
+      </section>
+
+      <section class="exhibit-resources" aria-labelledby="resources-heading">
+        <div>
+          <div class="eyebrow">RELATED RESEARCH</div>
+          <h2 id="resources-heading">关联材料</h2>
+          <ul id="exhibit-links" class="related-links"></ul>
+        </div>
+        <div>
+          <div class="eyebrow">REVISION HISTORY</div>
+          <h2>真实编辑记录</h2>
+          <ol id="exhibit-revisions" class="revision-list"></ol>
+        </div>
+      </section>
+      <footer class="exhibit-footer">
+        <p>条件与 reading 是有边界的编辑分析；固定源码事实以图中证据为准。</p>
+        <a href="#questions" id="back-to-questions">← 返回研究问题</a>
+      </footer>
     </section>
-    <section class="evidence-section" aria-label="图示与证据">
-      <div class="inspector"><div class="eyebrow">FOLLOW THE EVIDENCE</div><h2 id="detail-title">从一个节点开始</h2><div id="detail-body"></div><label for="node-picker">或从列表选择节点</label><select id="node-picker"><option value="">选择节点…</option></select></div>
-      <div class="state-panel"><h2>谁改变状态，谁承担后果</h2><div id="state-notes"></div></div>
+
+    <section id="project-view" class="project-view" hidden>
+      <nav id="project-breadcrumbs" class="breadcrumbs" aria-label="面包屑"></nav>
+      <div id="return-context" class="return-context" hidden></div>
+      <section class="project-heading">
+        <div><div class="eyebrow" id="project-number"></div><h1 id="project-name"></h1><p id="project-summary"></p></div>
+        <div class="identity"><a id="upstream-link" target="_blank" rel="noreferrer">公开 upstream ↗</a><a id="commit-link" target="_blank" rel="noreferrer"></a><a id="report-link">阅读完整研究 ↗</a></div>
+      </section>
+      <p class="boundary" id="boundary"></p>
+      <nav id="view-tabs" aria-label="架构视图"></nav>
+      <section class="diagram-section" aria-labelledby="view-title">
+        <div class="view-heading"><div><h2 id="view-title"></h2><p id="view-question"></p></div><div class="exports"><button id="export-svg" type="button">SVG ↓</button><a id="export-source" download>Mermaid ↓</a></div></div>
+        <div class="diagram-toolbar"><span id="view-instruction" role="status">点击节点，沿源码查看它的职责</span><div class="zoom-controls"><button id="zoom-out" type="button" aria-label="缩小">−</button><output id="zoom-value">100%</output><button id="zoom-in" type="button" aria-label="放大">＋</button><button id="fit-reading" type="button">阅读</button><button id="fit-width" type="button">适宽</button><button id="fit-all" type="button">全图</button></div></div>
+        <div id="diagram-viewport" tabindex="0" aria-label="可滚动架构图"><div id="diagram-stage"></div></div>
+        <div class="legend"><span><i class="store-swatch"></i>状态 / 存储</span><span><i class="model-swatch"></i>模型参与</span><span><i class="decision-swatch"></i>选择 / 控制</span><span>实线：已读源码路径</span><span>虚线：推断 / 未知，见标签</span></div>
+        <p class="reading-guide" id="reading-guide"></p>
+      </section>
+      <section class="evidence-section" aria-label="图示与证据">
+        <div class="inspector"><div class="eyebrow">FOLLOW THE EVIDENCE</div><h2 id="detail-title">从一个节点开始</h2><div id="detail-body"></div><label for="node-picker">或从列表选择节点</label><select id="node-picker"><option value="">选择节点…</option></select></div>
+        <div class="state-panel"><h2>谁改变状态，谁承担后果</h2><div id="state-notes"></div></div>
+      </section>
+      <section class="judgment-section"><div><h2>机制提供的可能性</h2><ul id="strengths"></ul></div><div><h2>条件、代价与未验证部分</h2><ul id="limits"></ul></div></section>
+      <details class="source-details"><summary>本视图的全部关系与证据</summary><div id="edge-evidence"></div></details>
+      <details class="source-details"><summary>覆盖边界与来源目录</summary><div id="coverage"></div><div id="source-list"></div></details>
+      <footer>图中“已读源码”不等于实际运行。图集是有界 source studies；未建立性能排名或 accepted System Cards。<a href="../source-studies/README.md">比较综合 ↗</a></footer>
     </section>
-    <section class="judgment-section"><div><h2>机制提供的可能性</h2><ul id="strengths"></ul></div><div><h2>条件、代价与未验证部分</h2><ul id="limits"></ul></div></section>
-    <details class="source-details"><summary>本视图的全部关系与证据</summary><div id="edge-evidence"></div></details>
-    <details class="source-details"><summary>覆盖边界与来源目录</summary><div id="coverage"></div><div id="source-list"></div></details>
-    <footer>图中“已读源码”不等于实际运行。图集是有界 source studies；未建立性能排名或 accepted System Cards。<a href="../source-studies/README.md">比较综合 ↗</a></footer>
   </main>
-  <noscript>交互图集需要 JavaScript。可直接阅读 diagrams/ 下的 SVG 和 README.md 中的项目索引。</noscript>
+  <noscript>交互图集需要 JavaScript。可直接阅读 diagrams/ 下的 SVG、exhibits.md 和 README.md。</noscript>
   <!-- ATLAS_DATA -->
   <script>/* ATLAS_LOGIC */</script>
 </body>

@@ -3,8 +3,6 @@
 
 # Relata
 
-**P0 extension (2026-10-23):** the named RC-005 study also includes the [fixed-capture reader follow-up](experiments/rc005-exposure-followup.md): 18 original immediate captures × three projections, at most 54 additional DSF reader dispatches, 4096 completion cap for all new arms, no new ingestion/search/embedding, and the same cumulative 300 chat / 500 embedding ledger. The original 144 positions and outputs remain unchanged. The [Relata × AMS campaign](research/relata-ams-campaign.md) retains separate research questions and evidence; P1–P6 designs do not activate other provider or human studies.
-
 **Relata** is an open, community-grounded **frontier memory research lab**. It defines, synthesizes and critically examines agent memory, open-source architectures and the evidence for their strengths and limitations, inside and outside long-term human–AI relationships. Chinese is the primary R0 working and community language; the English entrypoint is maintained alongside it.
 
 > What does it mean for an agent to remember, how do different systems implement it, and what enables continuity across changing tasks, lives and relationships?
@@ -22,6 +20,12 @@ Relata brings together **its own benchmark research, a collection of system stud
 System studies can expose case questions; evaluation can challenge architectural claims; both can inform future designs. Each function also has independent research value. The benchmark is under development, the existing collection contains research drafts, and future Tilia product source belongs in its own project.
 
 [Agent Memory Study (AMS)](https://github.com/IndelibleVivi/agent-memory-study) contributes readings, source investigations and experiments that Relata can use with their original evidence limits. Both projects can support long-form synthesis while retaining their own questions and artifacts.
+
+## Start from a concrete question
+
+The [lab vision and capability map](research/lab-development.md) explains the current stage, directional risks and continuous development programme. Open the [five-question offline reader](systems/architecture-atlas/index.html#questions), or read the [GitHub exhibit edition](systems/architecture-atlas/exhibits.md): changing future uses, delivery after retrieval, correction propagation, timely resurfacing, and how experience changes understanding or practice. Ten pinned source models connect concrete scenarios, reading conditions, graph evidence and research destinations.
+
+After cloning, open `systems/architecture-atlas/index.html` directly in a browser; no server, account or network is required. Conditions display static editorial analysis; graph links locate existing nodes and return to the question. GitHub's file viewer does not execute HTML, so use the generated Markdown and SVGs there. The exhibits simulate no answers and publish no private run results.
 
 ## Memory ecology
 
@@ -50,6 +54,8 @@ Software now includes the public repository checker and an **offline RC-002 exec
 A second offline tool prepares and verifies **18 unanswered inputs for [RC-005 / shared-work authorship](case-lab/cases/seed-005-shared-work-authorship.zh-CN.md)** and audits whether input projections erase the speaker distinction. The case remains an authored candidate; independent human review and case acceptance are pending. See the [input audit guide](experiments/continuity-input-audit.md).
 
 The broader [first research cycle](research/first-research-cycle.md) remains proposed. [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) is accepted on 2026-10-23, activating only the [RC-005 → pinned Mem0 execution packet](experiments/rc005-native-execution-packet.md). Its fixed-study CLI covers 54 reader preflight, 36 raw-source control and 54 native answer positions; source implementation and offline plumbing checks do not prove live runnability or semantic success. Existing generation entitlement and local Qwen3-Embedding-0.6B-Q8_0/1024 are the selected resources, with 300 chat / 500 embedding client dispatches including failures and diagnostics, no recharge or paid fallback. Native states, attempts, responses and review material remain ignored local artifacts. The offline `export-review` command creates a separate anonymized packet; its private mapping and condition-visible source records stay with the operator. Formal benchmark promotion, other study envelopes, Tilia product implementation, publication, hosting, outreach and licensing retain their separate boundaries. [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) remains the independent compatibility-only exception; matching protocol evidence may be reused.
+
+**P0 extension (2026-10-23):** the named RC-005 study also includes the [fixed-capture reader follow-up](experiments/rc005-exposure-followup.md): 18 original immediate captures × three projections, at most 54 additional DSF reader dispatches, 4096 completion cap for all new arms, no new ingestion/search/embedding, and the same cumulative 300 chat / 500 embedding ledger. The original 144 positions and outputs remain unchanged. The [Relata × AMS campaign](research/relata-ams-campaign.md) retains separate research questions and evidence; P1–P6 designs do not activate other provider or human studies.
 
 A follow-up [correction-race challenge](research/correction-race-challenge.md) adds authored interleavings, counterfactual histories and recovery controls; a [pinned Hindsight source audit](research/stale-write-source-audit.md) examines existing safeguards. These remain draft research, with no system execution or defect claim.
 

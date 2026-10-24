@@ -25,7 +25,7 @@ This proposed map turns existing test questions, six Case Cards and ten pinned s
 
 ### X1 历史依赖性与保留收益 · proposed
 - **来源:** [CHARTER 3.7](../CHARTER.md)（memory necessity）、[RC-001 §9 MN gate](../case-lab/cases/pilot-001-current-state-without-erasure.md)、[claim-boundary CL3](../research/claim-boundary-study.zh-CN.md)。
-- **现有案例覆盖:** RC-001 已写 MN gate 与 C0/C1/C2/C3/C4；RC-002 §8、RC-003 §8、RC-005 §6 各写 current-only/full-history 计划。**全部未运行** → 无运行证据。
+- **现有案例覆盖:** RC-001 已写 MN gate 与 C0/C1/C2/C3/C4；RC-002 §8、RC-003 §8、RC-005 §6 各写 current-only/full-history 计划。本图未纳入系统语义运行结果。RC-005 的具名 native 包与实际记录由[执行包](../experiments/rc005-native-execution-packet.md)独立管理；未纳入本图不能推成从未执行，也不将私人、未评审观察自动接受为本维度的证据。
 - **架构责任（要求结果）:** 在 current turn 相同的历史反事实对上，correct region 必须依赖 case-bounded 历史，只读 current turn 的路径不能同时满足两侧。
 - **正例 / 反例·对照:** 正例 = history-bearing 两侧均正确；反例 = current-only 与 no-memory 对 twins 产生同一 policy（RC-001 §9；RC-003 §8）。
 - **需保存观测:** 两侧输出、condition、input view、configured subject identity、evaluator 记录（CL1–CL3 required）。

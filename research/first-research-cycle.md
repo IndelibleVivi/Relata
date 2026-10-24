@@ -102,6 +102,8 @@ adapter 补上的 semantics／state／routing 会改变 attribution：为系统�
 
 ## 8. 系统样本空间（museum）
 
+**已实现的静态分支（2026-10-25）：** [五问题展品](../systems/architecture-atlas/exhibits.md)与[离线 reader](../systems/architecture-atlas/index.html#questions)将十个固定模型接到具体情境、阅读条件、跨系统解释、源码节点和三职能去向。`exhibits.json` 拥有编辑综合，沿用模型的节点与 source IDs；同一 build 生成 reader 和 GitHub Markdown，不另存 topology。运行 exhibit、公开 hosting 与下面需 executed record 的验收仍未由此完成。更广的[能力版图](lab-development.md)保留这三个问题以外的概念、理解、学习、companion 与社区研究。
+
 museum／样本间／研究室的正式名称仍开放。本周期**建立在现有十份 source studies 与 30 幅 atlas 视图之上**，不重建 topology、不新增平行副本。
 
 - `systems/architecture-atlas/models/*.json` 继续拥有 source-grounded 节点、关系、边界、state 与 pinned evidence；[`build.cjs`](../systems/architecture-atlas/build.cjs) 与 render 脚本拥有呈现生成。编辑 model 或 viewer 源后须以 `node systems/architecture-atlas/build.cjs` 重新生成并肉眼检查。

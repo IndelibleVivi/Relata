@@ -5,6 +5,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const root = __dirname;
 const { renderSvg } = require('./render-svg.cjs');
+const { validateCollection, renderExhibitsMarkdown } = require('./collection.cjs');
 const statuses = new Set(['observed', 'inferred', 'unknown']);
 const kinds = new Set(['entry', 'process', 'decision', 'store', 'model', 'output', 'external']);
 const args = process.argv.slice(2);
@@ -80,10 +81,10 @@ function mermaid(model, view) {
   lines.push('  classDef unknown stroke-dasharray:2 4');
   return lines.join('\n') + '\n';
 }
-function buildReader(models, assets) {
+function buildReader(models, assets, collection) {
   const css = fs.readFileSync(path.join(root, 'viewer.css'), 'utf8');
   const js = fs.readFileSync(path.join(root, 'viewer.js'), 'utf8');
-  const data = JSON.stringify({date:'2026-09-22', renderer:'relata-native-svg-1', models, assets}).replaceAll('<', '\\u003c');
+  const data = JSON.stringify({date:'2026-09-22', renderer:'relata-native-svg-1', models, assets, collection}).replaceAll('<', '\\u003c');
   return fs.readFileSync(path.join(root, 'viewer.html'), 'utf8')
     .replace('/* ATLAS_STYLES */', css).replace('/* ATLAS_LOGIC */', js)
     .replace('<!-- ATLAS_DATA -->', `<script id="atlas-data" type="application/json">${data}</script>`);
@@ -92,6 +93,8 @@ async function main() {
   const models = readModels();
   requireThat(models.length > 0, 'No architecture models');
   models.forEach(validate);
+  const collection = JSON.parse(fs.readFileSync(path.join(root, 'exhibits.json'), 'utf8'));
+  validateCollection(collection, models);
   const assets = {};
   for (const model of models) {
     for (const view of model.views) {
@@ -116,10 +119,14 @@ async function main() {
       console.log(`${checkOnly ? 'checked' : 'rendered'} ${key}: ${view.nodes.length} nodes / ${view.edges.length} edges`);
     }
   }
-  const reader = buildReader(models, assets);
+  const markdown = renderExhibitsMarkdown(collection, models);
+  const markdownTarget = path.join(root, 'exhibits.md');
+  if (checkOnly) requireThat(fs.readFileSync(markdownTarget, 'utf8') === markdown, 'Research exhibits Markdown is stale');
+  else fs.writeFileSync(markdownTarget, markdown);
+  const reader = buildReader(models, assets, collection);
   const target = path.join(root, 'index.html');
   if (checkOnly) requireThat(fs.readFileSync(target, 'utf8') === reader, 'Offline reader is stale');
   else fs.writeFileSync(target, reader);
-  console.log(`${models.length} projects / ${Object.keys(assets).length} diagrams; ${checkOnly ? 'all derived artifacts current' : 'offline reader built'}`);
+  console.log(`${models.length} projects / ${Object.keys(assets).length} diagrams / ${collection.exhibits.length} research exhibits; ${checkOnly ? 'all derived artifacts current' : 'offline reader built'}`);
 }
 main().catch(error => { console.error(error.message); process.exitCode = 1; });

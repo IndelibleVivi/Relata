@@ -14,6 +14,8 @@ Ten bounded source studies examine Mem0, current Letta, Graphiti, lmc-5, Tidelin
 
 ## 先看架构
 
+如果还没有选定项目，可先从[五问题静态展品](../architecture-atlas/exhibits.md)或[离线 reader](../architecture-atlas/index.html#questions)进入：比较同一情境下不同任务所需的机制，再追到本目录报告与图中节点。展品复用下面的固定研究，保留 source synthesis、编辑推断与待观察行为的区别，不新增上游运行或 accepted status。
+
 **[打开离线交互图集](../architecture-atlas/index.html)**：十个项目 × 三个视图。下载仓库后直接用浏览器打开，无需 server 或账号；GitHub 文件页不执行 HTML，在线浏览可读[三十幅 SVG 索引](../architecture-atlas/README.md)。
 
 - **全景与边界**：系统、调用方、模型、状态分别在哪里。
