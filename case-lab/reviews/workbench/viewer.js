@@ -9,6 +9,7 @@
   const labels = {pending:'待评审',draft:'有草稿',submitted:'已提交',skipped:'暂时跳过',technical:'技术失败'};
   let state, loadSequence=0, storageTimer, noticeTimer;
   let mobilePanel='source', mobilePositions={};
+  const stepPositions=new Map();
   const decoder = new TextDecoder('utf-8',{fatal:true,ignoreBOM:true});
   const encode = text => new TextEncoder().encode(text);
   function element(tag,text,className) {
@@ -19,9 +20,15 @@
   }
   function message(text,error=false) {
     clearTimeout(noticeTimer);
-    const box=byId('message'); box.hidden=false; box.textContent=text; box.classList.toggle('error',error);
-    document.documentElement.style.setProperty('--notice-height',`${box.getBoundingClientRect().height}px`);
-    if (!error) noticeTimer=setTimeout(()=>{box.hidden=true;document.documentElement.style.setProperty('--notice-height','0px');},14000);
+    const box=byId('message');box.hidden=false;box.textContent=text;box.classList.toggle('error',error);
+    if(error) {
+      const previousFocus=document.activeElement,close=element('button','×','dismiss-message');
+      close.type='button';close.setAttribute('aria-label','关闭提示');
+      close.addEventListener('click',()=>{box.hidden=true;if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});});box.append(close);
+    }
+    const feedback=byId('settings-feedback');
+    feedback.hidden=!byId('workspace-settings').open;feedback.textContent=text;
+    if (!error) noticeTimer=setTimeout(()=>{box.hidden=true;},6000);
   }
   function safely(action) {
     return async event => {
@@ -46,10 +53,24 @@
       reviewer_id:state.reviewer,practice_only:state.identity.practice_only,
       selected_review_id:item().review_id,entries:clone(state.entries)};
   }
-  function requireReviewer() {C.text(state.reviewer,'Reviewer alias',true,120);}
+  function openSettings(focusReviewer=false) {
+    const dialog=byId('workspace-settings');
+    byId('settings-feedback').hidden=true;
+    if(!dialog.open) dialog.showModal();
+    if(focusReviewer) byId('reviewer').focus();
+  }
+  function closeSettings() {byId('workspace-settings').close();}
+  function requireReviewer() {
+    try {C.text(state.reviewer,'Reviewer alias',true,120);}
+    catch(error) {openSettings(true);throw error;}
+  }
   function storeKey(alias=state.reviewer) {return `relata-rc005-review:${state.identity.practice_only?'practice:':''}${state.identity.packet_sha256}:${encodeURIComponent(alias)}`;}
   function metaKey() {return `relata-rc005-review:last:${state.identity.practice_only?'practice:':''}${state.identity.packet_sha256}`;}
-  function updateSaveState(text) {byId('save-state').textContent=text;}
+  function updateSaveState(text) {
+    byId('save-state').textContent=text;
+    byId('save-indicator').textContent=`${state?.reviewer||'未设置评审者'} · ${state?.remember?'本机自动保存':'内存草稿'}`;
+    byId('save-indicator').title=text;
+  }
   function saveLocal() {
     if (!state.remember) return;
     try {
@@ -73,6 +94,7 @@
     } else updateSaveState('内存草稿已更新 · 尚未下载本次修改');
     renderQueue();
     byId('judgment-state').textContent=labels[status(item())];
+    byId('judgment-state').dataset.status=status(item());
     const e=state.entries[item().review_id];
     if(e && (!e.history.length||e.editing))byId('discard-edit').hidden=!e.draft&&!e.editing;
   }
@@ -81,6 +103,7 @@
     state.entries=clone(draft.entries); state.reviewer=draft.reviewer_id;
     state.selected=state.packet.items.findIndex(i=>i.review_id===draft.selected_review_id);
     byId('reviewer').value=state.reviewer; state.revision++; state.exported=state.revision;
+    stepPositions.clear();updateSaveState('草稿已恢复 · 请继续保存后续修改');
     renderItem(false); renderQueue();
   }
   function restoreLocal(alias) {
@@ -105,6 +128,7 @@
     state={packet,identity:{packet_sha256:hash,contract_sha256:definition.sha256,practice_only:practice},
       entries:Object.create(null),selected:0,reviewer:'',remember:false,revision:0,exported:0,stored:0};
     byId('landing').hidden=true; byId('workspace').hidden=false;
+    stepPositions.clear();if(byId('workspace-settings').open)closeSettings();
     byId('reviewer').value=''; byId('remember').checked=false; byId('forget').hidden=true;
     byId('queue-search').value=''; byId('queue-filter').value='all';
     byId('packet-kind').textContent=`${practice?`合成练习 · ${packet.items.length} 个位置`:'RC-005 · 144 个位置'} · 包 ${hash.slice(0,8)}`;
@@ -128,22 +152,38 @@
     const currentJudgments=Object.values(state.entries).filter(e=>e.history.length).length;
     const reviewable=state.packet.items.length-counts.technical;
     byId('progress').textContent=`${currentJudgments} / ${reviewable}`;
-    byId('progress-detail').textContent=`${state.packet.items.length} 位置 · ${counts.technical} 技术失败 · ${counts.draft} 草稿 · ${counts.skipped} 暂跳过。分子是已有提交的回答，不是得分。`;
+    byId('progress-detail').textContent=`${state.packet.items.length} 位置 · ${counts.technical} 技术失败 · ${counts.draft} 草稿 · ${counts.skipped} 暂跳过`;
+    byId('progress-fill').style.width=`${reviewable?currentJudgments/reviewable*100:0}%`;
     const list=byId('queue'); list.replaceChildren(); let matches=0;
     state.packet.items.forEach((record,index)=>{
       const kind=status(record),e=state.entries[record.review_id];
       const haystack=[record.review_id,record.response||'',e?JSON.stringify(e):''].join(' ').toLowerCase();
       if ((filter!=='all' && filter!==kind) || (query && !haystack.includes(query))) return;
       matches++;
-      const button=element('button',undefined,'queue-item'); button.type='button'; button.dataset.reviewId=record.review_id;
+      const button=element('button',undefined,'queue-item'); button.type='button'; button.dataset.reviewId=record.review_id;button.dataset.status=kind;button.title=record.review_id;
       button.setAttribute('aria-current',String(index===state.selected));
       button.append(element('span',String(index+1).padStart(3,'0'),'queue-number'));
-      const name=element('span'); name.append(element('span',record.review_id.slice(-8),'queue-alias'),element('span',labels[kind],'queue-state')); button.append(name);
+      const name=element('span');
+      name.append(element('span',record.response===null?'未收到回答':record.response.trim()||'空白回答','queue-preview'));
+      const meta=element('span',undefined,'queue-meta');meta.append(element('span',labels[kind],'queue-state'));
+      name.append(meta);button.append(name);
       button.addEventListener('click',()=>navigate(index)); list.append(button);
     });
-    byId('queue-empty').hidden=matches!==0;
+    byId('queue-empty').hidden=matches!==0;revealQueueSelection();
     byId('download-reviews').textContent=`导出已提交判断${currentJudgments?` (${currentJudgments})`:''}`;
     byId('mobile-item').textContent=`${state.selected+1} / ${state.packet.items.length} · ${item().review_id.slice(-8)} · ${labels[status(item())]}`;
+  }
+  function revealQueueSelection() {
+    const list=byId('queue'),active=list.querySelector('[aria-current="true"]');
+    if(!active)return;
+    const itemRect=active.getBoundingClientRect(),listRect=list.getBoundingClientRect();
+    if(innerWidth<=900) {
+      if(itemRect.left<listRect.left)list.scrollLeft+=itemRect.left-listRect.left;
+      else if(itemRect.right>listRect.right)list.scrollLeft+=itemRect.right-listRect.right;
+    } else {
+      if(itemRect.top<listRect.top)list.scrollTop+=itemRect.top-listRect.top;
+      else if(itemRect.bottom>listRect.bottom)list.scrollTop+=itemRect.bottom-listRect.bottom;
+    }
   }
   function setMobilePanel(name,restorePosition=false) {
     if(restorePosition) mobilePositions[mobilePanel]=window.scrollY;
@@ -151,9 +191,9 @@
     mobilePanel=name;
     byId('show-source').setAttribute('aria-pressed',String(name==='source'));
     byId('show-form').setAttribute('aria-pressed',String(name==='form'));
-    if(restorePosition&&innerWidth<=700) {
+    if(restorePosition&&innerWidth<=900) {
       const tabs=document.querySelector('.mobile-tabs');
-      const start=tabs.getBoundingClientRect().top+window.scrollY-byId('message').getBoundingClientRect().height;
+      const start=tabs.getBoundingClientRect().top+window.scrollY;
       window.scrollTo({top:mobilePositions[name]??start,behavior:'instant'});
     }
   }
@@ -165,9 +205,10 @@
   }
   function renderItem(scroll=true) {
     const record=item();
-    byId('skip-panel').hidden=true;
+    byId('skip-panel').hidden=true;byId('form-error').hidden=true;
+    byId('source-panel').scrollTop=0;document.querySelector('.judgment-scroll').scrollTop=0;
     byId('position-label').textContent=`${state.identity.practice_only?'PRACTICE':'BLIND PASS'} / ${String(state.selected+1).padStart(3,'0')} OF ${state.packet.items.length}`;
-    byId('item-title').textContent=`回答 · ${record.review_id.slice(-8)}`;
+    byId('item-title').replaceChildren(document.createTextNode(`回答 ${String(state.selected+1).padStart(3,'0')}`),element('span',record.review_id.slice(-8)));
     byId('mobile-item').textContent=`${state.selected+1} / ${state.packet.items.length} · ${record.review_id.slice(-8)} · ${labels[status(record)]}`;
     byId('case-boundary').textContent=record.context;
     byId('packet-instructions').textContent=record.instructions;
@@ -199,32 +240,80 @@
     if(options) {
       control=element('select');const blank=element('option','请选择，或明确保留未决');blank.value='';control.append(blank);
       for(const option of options){const e=element('option',option.label);e.value=option.value;control.append(e);}
-    } else control=element('textarea');
+    } else {control=element('textarea');control.rows=id==='attribution'?2:3;}
     control.dataset.field=id;control.name=id;control.value=value||'';wrapper.append(control);
     if(help) wrapper.append(element('span',help,'field-help'));
     return wrapper;
+  }
+  function setStep(index,focus=false) {
+    if(!state)return;
+    stepPositions.set(item().review_id,index);
+    const sections=byId('judgment-form').querySelectorAll(':scope > fieldset');
+    sections.forEach((section,i)=>section.hidden=i!==index);
+    for(const button of byId('review-steps').querySelectorAll('button'))button.setAttribute('aria-pressed',String(Number(button.dataset.step)===index));
+    const e=entry(),locked=e.history.length>0&&!e.editing;
+    byId('step-back').hidden=index===0;
+    byId('step-forward').hidden=index===2;
+    byId('step-forward').textContent=`${locked?'查看':'继续'}：${index===0?'行动判断':'诊断与理由'} →`;
+    byId('step-forward').classList.toggle('primary',!locked);byId('step-forward').classList.toggle('text-button',locked);
+    byId('submit-review').hidden=locked||index!==2;
+    byId('reopen-review').hidden=!locked;
+    if(focus) {
+      document.querySelector('.judgment-scroll').scrollTop=0;
+      const legend=sections[index]?.querySelector('legend');
+      if(legend){legend.tabIndex=-1;legend.focus({preventScroll:true});}
+    }
+  }
+  function revealValidation(error) {
+    const text=error.message||String(error);
+    const dimension=['current_action','clarification','selective_use','confidence_limits','guessability','guess_confidence'].find(id=>text.includes(id));
+    const last=dimension?.startsWith('guess')||/条件猜测|整体理由|修订理由/.test(text);
+    const step=last?2:dimension?1:0;
+    setStep(step);byId('form-error').textContent=text;byId('form-error').hidden=false;
+    setMobilePanel('form');
+    let field=dimension||(/连续原文|主张 quote/.test(text)?'quote':/attribution/.test(text)?'attribution':/主张 kind/.test(text)?'kind':/主张 support/.test(text)?'support':/主张 rationale/.test(text)?'rationale':/条件猜测/.test(text)?'guess_cue':/整体理由/.test(text)?'rationale':/修订理由/.test(text)?'amendment_reason':null);
+    const section=byId('judgment-form').querySelectorAll(':scope > fieldset')[step];
+    let scope=section;
+    if(step===0) {
+      // Reuse the contract checker to find the failing claim instead of
+      // duplicating its rules or always focusing the first quotation.
+      const draft=entry().draft;
+      for(let index=0;index<(draft?.claims.length||0);index++) {
+        try {C.validateForm({...draft,claims:[draft.claims[index]]},item(),contract);}
+        catch(candidate) {if(candidate.message===text){scope=section.querySelectorAll('.claim')[index];break;}}
+      }
+    }
+    const evidence=step===0&&/证据引用|历史或当前问题引用/.test(text);
+    const control=evidence?scope?.querySelector('input[data-ref]'):field?scope?.querySelector(`[data-field="${field}"]`):scope?.querySelector('input,textarea,select,button');
+    (control||byId('form-error')).focus();
   }
   function renderForm() {
     const record=item(),e=entry();const technical=record.response_state==='technical-failure';
     byId('technical-note').hidden=!technical;byId('judgment-form').hidden=technical;byId('judgment-actions').hidden=technical;
     byId('judgment-state').textContent=labels[status(record)];
+    byId('judgment-state').dataset.status=status(record);byId('review-steps').hidden=technical;
     const locked=e.history.length>0&&!e.editing;
     byId('submit-review').hidden=locked;byId('skip-review').hidden=locked;
     byId('reopen-review').hidden=!locked;byId('discard-edit').hidden=locked||(!e.draft&&!e.editing);
     const form=byId('judgment-form');form.replaceChildren();
     if(!technical) {
       const value=clone(e.draft||e.history.at(-1)||C.emptyForm());
-      const claims=element('fieldset',undefined,'form-section');claims.append(element('legend','01 / 回答表达了什么'));
+      const claims=element('fieldset',undefined,'form-section');claims.append(element('legend','回答表达了什么'));
       claims.append(element('p',fieldDefinition('claims').help,'field-help'));
+      if(!value.claims.length) {
+        const hint=element('div',undefined,'claim-empty');hint.append(element('span','“'),element('h4',record.response.trim()?'从一段原文字句开始':'这是一个空白回答'),element('p',record.response.trim()?'选出需要核对的表达，记录类型、归属和历史依据。每一项都保留原文。':'无需添加字句，继续记录行动、限制与未决之处。'));
+        claims.append(hint);
+      }
       value.claims.forEach((claim,index)=>{
         const block=element('div',undefined,'claim');block.dataset.claim=index;
         const heading=element('div',undefined,'claim-heading');heading.append(element('strong',`字句 ${index+1}`));
         const remove=element('button','移除');remove.type='button';remove.disabled=locked;
         remove.addEventListener('click',()=>{captureForm();const current=entry();if(current.draft.claims[index].quote&&!confirm('移除这项尚未提交的字句？已提交历史会保留。'))return;current.draft.claims.splice(index,1);changed();renderForm();});heading.append(remove);block.append(heading);
-        for(const id of ['quote','kind','attribution','support']) {
-          const definition=fieldDefinition(id,true);
-          block.append(formField(id,definition.label,claim[id],definition.help,['kind','support'].includes(id)?optionsFor(id,true):null));
-        }
+        const quote=fieldDefinition('quote',true);block.append(formField('quote',quote.label,claim.quote,quote.help));
+        const pair=element('div',undefined,'claim-pair');
+        for(const id of ['kind','support']) {const d=fieldDefinition(id,true);pair.append(formField(id,d.label,claim[id],d.help,optionsFor(id,true)));}
+        block.append(pair);
+        const attribution=fieldDefinition('attribution',true);block.append(formField('attribution',attribution.label,claim.attribution,attribution.help));
         block.append(element('p','引用完整历史的位置（H1…）或当前问题。','field-help'));
         const refs=element('div',undefined,'evidence-checks');
         for(const ref of [...record.governing_history.map((_,i)=>`H${i+1}`),'current']) {
@@ -232,18 +321,20 @@
         }
         block.append(refs,formField('rationale','这项字句的理由',claim.rationale,'解释依据、时态、归属或未决之处。'));claims.append(block);
       });
-      const add=element('button','＋ 添加一项字句');add.type='button';add.disabled=locked;
-      add.addEventListener('click',()=>{captureForm();entry().draft.claims.push({quote:'',kind:'',attribution:'',support:'',evidence_refs:[],rationale:''});changed();renderForm();byId('judgment-form').querySelector('.claim:last-of-type textarea')?.focus();});claims.append(add);form.append(claims);
-      const actions=element('fieldset',undefined,'form-section');actions.append(element('legend','02 / 行动、澄清与使用'));
+      const add=element('button','＋ 添加原文字句','add-claim');add.type='button';add.disabled=locked;
+      add.addEventListener('click',()=>{captureForm();entry().draft.claims.push({quote:'',kind:'',attribution:'',support:'',evidence_refs:[],rationale:''});changed();renderForm();byId('judgment-form').querySelector('.claim:last-of-type textarea')?.focus();});if(record.response.trim())claims.append(add);form.append(claims);
+      const actions=element('fieldset',undefined,'form-section');actions.append(element('legend','行动、澄清与使用'));
+      actions.append(element('p','分别记录每项判断。不确定时可明确保留未决。','field-help section-intro'));
       for(const id of ['current_action','clarification','selective_use','confidence_limits']) {const d=fieldDefinition(id);actions.append(formField(id,d.label,value[id],d.help,d.options));}form.append(actions);
-      const guess=element('fieldset',undefined,'form-section');guess.append(element('legend','03 / 盲化诊断与理由'));
+      const guess=element('fieldset',undefined,'form-section');guess.append(element('legend','盲化诊断与整体理由'));
+      guess.append(element('p','条件猜测单独记录，它不是回答质量的判断。','field-help section-intro'));
       for(const id of ['guessability','guess_confidence']) {const d=fieldDefinition(id);guess.append(formField(id,d.label,value[id],d.help,d.options));}
       guess.append(formField('guess_cue','条件猜测的文字线索',value.guess_cue,'无法判断时可留空；其他猜测需要指明回答中的线索。'),formField('rationale','整体理由与未决',value.rationale,'综合说明行动、澄清和限制；保留不同的合法解释。'),formField('notes','补充笔记（可选）',value.notes,'使用不含个人身份或其他私人材料的说明。'));
       if(e.editing&&e.history.length) guess.append(formField('amendment_reason','为什么修订之前的判断？',e.amendment_reason,'新判断保留旧记录，并明确替代当前版本。'));
       form.append(guess);
       for(const control of form.querySelectorAll('textarea,select,input')) control.disabled=locked;
     }
-    renderHistory();
+    renderHistory();setStep(stepPositions.get(record.review_id)||0);
   }
   function captureForm() {
     if(!state||item().response_state!=='complete') return;
@@ -292,12 +383,14 @@
     } else await loadPacket(bytes,false,sequence);
   }));
   byId('practice').addEventListener('click',safely(()=>loadPacket(encode(JSON.stringify(demo.packet,null,2)+'\n'),true)));
-  byId('judgment-form').addEventListener('input',()=>{captureForm();changed();});
-  byId('judgment-form').addEventListener('change',()=>{captureForm();changed();});
+  byId('judgment-form').addEventListener('input',()=>{byId('form-error').hidden=true;captureForm();changed();});
+  byId('judgment-form').addEventListener('change',()=>{byId('form-error').hidden=true;captureForm();changed();});
   byId('submit-review').addEventListener('click',safely(()=>{
-    requireReviewer();captureForm();const e=entry(),record=item();C.validateForm(e.draft,record,contract);
+    requireReviewer();captureForm();const e=entry(),record=item();
     const supersedes=e.history.at(-1)?.judgment_id||null;
-    if(supersedes)C.text(e.amendment_reason,'修订理由');
+    try {C.validateForm(e.draft,record,contract);if(supersedes)C.text(e.amendment_reason,'修订理由');}
+    catch(error){revealValidation(error);return;}
+    byId('form-error').hidden=true;
     const bytes=crypto.getRandomValues(new Uint8Array(16));
     const judgment={judgment_id:Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join(''),review_id:record.review_id,
       supersedes,amendment_reason:supersedes?e.amendment_reason:'',created_at:new Date().toISOString(),...clone(e.draft)};
@@ -334,7 +427,7 @@
     const alias=event.target.value.trim();try{C.text(alias,'Reviewer alias',true,120);}catch(error){event.target.value=state.reviewer;throw error;}
     if(state.reviewer&&alias!==state.reviewer&&Object.values(state.entries).some(e=>e.draft||e.history.length||e.skipped_reason)) {
       if(!confirm('更换 reviewer 会开始独立评审。请确认已保存原 reviewer 的草稿。继续？')){event.target.value=state.reviewer;return;}
-      if(state.remember)saveLocal();state.entries=Object.create(null);state.remember=false;byId('remember').checked=false;
+      if(state.remember)saveLocal();state.entries=Object.create(null);stepPositions.clear();state.remember=false;byId('remember').checked=false;
     }
     state.reviewer=alias;if(!restoreLocal(alias)){changed();renderForm();}
   }));
@@ -352,7 +445,13 @@
   byId('mobile-next').addEventListener('click',()=>navigate(state.selected+1));
   byId('copy-response').addEventListener('click',safely(async()=>{try{await navigator.clipboard.writeText(item().response);message('已复制原样回答。');}catch{message('浏览器未允许复制；可在原样回答中直接选择文字。',true);}}));
   byId('change-packet').addEventListener('click',()=>{byId('packet-file').click();});
-  new ResizeObserver(()=>document.documentElement.style.setProperty('--notice-height',`${byId('message').getBoundingClientRect().height}px`)).observe(byId('message'));
+  for(const button of byId('review-steps').querySelectorAll('button'))button.addEventListener('click',()=>setStep(Number(button.dataset.step),true));
+  byId('step-forward').addEventListener('click',()=>setStep(Math.min(2,(stepPositions.get(item().review_id)||0)+1),true));
+  byId('step-back').addEventListener('click',()=>setStep(Math.max(0,(stepPositions.get(item().review_id)||0)-1),true));
+  byId('workspace-options').addEventListener('click',()=>openSettings(!state.reviewer));
+  byId('mobile-settings').addEventListener('click',()=>openSettings(!state.reviewer));
+  byId('close-settings').addEventListener('click',closeSettings);byId('done-settings').addEventListener('click',closeSettings);
+  addEventListener('resize',()=>{if(state)revealQueueSelection();});
   addEventListener('beforeunload',event=>{if(state&&state.revision>state.exported&&(!state.remember||state.stored<state.revision)){event.preventDefault();event.returnValue='';}});
   addEventListener('keydown',event=>{if(!state||event.isComposing||!event.altKey)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();navigate(state.selected+(event.key==='ArrowLeft'?-1:1));}});
 })();

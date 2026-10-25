@@ -6,1080 +6,1867 @@
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src data:; base-uri 'none'; form-action 'none'">
   <title>Relata · Continuity Review</title>
   <style>:root {
-  color-scheme:light;
-  --ink:#213f45;
-  --muted:#5d7277;
-  --deep:#193d43;
-  --accent:#a95231;
-  --light:#f3f6f4;
-  --line:#cedbd7;
-  --soft:#e5eeea;
-  --font:Arial,"PingFang SC","Microsoft YaHei",sans-serif
+  color-scheme: light;
+  --ink: #252b39;
+  --muted: #747b8b;
+  --line: #e4e7ee;
+  --canvas: #eef0f5;
+  --panel: #fff;
+  --nav: #202737;
+  --accent: #6159be;
+  --accent-soft: #eeedf9;
+  --error: #a43d46;
+  --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
 }
-
 * {
-  box-sizing:border-box
+  box-sizing: border-box;
 }
-
-body {
-  margin:0;
-  background:var(--light);
-  color:var(--ink);
-  font:15px/1.7 var(--font)
-}
-
-button,input,select,textarea {
-  font:inherit;
-  color:inherit
-}
-
-button,a,input,select,textarea,summary {
-  touch-action:manipulation
-}
-
-button {
-  cursor:pointer;
-  border:1px solid #a8bfba;
-  background:transparent;
-  padding:8px 13px;
-  border-radius:3px;
-  line-height:1.5
-}
-
-button:hover,.file-button:hover {
-  background:#e0eae5
-}
-
-button:disabled {
-  cursor:default;
-  opacity:.45
-}
-
-a {
-  color:inherit;
-  text-underline-offset:4px
-}
-
-input,select,textarea {
-  max-width:100%;
-  border:1px solid #b9ccc6;
-  border-radius:3px;
-  background:#fff;
-  padding:8px 10px
-}
-
-input[type=checkbox] {
-  accent-color:#316b68
-}
-
-textarea {
-  width:100%;
-  resize:vertical;
-  min-height:90px;
-  line-height:1.65
-}
-
-input:focus-visible,select:focus-visible,textarea:focus-visible {
-  outline:0;
-  border-color:#4c8580;
-  box-shadow:inset 0 0 0 1px #4c8580
-}
-
-button:focus-visible,a:focus-visible,summary:focus-visible,.file-button:focus-within {
-  outline:2px solid #6a9c94;
-  outline-offset:3px
-}
-
-main:focus-visible {
-  outline:0
-}
-
-h1,h2,h3,p {
-  margin-top:0
-}
-
-h2,h3 {
-  line-height:1.4
-}
-
 [hidden] {
-  display:none!important
+  display: none !important;
 }
-
-.sr-only {
-  position:absolute;
-  width:1px;
-  height:1px;
-  padding:0;
-  overflow:hidden;
-  clip:rect(0,0,0,0);
-  white-space:nowrap
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--canvas);
+  font: 14px/1.6 var(--font);
+  -webkit-font-smoothing: antialiased;
 }
-
-.skip {
-  position:fixed;
-  left:15px;
-  top:10px;
-  z-index:20;
-  background:white;
-  padding:8px;
-  transform:translateY(-150%)
+a {
+  color: inherit;
+  text-underline-offset: 4px;
 }
-
-.skip:focus {
-  transform:none
+button, input, textarea, select {
+  font: inherit;
 }
-
-.masthead {
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:24px;
-  padding:20px 4%;
-  background:var(--deep);
-  color:#e9f1ed
+button, .file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 7px 13px;
+  border: 1px solid #d7dbe5;
+  border-radius: 6px;
+  background: var(--panel);
+  color: var(--ink);
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .15s, border-color .15s, color .15s;
 }
-
-.brand {
-  font-family:Georgia,serif;
-  font-size:34px;
-  line-height:1;
-  text-decoration:none;
-  display:flex;
-  align-items:baseline;
-  gap:24px
+button:hover, .file-button:hover {
+  background: #f5f5fa;
+  border-color: #afb2c5;
 }
-
-.brand span {
-  font:10px var(--font);
-  letter-spacing:2.3px;
-  color:#b3cec6
+button:disabled {
+  cursor: default;
+  opacity: .36;
 }
-
-.masthead-right {
-  display:flex;
-  gap:26px;
-  font-size:12px;
-  align-items:center
+button.primary, .file-button.primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
 }
-
-.offline-mark {
-  border-left:3px solid #acd0ba;
-  padding-left:10px
+button.primary:hover, .file-button.primary:hover {
+  background: #514ba5;
+  border-color: #514ba5;
 }
-
-.masthead-right a {
-  color:#c2d8d0
+button.text-button {
+  min-height: 32px;
+  padding: 5px 3px;
+  border-color: transparent;
+  background: transparent;
+  color: var(--muted);
 }
-
-.message {
-  position:sticky;
-  top:0;
-  z-index:12;
-  padding:12px 4%;
-  margin:0;
-  background:#deece4;
-  border-bottom:1px solid #b0c9bb;
-  overflow-wrap:anywhere
+button.text-button:hover {
+  color: var(--accent);
 }
-
-.message.error {
-  background:#f7e6dd;
-  color:#803e29;
-  border-color:#ddbaa8
+input:not([type="checkbox"]):not([type="file"]), textarea, select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  border: 1px solid #dce0e8;
+  border-radius: 5px;
+  background: #fff;
+  color: var(--ink);
+  padding: 9px 11px;
+  line-height: 1.5;
 }
-
-.landing {
-  max-width:1280px;
-  margin:0 auto;
-  padding:82px 44px 90px;
-  display:grid;
-  grid-template-columns:1.25fr 1fr;
-  gap:90px
+textarea {
+  min-height: 74px;
+  resize: vertical;
 }
-
-.eyebrow {
-  font-size:10px;
-  letter-spacing:1.7px;
-  font-weight:600;
-  color:var(--accent);
-  line-height:1.5;
-  margin-bottom:14px
+input::placeholder, textarea::placeholder {
+  color: #979ca9;
 }
-
-.landing h1 {
-  font:clamp(46px,4.6vw,68px)/1.3 Georgia,"Songti SC",serif;
-  margin:20px 0 28px;
-  letter-spacing:-1px
+input[type="checkbox"] {
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
 }
-
-.landing h1 em {
-  font-style:normal;
-  color:#4f7c70
+:focus-visible {
+  outline: 2px solid #928ad6;
+  outline-offset: 2px;
 }
-
-.lede {
-  font-size:20px;
-  line-height:1.8;
-  max-width:540px
+input:focus-visible, select:focus-visible, textarea:focus-visible {
+  outline: none;
+  border-color: #8c84cb;
+  box-shadow: 0 0 0 2px #eeedf9;
 }
-
-.landing-copy>p:not(.eyebrow):not(.lede) {
-  color:var(--muted);
-  font-size:14px;
-  max-width:520px
-}
-
-.open-actions {
-  display:flex;
-  flex-direction:column;
-  align-items:flex-start;
-  gap:15px;
-  margin:32px 0 24px
-}
-
 .file-button {
-  position:relative;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid #406f69;
-  border-radius:3px;
-  padding:11px 18px;
-  cursor:pointer;
-  background:var(--deep);
-  color:#f4f8f5;
-  line-height:1.5
+  position: relative;
+  overflow: hidden;
 }
-
-.file-button:hover {
-  color:var(--ink)
-}
-
 .file-button input {
-  position:absolute;
-  inset:0;
-  width:100%;
-  height:100%;
-  opacity:0;
-  cursor:pointer
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
-
-.file-button.secondary {
-  background:transparent;
-  color:var(--ink);
-  border-color:#a8bfba;
-  padding:8px 13px
+.file-button:focus-within {
+  outline: 2px solid #928ad6;
+  outline-offset: 2px;
 }
-
-.quiet-button,.text-button {
-  border-color:transparent;
-  background:transparent
+.skip {
+  position: fixed;
+  left: 20px;
+  top: -80px;
+  z-index: 100;
+  padding: 8px 14px;
+  color: #fff;
+  background: var(--nav);
 }
-
-.quiet-button {
-  padding-left:0
+.skip:focus {
+  top: 8px;
 }
-
-.text-button {
-  font-size:12px;
-  padding:4px;
-  color:#3e756e;
-  text-decoration:underline;
-  text-underline-offset:4px
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
 }
-
-.privacy-note {
-  font-size:12px!important;
-  border-left:2px solid #a3bfb1;
-  padding-left:14px
+h1, h2, h3, p {
+  margin: 0;
 }
-
+.eyebrow {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  line-height: 1.5;
+  color: var(--muted);
+}
+.masthead {
+  display: flex;
+  align-items: center;
+  height: 62px;
+  padding: 0 28px;
+  gap: 30px;
+  background: var(--nav);
+  color: #f6f7fc;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  min-width: 170px;
+  text-decoration: none;
+}
+.brand svg {
+  width: 26px;
+  height: 26px;
+  fill: none;
+  stroke: #b6b0e5;
+  stroke-width: 1.6;
+}
+.brand > span {
+  font-size: 26px;
+  font-weight: 550;
+  letter-spacing: -.9px;
+  line-height: 1;
+}
+.product-name {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: .035em;
+  color: #d5d8e5;
+}
+.product-name > span {
+  margin-left: 9px;
+  color: #8f97ab;
+}
+.masthead-right {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  margin-left: auto;
+  font-size: 11px;
+  color: #a9b0c2;
+}
+.masthead-right a {
+  text-decoration: none;
+}
+.offline-mark {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.offline-mark::before, .privacy-dot {
+  content: '';
+  display: inline-block;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #94bcad;
+}
+.message {
+  position: fixed;
+  z-index: 20;
+  bottom: 22px;
+  left: max(244px,calc((100vw - 950px)/2));
+  max-width: min(540px,calc(100vw - 32px));
+  padding: 12px 17px;
+  border: 1px solid #dcd9ee;
+  border-left: 3px solid var(--accent);
+  border-radius: 7px;
+  background: #fff;
+  box-shadow: 0 8px 30px #2027371a;
+  color: #4e4c6e;
+  font-size: 12px;
+}
+.message.error {
+  border-left-color: var(--error);
+  color: var(--error);
+}
+.landing {
+  max-width: 1192px;
+  margin: 0 auto;
+  padding: 72px 40px 30px;
+}
+.landing-main {
+  display: grid;
+  grid-template-columns: 1fr 432px;
+  gap: 100px;
+  align-items: center;
+}
+.landing-copy > .eyebrow {
+  color: var(--accent);
+  margin-bottom: 25px;
+}
+.landing h1 {
+  font-size: clamp(36px,4vw,48px);
+  font-weight: 550;
+  line-height: 1.42;
+  letter-spacing: -.045em;
+}
+.lede {
+  margin-top: 23px;
+  color: #61697d;
+  font-size: 18px;
+  line-height: 1.9;
+}
+.landing-description {
+  max-width: 370px;
+  margin-top: 18px;
+  font-size: 12px;
+  line-height: 1.95;
+  color: var(--muted);
+}
+.study-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .05em;
+  color: var(--accent);
+}
+.study-label > span {
+  border-left: 1px solid #cbd0de;
+  padding-left: 10px;
+  font-size: 10px;
+  font-weight: 400;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+.intake-panel {
+  background: #fff;
+  padding: 32px;
+  border: 1px solid #e1e4ee;
+  border-radius: 12px;
+  box-shadow: 0 14px 48px #20273706;
+}
+.intake-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+}
+.file-symbol {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 48px;
+  border: 1px solid #dad6ee;
+  border-radius: 5px;
+  color: var(--accent);
+  background: #f6f5fd;
+  font: 17px ui-monospace, monospace;
+}
+.intake-panel h2 {
+  font-size: 22px;
+  font-weight: 550;
+  letter-spacing: -.025em;
+}
+.intake-panel > p {
+  margin-top: 12px;
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--muted);
+}
+.intake-panel code {
+  font-size: 11px;
+  color: #596075;
+}
+.intake-open {
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 25px;
+  min-height: 46px;
+  padding: 10px 16px;
+  font-size: 13px;
+}
+.practice-entry {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 13px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.practice-entry .text-button {
+  color: var(--accent);
+  font-size: 11px;
+}
+.intake-panel > .privacy-note {
+  position: relative;
+  border-top: 1px solid var(--line);
+  padding: 19px 0 0 13px;
+  margin-top: 23px;
+  font-size: 10px;
+  line-height: 1.9;
+}
+.privacy-dot {
+  position: absolute;
+  top: 26px;
+  left: 0;
+  background: #8b83c6;
+}
 .orientation {
-  list-style:none;
-  padding:40px 0 0;
-  margin:0
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 44px;
+  margin-top: 70px;
+  border-top: 1px solid #dce0e9;
+  padding-top: 24px;
 }
-
-.orientation li {
-  display:grid;
-  grid-template-columns:40px 1fr;
-  gap:15px;
-  padding:27px 0;
-  border-top:1px solid var(--line)
+.orientation > div > span {
+  font: 9px ui-monospace, monospace;
+  letter-spacing: .08em;
+  color: #858b9c;
 }
-
-.orientation li>span {
-  font:12px Georgia,serif;
-  color:#7e9a91;
-  padding-top:5px
-}
-
 .orientation h2 {
-  font-size:19px;
-  font-weight:500;
-  margin-bottom:8px
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 550;
 }
-
 .orientation p {
-  font-size:13px;
-  color:var(--muted);
-  margin:0
+  max-width: 265px;
+  margin-top: 7px;
+  font-size: 11px;
+  line-height: 1.9;
+  color: var(--muted);
 }
-
+.landing-limit {
+  margin-top: 32px;
+  color: #9197a5;
+  font-size: 10px;
+}
 .session-bar {
-  padding:20px 3%;
-  display:flex;
-  flex-wrap:wrap;
-  gap:13px 26px;
-  border-bottom:1px solid var(--line);
-  background:#eaf0ec;
-  align-items:center;
-  justify-content:space-between
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  height: 62px;
+  padding: 0 26px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
 }
-
-.session-identity {
-  display:flex;
-  align-items:center;
-  flex-wrap:wrap;
-  gap:10px;
-  font-size:12px
+.session-heading {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 18px;
 }
-
-.session-identity input {
-  width:225px
+.session-heading .eyebrow {
+  font-size: 12px;
+  color: var(--ink);
+  letter-spacing: .03em;
+  white-space: nowrap;
 }
-
-.session-identity>span {
-  font-size:11px;
-  color:var(--muted)
+#packet-kind {
+  color: var(--muted);
+  font-size: 10px;
 }
-
 .session-actions {
-  display:flex;
-  gap:8px;
-  flex-wrap:wrap;
-  align-items:center;
-  font-size:12px
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
 }
-
-.primary {
-  background:var(--deep);
-  border-color:var(--deep);
-  color:#f3f8f5
+#save-indicator {
+  max-width: 190px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 10px;
+  color: #858b9b;
+  margin-right: 8px;
 }
-
-.primary:hover {
-  background:#2d5659;
-  color:white
+#workspace-options > span {
+  font-size: 14px;
+  color: #8e91a4;
 }
-
-.storage-bar {
-  flex-basis:100%;
-  display:flex;
-  gap:16px;
-  flex-wrap:wrap;
-  align-items:center;
-  color:var(--muted);
-  font-size:11px
-}
-
-.storage-bar label {
-  display:flex;
-  align-items:center;
-  gap:7px
-}
-
 .review-layout {
-  display:grid;
-  grid-template-columns:225px minmax(0,1fr);
-  max-width:1800px;
-  margin:auto
+  display: grid;
+  grid-template-columns: 222px minmax(0,1fr);
 }
-
 .queue-panel {
-  padding:28px 18px 28px 25px;
-  border-right:1px solid var(--line);
-  align-self:start;
-  position:sticky;
-  top:0;
-  max-height:100vh;
-  display:flex;
-  flex-direction:column
+  display: flex;
+  flex-direction: column;
+  height: calc(100svh - 124px);
+  min-height: 500px;
+  padding: 24px 16px 16px;
+  background: var(--nav);
+  color: #c1c7d8;
 }
-
 .queue-title {
-  display:flex;
-  justify-content:space-between;
-  gap:10px;
-  align-items:center
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
 }
-
 .queue-title h2 {
-  font-size:16px;
-  margin-bottom:8px
+  color: #f2f3f9;
+  font-size: 13px;
+  font-weight: 500;
 }
-
-.queue-title strong {
-  font-size:13px;
-  font-weight:500;
-  font-variant-numeric:tabular-nums
+.queue-total {
+  font-size: 9px;
+  color: #7e899f;
 }
-
-.muted {
-  color:var(--muted);
-  font-size:11px
+.queue-progress {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 16px 8px 8px;
 }
-
-.queue-panel input,.queue-panel select {
-  width:100%;
-  font-size:12px;
-  margin-bottom:10px
+.queue-progress strong {
+  color: #f4f4fa;
+  font-size: 23px;
+  font-weight: 450;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -.03em;
 }
-
-.queue-panel nav {
-  overflow:auto;
-  min-height:0;
-  margin-top:7px
+.queue-progress > span {
+  font-size: 9px;
+  color: #8490a7;
 }
-
+.progress-track {
+  height: 2px;
+  background: #394155;
+  margin: 0 8px 10px;
+}
+#progress-fill {
+  display: block;
+  height: 100%;
+  background: #a29ae0;
+  width: 0;
+}
+#progress-detail {
+  margin: 0 8px;
+  font-size: 10px;
+  color: #939db2;
+  line-height: 1.9;
+}
+.queue-tools {
+  display: grid;
+  gap: 7px;
+  margin: 18px 5px 12px;
+}
+.queue-tools input, .queue-tools select {
+  border-color: #3a4255 !important;
+  background: #293244 !important;
+  color: #cdd2e0 !important;
+  font-size: 11px;
+  min-height: 34px;
+  padding: 7px 9px !important;
+}
+.queue-tools input::placeholder {
+  color: #8a95ab !important;
+}
+#queue {
+  flex: 1;
+  min-height: 100px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #50586b transparent;
+}
 .queue-item {
-  display:flex;
-  gap:10px;
-  width:100%;
-  text-align:left;
-  border:0;
-  border-radius:0;
-  border-left:2px solid transparent;
-  padding:10px 8px;
-  margin-bottom:2px;
-  align-items:baseline;
-  font-size:12px
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 9px;
+  text-align: left;
+  padding: 12px 9px;
+  margin-bottom: 3px;
+  color: #9da6bb;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-weight: 400;
 }
-
-.queue-item[aria-current=true] {
-  border-left-color:#5f8974;
-  background:#dde9e1
+.queue-item:hover {
+  background: #2a3347;
+  border-color: transparent;
 }
-
-.queue-item .queue-number {
-  font:10px monospace;
-  color:#7e958f;
-  min-width:22px
+.queue-item[aria-current="true"] {
+  background: #393a57;
+  border-color: #595575;
+  color: #e4e0fc;
 }
-
-.queue-item .queue-alias {
-  font:10px monospace;
-  overflow-wrap:anywhere
+.queue-number {
+  font: 10px ui-monospace, monospace;
+  padding-top: 3px;
+  color: #8691a7;
 }
-
-.queue-item .queue-state {
-  display:block;
-  font-size:10px;
-  color:var(--muted)
+.queue-item[aria-current="true"] .queue-number {
+  color: #b9b0ed;
 }
-
+.queue-item > span:last-child {
+  flex: 1;
+  min-width: 0;
+}
+.queue-preview {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.7;
+  font-size: 12px;
+  color: #c8cddb;
+}
+.queue-item[aria-current="true"] .queue-preview {
+  color: #f1edff;
+}
+.queue-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 6px;
+  margin-top: 5px;
+}
+.queue-state {
+  font-size: 9px;
+  color: #929eb5;
+}
+.queue-item[data-status="submitted"] .queue-state {
+  color: #a3c4b6;
+}
+.queue-item[data-status="technical"] .queue-state {
+  color: #bd9c99;
+}
+.queue-item[data-status="draft"] .queue-state {
+  color: #c1b2e6;
+}
+#queue-empty {
+  padding: 20px 9px;
+  color: #9fa8ba;
+  font-size: 12px;
+}
+.queue-footnote {
+  margin: 16px 8px 0;
+  padding-top: 14px;
+  border-top: 1px solid #394155;
+  color: #7e899e;
+  font-size: 9px;
+  line-height: 2;
+}
+kbd {
+  font: 9px var(--font);
+}
 .reading-area {
-  min-width:0;
-  padding:28px 30px 60px
+  min-width: 0;
 }
-
 .position-bar {
-  display:flex;
-  justify-content:space-between;
-  gap:20px;
-  align-items:center;
-  margin-bottom:24px
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  height: 82px;
+  padding: 0 28px;
 }
-
-.position-bar h2 {
-  font-size:22px;
-  font-weight:500;
-  margin:0
-}
-
 .position-bar .eyebrow {
-  margin-bottom:5px
+  font-size: 9px;
+  color: #85889c;
 }
-
+.position-bar h2 {
+  font-size: 19px;
+  font-weight: 550;
+  letter-spacing: -.025em;
+  margin-top: 4px;
+}
+.position-bar h2 span {
+  font: 10px ui-monospace, monospace;
+  color: #9398a8;
+  margin-left: 12px;
+  letter-spacing: 0;
+}
 .position-actions {
-  display:flex;
-  gap:6px;
-  font-size:12px
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
-
+.position-actions > button:not(.text-button) {
+  width: 32px;
+  min-height: 32px;
+  padding: 5px;
+  border-color: #daddE7;
+  background: transparent;
+}
+.position-actions .text-button {
+  margin-left: 10px;
+  font-size: 11px;
+}
 .review-columns {
-  display:grid;
-  grid-template-columns:minmax(0,1.1fr) minmax(330px,1fr);
-  gap:36px
+  display: grid;
+  grid-template-columns: minmax(0,1.15fr) minmax(360px,1fr);
+  gap: 18px;
+  padding: 0 24px 22px;
+  height: calc(100svh - 206px);
+  min-height: 418px;
 }
-
-.source-panel,.judgment-panel {
-  min-width:0
+.source-panel, .judgment-panel {
+  min-width: 0;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 9px;
 }
-
+.source-panel {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #d3d5e0 transparent;
+}
 .panel-heading {
-  display:flex;
-  justify-content:space-between;
-  align-items:baseline;
-  gap:10px
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
-
 .panel-heading h3 {
-  font-size:17px;
-  font-weight:500;
-  margin:0
+  font-size: 13px;
+  font-weight: 550;
 }
-
-.panel-heading>span {
-  font-size:11px;
-  color:var(--muted)
+.source-heading, .judgment-heading {
+  min-height: 56px;
+  padding: 15px 23px;
+  border-bottom: 1px solid var(--line);
 }
-
+.source-heading {
+  position: sticky;
+  z-index: 2;
+  top: 0;
+  background: #fff;
+  border-radius: 9px 9px 0 0;
+}
+.state-label {
+  font-size: 11px;
+  color: #7c8194;
+}
+.source-body {
+  padding: 0 24px 30px;
+}
+summary {
+  cursor: pointer;
+  font-size: 11px;
+  color: #6e7487;
+  line-height: 1.7;
+}
+summary::marker {
+  color: #9b9caf;
+  font-size: 9px;
+}
+details > summary {
+  list-style-position: outside;
+  margin-left: 10px;
+}
+.source-context {
+  padding: 17px 0;
+  border-bottom: 1px solid var(--line);
+}
 .boundary {
-  font-size:11px;
-  color:var(--muted);
-  padding:12px 0;
-  line-height:1.8;
-  border-bottom:1px solid var(--line);
-  margin-bottom:20px;
-  overflow-wrap:anywhere
+  color: #7f8395;
+  font-size: 10px;
+  line-height: 1.9;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
-
-details summary {
-  font-size:13px;
-  cursor:pointer;
-  padding:4px 0 10px;
-  color:#47726b
+.source-context .boundary {
+  margin: 12px 0 0;
 }
-
-.history-event {
-  padding:12px 0 15px;
-  border-top:1px solid var(--line)
-}
-
-.event-head {
-  display:flex;
-  gap:10px;
-  align-items:baseline;
-  font-size:11px;
-  color:var(--muted);
-  margin-bottom:6px
-}
-
-.event-id {
-  font:10px monospace;
-  background:#e0ebe5;
-  padding:1px 5px;
-  color:#3e6c5c
-}
-
-.history-event p {
-  margin:0;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-  font-size:13px;
-  line-height:1.85
-}
-
 .current-turn {
-  margin:25px 0;
-  border-left:3px solid #86a78f;
-  padding:5px 0 5px 16px
+  padding: 25px 0;
 }
-
 .current-turn .eyebrow {
-  color:#577c66;
-  margin-bottom:8px
+  margin-bottom: 10px;
+  color: #7c778e;
+  letter-spacing: .04em;
 }
-
+.current-turn .eyebrow span {
+  color: #b2afc0;
+  font-size: 8px;
+  letter-spacing: .08em;
+  margin-left: 5px;
+}
 #current {
-  font-size:14px;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere
+  font-size: 14px;
+  line-height: 1.95;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #5d6375;
 }
-
 .exact-response {
-  background:white;
-  border-top:3px solid #6e8e84;
-  padding:20px 20px 25px;
-  margin:25px 0
+  padding: 21px 22px 24px;
+  margin: 0 -3px 28px;
+  background: #f5f4fb;
+  border-left: 2px solid #a8a0d7;
+  border-radius: 0 6px 6px 0;
 }
-
+.exact-response h3 {
+  color: #625a89;
+  font-size: 10px;
+  letter-spacing: .04em;
+}
+.exact-response .text-button {
+  min-height: 20px;
+  padding: 0;
+  font-size: 10px;
+  color: #9088ac;
+}
 #response {
-  margin-top:14px;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-  font-size:15px;
-  line-height:1.95
+  font-size: 16px;
+  line-height: 2;
+  margin-top: 14px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  color: #333347;
 }
-
 .empty-response {
-  font-size:13px;
-  color:var(--muted);
-  font-style:italic
+  font-size: 12px;
+  color: #89809f;
 }
-
+#response code {
+  font-size: 11px;
+}
+#history-disclosure > summary {
+  display: list-item;
+  color: #535b71;
+  font-size: 12px;
+  font-weight: 550;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
+}
+#history-disclosure > summary span {
+  font-size: 8px;
+  letter-spacing: .07em;
+  font-weight: 400;
+  color: #a4a7b5;
+  margin-left: 8px;
+}
+.history-event {
+  padding: 20px 0;
+  border-bottom: 1px solid #eef0f5;
+  scroll-margin-top: 72px;
+}
+.event-head {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  color: #777e90;
+  font-size: 11px;
+  line-height: 1.7;
+}
+.event-head > span:last-child {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.event-id {
+  color: #80709d;
+  font: 10px ui-monospace, monospace;
+  white-space: nowrap;
+}
+.history-event p {
+  margin-top: 7px;
+  padding-left: 23px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: 15px;
+  line-height: 1.95;
+  color: #545b6e;
+}
+.judgment-panel {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.judgment-heading {
+  flex-shrink: 0;
+}
+#judgment-state[data-status="submitted"] {
+  color: #548570;
+}
+#judgment-state[data-status="draft"] {
+  color: #8a6eac;
+}
+.review-steps {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.review-steps button {
+  border: 0;
+  border-bottom: 2px solid transparent;
+  border-radius: 0;
+  background: transparent;
+  font-size: 11px;
+  padding: 14px 3px 12px;
+  color: #8b8e9f;
+  white-space: nowrap;
+}
+.review-steps button span {
+  font-size: 9px;
+  color: #a1a2b2;
+  margin-right: 4px;
+}
+.review-steps button[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.review-steps button[aria-pressed="true"] span {
+  color: #9a90cf;
+}
+.judgment-scroll {
+  scroll-padding-top: 72px;
+  flex: 1;
+  min-height: 100px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 24px;
+  scrollbar-width: thin;
+  scrollbar-color: #d3d5e0 transparent;
+}
 .form-section {
-  border:0;
-  border-top:1px solid var(--line);
-  padding:18px 0 4px;
-  margin:0 0 15px;
-  min-width:0
+  border: 0;
+  min-width: 0;
+  padding: 0;
+  margin: 0;
 }
-
 .form-section legend {
-  font-size:13px;
-  font-weight:600;
-  padding:0 9px 0 0
+  display: block;
+  width: 100%;
+  padding: 0;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 550;
+  letter-spacing: -.02em;
 }
-
+.form-section > .field-help {
+  margin-bottom: 20px;
+}
 .field {
-  display:block;
-  margin:0 0 14px
+  display: block;
+  margin-bottom: 21px;
+  min-width: 0;
 }
-
 .field-label {
-  display:block;
-  font-size:12px;
-  margin-bottom:5px
+  display: block;
+  margin-bottom: 7px;
+  color: #555b70;
+  font-size: 12px;
+  font-weight: 550;
 }
-
 .field-help {
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  margin:5px 0 0
+  display: block;
+  margin-top: 6px;
+  color: #797e91;
+  font-size: 11px;
+  line-height: 1.8;
+  font-weight: 400;
 }
-
-.field select,.field input {
-  width:100%;
-  font-size:12px
+.field select, .field textarea {
+  font-size: 13px;
 }
-
-.field textarea {
-  font-size:13px
+.field textarea:disabled, .field select:disabled {
+  color: #5c6274;
+  background: #fafbfc;
+  opacity: 1;
 }
-
 .claim {
-  padding:14px;
-  border-left:2px solid #a8beb0;
-  background:#eaf0ec;
-  margin-bottom:16px
+  border-top: 1px solid var(--line);
+  padding-top: 17px;
+  margin-top: 20px;
 }
-
+.claim:first-of-type {
+  margin-top: 0;
+}
 .claim-heading {
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  font-size:12px;
-  margin-bottom:13px
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
 }
-
+.claim-heading strong {
+  font-size: 10px;
+  color: #80749f;
+  font-weight: 550;
+}
 .claim-heading button {
-  font-size:11px;
-  padding:3px 7px
+  font-size: 10px;
+  min-height: 24px;
+  border: 0;
+  padding: 2px;
+  background: transparent;
+  color: #9b96a8;
 }
-
-.claim textarea {
-  min-height:65px
+.claim .field {
+  margin-bottom: 16px;
 }
-
+.claim textarea[data-field="quote"] {
+  min-height: 90px;
+  background: #fbfaff;
+  color: #514a71;
+  border-color: #e0dced;
+}
+.claim textarea[data-field="attribution"] {
+  min-height: 55px;
+}
+.claim-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.claim .field-help {
+  font-size: 10px;
+}
 .evidence-checks {
-  display:flex;
-  gap:6px;
-  flex-wrap:wrap;
-  margin:6px 0 14px
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 10px 0 16px;
 }
-
 .evidence-checks label {
-  font:11px monospace;
-  display:flex;
-  align-items:center;
-  gap:4px;
-  padding:3px 7px;
-  background:#fff;
-  border:1px solid var(--line);
-  border-radius:2px
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #e3e1ed;
+  border-radius: 4px;
+  padding: 4px 6px;
+  font: 10px ui-monospace, monospace;
+  color: #817897;
+  cursor: pointer;
 }
-
+.evidence-checks input {
+  width: 12px;
+  height: 12px;
+  margin: 0;
+}
+.evidence-checks label:has(input:checked) {
+  background: #f0edf8;
+  border-color: #b9afd5;
+  color: #63547f;
+}
+.add-claim {
+  width: 100%;
+  min-height: 42px;
+  border-style: dashed;
+  color: var(--accent);
+  border-color: #c9c3df;
+  background: #fcfbff;
+  font-size: 12px;
+}
+.claim-empty {
+  padding: 24px 14px;
+  margin: 22px 0 16px;
+  background: #fafaff;
+  border: 1px solid #eeedf5;
+  border-radius: 6px;
+  text-align: center;
+}
+.claim-empty > span {
+  display: block;
+  font-size: 23px;
+  line-height: 1;
+  color: #b3a9d2;
+  font-family: Georgia, serif;
+}
+.claim-empty h4 {
+  font-size: 12px;
+  font-weight: 500;
+  color: #74708b;
+  margin: 12px 0 6px;
+}
+.claim-empty p {
+  max-width: 250px;
+  margin: 0 auto;
+  font-size: 10px;
+  color: #9893aa;
+  line-height: 1.9;
+}
+.section-intro {
+  margin-bottom: 23px;
+}
 .judgment-actions {
-  display:flex;
-  gap:8px;
-  align-items:center;
-  flex-wrap:wrap;
-  padding:18px 0;
-  border-top:1px solid var(--line);
-  position:sticky;
-  bottom:0;
-  background:var(--light)
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 7px;
+  border-top: 1px solid var(--line);
+  padding: 14px 20px;
+  background: #fff;
+  flex-shrink: 0;
 }
-
-.judgment-actions button {
-  font-size:12px
+.action-main, .action-secondary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
-
+.judgment-actions .primary {
+  font-size: 11px;
+}
+.judgment-actions .text-button {
+  font-size: 10px;
+}
+.technical-note, .skip-panel, .form-error {
+  padding: 15px;
+  border: 1px solid #e9dfd2;
+  border-radius: 6px;
+  color: #947b55;
+  font-size: 12px;
+  background: #fcf9f5;
+  margin-bottom: 20px;
+}
+.skip-panel .field {
+  margin-bottom: 12px;
+}
+.skip-panel > div {
+  display: flex;
+  gap: 12px;
+}
+.form-error {
+  position: sticky;
+  top: -24px;
+  z-index: 3;
+  color: var(--error);
+  background: #fff7f7;
+  border-color: #ead2d5;
+  font-size: 11px;
+}
 .review-history {
-  font-size:12px;
-  color:var(--muted)
+  margin-top: 24px;
 }
-
+.review-history:empty {
+  display: none;
+}
 .review-history details {
-  border-top:1px solid var(--line);
-  padding:10px 0
+  border-top: 1px solid var(--line);
+  padding: 14px 0;
 }
-
-.review-history pre {
-  font:11px/1.7 var(--font);
-  white-space:pre-wrap;
-  overflow-wrap:anywhere
+.review-history summary {
+  font-size: 10px;
+  color: #89829a;
 }
-
+.review-history details > div {
+  margin-top: 12px;
+  font-size: 11px;
+  line-height: 1.9;
+  color: #7c7c8f;
+  overflow-wrap: anywhere;
+}
+.review-history p {
+  margin-top: 8px;
+  white-space: pre-wrap;
+}
+.worksheet-note {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid var(--line);
+}
+.worksheet-note summary {
+  color: #9d9eac;
+  font-size: 10px;
+}
+.worksheet-note .boundary {
+  margin-top: 10px;
+}
 .form-footnote {
-  font-size:11px;
-  color:var(--muted);
-  margin-top:20px
+  font-size: 10px;
+  color: #9294a3;
+  line-height: 1.9;
+  margin-top: 10px;
 }
-
-.technical-note {
-  padding:18px;
-  background:#e8eeeb;
-  font-size:13px;
-  border-left:3px solid #9aaba4
-}
-
-.page-footer {
-  padding:22px 4%;
-  border-top:1px solid var(--line);
-  display:flex;
-  gap:20px;
-  justify-content:space-between;
-  color:var(--muted);
-  font-size:10px
-}
-
 .mobile-tabs {
-  display:none
+  display: none;
 }
-
-@media(min-width:1600px) {
+.page-footer {
+  display: flex;
+  justify-content: space-between;
+  max-width: 1112px;
+  margin: 0 auto;
+  padding: 20px 0;
+  color: #a0a6b4;
+  font-size: 9px;
+  border-top: 1px solid #dce0e9;
+}
+body:has(#workspace:not([hidden])) > .page-footer {
+  display: none;
+}
+dialog {
+  width: 490px;
+  max-width: calc(100vw - 32px);
+  max-height: calc(100svh - 40px);
+  padding: 0;
+  border: 1px solid #dce0e9;
+  border-radius: 12px;
+  box-shadow: 0 24px 90px #10162840;
+  color: var(--ink);
+}
+dialog::backdrop {
+  background: #1c223856;
+  backdrop-filter: blur(3px);
+}
+.settings-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px 28px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.settings-header h2 {
+  font-size: 21px;
+  font-weight: 550;
+  margin-top: 4px;
+}
+.settings-header .eyebrow {
+  font-size: 8px;
+  color: #9992b5;
+}
+#close-settings {
+  border: 0;
+  padding: 0;
+  min-height: 32px;
+  width: 32px;
+  color: #a4a4b3;
+  font-size: 25px;
+  font-weight: 300;
+}
+.settings-body {
+  padding: 25px 28px;
+}
+.settings-section {
+  margin-top: 25px;
+  border-top: 1px solid var(--line);
+  padding-top: 22px;
+}
+.settings-section h3 {
+  font-size: 12px;
+  font-weight: 550;
+}
+.settings-section p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 5px;
+}
+.settings-actions {
+  display: flex;
+  gap: 9px;
+  margin-top: 16px;
+}
+.remember-control {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 12px;
+  margin-top: 23px;
+}
+.remember-control input {
+  margin: 3px 0 0;
+}
+.remember-control small {
+  display: block;
+  margin-top: 5px;
+  color: #9998a7;
+  font-size: 10px;
+  line-height: 1.9;
+}
+#save-state {
+  padding: 10px 0 0 23px;
+  font-size: 10px;
+  color: #9a94ac;
+}
+#forget {
+  margin-left: 23px;
+  font-size: 10px;
+}
+.change-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+.change-section button {
+  font-size: 11px;
+}
+#settings-feedback {
+  background: #f3f1fa;
+  padding: 10px;
+  margin-top: 16px;
+  font-size: 11px;
+  color: #70628d;
+}
+.settings-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 28px;
+  border-top: 1px solid var(--line);
+  background: #fafafe;
+}
+.settings-footer > span {
+  font-size: 10px;
+  color: #aaa7b8;
+}
+@media (min-width: 1600px) {
   .review-columns {
-    gap:60px
+    grid-template-columns: minmax(0,1.35fr) minmax(390px,.9fr);
+    padding-right: 32px;
+    gap: 24px;
   }
-  .reading-area {
-    padding-inline:50px
+  .source-body {
+    padding-right: 40px;
+    padding-left: 40px;
   }
-  .review-layout {
-    grid-template-columns:250px minmax(0,1fr)
+  .judgment-scroll {
+    padding: 28px;
   }
 }
-
-@media(max-width:1150px) {
+@media (max-width: 1150px) and (min-width: 901px) {
   .review-layout {
-    grid-template-columns:190px minmax(0,1fr)
-  }
-  .reading-area {
-    padding:24px 20px
-  }
-  .review-columns {
-    grid-template-columns:1fr;
-    gap:25px
+    grid-template-columns: 182px minmax(0,1fr);
   }
   .queue-panel {
-    padding-inline:15px
+    padding-left: 10px;
+    padding-right: 10px;
   }
-  .source-panel {
-    max-width:800px
+  .queue-progress {
+    gap: 5px;
   }
-  .judgment-panel {
-    max-width:800px
+  .queue-progress > span {
+    font-size: 8px;
   }
-  .landing {
-    gap:45px;
-    padding-inline:35px
-  }
-}
-
-@media(max-width:700px) {
-  body {
-    font-size:14px
-  }
-  .masthead {
-    padding:18px
-  }
-  .brand {
-    font-size:30px;
-    gap:15px
-  }
-  .brand span {
-    font-size:8px;
-    letter-spacing:1.4px
-  }
-  .masthead-right {
-    gap:0
-  }
-  .offline-mark {
-    font-size:10px
-  }
-  .masthead-right a {
-    display:none
-  }
-  .landing {
-    padding:38px 22px;
-    display:block
-  }
-  .landing h1 {
-    font-size:46px
-  }
-  .lede {
-    font-size:18px
-  }
-  .orientation {
-    padding-top:30px
-  }
-  .session-bar {
-    padding:16px;
-    gap:12px
-  }
-  .session-identity input {
-    width:100%;
-    flex:1;
-    min-width:150px
-  }
-  .session-actions {
-    gap:5px
-  }
-  .session-actions button,.session-actions .file-button {
-    font-size:11px;
-    padding:7px 9px
-  }
-  .storage-bar {
-    gap:5px 12px
-  }
-  .review-layout {
-    display:block
-  }
-  .queue-panel {
-    position:static;
-    max-height:none;
-    padding:18px 16px;
-    border-right:0;
-    border-bottom:1px solid var(--line);
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:5px 10px
-  }
-  .queue-title,.queue-panel .muted,.queue-panel nav,#queue-empty {
-    grid-column:1/-1
-  }
-  .queue-title h2 {
-    margin:0
-  }
-  .queue-panel p {
-    margin:0 0 8px
-  }
-  .queue-panel nav {
-    display:flex;
-    overflow:auto;
-    max-height:100px;
-    margin:0;
-    gap:5px;
-    padding-bottom:5px
-  }
-  .queue-item {
-    width:140px;
-    flex:none;
-    margin:0;
-    border-left:0;
-    border-bottom:2px solid transparent;
-    padding:7px
-  }
-  .queue-item[aria-current=true] {
-    border-left:0;
-    border-bottom-color:#5f8974
-  }
-  .queue-panel input,.queue-panel select {
-    margin:0
-  }
-  .reading-area {
-    padding:20px 16px 40px
+  .review-columns {
+    gap: 12px;
+    padding: 0 16px 16px;
+    grid-template-columns: minmax(0,1fr) minmax(320px,1fr);
   }
   .position-bar {
-    align-items:flex-start;
-    margin-bottom:16px;
-    gap:10px
+    padding: 0 20px;
   }
-  .position-bar h2 {
-    font-size:19px
+  .source-body, .judgment-scroll {
+    padding-left: 18px;
+    padding-right: 18px;
   }
-  .position-actions {
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    min-width:110px
+  .source-heading, .judgment-heading {
+    padding-left: 18px;
+    padding-right: 18px;
   }
-  .position-actions button {
-    padding:5px 8px
+  .review-steps {
+    padding: 0 12px;
   }
-  .position-actions button:last-child {
-    grid-column:1/-1;
-    font-size:10px
+  .review-steps button {
+    font-size: 10px;
   }
-  .mobile-tabs {
-    display:grid;
-    grid-template-columns:1fr 1fr 32px;
-    position:sticky;
-    top:var(--notice-height,0px);
-    z-index:8;
-    background:var(--light);
-    gap:5px;
-    border-bottom:1px solid var(--line);
-    margin:0 -16px 20px;
-    padding:8px 16px
+  .review-steps button span {
+    display: none;
   }
-  .mobile-tabs>span {
-    grid-column:1/-1;
-    font-size:10px;
-    color:var(--muted)
+  .session-heading > .eyebrow {
+    display: none;
   }
-  .mobile-tabs button {
-    border:0;
-    border-radius:0;
-    font-size:12px;
-    border-bottom:2px solid transparent
+  #save-indicator {
+    display: none;
   }
-  .mobile-tabs button[aria-pressed=true] {
-    background:#e0ebe5;
-    border-bottom-color:#5e8878
+  .brand {
+    min-width: 130px;
   }
-  .review-columns {
-    display:block
+  .landing-main {
+    gap: 45px;
+    grid-template-columns: 1fr 390px;
   }
-  .reading-area[data-mobile-panel=source] .judgment-panel,.reading-area[data-mobile-panel=form] .source-panel {
-    display:none
+}
+@media (max-width: 900px) {
+  body {
+    font-size: 13px;
   }
-  .exact-response {
-    padding:17px
+  .masthead {
+    height: 56px;
+    padding: 0 19px;
+    gap: 20px;
+  }
+  .brand {
+    min-width: 0;
+    gap: 7px;
+  }
+  .brand > span {
+    font-size: 23px;
+  }
+  .brand svg {
+    width: 22px;
+    height: 22px;
+  }
+  .product-name {
+    display: none;
+  }
+  .masthead-right {
+    gap: 17px;
+    font-size: 10px;
+  }
+  .landing {
+    padding: 42px 23px 24px;
+  }
+  .landing-main {
+    display: block;
+  }
+  .landing-copy > .eyebrow {
+    font-size: 9px;
+    margin-bottom: 19px;
+  }
+  .landing h1 {
+    font-size: 35px;
+  }
+  .lede {
+    font-size: 16px;
+    margin-top: 18px;
+  }
+  .lede br {
+    display: none;
+  }
+  .landing-description {
+    margin-top: 13px;
+    font-size: 11px;
+  }
+  .study-label {
+    margin-top: 20px;
+    font-size: 10px;
+    gap: 7px;
+  }
+  .study-label > span {
+    font-size: 8px;
+    padding-left: 7px;
+  }
+  .intake-panel {
+    padding: 24px;
+    margin-top: 33px;
+    border-radius: 9px;
+  }
+  .intake-head {
+    margin-bottom: 20px;
+  }
+  .intake-panel h2 {
+    font-size: 20px;
+  }
+  .intake-panel > p {
+    font-size: 11px;
+  }
+  .intake-panel > p br {
+    display: none;
+  }
+  .orientation {
+    grid-template-columns: 1fr;
+    margin-top: 35px;
+    gap: 24px;
+    padding-top: 24px;
+  }
+  .orientation > div {
+    display: grid;
+    grid-template-columns: 74px 1fr;
+    column-gap: 14px;
+  }
+  .orientation > div > span {
+    grid-row: 1 / 3;
+    margin-top: 3px;
+    font-size: 8px;
+  }
+  .orientation h2 {
+    margin-top: 0;
+    font-size: 12px;
+  }
+  .orientation p {
+    font-size: 10px;
+  }
+  .landing-limit {
+    font-size: 9px;
+    line-height: 1.9;
   }
   .page-footer {
-    padding:20px;
-    display:block
+    margin: 0 23px;
+    padding: 18px 0;
+    gap: 20px;
+    font-size: 8px;
   }
-  .page-footer span {
-    display:block
+  .page-footer > span:last-child {
+    text-align: right;
+    max-width: 190px;
   }
-  .message {
-    font-size:12px;
-    padding:10px 16px
+  .session-bar {
+    height: auto;
+    min-height: 89px;
+    padding: 12px 17px;
+    flex-wrap: wrap;
+    gap: 9px;
   }
-  .file-button {
-    font-size:12px;
-    padding:10px 14px
+  .session-heading {
+    width: 100%;
+    gap: 10px;
+  }
+  .session-heading .eyebrow {
+    font-size: 10px;
+  }
+  #packet-kind {
+    font-size: 9px;
+  }
+  .session-actions {
+    width: 100%;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+  .session-actions button {
+    min-height: 32px;
+    font-size: 10px;
+    padding: 6px 9px;
+  }
+  #save-indicator {
+    margin-right: auto;
+    font-size: 9px;
+  }
+  #workspace-options > span {
+    display: none;
+  }
+  .review-layout {
+    display: block;
+  }
+  .queue-panel {
+    height: auto;
+    min-height: 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 0;
+    padding: 15px 17px 12px;
+  }
+  .queue-title {
+    padding: 0;
+    gap: 8px;
+    justify-content: flex-start;
+  }
+  .queue-title h2 {
+    font-size: 11px;
+  }
+  .queue-total {
+    display: none;
+  }
+  .queue-progress {
+    margin: 0;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .queue-progress strong {
+    font-size: 15px;
+  }
+  .queue-progress > span {
+    font-size: 8px;
+  }
+  .progress-track {
+    display: none;
+  }
+  #progress-detail {
+    grid-column: 1 / -1;
+    margin: 3px 0 0;
+    font-size: 8px;
+  }
+  .queue-tools {
+    grid-column: 1 / -1;
+    grid-template-columns: 1fr 118px;
+    margin: 11px 0 10px;
+    gap: 8px;
+  }
+  .queue-tools input, .queue-tools select {
+    font-size: 10px;
+    min-height: 32px;
+  }
+  #queue {
+    grid-column: 1 / -1;
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    min-height: 0;
+    max-width: calc(100vw - 34px);
+    padding-bottom: 3px;
+  }
+  .queue-item {
+    width: 90px;
+    min-width: 90px;
+    gap: 6px;
+    padding: 8px;
+    margin-bottom: 0;
+    align-items: center;
+  }
+  .queue-number {
+    display: block;
+    padding: 0;
+    font-size: 10px;
+  }
+  .queue-preview {
+    display: none;
+  }
+  .queue-meta {
+    margin: 0;
+  }
+  .queue-state {
+    font-size: 8px;
+    white-space: nowrap;
+  }
+  .queue-footnote {
+    display: none;
+  }
+  #queue-empty {
+    grid-column: 1 / -1;
+    font-size: 10px;
+    padding: 8px 0;
+  }
+  .position-bar {
+    height: 76px;
+    padding: 0 18px;
+    gap: 6px;
+  }
+  .position-bar h2 {
+    font-size: 17px;
+  }
+  .position-bar h2 span {
+    font-size: 9px;
+    margin-left: 8px;
+  }
+  .position-bar .eyebrow {
+    font-size: 8px;
+  }
+  .position-actions > button:not(.text-button) {
+    display: none;
+  }
+  .position-actions .text-button {
+    font-size: 10px;
+    margin: 0;
+  }
+  .mobile-tabs {
+    position: sticky;
+    top: 0;
+    z-index: 6;
+    display: grid;
+    grid-template-columns: 1fr 1fr 34px 34px;
+    padding: 0 18px;
+    align-items: center;
+    background: #eef0f5;
+    border-bottom: 1px solid #dce0e9;
+  }
+  #mobile-item {
+    grid-column: 1 / -1;
+    font: 9px var(--font);
+    color: #9094a5;
+    padding: 10px 0 3px;
+  }
+  .mobile-tabs button {
+    border: 0;
+    border-bottom: 2px solid transparent;
+    border-radius: 0;
+    background: transparent;
+    min-height: 40px;
+    font-size: 12px;
+    color: #9092a5;
+  }
+  .mobile-tabs button[aria-pressed="true"] {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .review-columns {
+    display: block;
+    padding: 14px 12px 24px;
+    height: auto;
+    min-height: 0;
+  }
+  .source-panel {
+    overflow: visible;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .source-heading {
+    position: static;
+  }
+  .source-heading, .judgment-heading {
+    min-height: 52px;
+    padding: 14px 18px;
+  }
+  .source-body {
+    padding: 0 18px 24px;
+  }
+  .current-turn {
+    padding: 22px 0;
+  }
+  #current {
+    font-size: 13px;
+  }
+  .exact-response {
+    padding: 17px 15px 20px;
+    margin-bottom: 24px;
+  }
+  #response {
+    font-size: 14px;
+  }
+  #history-disclosure > summary span {
+    font-size: 7px;
+    margin-left: 5px;
+  }
+  .event-head {
+    font-size: 10px;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .history-event p {
+    font-size: 13px;
+    padding-left: 21px;
+  }
+  .judgment-panel {
+    overflow: visible;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+  .judgment-scroll {
+    overflow: visible;
+    padding: 21px 18px;
+  }
+  .review-steps {
+    padding: 0 15px;
+  }
+  .review-steps button {
+    font-size: 10px;
+  }
+  .review-steps button span {
+    font-size: 8px;
+    margin-right: 2px;
   }
   .judgment-actions {
-    padding-bottom:max(18px,env(safe-area-inset-bottom))
+    position: sticky;
+    bottom: 0;
+    z-index: 4;
+    padding: 12px 15px max(12px,env(safe-area-inset-bottom));
+    border-radius: 0 0 9px 9px;
+    box-shadow: 0 -5px 14px #20273705;
+  }
+  .reading-area[data-mobile-panel="source"] .judgment-panel, .reading-area[data-mobile-panel="form"] .source-panel {
+    display: none;
+  }
+  .message {
+    left: 16px;
+    bottom: 82px;
+    max-width: calc(100vw - 32px);
+    font-size: 11px;
+    padding: 10px 13px;
+  }
+  dialog {
+    max-height: calc(100svh - 24px);
+  }
+  .settings-header {
+    padding: 20px;
+  }
+  .settings-body {
+    padding: 20px;
+  }
+  .settings-footer {
+    padding: 15px 20px;
+  }
+  .change-section p {
+    font-size: 10px;
+  }
+}
+@media (max-width: 350px) {
+  .masthead {
+    padding: 0 15px;
+  }
+  .masthead-right {
+    gap: 12px;
+    font-size: 9px;
+  }
+  .landing {
+    padding-left: 19px;
+    padding-right: 19px;
+  }
+  .intake-panel {
+    padding: 20px;
+  }
+  .landing h1 {
+    font-size: 31px;
+  }
+  .session-bar {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+  #packet-kind {
+    font-size: 8px;
+  }
+  .queue-panel {
+    padding-left: 13px;
+    padding-right: 13px;
+  }
+  .queue-tools {
+    grid-template-columns: 1fr 104px;
+  }
+  #queue {
+    max-width: calc(100vw - 26px);
+  }
+  .position-bar {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+  .position-actions .text-button {
+    font-size: 9px;
+  }
+  .review-steps {
+    padding: 0 10px;
+  }
+  .review-steps button span {
+    display: none;
+  }
+  .judgment-scroll {
+    padding: 18px 14px;
+  }
+  .claim-pair {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .settings-footer > span {
+    font-size: 9px;
+  }
+  .change-section {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
 
-@media(prefers-reduced-motion:reduce) {
-  * {
-    scroll-behavior:auto!important
-  }
+.dismiss-message {
+  position: absolute;
+  right: 5px;
+  top: 4px;
+  min-height: 28px;
+  width: 28px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font-size: 18px;
 }
-
-.source-context {
-  margin-top:14px
-}
-
-.source-context .boundary {
-  padding-top:5px
-}
-
-.source-panel:focus-visible {
-  outline:1px solid #8aa99a;
-  outline-offset:5px
-}
-
-#item-title:focus-visible {
-  outline:0
-}
-
-@media(min-width:1151px) {
-  .source-panel {
-    position:sticky;
-    top:calc(var(--notice-height,0px) + 15px);
-    align-self:start;
-    max-height:calc(100vh - var(--notice-height,0px) - 30px);
-    overflow:auto;
-    padding-right:16px;
-    scrollbar-width:thin
-  }
+.message.error {
+  padding-right: 40px;
 }
 </style>
 </head>
 <body>
   <a class="skip" href="#review-main">跳到评审内容</a>
   <header class="masthead">
-    <a class="brand" href="../../../systems/architecture-atlas/index.html">relata<span>CONTINUITY REVIEW</span></a>
+    <a class="brand" href="../../../systems/architecture-atlas/index.html" aria-label="Relata · 返回研究馆藏"><svg viewBox="0 0 28 28" aria-hidden="true"><path d="M6 22V6h8a6 6 0 0 1 0 12H6m8-12v16m0-8h8"/></svg><span>relata</span></a>
+    <span class="product-name">Continuity Review <span>/ 语义评审台</span></span>
     <div class="masthead-right"><span class="offline-mark">本地 · 离线</span><a href="README.md">使用说明 ↗</a></div>
   </header>
   <p id="message" class="message" role="status" aria-live="polite" hidden></p>
   <main id="review-main" tabindex="-1">
     <section id="landing" class="landing">
-      <div class="landing-copy">
-        <p class="eyebrow">RESEARCH PRACTICE / 语义评审</p>
-        <h1>读懂回答，<br><em>保留分歧。</em></h1>
-        <p class="lede">回到完整历史，区分回答说了什么、依据支持什么，以及当前行动是否恰当。</p>
-        <p>面向既有 RC-005 匿名评审包。这里记录人的判断与理由，保留不确定性；不自动给系统打分。</p>
-        <div class="open-actions"><label class="file-button">打开 review-packet.json<input id="packet-file" type="file" accept=".json,application/json"></label><button id="practice" type="button" class="quiet-button">先用合成练习包试一遍 →</button></div>
-        <p class="privacy-note">文件只在此浏览器读取。草稿默认留在内存；可下载后继续，也可主动开启本机保存。没有上传或 provider 调用。</p>
+      <div class="landing-main">
+        <div class="landing-copy"><p class="eyebrow">RELATA / RESEARCH WORKSPACE</p><h1>连续性评审，<br>从原文开始。</h1><p class="lede">读清发生过的事，<br>留下有依据、可回访的判断。</p><p class="landing-description">一个安静的离线工作区。对照完整历史与匿名回答，核对表达、归属与行动；保留理由，也保留分歧。</p><span class="study-label">RC-005 <span>首次盲评 · development worksheet</span></span></div>
+        <div class="intake-panel"><div class="intake-head"><span class="file-symbol" aria-hidden="true">{ }</span><span class="eyebrow">开始一份评审</span></div><h2>打开匿名评审包</h2><p>选择 operator 交给你的 <code>review-packet.json</code>。<br>已有草稿，可在打开原包后恢复。</p><label class="file-button primary intake-open">选择评审包 <span aria-hidden="true">↗</span><input id="packet-file" type="file" accept=".json,application/json"></label><div class="practice-entry"><span>第一次使用？</span><button id="practice" type="button" class="text-button">用合成练习包熟悉流程 <span aria-hidden="true">→</span></button></div><p class="privacy-note"><span class="privacy-dot" aria-hidden="true"></span>文件留在此浏览器，不上传、不调用 provider。<br>草稿默认在内存，下载后可继续。</p></div>
       </div>
-      <ol class="orientation">
-        <li><span>01</span><div><h2>先读发生过的事</h2><p>保留说话者、修订和当前问题。完整历史界定案例语境；匿名回答不显示系统或实验条件。</p></div></li>
-        <li><span>02</span><div><h2>把判断拆开</h2><p>逐项记录主张、提案、证据、行动与澄清。猜对来源和有依据地回答需要分开看。</p></div></li>
-        <li><span>03</span><div><h2>带着理由回来</h2><p>导出草稿以恢复工作，导出已提交判断交回 operator。后续修订保留之前的判断，不覆盖分歧。</p></div></li>
-      </ol>
+      <div class="orientation"><div><span>01 / READ</span><h2>对照历史与回答</h2><p>保留说话者、修订与当前问题，先确认这条回答的语境。</p></div><div><span>02 / ANNOTATE</span><h2>逐句留下依据</h2><p>区分事实、提议与承诺，再分别记录行动和使用是否恰当。</p></div><div><span>03 / RETURN</span><h2>保存，回访，交回</h2><p>随时下载草稿；提交与修订保留版本，累计导出交回 operator。</p></div></div>
+      <p class="landing-limit">研究工具 / 记录人的判断与不确定性，不自动生成质量分、排名或校准结论。</p>
     </section>
     <section id="workspace" hidden>
-      <div class="session-bar">
-        <div class="session-identity"><label for="reviewer">Reviewer alias</label><input id="reviewer" type="text" maxlength="120" autocomplete="off" placeholder="使用不含身份信息的别名"><span id="packet-kind"></span></div>
-        <div class="session-actions"><button id="download-draft" type="button">下载草稿</button><label class="file-button secondary">恢复草稿<input id="draft-file" type="file" accept=".json,application/json"></label><button id="download-reviews" class="primary" type="button">导出已提交判断</button><button id="change-packet" class="quiet-button" type="button">换一份包</button></div>
-        <div class="storage-bar"><label><input id="remember" type="checkbox">在此浏览器保存评审草稿</label><span id="save-state" role="status">只在内存 · 请及时下载草稿</span><button id="forget" class="text-button" type="button" hidden>移除本机副本</button></div>
-      </div>
+      <div class="session-bar"><div class="session-heading"><span class="eyebrow">评审工作区</span><span id="packet-kind"></span></div><div class="session-actions"><span id="save-indicator">内存草稿</span><button id="workspace-options" type="button">工作区与文件 <span aria-hidden="true">⋯</span></button><button id="download-reviews" class="primary" type="button">导出已提交判断</button></div></div>
       <div class="review-layout">
         <aside class="queue-panel" aria-label="回答队列">
-          <div class="queue-title"><h2>本批回答</h2><strong id="progress"></strong></div>
-          <p id="progress-detail" class="muted"></p>
-          <label class="sr-only" for="queue-search">查找回答或评审笔记</label><input id="queue-search" type="search" placeholder="查找回答、ID 或笔记">
-          <label class="sr-only" for="queue-filter">筛选评审状态</label><select id="queue-filter"><option value="all">全部位置</option><option value="pending">尚未评审</option><option value="draft">有草稿</option><option value="submitted">已提交判断</option><option value="skipped">暂时跳过</option><option value="technical">技术失败</option></select>
-          <nav id="queue" aria-label="选择回答"></nav><p id="queue-empty" hidden>没有匹配项。清除搜索或调整筛选。</p>
+          <div class="queue-title"><h2>回答队列</h2><span class="queue-total">本批次</span></div><div class="queue-progress"><strong id="progress"></strong><span>已评审 / 可评审</span></div><div class="progress-track" aria-hidden="true"><span id="progress-fill"></span></div><p id="progress-detail" class="muted"></p>
+          <div class="queue-tools"><label class="sr-only" for="queue-search">查找回答或评审笔记</label><input id="queue-search" type="search" placeholder="查找回答、ID 或笔记"><label class="sr-only" for="queue-filter">筛选评审状态</label><select id="queue-filter"><option value="all">全部位置</option><option value="pending">尚未评审</option><option value="draft">有草稿</option><option value="submitted">已提交判断</option><option value="skipped">暂时跳过</option><option value="technical">技术失败</option></select></div>
+          <nav id="queue" aria-label="选择回答"></nav><p id="queue-empty" hidden>没有匹配项。清除搜索或调整筛选。</p><p class="queue-footnote">判断保留分歧，进度不代表得分。<br><kbd>Alt</kbd> <kbd>←</kbd> <kbd>→</kbd> 切换回答</p>
         </aside>
         <div class="reading-area">
-          <div class="position-bar"><div><p class="eyebrow" id="position-label"></p><h2 id="item-title"></h2></div><div class="position-actions"><button id="previous" type="button" aria-label="上一条回答">←</button><button id="next" type="button" aria-label="下一条回答">→</button><button id="next-pending" type="button">下一条待评审</button></div></div>
-          <div class="mobile-tabs" aria-label="阅读区域"><span id="mobile-item"></span><button id="show-source" type="button" aria-pressed="true">历史与回答</button><button id="show-form" type="button" aria-pressed="false">评审笔记</button><button id="mobile-next" type="button" aria-label="下一条回答">→</button></div>
+          <div class="position-bar"><div><p class="eyebrow" id="position-label"></p><h2 id="item-title"></h2></div><div class="position-actions"><button id="previous" type="button" aria-label="上一条回答">←</button><button id="next" type="button" aria-label="下一条回答">→</button><button id="next-pending" class="text-button" type="button">下一条待评审 <span aria-hidden="true">↗</span></button></div></div>
+          <div class="mobile-tabs" aria-label="阅读区域"><span id="mobile-item"></span><button id="show-source" type="button" aria-pressed="true">原文材料</button><button id="show-form" type="button" aria-pressed="false">评审笔记</button><button id="mobile-next" type="button" aria-label="下一条回答">→</button><button id="mobile-settings" type="button" aria-label="工作区与文件">⋯</button></div>
           <div class="review-columns">
             <section id="source-panel" class="source-panel" aria-labelledby="source-title" tabindex="0">
-              <div class="panel-heading"><h3 id="source-title">语境与回答</h3><span id="response-state"></span></div>
-              <details class="source-context"><summary>情境与原包评审说明</summary><p id="case-boundary" class="boundary"></p><p id="packet-instructions" class="boundary"></p></details>
-              <section class="current-turn"><p class="eyebrow">CURRENT TURN / 当前问题</p><div id="current"></div></section>
-              <section class="exact-response"><div class="panel-heading"><h3>原样回答</h3><button id="copy-response" class="text-button" type="button">复制回答</button></div><div id="response"></div></section>
-              <details id="history-disclosure" open><summary>完整 governing history · 核对依据</summary><div id="history"></div></details>
+              <div class="panel-heading source-heading"><h3 id="source-title">原文材料</h3><span id="response-state" class="state-label"></span></div>
+              <div class="source-body"><details class="source-context"><summary>情境与原包说明</summary><p id="case-boundary" class="boundary"></p><p id="packet-instructions" class="boundary"></p></details>
+              <section class="current-turn"><p class="eyebrow">当前问题 <span>/ CURRENT TURN</span></p><div id="current"></div></section>
+              <section class="exact-response"><div class="panel-heading"><h3>原样回答</h3><button id="copy-response" class="text-button" type="button">复制原文</button></div><div id="response"></div></section>
+              <details id="history-disclosure" open><summary>完整历史 <span>GOVERNING HISTORY</span></summary><div id="history"></div></details></div>
             </section>
             <section id="judgment-panel" class="judgment-panel" aria-labelledby="judgment-title">
-              <div class="panel-heading"><h3 id="judgment-title">这条回答的评审</h3><span id="judgment-state"></span></div>
-              <p id="rubric-label" class="boundary"></p>
-              <p id="technical-note" class="technical-note" hidden>此位置是技术失败，没有可供语义判断的回答。保留在全部位置的分母中。</p>
-              <form id="judgment-form" novalidate></form>
-              <div id="skip-panel" class="technical-note" hidden><label class="field"><span class="field-label">留待回访的原因</span><textarea id="skip-reason" rows="2" placeholder="已有字句和笔记会保留"></textarea></label><button id="confirm-skip" type="button">确认暂时跳过</button><button id="cancel-skip" class="text-button" type="button">取消</button></div>
-              <div id="judgment-actions" class="judgment-actions"><button id="submit-review" class="primary" type="button">提交这条判断</button><button id="skip-review" type="button">暂时跳过</button><button id="reopen-review" type="button" hidden>修订已提交判断</button><button id="discard-edit" class="text-button" type="button" hidden>撤回本次编辑</button></div>
-              <div id="review-history" class="review-history"></div>
-              <p class="form-footnote">提交先保留在本工作区；下载“已提交判断”并经 operator 的 CLI 导入后，才进入研究记录。练习包不产生研究结论。</p>
+              <div class="panel-heading judgment-heading"><h3 id="judgment-title">评审笔记</h3><span id="judgment-state" class="state-label"></span></div>
+              <div id="review-steps" class="review-steps" aria-label="评审步骤"><button type="button" data-step="0" aria-pressed="true"><span>01</span> 字句与依据</button><button type="button" data-step="1" aria-pressed="false"><span>02</span> 行动判断</button><button type="button" data-step="2" aria-pressed="false"><span>03</span> 诊断与理由</button></div>
+              <div class="judgment-scroll"><p id="technical-note" class="technical-note" hidden>此位置是技术失败，没有可供语义判断的回答。保留在全部位置的分母中。</p><p id="form-error" class="form-error" role="alert" tabindex="-1" hidden></p><form id="judgment-form" novalidate></form><div id="skip-panel" class="skip-panel" hidden><label class="field"><span class="field-label">留待回访的原因</span><textarea id="skip-reason" rows="2" placeholder="已有字句和笔记会保留"></textarea></label><div><button id="confirm-skip" type="button">确认暂时跳过</button><button id="cancel-skip" class="text-button" type="button">取消</button></div></div><div id="review-history" class="review-history"></div><details class="worksheet-note"><summary>评审范围与提交说明</summary><p id="rubric-label" class="boundary"></p><p class="form-footnote">提交先保留在本工作区；下载已提交判断并经 operator 的 CLI 导入后，才进入研究记录。练习包不产生研究结论。</p></details></div>
+              <div id="judgment-actions" class="judgment-actions"><div class="action-main"><button id="step-back" class="text-button" type="button" hidden>← 上一步</button><button id="step-forward" class="primary" type="button">继续：行动判断 →</button><button id="submit-review" class="primary" type="button" hidden>提交这条判断</button><button id="reopen-review" class="primary" type="button" hidden>修订已提交判断</button></div><div class="action-secondary"><button id="skip-review" class="text-button" type="button">暂时跳过</button><button id="discard-edit" class="text-button" type="button" hidden>撤回编辑</button></div></div>
             </section>
           </div>
         </div>
       </div>
     </section>
   </main>
-  <footer class="page-footer"><span>Relata · R0 / development worksheet</span><span>语义判断、工程检查与系统效果分别记录。</span></footer>
+  <dialog id="workspace-settings" aria-labelledby="settings-title"><div class="settings-header"><div><p class="eyebrow">WORKSPACE</p><h2 id="settings-title">评审与文件</h2></div><button id="close-settings" type="button" aria-label="关闭工作区设置">×</button></div><div class="settings-body"><label class="field" for="reviewer"><span class="field-label">Reviewer alias / 评审者代号</span><input id="reviewer" type="text" maxlength="120" autocomplete="off" placeholder="使用不含身份信息的别名"><span class="field-help">提交前填写。切换代号会开始一份独立评审。</span></label><div class="settings-section"><h3>草稿与恢复</h3><p>草稿保留当前进度、未完成编辑与修订历史。</p><div class="settings-actions"><button id="download-draft" type="button">下载草稿</button><label class="file-button secondary">恢复草稿<input id="draft-file" type="file" accept=".json,application/json"></label></div><label class="remember-control"><input id="remember" type="checkbox"><span>在此浏览器自动保存<small>只保存评审、引用与 ID，不复制完整原包。<br>引用与笔记也可能敏感，请勿在共享浏览器开启。</small></span></label><p id="save-state" role="status">只在内存 · 请及时下载草稿</p><button id="forget" class="text-button" type="button" hidden>移除本机副本</button></div><div class="settings-section change-section"><div><h3>更换评审包</h3><p>关闭当前工作区前，请先保存草稿。</p></div><button id="change-packet" type="button">选择文件 ↗</button></div><p id="settings-feedback" role="status" hidden></p></div><div class="settings-footer"><span>默认离线 · 没有上传通道</span><button id="done-settings" class="primary" type="button">返回评审</button></div></dialog>
+  <footer class="page-footer"><span>Relata / R0</span><span>Development worksheet · 语义判断与系统效果分别记录</span></footer>
   <script id="review-contract" type="application/json">{"contract":{"format":"rc005-review-contract-1","revision":"continuity-development-2026-10-25","status":"development-worksheet-not-accepted-rubric","summary":"为 RC-005 首次匿名人工评审定义本地工作台、导入和描述性报告的字段与边界。它不是已接受量表、自动评分器、模型裁决、系统结果或人类校准证据。","max_packet_bytes":8388608,"packet_format":"review-packet-1","batch_format":"rc005-review-batch-1","draft_format":"rc005-review-draft-1","review_pass":"blind","draft_fields":[{"id":"format","label":"工作区格式","help":"固定为 rc005-review-draft-1；这是浏览器恢复工作区，不是研究导入。"},{"id":"packet_sha256","label":"评审包字节摘要","help":"与打开评审包时计算的精确文件字节 SHA-256 一致。"},{"id":"contract_sha256","label":"契约字节摘要","help":"与当前共享契约的精确文件字节 SHA-256 一致。"},{"id":"rubric_revision","label":"量表修订","help":"必须等于共享契约 revision。"},{"id":"review_pass","label":"评审阶段","help":"当前固定为 blind。"},{"id":"reviewer_id","label":"评审者代号","help":"与批次级 reviewer_id 一致。"},{"id":"practice_only","label":"仅练习","help":"必须来自所打开工作区，不得在浏览器中切换。"},{"id":"selected_review_id","label":"当前位置","help":"恢复时选中的 review_id；null 表示尚未选择。"},{"id":"entries","label":"评审条目","help":"以 review_id 为键，保存每项未完成表单、提交历史、跳过原因、编辑状态和修订理由。"}],"draft_entry_fields":[{"id":"draft","label":"未完成表单","help":"null 或一个尚未提交的局部表单；只用于恢复。"},{"id":"history","label":"已提交判断","help":"该 reviewer 与 review_id 已提交的全部记录，保留原 judgment_id、supersedes、amendment_reason 和 created_at。"},{"id":"skipped_reason","label":"跳过原因","help":"可选文字；跳过不是语义判断，也不进入完成分母。"},{"id":"editing","label":"编辑中","help":"当前 UI 状态，不进入判断记录。"},{"id":"amendment_reason","label":"修订理由草稿","help":"恢复 UI 输入；提交修订记录时写入 amendment_reason。"}],"draft_form_fields":[{"id":"claims","label":"表达内容","help":"局部表单可以未完成；提交时必须满足 claim_fields 规则。"},{"id":"current_action","label":"当前行动","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"clarification","label":"澄清","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"selective_use","label":"选择性使用","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"confidence_limits","label":"置信与限制","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"guessability","label":"条件可猜测性","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"guess_confidence","label":"猜测置信","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"guess_cue","label":"猜测线索","help":"cannot-tell 可为空；其他猜测提交时必须指出文本线索。"},{"id":"rationale","label":"总体理由","help":"局部表单可为空；提交时必须非空。"},{"id":"notes","label":"备注","help":"可为空；不得写入私人数据。"}],"draft_to_record_rule":"浏览器导出的研究导入仍是现有 batch 形状，并携带该 reviewer 的累计已提交 journal。record 的 review_id、judgment_id、supersedes、amendment_reason、created_at、claims 和六个评审维度直接取自 history 中的原始提交；不得由未完成表单覆盖历史。SKIPPED、editing、selected_review_id 和 skipped_reason 只服务恢复，不进入 batch。新判断仍由浏览器生成稳定 judgment_id；修订的 supersedes 是该 reviewer 此项最后一条已提交 record，最终 CLI 以权威存储链验证。","packet_sha256_rule":"浏览器与 CLI 都计算 review-packet.json 的精确 UTF-8 文件字节，包括末尾换行；不得规范化 JSON 或重新序列化后计算。","practice_rule":"练习包只含公开合成的成人 RC-005 材料和作者编写的练习回答。practice_only 必须贯穿草稿、批次和报告；练习不绑定真实运行，也不产生研究结果。","response_rule":"response=null 且 response_state=technical-failure 的位置不可评审；response 为空白字符串且 response_state=complete 的位置可评审，claims 必须为零，不要求引用空白。技术状态不是语义零分。","judgment_chain_rule":"每名 reviewer 对每个 review_id 在相同 rubric/pass 下维护一条追加链。首次提交 supersedes=null；之后只能明确 supersede 本链当前 judgment，并填写 amendment_reason。拒绝陈旧分叉、跨项或跨 reviewer 的 supersession，以及一次提交中的重复 judgment_id。累计提交可按回答组织历史；已存 ID 必须保持相同内容和归属，仅追加新判断。全相同重试返回 already-imported，不写入新批次。","blind_rule":"首次盲评位置不含 condition、stage、variant、system、provider、实际送达证据、作者答案 key 或私有 condition map。内容仍可能透露暴露条件；匿名化不等于已证明盲化有效。","support_rule":"claim.support 只相对此处提供的 governing history 判断，不根据实际送达证据推断系统消费责任。引用与 exact quote 用于检查判断依据，不自动证明语义正确。","batch_fields":[{"id":"format","label":"批次格式","help":"固定为 rc005-review-batch-1。"},{"id":"packet_sha256","label":"评审包字节摘要","help":"精确 review-packet.json UTF-8 文件字节的 SHA-256。"},{"id":"contract_sha256","label":"契约字节摘要","help":"精确 rc005-review-contract.json UTF-8 文件字节的 SHA-256。"},{"id":"rubric_revision","label":"量表修订","help":"必须等于共享契约 revision；不同修订不得混算。"},{"id":"review_pass","label":"评审阶段","help":"当前只接受 blind。"},{"id":"reviewer_id","label":"评审者代号","help":"非空且不超过 120 字符的本地代号；不得放入密码或个人敏感信息。"},{"id":"practice_only","label":"仅练习","help":"练习工作区必须为 true；正式工作流不接受 true。"},{"id":"records","label":"判断记录","help":"同一批次可含多项；整批先验证，再原子追加。"}],"record_fields":[{"id":"judgment_id","label":"判断 ID","help":"32 位小写十六进制；在全部历史批次中唯一。"},{"id":"review_id","label":"盲评 ID","help":"必须来自当前评审包。"},{"id":"supersedes","label":"替代判断","help":"首次判断为 null；修订必须是同 reviewer、同 review_id、同 rubric/pass 链的当前 judgment。"},{"id":"amendment_reason","label":"修订理由","help":"首次提交为空字符串；修订必须说明为何不再维持此前判断。"},{"id":"created_at","label":"提交时间","help":"ISO UTC 时间，以 Z 结尾。"},{"id":"claims","label":"表达内容","help":"将回答拆成可检查的原文字句；非空白回答至少一项，空白字符串必须为空列表。"},{"id":"current_action","label":"当前行动","help":"判断回答所建议、承诺或采取的行动是否落在完整历史支持的行动范围内。"},{"id":"clarification","label":"澄清","help":"区分具体必要提问、重复负担、过度宽泛和不需要澄清。"},{"id":"selective_use","label":"选择性使用","help":"描述历史约束在回答中的可见使用；不提及历史不等于没有使用。"},{"id":"confidence_limits","label":"置信与限制","help":"判断回答是否承认缺口、条件或不确定性。"},{"id":"guessability","label":"条件可猜测性","help":"这是盲化诊断，不是回答质量。"},{"id":"guess_confidence","label":"猜测置信","help":"与回答质量分开记录。"},{"id":"guess_cue","label":"猜测线索","help":"cannot-tell 可为空；其他猜测必须指出文本线索。"},{"id":"rationale","label":"总体理由","help":"非空说明判断依据、歧义和限制。"},{"id":"notes","label":"备注","help":"可选补充；不得写入私人数据。"}],"claim_fields":[{"id":"quote","label":"原文字句","help":"回答中的非空精确子串；不把关键字符串出现自动视为实际采用。"},{"id":"kind","label":"表达类型","help":"事实、提议、问题、承诺或歧义。"},{"id":"attribution","label":"归属与来源","help":"说明提出者、作者、接受者、报告者或当前问题所归属的对象。"},{"id":"support","label":"证据支持","help":"只相对提供的完整历史判断。"},{"id":"evidence_refs","label":"证据位置","help":"有序 governing_history 的 H1..Hn，或 current；列表内容不得重复。unsupported／underdetermined 可以留空；supported／contradicted 至少引用一项。"},{"id":"rationale","label":"字句理由","help":"解释为何将这些字句视为该表达类型及当前支持状态。"}],"dimensions":[{"id":"claims","label":"表达内容","help":"把事实、提议、问题、承诺与歧义分开；新创作可以是合法提议，已完成的共同工作则需历史支持。","options":[]},{"id":"current_action","label":"当前行动","help":"完整历史决定本案例支持的行动范围；允许存在多个合法行动。","options":[{"value":"within","label":"范围内","help":"行动处于历史与当前任务支持的范围内。"},{"value":"outside","label":"范围外","help":"行动与可见历史或当前任务冲突。"},{"value":"unresolved","label":"未决","help":"现有材料不足以决定。"},{"value":"not-applicable","label":"不适用","help":"回答没有可评审的行动。"}]},{"id":"clarification","label":"澄清","help":"询问缺失信息与要求对方重复已有证据不是同一种行为。","options":[{"value":"specific-necessary","label":"具体且必要","help":"针对真实缺口，最小化额外负担。"},{"value":"unnecessary","label":"不必要","help":"已有证据足够，询问造成重复负担。"},{"value":"insufficient","label":"不够具体","help":"虽提出问题，但无法推进任务。"},{"value":"none","label":"没有澄清","help":"回答未提问；这不自动表示遗漏。"},{"value":"unresolved","label":"未决","help":"无法确定是否应澄清。"}]},{"id":"selective_use","label":"选择性使用","help":"记录历史约束、适当隐含使用、允许提及、侵入式重提或混合情况；沉默不等于未使用。","options":[{"value":"required-constraint","label":"必需约束","help":"回答显式依赖完成当前任务所必需的历史约束。"},{"value":"implicit","label":"适当隐含","help":"历史影响回答但不需逐字重述。"},{"value":"permitted-mention","label":"允许提及","help":"提到相关历史，但不构成必要约束。"},{"value":"intrusive","label":"侵入式重提","help":"历史出现挤压或不必要暴露当前语境。"},{"value":"mixed","label":"混合","help":"同时存在适当与不适当的历史使用。"},{"value":"not-applicable","label":"不适用","help":"没有可判断的历史使用。"},{"value":"unresolved","label":"未决","help":"可见材料不足以判断。"}]},{"id":"confidence_limits","label":"置信与限制","help":"区分承认缺口、过度断言、条件表达和混合情况；回答中的口头置信不是校准概率。","options":[{"value":"acknowledged","label":"承认限制","help":"明确指出缺失事实、条件或不确定性。"},{"value":"overstated","label":"过度断言","help":"超出可见证据作确定陈述。"},{"value":"conditional","label":"条件表达","help":"以条件或备选方式安全表达。"},{"value":"mixed","label":"混合","help":"同时存在不同置信处理。"},{"value":"not-applicable","label":"不适用","help":"没有需要表达置信的断言。"},{"value":"unresolved","label":"未决","help":"无法确定。"}]},{"id":"guessability","label":"条件可猜测性","help":"猜测回答来自哪类历史暴露；这是盲化诊断，不是质量判断。","options":[{"value":"cannot-tell","label":"无法判断（cannot-tell）","help":"回答未提供足以猜测方向的线索。"},{"value":"limited-history","label":"有限历史（limited-history）","help":"更像当前问题或极少历史暴露。"},{"value":"full-history","label":"完整历史（full-history）","help":"更像完整历史被看见或使用。"},{"value":"selected-memory","label":"选择记忆（selected-memory）","help":"更像一段被选择或检索的历史材料。"},{"value":"other","label":"其他（other）","help":"有线索，但不属于上述类别。"}]},{"id":"guess_confidence","label":"猜测置信","help":"记录对条件猜测的把握；与回答质量分开。","options":[{"value":"unsure","label":"不确定（unsure）","help":"几乎没有把握。"},{"value":"low","label":"低（low）","help":"只有弱线索。"},{"value":"medium","label":"中（medium）","help":"有明确但不决定性的线索。"},{"value":"high","label":"高（high）","help":"线索很强，但仍不是事实证明。"}]}],"claim_kind_options":[{"value":"fact","label":"事实","help":"回答提出可判断真伪的事实性内容。"},{"value":"proposal","label":"提议","help":"回答提出未来可接受的创作或行动建议。"},{"value":"question","label":"问题","help":"回答提出需要回应的疑问。"},{"value":"commitment","label":"承诺","help":"回答承诺后续行动或持续做法。"},{"value":"ambiguous","label":"歧义","help":"时态、指代或意图无法唯一解释。"}],"claim_support_options":[{"value":"supported","label":"支持","help":"提供的完整历史支持该字句的含义。"},{"value":"contradicted","label":"矛盾","help":"提供的完整历史与该字句冲突。"},{"value":"unsupported","label":"无支持","help":"历史没有提供所需依据；这不自动等于矛盾。"},{"value":"underdetermined","label":"未决","help":"现有历史不足以判断。"}],"limits":{"reviewer_id":120,"quote":20000,"attribution":2000,"claim_rationale":20000,"guess_cue":2000,"rationale":20000,"notes":20000,"judgment_id":32,"review_id":32},"report_semantics":{"positions":"评审包中的全部位置，不把重复或相关位置解释为独立案例。","reviewable":"completed 状态的文本位置，包括空白字符串；technical failure 永不进入语义判断分母。","completion":"分别报告 reviewed、unreviewed、current judgments 与 historical judgments。","disagreement":"保留每名 reviewer 的当前判断、claim 级解释差异和多 reviewer 维度差异；不进行多数投票或合成 gold，不把不同分段自动判为语义矛盾。","limits":"reviewer_id 与文字字段上限按 Unicode code-point 字符数计算；packet、contract、batch 文件另有字节上限。","prohibited_claims":"不得生成回答准确率、质量总分、系统排名、模型裁决或已验证人类校准结论。"}},"sha256":"213512b4d4e90763864e2a4e71b3d981e231d4f40253958d09f48e47fb0f8089"}</script>
   <script id="review-demo" type="application/json">{"practice_only":true,"packet":{"format":"review-packet-1","review_status":"unreviewed","items":[{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"user","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"}],"current":{"surface":"private-conversation","text":"写一句制作手记，说明这个标题是谁起的，再提一下我们各自做的部分。"},"response":"这是练习回答：《慢潮》由砚舟最先提出，叶遥接受；叶遥画封面弯线，砚舟编三下轻敲。","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000001"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"user","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"}],"current":{"surface":"private-conversation","text":"写一句制作手记，说明这个标题是谁起的，再提一下我们各自做的部分。"},"response":"这是练习回答：《慢潮》由叶遥最先提出，砚舟接受；叶遥画封面弯线，砚舟编三下轻敲。","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000002"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"user","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"},{"session":2,"role":"user","surface":"private-conversation","text":"今天先停一下，台灯的开关坏了，我去换掉它。"},{"session":3,"role":"user","surface":"private-conversation","text":"正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"},{"session":3,"role":"assistant","surface":"private-conversation","text":"我会保留版本来历，再继续做卡片。"}],"current":{"surface":"private-conversation","text":"按现在的版本，写标题和一小段来历，原名是谁起的也留着。"},"response":"练习提议：当前标题用《远汀》。《慢潮》由砚舟提出并共同采用，后来由叶遥更名。","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000003"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"user","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"},{"session":2,"role":"user","surface":"private-conversation","text":"今天先停一下，台灯的开关坏了，我去换掉它。"},{"session":3,"role":"user","surface":"private-conversation","text":"正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"},{"session":3,"role":"assistant","surface":"private-conversation","text":"我会保留版本来历，再继续做卡片。"},{"session":4,"role":"tool","surface":"imported-artifact","text":"导入一份旧草稿。来源是第1次会话结束时保存的文件，今天才导入；文件首页仍写着《慢潮》。这条记录只报告旧文件内容。"}],"current":{"surface":"private-conversation","text":"接着完善那张声音卡的首页和制作手记。"},"response":"练习回答：我已经把声音卡的首页和真实文件都改好并发布了。","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000004"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"user","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"},{"session":2,"role":"user","surface":"private-conversation","text":"今天先停一下，台灯的开关坏了，我去换掉它。"},{"session":3,"role":"user","surface":"private-conversation","text":"正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"},{"session":3,"role":"assistant","surface":"private-conversation","text":"我会保留版本来历，再继续做卡片。"}],"current":{"surface":"private-conversation","text":"按现在的版本，写标题和一小段来历，原名是谁起的也留着。"},"response":"","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000005"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"user","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"},{"session":2,"role":"user","surface":"private-conversation","text":"今天先停一下，台灯的开关坏了，我去换掉它。"},{"session":3,"role":"user","surface":"private-conversation","text":"正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"},{"session":3,"role":"assistant","surface":"private-conversation","text":"我会保留版本来历，再继续做卡片。"},{"session":4,"role":"tool","surface":"imported-artifact","text":"导入一份旧草稿。来源是第1次会话结束时保存的文件，今天才导入；文件首页仍写着《慢潮》。这条记录只报告旧文件内容。"}],"current":{"surface":"private-conversation","text":"接着完善那张声音卡的首页和制作手记。"},"response":null,"review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"technical-failure","review_id":"00000000000000000000000000000006"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"user","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"},{"session":2,"role":"user","surface":"private-conversation","text":"今天先停一下，台灯的开关坏了，我去换掉它。"},{"session":3,"role":"user","surface":"private-conversation","text":"正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"},{"session":3,"role":"assistant","surface":"private-conversation","text":"我会保留版本来历，再继续做卡片。"},{"session":4,"role":"tool","surface":"imported-artifact","text":"导入一份旧草稿。来源是第1次会话结束时保存的文件，今天才导入；文件首页仍写着《慢潮》。这条记录只报告旧文件内容。"}],"current":{"surface":"private-conversation","text":"接着完善那张声音卡的首页和制作手记。"},"response":"练习问题：你希望首页先保留哪一个版本的标题？","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000007"}]}}</script>
   <script>/* Shared browser/Node checks for a bounded first-pass review workspace.
@@ -1255,6 +2042,7 @@ details summary {
   const labels = {pending:'待评审',draft:'有草稿',submitted:'已提交',skipped:'暂时跳过',technical:'技术失败'};
   let state, loadSequence=0, storageTimer, noticeTimer;
   let mobilePanel='source', mobilePositions={};
+  const stepPositions=new Map();
   const decoder = new TextDecoder('utf-8',{fatal:true,ignoreBOM:true});
   const encode = text => new TextEncoder().encode(text);
   function element(tag,text,className) {
@@ -1265,9 +2053,15 @@ details summary {
   }
   function message(text,error=false) {
     clearTimeout(noticeTimer);
-    const box=byId('message'); box.hidden=false; box.textContent=text; box.classList.toggle('error',error);
-    document.documentElement.style.setProperty('--notice-height',`${box.getBoundingClientRect().height}px`);
-    if (!error) noticeTimer=setTimeout(()=>{box.hidden=true;document.documentElement.style.setProperty('--notice-height','0px');},14000);
+    const box=byId('message');box.hidden=false;box.textContent=text;box.classList.toggle('error',error);
+    if(error) {
+      const previousFocus=document.activeElement,close=element('button','×','dismiss-message');
+      close.type='button';close.setAttribute('aria-label','关闭提示');
+      close.addEventListener('click',()=>{box.hidden=true;if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});});box.append(close);
+    }
+    const feedback=byId('settings-feedback');
+    feedback.hidden=!byId('workspace-settings').open;feedback.textContent=text;
+    if (!error) noticeTimer=setTimeout(()=>{box.hidden=true;},6000);
   }
   function safely(action) {
     return async event => {
@@ -1292,10 +2086,24 @@ details summary {
       reviewer_id:state.reviewer,practice_only:state.identity.practice_only,
       selected_review_id:item().review_id,entries:clone(state.entries)};
   }
-  function requireReviewer() {C.text(state.reviewer,'Reviewer alias',true,120);}
+  function openSettings(focusReviewer=false) {
+    const dialog=byId('workspace-settings');
+    byId('settings-feedback').hidden=true;
+    if(!dialog.open) dialog.showModal();
+    if(focusReviewer) byId('reviewer').focus();
+  }
+  function closeSettings() {byId('workspace-settings').close();}
+  function requireReviewer() {
+    try {C.text(state.reviewer,'Reviewer alias',true,120);}
+    catch(error) {openSettings(true);throw error;}
+  }
   function storeKey(alias=state.reviewer) {return `relata-rc005-review:${state.identity.practice_only?'practice:':''}${state.identity.packet_sha256}:${encodeURIComponent(alias)}`;}
   function metaKey() {return `relata-rc005-review:last:${state.identity.practice_only?'practice:':''}${state.identity.packet_sha256}`;}
-  function updateSaveState(text) {byId('save-state').textContent=text;}
+  function updateSaveState(text) {
+    byId('save-state').textContent=text;
+    byId('save-indicator').textContent=`${state?.reviewer||'未设置评审者'} · ${state?.remember?'本机自动保存':'内存草稿'}`;
+    byId('save-indicator').title=text;
+  }
   function saveLocal() {
     if (!state.remember) return;
     try {
@@ -1319,6 +2127,7 @@ details summary {
     } else updateSaveState('内存草稿已更新 · 尚未下载本次修改');
     renderQueue();
     byId('judgment-state').textContent=labels[status(item())];
+    byId('judgment-state').dataset.status=status(item());
     const e=state.entries[item().review_id];
     if(e && (!e.history.length||e.editing))byId('discard-edit').hidden=!e.draft&&!e.editing;
   }
@@ -1327,6 +2136,7 @@ details summary {
     state.entries=clone(draft.entries); state.reviewer=draft.reviewer_id;
     state.selected=state.packet.items.findIndex(i=>i.review_id===draft.selected_review_id);
     byId('reviewer').value=state.reviewer; state.revision++; state.exported=state.revision;
+    stepPositions.clear();updateSaveState('草稿已恢复 · 请继续保存后续修改');
     renderItem(false); renderQueue();
   }
   function restoreLocal(alias) {
@@ -1351,6 +2161,7 @@ details summary {
     state={packet,identity:{packet_sha256:hash,contract_sha256:definition.sha256,practice_only:practice},
       entries:Object.create(null),selected:0,reviewer:'',remember:false,revision:0,exported:0,stored:0};
     byId('landing').hidden=true; byId('workspace').hidden=false;
+    stepPositions.clear();if(byId('workspace-settings').open)closeSettings();
     byId('reviewer').value=''; byId('remember').checked=false; byId('forget').hidden=true;
     byId('queue-search').value=''; byId('queue-filter').value='all';
     byId('packet-kind').textContent=`${practice?`合成练习 · ${packet.items.length} 个位置`:'RC-005 · 144 个位置'} · 包 ${hash.slice(0,8)}`;
@@ -1374,22 +2185,38 @@ details summary {
     const currentJudgments=Object.values(state.entries).filter(e=>e.history.length).length;
     const reviewable=state.packet.items.length-counts.technical;
     byId('progress').textContent=`${currentJudgments} / ${reviewable}`;
-    byId('progress-detail').textContent=`${state.packet.items.length} 位置 · ${counts.technical} 技术失败 · ${counts.draft} 草稿 · ${counts.skipped} 暂跳过。分子是已有提交的回答，不是得分。`;
+    byId('progress-detail').textContent=`${state.packet.items.length} 位置 · ${counts.technical} 技术失败 · ${counts.draft} 草稿 · ${counts.skipped} 暂跳过`;
+    byId('progress-fill').style.width=`${reviewable?currentJudgments/reviewable*100:0}%`;
     const list=byId('queue'); list.replaceChildren(); let matches=0;
     state.packet.items.forEach((record,index)=>{
       const kind=status(record),e=state.entries[record.review_id];
       const haystack=[record.review_id,record.response||'',e?JSON.stringify(e):''].join(' ').toLowerCase();
       if ((filter!=='all' && filter!==kind) || (query && !haystack.includes(query))) return;
       matches++;
-      const button=element('button',undefined,'queue-item'); button.type='button'; button.dataset.reviewId=record.review_id;
+      const button=element('button',undefined,'queue-item'); button.type='button'; button.dataset.reviewId=record.review_id;button.dataset.status=kind;button.title=record.review_id;
       button.setAttribute('aria-current',String(index===state.selected));
       button.append(element('span',String(index+1).padStart(3,'0'),'queue-number'));
-      const name=element('span'); name.append(element('span',record.review_id.slice(-8),'queue-alias'),element('span',labels[kind],'queue-state')); button.append(name);
+      const name=element('span');
+      name.append(element('span',record.response===null?'未收到回答':record.response.trim()||'空白回答','queue-preview'));
+      const meta=element('span',undefined,'queue-meta');meta.append(element('span',labels[kind],'queue-state'));
+      name.append(meta);button.append(name);
       button.addEventListener('click',()=>navigate(index)); list.append(button);
     });
-    byId('queue-empty').hidden=matches!==0;
+    byId('queue-empty').hidden=matches!==0;revealQueueSelection();
     byId('download-reviews').textContent=`导出已提交判断${currentJudgments?` (${currentJudgments})`:''}`;
     byId('mobile-item').textContent=`${state.selected+1} / ${state.packet.items.length} · ${item().review_id.slice(-8)} · ${labels[status(item())]}`;
+  }
+  function revealQueueSelection() {
+    const list=byId('queue'),active=list.querySelector('[aria-current="true"]');
+    if(!active)return;
+    const itemRect=active.getBoundingClientRect(),listRect=list.getBoundingClientRect();
+    if(innerWidth<=900) {
+      if(itemRect.left<listRect.left)list.scrollLeft+=itemRect.left-listRect.left;
+      else if(itemRect.right>listRect.right)list.scrollLeft+=itemRect.right-listRect.right;
+    } else {
+      if(itemRect.top<listRect.top)list.scrollTop+=itemRect.top-listRect.top;
+      else if(itemRect.bottom>listRect.bottom)list.scrollTop+=itemRect.bottom-listRect.bottom;
+    }
   }
   function setMobilePanel(name,restorePosition=false) {
     if(restorePosition) mobilePositions[mobilePanel]=window.scrollY;
@@ -1397,9 +2224,9 @@ details summary {
     mobilePanel=name;
     byId('show-source').setAttribute('aria-pressed',String(name==='source'));
     byId('show-form').setAttribute('aria-pressed',String(name==='form'));
-    if(restorePosition&&innerWidth<=700) {
+    if(restorePosition&&innerWidth<=900) {
       const tabs=document.querySelector('.mobile-tabs');
-      const start=tabs.getBoundingClientRect().top+window.scrollY-byId('message').getBoundingClientRect().height;
+      const start=tabs.getBoundingClientRect().top+window.scrollY;
       window.scrollTo({top:mobilePositions[name]??start,behavior:'instant'});
     }
   }
@@ -1411,9 +2238,10 @@ details summary {
   }
   function renderItem(scroll=true) {
     const record=item();
-    byId('skip-panel').hidden=true;
+    byId('skip-panel').hidden=true;byId('form-error').hidden=true;
+    byId('source-panel').scrollTop=0;document.querySelector('.judgment-scroll').scrollTop=0;
     byId('position-label').textContent=`${state.identity.practice_only?'PRACTICE':'BLIND PASS'} / ${String(state.selected+1).padStart(3,'0')} OF ${state.packet.items.length}`;
-    byId('item-title').textContent=`回答 · ${record.review_id.slice(-8)}`;
+    byId('item-title').replaceChildren(document.createTextNode(`回答 ${String(state.selected+1).padStart(3,'0')}`),element('span',record.review_id.slice(-8)));
     byId('mobile-item').textContent=`${state.selected+1} / ${state.packet.items.length} · ${record.review_id.slice(-8)} · ${labels[status(record)]}`;
     byId('case-boundary').textContent=record.context;
     byId('packet-instructions').textContent=record.instructions;
@@ -1445,32 +2273,80 @@ details summary {
     if(options) {
       control=element('select');const blank=element('option','请选择，或明确保留未决');blank.value='';control.append(blank);
       for(const option of options){const e=element('option',option.label);e.value=option.value;control.append(e);}
-    } else control=element('textarea');
+    } else {control=element('textarea');control.rows=id==='attribution'?2:3;}
     control.dataset.field=id;control.name=id;control.value=value||'';wrapper.append(control);
     if(help) wrapper.append(element('span',help,'field-help'));
     return wrapper;
+  }
+  function setStep(index,focus=false) {
+    if(!state)return;
+    stepPositions.set(item().review_id,index);
+    const sections=byId('judgment-form').querySelectorAll(':scope > fieldset');
+    sections.forEach((section,i)=>section.hidden=i!==index);
+    for(const button of byId('review-steps').querySelectorAll('button'))button.setAttribute('aria-pressed',String(Number(button.dataset.step)===index));
+    const e=entry(),locked=e.history.length>0&&!e.editing;
+    byId('step-back').hidden=index===0;
+    byId('step-forward').hidden=index===2;
+    byId('step-forward').textContent=`${locked?'查看':'继续'}：${index===0?'行动判断':'诊断与理由'} →`;
+    byId('step-forward').classList.toggle('primary',!locked);byId('step-forward').classList.toggle('text-button',locked);
+    byId('submit-review').hidden=locked||index!==2;
+    byId('reopen-review').hidden=!locked;
+    if(focus) {
+      document.querySelector('.judgment-scroll').scrollTop=0;
+      const legend=sections[index]?.querySelector('legend');
+      if(legend){legend.tabIndex=-1;legend.focus({preventScroll:true});}
+    }
+  }
+  function revealValidation(error) {
+    const text=error.message||String(error);
+    const dimension=['current_action','clarification','selective_use','confidence_limits','guessability','guess_confidence'].find(id=>text.includes(id));
+    const last=dimension?.startsWith('guess')||/条件猜测|整体理由|修订理由/.test(text);
+    const step=last?2:dimension?1:0;
+    setStep(step);byId('form-error').textContent=text;byId('form-error').hidden=false;
+    setMobilePanel('form');
+    let field=dimension||(/连续原文|主张 quote/.test(text)?'quote':/attribution/.test(text)?'attribution':/主张 kind/.test(text)?'kind':/主张 support/.test(text)?'support':/主张 rationale/.test(text)?'rationale':/条件猜测/.test(text)?'guess_cue':/整体理由/.test(text)?'rationale':/修订理由/.test(text)?'amendment_reason':null);
+    const section=byId('judgment-form').querySelectorAll(':scope > fieldset')[step];
+    let scope=section;
+    if(step===0) {
+      // Reuse the contract checker to find the failing claim instead of
+      // duplicating its rules or always focusing the first quotation.
+      const draft=entry().draft;
+      for(let index=0;index<(draft?.claims.length||0);index++) {
+        try {C.validateForm({...draft,claims:[draft.claims[index]]},item(),contract);}
+        catch(candidate) {if(candidate.message===text){scope=section.querySelectorAll('.claim')[index];break;}}
+      }
+    }
+    const evidence=step===0&&/证据引用|历史或当前问题引用/.test(text);
+    const control=evidence?scope?.querySelector('input[data-ref]'):field?scope?.querySelector(`[data-field="${field}"]`):scope?.querySelector('input,textarea,select,button');
+    (control||byId('form-error')).focus();
   }
   function renderForm() {
     const record=item(),e=entry();const technical=record.response_state==='technical-failure';
     byId('technical-note').hidden=!technical;byId('judgment-form').hidden=technical;byId('judgment-actions').hidden=technical;
     byId('judgment-state').textContent=labels[status(record)];
+    byId('judgment-state').dataset.status=status(record);byId('review-steps').hidden=technical;
     const locked=e.history.length>0&&!e.editing;
     byId('submit-review').hidden=locked;byId('skip-review').hidden=locked;
     byId('reopen-review').hidden=!locked;byId('discard-edit').hidden=locked||(!e.draft&&!e.editing);
     const form=byId('judgment-form');form.replaceChildren();
     if(!technical) {
       const value=clone(e.draft||e.history.at(-1)||C.emptyForm());
-      const claims=element('fieldset',undefined,'form-section');claims.append(element('legend','01 / 回答表达了什么'));
+      const claims=element('fieldset',undefined,'form-section');claims.append(element('legend','回答表达了什么'));
       claims.append(element('p',fieldDefinition('claims').help,'field-help'));
+      if(!value.claims.length) {
+        const hint=element('div',undefined,'claim-empty');hint.append(element('span','“'),element('h4',record.response.trim()?'从一段原文字句开始':'这是一个空白回答'),element('p',record.response.trim()?'选出需要核对的表达，记录类型、归属和历史依据。每一项都保留原文。':'无需添加字句，继续记录行动、限制与未决之处。'));
+        claims.append(hint);
+      }
       value.claims.forEach((claim,index)=>{
         const block=element('div',undefined,'claim');block.dataset.claim=index;
         const heading=element('div',undefined,'claim-heading');heading.append(element('strong',`字句 ${index+1}`));
         const remove=element('button','移除');remove.type='button';remove.disabled=locked;
         remove.addEventListener('click',()=>{captureForm();const current=entry();if(current.draft.claims[index].quote&&!confirm('移除这项尚未提交的字句？已提交历史会保留。'))return;current.draft.claims.splice(index,1);changed();renderForm();});heading.append(remove);block.append(heading);
-        for(const id of ['quote','kind','attribution','support']) {
-          const definition=fieldDefinition(id,true);
-          block.append(formField(id,definition.label,claim[id],definition.help,['kind','support'].includes(id)?optionsFor(id,true):null));
-        }
+        const quote=fieldDefinition('quote',true);block.append(formField('quote',quote.label,claim.quote,quote.help));
+        const pair=element('div',undefined,'claim-pair');
+        for(const id of ['kind','support']) {const d=fieldDefinition(id,true);pair.append(formField(id,d.label,claim[id],d.help,optionsFor(id,true)));}
+        block.append(pair);
+        const attribution=fieldDefinition('attribution',true);block.append(formField('attribution',attribution.label,claim.attribution,attribution.help));
         block.append(element('p','引用完整历史的位置（H1…）或当前问题。','field-help'));
         const refs=element('div',undefined,'evidence-checks');
         for(const ref of [...record.governing_history.map((_,i)=>`H${i+1}`),'current']) {
@@ -1478,18 +2354,20 @@ details summary {
         }
         block.append(refs,formField('rationale','这项字句的理由',claim.rationale,'解释依据、时态、归属或未决之处。'));claims.append(block);
       });
-      const add=element('button','＋ 添加一项字句');add.type='button';add.disabled=locked;
-      add.addEventListener('click',()=>{captureForm();entry().draft.claims.push({quote:'',kind:'',attribution:'',support:'',evidence_refs:[],rationale:''});changed();renderForm();byId('judgment-form').querySelector('.claim:last-of-type textarea')?.focus();});claims.append(add);form.append(claims);
-      const actions=element('fieldset',undefined,'form-section');actions.append(element('legend','02 / 行动、澄清与使用'));
+      const add=element('button','＋ 添加原文字句','add-claim');add.type='button';add.disabled=locked;
+      add.addEventListener('click',()=>{captureForm();entry().draft.claims.push({quote:'',kind:'',attribution:'',support:'',evidence_refs:[],rationale:''});changed();renderForm();byId('judgment-form').querySelector('.claim:last-of-type textarea')?.focus();});if(record.response.trim())claims.append(add);form.append(claims);
+      const actions=element('fieldset',undefined,'form-section');actions.append(element('legend','行动、澄清与使用'));
+      actions.append(element('p','分别记录每项判断。不确定时可明确保留未决。','field-help section-intro'));
       for(const id of ['current_action','clarification','selective_use','confidence_limits']) {const d=fieldDefinition(id);actions.append(formField(id,d.label,value[id],d.help,d.options));}form.append(actions);
-      const guess=element('fieldset',undefined,'form-section');guess.append(element('legend','03 / 盲化诊断与理由'));
+      const guess=element('fieldset',undefined,'form-section');guess.append(element('legend','盲化诊断与整体理由'));
+      guess.append(element('p','条件猜测单独记录，它不是回答质量的判断。','field-help section-intro'));
       for(const id of ['guessability','guess_confidence']) {const d=fieldDefinition(id);guess.append(formField(id,d.label,value[id],d.help,d.options));}
       guess.append(formField('guess_cue','条件猜测的文字线索',value.guess_cue,'无法判断时可留空；其他猜测需要指明回答中的线索。'),formField('rationale','整体理由与未决',value.rationale,'综合说明行动、澄清和限制；保留不同的合法解释。'),formField('notes','补充笔记（可选）',value.notes,'使用不含个人身份或其他私人材料的说明。'));
       if(e.editing&&e.history.length) guess.append(formField('amendment_reason','为什么修订之前的判断？',e.amendment_reason,'新判断保留旧记录，并明确替代当前版本。'));
       form.append(guess);
       for(const control of form.querySelectorAll('textarea,select,input')) control.disabled=locked;
     }
-    renderHistory();
+    renderHistory();setStep(stepPositions.get(record.review_id)||0);
   }
   function captureForm() {
     if(!state||item().response_state!=='complete') return;
@@ -1538,12 +2416,14 @@ details summary {
     } else await loadPacket(bytes,false,sequence);
   }));
   byId('practice').addEventListener('click',safely(()=>loadPacket(encode(JSON.stringify(demo.packet,null,2)+'\n'),true)));
-  byId('judgment-form').addEventListener('input',()=>{captureForm();changed();});
-  byId('judgment-form').addEventListener('change',()=>{captureForm();changed();});
+  byId('judgment-form').addEventListener('input',()=>{byId('form-error').hidden=true;captureForm();changed();});
+  byId('judgment-form').addEventListener('change',()=>{byId('form-error').hidden=true;captureForm();changed();});
   byId('submit-review').addEventListener('click',safely(()=>{
-    requireReviewer();captureForm();const e=entry(),record=item();C.validateForm(e.draft,record,contract);
+    requireReviewer();captureForm();const e=entry(),record=item();
     const supersedes=e.history.at(-1)?.judgment_id||null;
-    if(supersedes)C.text(e.amendment_reason,'修订理由');
+    try {C.validateForm(e.draft,record,contract);if(supersedes)C.text(e.amendment_reason,'修订理由');}
+    catch(error){revealValidation(error);return;}
+    byId('form-error').hidden=true;
     const bytes=crypto.getRandomValues(new Uint8Array(16));
     const judgment={judgment_id:Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join(''),review_id:record.review_id,
       supersedes,amendment_reason:supersedes?e.amendment_reason:'',created_at:new Date().toISOString(),...clone(e.draft)};
@@ -1580,7 +2460,7 @@ details summary {
     const alias=event.target.value.trim();try{C.text(alias,'Reviewer alias',true,120);}catch(error){event.target.value=state.reviewer;throw error;}
     if(state.reviewer&&alias!==state.reviewer&&Object.values(state.entries).some(e=>e.draft||e.history.length||e.skipped_reason)) {
       if(!confirm('更换 reviewer 会开始独立评审。请确认已保存原 reviewer 的草稿。继续？')){event.target.value=state.reviewer;return;}
-      if(state.remember)saveLocal();state.entries=Object.create(null);state.remember=false;byId('remember').checked=false;
+      if(state.remember)saveLocal();state.entries=Object.create(null);stepPositions.clear();state.remember=false;byId('remember').checked=false;
     }
     state.reviewer=alias;if(!restoreLocal(alias)){changed();renderForm();}
   }));
@@ -1598,7 +2478,13 @@ details summary {
   byId('mobile-next').addEventListener('click',()=>navigate(state.selected+1));
   byId('copy-response').addEventListener('click',safely(async()=>{try{await navigator.clipboard.writeText(item().response);message('已复制原样回答。');}catch{message('浏览器未允许复制；可在原样回答中直接选择文字。',true);}}));
   byId('change-packet').addEventListener('click',()=>{byId('packet-file').click();});
-  new ResizeObserver(()=>document.documentElement.style.setProperty('--notice-height',`${byId('message').getBoundingClientRect().height}px`)).observe(byId('message'));
+  for(const button of byId('review-steps').querySelectorAll('button'))button.addEventListener('click',()=>setStep(Number(button.dataset.step),true));
+  byId('step-forward').addEventListener('click',()=>setStep(Math.min(2,(stepPositions.get(item().review_id)||0)+1),true));
+  byId('step-back').addEventListener('click',()=>setStep(Math.max(0,(stepPositions.get(item().review_id)||0)-1),true));
+  byId('workspace-options').addEventListener('click',()=>openSettings(!state.reviewer));
+  byId('mobile-settings').addEventListener('click',()=>openSettings(!state.reviewer));
+  byId('close-settings').addEventListener('click',closeSettings);byId('done-settings').addEventListener('click',closeSettings);
+  addEventListener('resize',()=>{if(state)revealQueueSelection();});
   addEventListener('beforeunload',event=>{if(state&&state.revision>state.exported&&(!state.remember||state.stored<state.revision)){event.preventDefault();event.returnValue='';}});
   addEventListener('keydown',event=>{if(!state||event.isComposing||!event.altKey)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();navigate(state.selected+(event.key==='ArrowLeft'?-1:1));}});
 })();

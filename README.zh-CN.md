@@ -49,7 +49,7 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 
 固定 future-question study 另有[离线 review 闭环](research/future-question-memory/README.md#离线-responsereview-闭环)：准备224份输入正文并隔离作者key、核验、导入外部已提供回答、导出盲评、追加判断并重算明确分母。精确有理数 ideal-lookup 上限描述作者有限合同，不是模型实测成绩。[五组 benefit/control 材料](research/continuity-benefit-study.md)补充必要性研究，保留原有 acceptance gate。
 
-具名 RC-005 研究已有[首次盲评离线工作流](case-lab/reviews/workbench/README.md)与[独立浏览器评审台](case-lab/reviews/workbench/index.html)：核对完整历史与原样回答，保留未完成草稿和明确修订，交回累计判断。作者侧 CLI 核验原关闭导出、追加新判断并报告分歧。七项作者练习包可在无 provider 的情况下走完整流程；工具实现不建立人类校准或系统效果。
+具名 RC-005 研究已有[首次盲评离线工作流](case-lab/reviews/workbench/README.md)与[独立浏览器评审台](case-lab/reviews/workbench/index.html)：在双栏阅读区核对完整历史与原样回答，按三个可回访步骤记录判断，保留草稿与明确修订，交回累计判断；工作区面板集中管理评审者代号、草稿恢复与可选本机保存。作者侧 CLI 核验原关闭导出、追加新判断并报告分歧。七项作者练习包可在无 provider 的情况下走完整流程；工具实现不建立人类校准或系统效果。
 
 软件现有 public repository checker 和一个**离线 RC-002 执行演练**：用明确标识的脚本替身，在两条合成历史下分别运行五种条件，保存证据并导出盲审包。测试只建立工程链路行为，不调用模型，也不产生语义分数或能力分数。完整证据状态见 [STATUS](STATUS.zh-CN.md)。
 
