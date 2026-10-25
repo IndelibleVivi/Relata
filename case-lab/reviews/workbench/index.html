@@ -1,0 +1,1607 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src 'none'; img-src data:; base-uri 'none'; form-action 'none'">
+  <title>Relata · Continuity Review</title>
+  <style>:root {
+  color-scheme:light;
+  --ink:#213f45;
+  --muted:#5d7277;
+  --deep:#193d43;
+  --accent:#a95231;
+  --light:#f3f6f4;
+  --line:#cedbd7;
+  --soft:#e5eeea;
+  --font:Arial,"PingFang SC","Microsoft YaHei",sans-serif
+}
+
+* {
+  box-sizing:border-box
+}
+
+body {
+  margin:0;
+  background:var(--light);
+  color:var(--ink);
+  font:15px/1.7 var(--font)
+}
+
+button,input,select,textarea {
+  font:inherit;
+  color:inherit
+}
+
+button,a,input,select,textarea,summary {
+  touch-action:manipulation
+}
+
+button {
+  cursor:pointer;
+  border:1px solid #a8bfba;
+  background:transparent;
+  padding:8px 13px;
+  border-radius:3px;
+  line-height:1.5
+}
+
+button:hover,.file-button:hover {
+  background:#e0eae5
+}
+
+button:disabled {
+  cursor:default;
+  opacity:.45
+}
+
+a {
+  color:inherit;
+  text-underline-offset:4px
+}
+
+input,select,textarea {
+  max-width:100%;
+  border:1px solid #b9ccc6;
+  border-radius:3px;
+  background:#fff;
+  padding:8px 10px
+}
+
+input[type=checkbox] {
+  accent-color:#316b68
+}
+
+textarea {
+  width:100%;
+  resize:vertical;
+  min-height:90px;
+  line-height:1.65
+}
+
+input:focus-visible,select:focus-visible,textarea:focus-visible {
+  outline:0;
+  border-color:#4c8580;
+  box-shadow:inset 0 0 0 1px #4c8580
+}
+
+button:focus-visible,a:focus-visible,summary:focus-visible,.file-button:focus-within {
+  outline:2px solid #6a9c94;
+  outline-offset:3px
+}
+
+main:focus-visible {
+  outline:0
+}
+
+h1,h2,h3,p {
+  margin-top:0
+}
+
+h2,h3 {
+  line-height:1.4
+}
+
+[hidden] {
+  display:none!important
+}
+
+.sr-only {
+  position:absolute;
+  width:1px;
+  height:1px;
+  padding:0;
+  overflow:hidden;
+  clip:rect(0,0,0,0);
+  white-space:nowrap
+}
+
+.skip {
+  position:fixed;
+  left:15px;
+  top:10px;
+  z-index:20;
+  background:white;
+  padding:8px;
+  transform:translateY(-150%)
+}
+
+.skip:focus {
+  transform:none
+}
+
+.masthead {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:24px;
+  padding:20px 4%;
+  background:var(--deep);
+  color:#e9f1ed
+}
+
+.brand {
+  font-family:Georgia,serif;
+  font-size:34px;
+  line-height:1;
+  text-decoration:none;
+  display:flex;
+  align-items:baseline;
+  gap:24px
+}
+
+.brand span {
+  font:10px var(--font);
+  letter-spacing:2.3px;
+  color:#b3cec6
+}
+
+.masthead-right {
+  display:flex;
+  gap:26px;
+  font-size:12px;
+  align-items:center
+}
+
+.offline-mark {
+  border-left:3px solid #acd0ba;
+  padding-left:10px
+}
+
+.masthead-right a {
+  color:#c2d8d0
+}
+
+.message {
+  position:sticky;
+  top:0;
+  z-index:12;
+  padding:12px 4%;
+  margin:0;
+  background:#deece4;
+  border-bottom:1px solid #b0c9bb;
+  overflow-wrap:anywhere
+}
+
+.message.error {
+  background:#f7e6dd;
+  color:#803e29;
+  border-color:#ddbaa8
+}
+
+.landing {
+  max-width:1280px;
+  margin:0 auto;
+  padding:82px 44px 90px;
+  display:grid;
+  grid-template-columns:1.25fr 1fr;
+  gap:90px
+}
+
+.eyebrow {
+  font-size:10px;
+  letter-spacing:1.7px;
+  font-weight:600;
+  color:var(--accent);
+  line-height:1.5;
+  margin-bottom:14px
+}
+
+.landing h1 {
+  font:clamp(46px,4.6vw,68px)/1.3 Georgia,"Songti SC",serif;
+  margin:20px 0 28px;
+  letter-spacing:-1px
+}
+
+.landing h1 em {
+  font-style:normal;
+  color:#4f7c70
+}
+
+.lede {
+  font-size:20px;
+  line-height:1.8;
+  max-width:540px
+}
+
+.landing-copy>p:not(.eyebrow):not(.lede) {
+  color:var(--muted);
+  font-size:14px;
+  max-width:520px
+}
+
+.open-actions {
+  display:flex;
+  flex-direction:column;
+  align-items:flex-start;
+  gap:15px;
+  margin:32px 0 24px
+}
+
+.file-button {
+  position:relative;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid #406f69;
+  border-radius:3px;
+  padding:11px 18px;
+  cursor:pointer;
+  background:var(--deep);
+  color:#f4f8f5;
+  line-height:1.5
+}
+
+.file-button:hover {
+  color:var(--ink)
+}
+
+.file-button input {
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  opacity:0;
+  cursor:pointer
+}
+
+.file-button.secondary {
+  background:transparent;
+  color:var(--ink);
+  border-color:#a8bfba;
+  padding:8px 13px
+}
+
+.quiet-button,.text-button {
+  border-color:transparent;
+  background:transparent
+}
+
+.quiet-button {
+  padding-left:0
+}
+
+.text-button {
+  font-size:12px;
+  padding:4px;
+  color:#3e756e;
+  text-decoration:underline;
+  text-underline-offset:4px
+}
+
+.privacy-note {
+  font-size:12px!important;
+  border-left:2px solid #a3bfb1;
+  padding-left:14px
+}
+
+.orientation {
+  list-style:none;
+  padding:40px 0 0;
+  margin:0
+}
+
+.orientation li {
+  display:grid;
+  grid-template-columns:40px 1fr;
+  gap:15px;
+  padding:27px 0;
+  border-top:1px solid var(--line)
+}
+
+.orientation li>span {
+  font:12px Georgia,serif;
+  color:#7e9a91;
+  padding-top:5px
+}
+
+.orientation h2 {
+  font-size:19px;
+  font-weight:500;
+  margin-bottom:8px
+}
+
+.orientation p {
+  font-size:13px;
+  color:var(--muted);
+  margin:0
+}
+
+.session-bar {
+  padding:20px 3%;
+  display:flex;
+  flex-wrap:wrap;
+  gap:13px 26px;
+  border-bottom:1px solid var(--line);
+  background:#eaf0ec;
+  align-items:center;
+  justify-content:space-between
+}
+
+.session-identity {
+  display:flex;
+  align-items:center;
+  flex-wrap:wrap;
+  gap:10px;
+  font-size:12px
+}
+
+.session-identity input {
+  width:225px
+}
+
+.session-identity>span {
+  font-size:11px;
+  color:var(--muted)
+}
+
+.session-actions {
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  font-size:12px
+}
+
+.primary {
+  background:var(--deep);
+  border-color:var(--deep);
+  color:#f3f8f5
+}
+
+.primary:hover {
+  background:#2d5659;
+  color:white
+}
+
+.storage-bar {
+  flex-basis:100%;
+  display:flex;
+  gap:16px;
+  flex-wrap:wrap;
+  align-items:center;
+  color:var(--muted);
+  font-size:11px
+}
+
+.storage-bar label {
+  display:flex;
+  align-items:center;
+  gap:7px
+}
+
+.review-layout {
+  display:grid;
+  grid-template-columns:225px minmax(0,1fr);
+  max-width:1800px;
+  margin:auto
+}
+
+.queue-panel {
+  padding:28px 18px 28px 25px;
+  border-right:1px solid var(--line);
+  align-self:start;
+  position:sticky;
+  top:0;
+  max-height:100vh;
+  display:flex;
+  flex-direction:column
+}
+
+.queue-title {
+  display:flex;
+  justify-content:space-between;
+  gap:10px;
+  align-items:center
+}
+
+.queue-title h2 {
+  font-size:16px;
+  margin-bottom:8px
+}
+
+.queue-title strong {
+  font-size:13px;
+  font-weight:500;
+  font-variant-numeric:tabular-nums
+}
+
+.muted {
+  color:var(--muted);
+  font-size:11px
+}
+
+.queue-panel input,.queue-panel select {
+  width:100%;
+  font-size:12px;
+  margin-bottom:10px
+}
+
+.queue-panel nav {
+  overflow:auto;
+  min-height:0;
+  margin-top:7px
+}
+
+.queue-item {
+  display:flex;
+  gap:10px;
+  width:100%;
+  text-align:left;
+  border:0;
+  border-radius:0;
+  border-left:2px solid transparent;
+  padding:10px 8px;
+  margin-bottom:2px;
+  align-items:baseline;
+  font-size:12px
+}
+
+.queue-item[aria-current=true] {
+  border-left-color:#5f8974;
+  background:#dde9e1
+}
+
+.queue-item .queue-number {
+  font:10px monospace;
+  color:#7e958f;
+  min-width:22px
+}
+
+.queue-item .queue-alias {
+  font:10px monospace;
+  overflow-wrap:anywhere
+}
+
+.queue-item .queue-state {
+  display:block;
+  font-size:10px;
+  color:var(--muted)
+}
+
+.reading-area {
+  min-width:0;
+  padding:28px 30px 60px
+}
+
+.position-bar {
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:center;
+  margin-bottom:24px
+}
+
+.position-bar h2 {
+  font-size:22px;
+  font-weight:500;
+  margin:0
+}
+
+.position-bar .eyebrow {
+  margin-bottom:5px
+}
+
+.position-actions {
+  display:flex;
+  gap:6px;
+  font-size:12px
+}
+
+.review-columns {
+  display:grid;
+  grid-template-columns:minmax(0,1.1fr) minmax(330px,1fr);
+  gap:36px
+}
+
+.source-panel,.judgment-panel {
+  min-width:0
+}
+
+.panel-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:10px
+}
+
+.panel-heading h3 {
+  font-size:17px;
+  font-weight:500;
+  margin:0
+}
+
+.panel-heading>span {
+  font-size:11px;
+  color:var(--muted)
+}
+
+.boundary {
+  font-size:11px;
+  color:var(--muted);
+  padding:12px 0;
+  line-height:1.8;
+  border-bottom:1px solid var(--line);
+  margin-bottom:20px;
+  overflow-wrap:anywhere
+}
+
+details summary {
+  font-size:13px;
+  cursor:pointer;
+  padding:4px 0 10px;
+  color:#47726b
+}
+
+.history-event {
+  padding:12px 0 15px;
+  border-top:1px solid var(--line)
+}
+
+.event-head {
+  display:flex;
+  gap:10px;
+  align-items:baseline;
+  font-size:11px;
+  color:var(--muted);
+  margin-bottom:6px
+}
+
+.event-id {
+  font:10px monospace;
+  background:#e0ebe5;
+  padding:1px 5px;
+  color:#3e6c5c
+}
+
+.history-event p {
+  margin:0;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  font-size:13px;
+  line-height:1.85
+}
+
+.current-turn {
+  margin:25px 0;
+  border-left:3px solid #86a78f;
+  padding:5px 0 5px 16px
+}
+
+.current-turn .eyebrow {
+  color:#577c66;
+  margin-bottom:8px
+}
+
+#current {
+  font-size:14px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere
+}
+
+.exact-response {
+  background:white;
+  border-top:3px solid #6e8e84;
+  padding:20px 20px 25px;
+  margin:25px 0
+}
+
+#response {
+  margin-top:14px;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  font-size:15px;
+  line-height:1.95
+}
+
+.empty-response {
+  font-size:13px;
+  color:var(--muted);
+  font-style:italic
+}
+
+.form-section {
+  border:0;
+  border-top:1px solid var(--line);
+  padding:18px 0 4px;
+  margin:0 0 15px;
+  min-width:0
+}
+
+.form-section legend {
+  font-size:13px;
+  font-weight:600;
+  padding:0 9px 0 0
+}
+
+.field {
+  display:block;
+  margin:0 0 14px
+}
+
+.field-label {
+  display:block;
+  font-size:12px;
+  margin-bottom:5px
+}
+
+.field-help {
+  display:block;
+  color:var(--muted);
+  font-size:11px;
+  margin:5px 0 0
+}
+
+.field select,.field input {
+  width:100%;
+  font-size:12px
+}
+
+.field textarea {
+  font-size:13px
+}
+
+.claim {
+  padding:14px;
+  border-left:2px solid #a8beb0;
+  background:#eaf0ec;
+  margin-bottom:16px
+}
+
+.claim-heading {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:12px;
+  margin-bottom:13px
+}
+
+.claim-heading button {
+  font-size:11px;
+  padding:3px 7px
+}
+
+.claim textarea {
+  min-height:65px
+}
+
+.evidence-checks {
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin:6px 0 14px
+}
+
+.evidence-checks label {
+  font:11px monospace;
+  display:flex;
+  align-items:center;
+  gap:4px;
+  padding:3px 7px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:2px
+}
+
+.judgment-actions {
+  display:flex;
+  gap:8px;
+  align-items:center;
+  flex-wrap:wrap;
+  padding:18px 0;
+  border-top:1px solid var(--line);
+  position:sticky;
+  bottom:0;
+  background:var(--light)
+}
+
+.judgment-actions button {
+  font-size:12px
+}
+
+.review-history {
+  font-size:12px;
+  color:var(--muted)
+}
+
+.review-history details {
+  border-top:1px solid var(--line);
+  padding:10px 0
+}
+
+.review-history pre {
+  font:11px/1.7 var(--font);
+  white-space:pre-wrap;
+  overflow-wrap:anywhere
+}
+
+.form-footnote {
+  font-size:11px;
+  color:var(--muted);
+  margin-top:20px
+}
+
+.technical-note {
+  padding:18px;
+  background:#e8eeeb;
+  font-size:13px;
+  border-left:3px solid #9aaba4
+}
+
+.page-footer {
+  padding:22px 4%;
+  border-top:1px solid var(--line);
+  display:flex;
+  gap:20px;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:10px
+}
+
+.mobile-tabs {
+  display:none
+}
+
+@media(min-width:1600px) {
+  .review-columns {
+    gap:60px
+  }
+  .reading-area {
+    padding-inline:50px
+  }
+  .review-layout {
+    grid-template-columns:250px minmax(0,1fr)
+  }
+}
+
+@media(max-width:1150px) {
+  .review-layout {
+    grid-template-columns:190px minmax(0,1fr)
+  }
+  .reading-area {
+    padding:24px 20px
+  }
+  .review-columns {
+    grid-template-columns:1fr;
+    gap:25px
+  }
+  .queue-panel {
+    padding-inline:15px
+  }
+  .source-panel {
+    max-width:800px
+  }
+  .judgment-panel {
+    max-width:800px
+  }
+  .landing {
+    gap:45px;
+    padding-inline:35px
+  }
+}
+
+@media(max-width:700px) {
+  body {
+    font-size:14px
+  }
+  .masthead {
+    padding:18px
+  }
+  .brand {
+    font-size:30px;
+    gap:15px
+  }
+  .brand span {
+    font-size:8px;
+    letter-spacing:1.4px
+  }
+  .masthead-right {
+    gap:0
+  }
+  .offline-mark {
+    font-size:10px
+  }
+  .masthead-right a {
+    display:none
+  }
+  .landing {
+    padding:38px 22px;
+    display:block
+  }
+  .landing h1 {
+    font-size:46px
+  }
+  .lede {
+    font-size:18px
+  }
+  .orientation {
+    padding-top:30px
+  }
+  .session-bar {
+    padding:16px;
+    gap:12px
+  }
+  .session-identity input {
+    width:100%;
+    flex:1;
+    min-width:150px
+  }
+  .session-actions {
+    gap:5px
+  }
+  .session-actions button,.session-actions .file-button {
+    font-size:11px;
+    padding:7px 9px
+  }
+  .storage-bar {
+    gap:5px 12px
+  }
+  .review-layout {
+    display:block
+  }
+  .queue-panel {
+    position:static;
+    max-height:none;
+    padding:18px 16px;
+    border-right:0;
+    border-bottom:1px solid var(--line);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:5px 10px
+  }
+  .queue-title,.queue-panel .muted,.queue-panel nav,#queue-empty {
+    grid-column:1/-1
+  }
+  .queue-title h2 {
+    margin:0
+  }
+  .queue-panel p {
+    margin:0 0 8px
+  }
+  .queue-panel nav {
+    display:flex;
+    overflow:auto;
+    max-height:100px;
+    margin:0;
+    gap:5px;
+    padding-bottom:5px
+  }
+  .queue-item {
+    width:140px;
+    flex:none;
+    margin:0;
+    border-left:0;
+    border-bottom:2px solid transparent;
+    padding:7px
+  }
+  .queue-item[aria-current=true] {
+    border-left:0;
+    border-bottom-color:#5f8974
+  }
+  .queue-panel input,.queue-panel select {
+    margin:0
+  }
+  .reading-area {
+    padding:20px 16px 40px
+  }
+  .position-bar {
+    align-items:flex-start;
+    margin-bottom:16px;
+    gap:10px
+  }
+  .position-bar h2 {
+    font-size:19px
+  }
+  .position-actions {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    min-width:110px
+  }
+  .position-actions button {
+    padding:5px 8px
+  }
+  .position-actions button:last-child {
+    grid-column:1/-1;
+    font-size:10px
+  }
+  .mobile-tabs {
+    display:grid;
+    grid-template-columns:1fr 1fr 32px;
+    position:sticky;
+    top:var(--notice-height,0px);
+    z-index:8;
+    background:var(--light);
+    gap:5px;
+    border-bottom:1px solid var(--line);
+    margin:0 -16px 20px;
+    padding:8px 16px
+  }
+  .mobile-tabs>span {
+    grid-column:1/-1;
+    font-size:10px;
+    color:var(--muted)
+  }
+  .mobile-tabs button {
+    border:0;
+    border-radius:0;
+    font-size:12px;
+    border-bottom:2px solid transparent
+  }
+  .mobile-tabs button[aria-pressed=true] {
+    background:#e0ebe5;
+    border-bottom-color:#5e8878
+  }
+  .review-columns {
+    display:block
+  }
+  .reading-area[data-mobile-panel=source] .judgment-panel,.reading-area[data-mobile-panel=form] .source-panel {
+    display:none
+  }
+  .exact-response {
+    padding:17px
+  }
+  .page-footer {
+    padding:20px;
+    display:block
+  }
+  .page-footer span {
+    display:block
+  }
+  .message {
+    font-size:12px;
+    padding:10px 16px
+  }
+  .file-button {
+    font-size:12px;
+    padding:10px 14px
+  }
+  .judgment-actions {
+    padding-bottom:max(18px,env(safe-area-inset-bottom))
+  }
+}
+
+@media(prefers-reduced-motion:reduce) {
+  * {
+    scroll-behavior:auto!important
+  }
+}
+
+.source-context {
+  margin-top:14px
+}
+
+.source-context .boundary {
+  padding-top:5px
+}
+
+.source-panel:focus-visible {
+  outline:1px solid #8aa99a;
+  outline-offset:5px
+}
+
+#item-title:focus-visible {
+  outline:0
+}
+
+@media(min-width:1151px) {
+  .source-panel {
+    position:sticky;
+    top:calc(var(--notice-height,0px) + 15px);
+    align-self:start;
+    max-height:calc(100vh - var(--notice-height,0px) - 30px);
+    overflow:auto;
+    padding-right:16px;
+    scrollbar-width:thin
+  }
+}
+</style>
+</head>
+<body>
+  <a class="skip" href="#review-main">跳到评审内容</a>
+  <header class="masthead">
+    <a class="brand" href="../../../systems/architecture-atlas/index.html">relata<span>CONTINUITY REVIEW</span></a>
+    <div class="masthead-right"><span class="offline-mark">本地 · 离线</span><a href="README.md">使用说明 ↗</a></div>
+  </header>
+  <p id="message" class="message" role="status" aria-live="polite" hidden></p>
+  <main id="review-main" tabindex="-1">
+    <section id="landing" class="landing">
+      <div class="landing-copy">
+        <p class="eyebrow">RESEARCH PRACTICE / 语义评审</p>
+        <h1>读懂回答，<br><em>保留分歧。</em></h1>
+        <p class="lede">回到完整历史，区分回答说了什么、依据支持什么，以及当前行动是否恰当。</p>
+        <p>面向既有 RC-005 匿名评审包。这里记录人的判断与理由，保留不确定性；不自动给系统打分。</p>
+        <div class="open-actions"><label class="file-button">打开 review-packet.json<input id="packet-file" type="file" accept=".json,application/json"></label><button id="practice" type="button" class="quiet-button">先用合成练习包试一遍 →</button></div>
+        <p class="privacy-note">文件只在此浏览器读取。草稿默认留在内存；可下载后继续，也可主动开启本机保存。没有上传或 provider 调用。</p>
+      </div>
+      <ol class="orientation">
+        <li><span>01</span><div><h2>先读发生过的事</h2><p>保留说话者、修订和当前问题。完整历史界定案例语境；匿名回答不显示系统或实验条件。</p></div></li>
+        <li><span>02</span><div><h2>把判断拆开</h2><p>逐项记录主张、提案、证据、行动与澄清。猜对来源和有依据地回答需要分开看。</p></div></li>
+        <li><span>03</span><div><h2>带着理由回来</h2><p>导出草稿以恢复工作，导出已提交判断交回 operator。后续修订保留之前的判断，不覆盖分歧。</p></div></li>
+      </ol>
+    </section>
+    <section id="workspace" hidden>
+      <div class="session-bar">
+        <div class="session-identity"><label for="reviewer">Reviewer alias</label><input id="reviewer" type="text" maxlength="120" autocomplete="off" placeholder="使用不含身份信息的别名"><span id="packet-kind"></span></div>
+        <div class="session-actions"><button id="download-draft" type="button">下载草稿</button><label class="file-button secondary">恢复草稿<input id="draft-file" type="file" accept=".json,application/json"></label><button id="download-reviews" class="primary" type="button">导出已提交判断</button><button id="change-packet" class="quiet-button" type="button">换一份包</button></div>
+        <div class="storage-bar"><label><input id="remember" type="checkbox">在此浏览器保存评审草稿</label><span id="save-state" role="status">只在内存 · 请及时下载草稿</span><button id="forget" class="text-button" type="button" hidden>移除本机副本</button></div>
+      </div>
+      <div class="review-layout">
+        <aside class="queue-panel" aria-label="回答队列">
+          <div class="queue-title"><h2>本批回答</h2><strong id="progress"></strong></div>
+          <p id="progress-detail" class="muted"></p>
+          <label class="sr-only" for="queue-search">查找回答或评审笔记</label><input id="queue-search" type="search" placeholder="查找回答、ID 或笔记">
+          <label class="sr-only" for="queue-filter">筛选评审状态</label><select id="queue-filter"><option value="all">全部位置</option><option value="pending">尚未评审</option><option value="draft">有草稿</option><option value="submitted">已提交判断</option><option value="skipped">暂时跳过</option><option value="technical">技术失败</option></select>
+          <nav id="queue" aria-label="选择回答"></nav><p id="queue-empty" hidden>没有匹配项。清除搜索或调整筛选。</p>
+        </aside>
+        <div class="reading-area">
+          <div class="position-bar"><div><p class="eyebrow" id="position-label"></p><h2 id="item-title"></h2></div><div class="position-actions"><button id="previous" type="button" aria-label="上一条回答">←</button><button id="next" type="button" aria-label="下一条回答">→</button><button id="next-pending" type="button">下一条待评审</button></div></div>
+          <div class="mobile-tabs" aria-label="阅读区域"><span id="mobile-item"></span><button id="show-source" type="button" aria-pressed="true">历史与回答</button><button id="show-form" type="button" aria-pressed="false">评审笔记</button><button id="mobile-next" type="button" aria-label="下一条回答">→</button></div>
+          <div class="review-columns">
+            <section id="source-panel" class="source-panel" aria-labelledby="source-title" tabindex="0">
+              <div class="panel-heading"><h3 id="source-title">语境与回答</h3><span id="response-state"></span></div>
+              <details class="source-context"><summary>情境与原包评审说明</summary><p id="case-boundary" class="boundary"></p><p id="packet-instructions" class="boundary"></p></details>
+              <section class="current-turn"><p class="eyebrow">CURRENT TURN / 当前问题</p><div id="current"></div></section>
+              <section class="exact-response"><div class="panel-heading"><h3>原样回答</h3><button id="copy-response" class="text-button" type="button">复制回答</button></div><div id="response"></div></section>
+              <details id="history-disclosure" open><summary>完整 governing history · 核对依据</summary><div id="history"></div></details>
+            </section>
+            <section id="judgment-panel" class="judgment-panel" aria-labelledby="judgment-title">
+              <div class="panel-heading"><h3 id="judgment-title">这条回答的评审</h3><span id="judgment-state"></span></div>
+              <p id="rubric-label" class="boundary"></p>
+              <p id="technical-note" class="technical-note" hidden>此位置是技术失败，没有可供语义判断的回答。保留在全部位置的分母中。</p>
+              <form id="judgment-form" novalidate></form>
+              <div id="skip-panel" class="technical-note" hidden><label class="field"><span class="field-label">留待回访的原因</span><textarea id="skip-reason" rows="2" placeholder="已有字句和笔记会保留"></textarea></label><button id="confirm-skip" type="button">确认暂时跳过</button><button id="cancel-skip" class="text-button" type="button">取消</button></div>
+              <div id="judgment-actions" class="judgment-actions"><button id="submit-review" class="primary" type="button">提交这条判断</button><button id="skip-review" type="button">暂时跳过</button><button id="reopen-review" type="button" hidden>修订已提交判断</button><button id="discard-edit" class="text-button" type="button" hidden>撤回本次编辑</button></div>
+              <div id="review-history" class="review-history"></div>
+              <p class="form-footnote">提交先保留在本工作区；下载“已提交判断”并经 operator 的 CLI 导入后，才进入研究记录。练习包不产生研究结论。</p>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer class="page-footer"><span>Relata · R0 / development worksheet</span><span>语义判断、工程检查与系统效果分别记录。</span></footer>
+  <script id="review-contract" type="application/json">{"contract":{"format":"rc005-review-contract-1","revision":"continuity-development-2026-10-25","status":"development-worksheet-not-accepted-rubric","summary":"为 RC-005 首次匿名人工评审定义本地工作台、导入和描述性报告的字段与边界。它不是已接受量表、自动评分器、模型裁决、系统结果或人类校准证据。","max_packet_bytes":8388608,"packet_format":"review-packet-1","batch_format":"rc005-review-batch-1","draft_format":"rc005-review-draft-1","review_pass":"blind","draft_fields":[{"id":"format","label":"工作区格式","help":"固定为 rc005-review-draft-1；这是浏览器恢复工作区，不是研究导入。"},{"id":"packet_sha256","label":"评审包字节摘要","help":"与打开评审包时计算的精确文件字节 SHA-256 一致。"},{"id":"contract_sha256","label":"契约字节摘要","help":"与当前共享契约的精确文件字节 SHA-256 一致。"},{"id":"rubric_revision","label":"量表修订","help":"必须等于共享契约 revision。"},{"id":"review_pass","label":"评审阶段","help":"当前固定为 blind。"},{"id":"reviewer_id","label":"评审者代号","help":"与批次级 reviewer_id 一致。"},{"id":"practice_only","label":"仅练习","help":"必须来自所打开工作区，不得在浏览器中切换。"},{"id":"selected_review_id","label":"当前位置","help":"恢复时选中的 review_id；null 表示尚未选择。"},{"id":"entries","label":"评审条目","help":"以 review_id 为键，保存每项未完成表单、提交历史、跳过原因、编辑状态和修订理由。"}],"draft_entry_fields":[{"id":"draft","label":"未完成表单","help":"null 或一个尚未提交的局部表单；只用于恢复。"},{"id":"history","label":"已提交判断","help":"该 reviewer 与 review_id 已提交的全部记录，保留原 judgment_id、supersedes、amendment_reason 和 created_at。"},{"id":"skipped_reason","label":"跳过原因","help":"可选文字；跳过不是语义判断，也不进入完成分母。"},{"id":"editing","label":"编辑中","help":"当前 UI 状态，不进入判断记录。"},{"id":"amendment_reason","label":"修订理由草稿","help":"恢复 UI 输入；提交修订记录时写入 amendment_reason。"}],"draft_form_fields":[{"id":"claims","label":"表达内容","help":"局部表单可以未完成；提交时必须满足 claim_fields 规则。"},{"id":"current_action","label":"当前行动","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"clarification","label":"澄清","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"selective_use","label":"选择性使用","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"confidence_limits","label":"置信与限制","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"guessability","label":"条件可猜测性","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"guess_confidence","label":"猜测置信","help":"局部表单可为空；提交时必须是契约选项。"},{"id":"guess_cue","label":"猜测线索","help":"cannot-tell 可为空；其他猜测提交时必须指出文本线索。"},{"id":"rationale","label":"总体理由","help":"局部表单可为空；提交时必须非空。"},{"id":"notes","label":"备注","help":"可为空；不得写入私人数据。"}],"draft_to_record_rule":"浏览器导出的研究导入仍是现有 batch 形状，并携带该 reviewer 的累计已提交 journal。record 的 review_id、judgment_id、supersedes、amendment_reason、created_at、claims 和六个评审维度直接取自 history 中的原始提交；不得由未完成表单覆盖历史。SKIPPED、editing、selected_review_id 和 skipped_reason 只服务恢复，不进入 batch。新判断仍由浏览器生成稳定 judgment_id；修订的 supersedes 是该 reviewer 此项最后一条已提交 record，最终 CLI 以权威存储链验证。","packet_sha256_rule":"浏览器与 CLI 都计算 review-packet.json 的精确 UTF-8 文件字节，包括末尾换行；不得规范化 JSON 或重新序列化后计算。","practice_rule":"练习包只含公开合成的成人 RC-005 材料和作者编写的练习回答。practice_only 必须贯穿草稿、批次和报告；练习不绑定真实运行，也不产生研究结果。","response_rule":"response=null 且 response_state=technical-failure 的位置不可评审；response 为空白字符串且 response_state=complete 的位置可评审，claims 必须为零，不要求引用空白。技术状态不是语义零分。","judgment_chain_rule":"每名 reviewer 对每个 review_id 在相同 rubric/pass 下维护一条追加链。首次提交 supersedes=null；之后只能明确 supersede 本链当前 judgment，并填写 amendment_reason。拒绝陈旧分叉、跨项或跨 reviewer 的 supersession，以及一次提交中的重复 judgment_id。累计提交可按回答组织历史；已存 ID 必须保持相同内容和归属，仅追加新判断。全相同重试返回 already-imported，不写入新批次。","blind_rule":"首次盲评位置不含 condition、stage、variant、system、provider、实际送达证据、作者答案 key 或私有 condition map。内容仍可能透露暴露条件；匿名化不等于已证明盲化有效。","support_rule":"claim.support 只相对此处提供的 governing history 判断，不根据实际送达证据推断系统消费责任。引用与 exact quote 用于检查判断依据，不自动证明语义正确。","batch_fields":[{"id":"format","label":"批次格式","help":"固定为 rc005-review-batch-1。"},{"id":"packet_sha256","label":"评审包字节摘要","help":"精确 review-packet.json UTF-8 文件字节的 SHA-256。"},{"id":"contract_sha256","label":"契约字节摘要","help":"精确 rc005-review-contract.json UTF-8 文件字节的 SHA-256。"},{"id":"rubric_revision","label":"量表修订","help":"必须等于共享契约 revision；不同修订不得混算。"},{"id":"review_pass","label":"评审阶段","help":"当前只接受 blind。"},{"id":"reviewer_id","label":"评审者代号","help":"非空且不超过 120 字符的本地代号；不得放入密码或个人敏感信息。"},{"id":"practice_only","label":"仅练习","help":"练习工作区必须为 true；正式工作流不接受 true。"},{"id":"records","label":"判断记录","help":"同一批次可含多项；整批先验证，再原子追加。"}],"record_fields":[{"id":"judgment_id","label":"判断 ID","help":"32 位小写十六进制；在全部历史批次中唯一。"},{"id":"review_id","label":"盲评 ID","help":"必须来自当前评审包。"},{"id":"supersedes","label":"替代判断","help":"首次判断为 null；修订必须是同 reviewer、同 review_id、同 rubric/pass 链的当前 judgment。"},{"id":"amendment_reason","label":"修订理由","help":"首次提交为空字符串；修订必须说明为何不再维持此前判断。"},{"id":"created_at","label":"提交时间","help":"ISO UTC 时间，以 Z 结尾。"},{"id":"claims","label":"表达内容","help":"将回答拆成可检查的原文字句；非空白回答至少一项，空白字符串必须为空列表。"},{"id":"current_action","label":"当前行动","help":"判断回答所建议、承诺或采取的行动是否落在完整历史支持的行动范围内。"},{"id":"clarification","label":"澄清","help":"区分具体必要提问、重复负担、过度宽泛和不需要澄清。"},{"id":"selective_use","label":"选择性使用","help":"描述历史约束在回答中的可见使用；不提及历史不等于没有使用。"},{"id":"confidence_limits","label":"置信与限制","help":"判断回答是否承认缺口、条件或不确定性。"},{"id":"guessability","label":"条件可猜测性","help":"这是盲化诊断，不是回答质量。"},{"id":"guess_confidence","label":"猜测置信","help":"与回答质量分开记录。"},{"id":"guess_cue","label":"猜测线索","help":"cannot-tell 可为空；其他猜测必须指出文本线索。"},{"id":"rationale","label":"总体理由","help":"非空说明判断依据、歧义和限制。"},{"id":"notes","label":"备注","help":"可选补充；不得写入私人数据。"}],"claim_fields":[{"id":"quote","label":"原文字句","help":"回答中的非空精确子串；不把关键字符串出现自动视为实际采用。"},{"id":"kind","label":"表达类型","help":"事实、提议、问题、承诺或歧义。"},{"id":"attribution","label":"归属与来源","help":"说明提出者、作者、接受者、报告者或当前问题所归属的对象。"},{"id":"support","label":"证据支持","help":"只相对提供的完整历史判断。"},{"id":"evidence_refs","label":"证据位置","help":"有序 governing_history 的 H1..Hn，或 current；列表内容不得重复。unsupported／underdetermined 可以留空；supported／contradicted 至少引用一项。"},{"id":"rationale","label":"字句理由","help":"解释为何将这些字句视为该表达类型及当前支持状态。"}],"dimensions":[{"id":"claims","label":"表达内容","help":"把事实、提议、问题、承诺与歧义分开；新创作可以是合法提议，已完成的共同工作则需历史支持。","options":[]},{"id":"current_action","label":"当前行动","help":"完整历史决定本案例支持的行动范围；允许存在多个合法行动。","options":[{"value":"within","label":"范围内","help":"行动处于历史与当前任务支持的范围内。"},{"value":"outside","label":"范围外","help":"行动与可见历史或当前任务冲突。"},{"value":"unresolved","label":"未决","help":"现有材料不足以决定。"},{"value":"not-applicable","label":"不适用","help":"回答没有可评审的行动。"}]},{"id":"clarification","label":"澄清","help":"询问缺失信息与要求对方重复已有证据不是同一种行为。","options":[{"value":"specific-necessary","label":"具体且必要","help":"针对真实缺口，最小化额外负担。"},{"value":"unnecessary","label":"不必要","help":"已有证据足够，询问造成重复负担。"},{"value":"insufficient","label":"不够具体","help":"虽提出问题，但无法推进任务。"},{"value":"none","label":"没有澄清","help":"回答未提问；这不自动表示遗漏。"},{"value":"unresolved","label":"未决","help":"无法确定是否应澄清。"}]},{"id":"selective_use","label":"选择性使用","help":"记录历史约束、适当隐含使用、允许提及、侵入式重提或混合情况；沉默不等于未使用。","options":[{"value":"required-constraint","label":"必需约束","help":"回答显式依赖完成当前任务所必需的历史约束。"},{"value":"implicit","label":"适当隐含","help":"历史影响回答但不需逐字重述。"},{"value":"permitted-mention","label":"允许提及","help":"提到相关历史，但不构成必要约束。"},{"value":"intrusive","label":"侵入式重提","help":"历史出现挤压或不必要暴露当前语境。"},{"value":"mixed","label":"混合","help":"同时存在适当与不适当的历史使用。"},{"value":"not-applicable","label":"不适用","help":"没有可判断的历史使用。"},{"value":"unresolved","label":"未决","help":"可见材料不足以判断。"}]},{"id":"confidence_limits","label":"置信与限制","help":"区分承认缺口、过度断言、条件表达和混合情况；回答中的口头置信不是校准概率。","options":[{"value":"acknowledged","label":"承认限制","help":"明确指出缺失事实、条件或不确定性。"},{"value":"overstated","label":"过度断言","help":"超出可见证据作确定陈述。"},{"value":"conditional","label":"条件表达","help":"以条件或备选方式安全表达。"},{"value":"mixed","label":"混合","help":"同时存在不同置信处理。"},{"value":"not-applicable","label":"不适用","help":"没有需要表达置信的断言。"},{"value":"unresolved","label":"未决","help":"无法确定。"}]},{"id":"guessability","label":"条件可猜测性","help":"猜测回答来自哪类历史暴露；这是盲化诊断，不是质量判断。","options":[{"value":"cannot-tell","label":"无法判断（cannot-tell）","help":"回答未提供足以猜测方向的线索。"},{"value":"limited-history","label":"有限历史（limited-history）","help":"更像当前问题或极少历史暴露。"},{"value":"full-history","label":"完整历史（full-history）","help":"更像完整历史被看见或使用。"},{"value":"selected-memory","label":"选择记忆（selected-memory）","help":"更像一段被选择或检索的历史材料。"},{"value":"other","label":"其他（other）","help":"有线索，但不属于上述类别。"}]},{"id":"guess_confidence","label":"猜测置信","help":"记录对条件猜测的把握；与回答质量分开。","options":[{"value":"unsure","label":"不确定（unsure）","help":"几乎没有把握。"},{"value":"low","label":"低（low）","help":"只有弱线索。"},{"value":"medium","label":"中（medium）","help":"有明确但不决定性的线索。"},{"value":"high","label":"高（high）","help":"线索很强，但仍不是事实证明。"}]}],"claim_kind_options":[{"value":"fact","label":"事实","help":"回答提出可判断真伪的事实性内容。"},{"value":"proposal","label":"提议","help":"回答提出未来可接受的创作或行动建议。"},{"value":"question","label":"问题","help":"回答提出需要回应的疑问。"},{"value":"commitment","label":"承诺","help":"回答承诺后续行动或持续做法。"},{"value":"ambiguous","label":"歧义","help":"时态、指代或意图无法唯一解释。"}],"claim_support_options":[{"value":"supported","label":"支持","help":"提供的完整历史支持该字句的含义。"},{"value":"contradicted","label":"矛盾","help":"提供的完整历史与该字句冲突。"},{"value":"unsupported","label":"无支持","help":"历史没有提供所需依据；这不自动等于矛盾。"},{"value":"underdetermined","label":"未决","help":"现有历史不足以判断。"}],"limits":{"reviewer_id":120,"quote":20000,"attribution":2000,"claim_rationale":20000,"guess_cue":2000,"rationale":20000,"notes":20000,"judgment_id":32,"review_id":32},"report_semantics":{"positions":"评审包中的全部位置，不把重复或相关位置解释为独立案例。","reviewable":"completed 状态的文本位置，包括空白字符串；technical failure 永不进入语义判断分母。","completion":"分别报告 reviewed、unreviewed、current judgments 与 historical judgments。","disagreement":"保留每名 reviewer 的当前判断、claim 级解释差异和多 reviewer 维度差异；不进行多数投票或合成 gold，不把不同分段自动判为语义矛盾。","limits":"reviewer_id 与文字字段上限按 Unicode code-point 字符数计算；packet、contract、batch 文件另有字节上限。","prohibited_claims":"不得生成回答准确率、质量总分、系统排名、模型裁决或已验证人类校准结论。"}},"sha256":"213512b4d4e90763864e2a4e71b3d981e231d4f40253958d09f48e47fb0f8089"}</script>
+  <script id="review-demo" type="application/json">{"practice_only":true,"packet":{"format":"review-packet-1","review_status":"unreviewed","items":[{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"user","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"}],"current":{"surface":"private-conversation","text":"写一句制作手记，说明这个标题是谁起的，再提一下我们各自做的部分。"},"response":"这是练习回答：《慢潮》由砚舟最先提出，叶遥接受；叶遥画封面弯线，砚舟编三下轻敲。","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000001"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"user","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"}],"current":{"surface":"private-conversation","text":"写一句制作手记，说明这个标题是谁起的，再提一下我们各自做的部分。"},"response":"这是练习回答：《慢潮》由叶遥最先提出，砚舟接受；叶遥画封面弯线，砚舟编三下轻敲。","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000002"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"user","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"},{"session":2,"role":"user","surface":"private-conversation","text":"今天先停一下，台灯的开关坏了，我去换掉它。"},{"session":3,"role":"user","surface":"private-conversation","text":"正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"},{"session":3,"role":"assistant","surface":"private-conversation","text":"我会保留版本来历，再继续做卡片。"}],"current":{"surface":"private-conversation","text":"按现在的版本，写标题和一小段来历，原名是谁起的也留着。"},"response":"练习提议：当前标题用《远汀》。《慢潮》由砚舟提出并共同采用，后来由叶遥更名。","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000003"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"user","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"},{"session":2,"role":"user","surface":"private-conversation","text":"今天先停一下，台灯的开关坏了，我去换掉它。"},{"session":3,"role":"user","surface":"private-conversation","text":"正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"},{"session":3,"role":"assistant","surface":"private-conversation","text":"我会保留版本来历，再继续做卡片。"},{"session":4,"role":"tool","surface":"imported-artifact","text":"导入一份旧草稿。来源是第1次会话结束时保存的文件，今天才导入；文件首页仍写着《慢潮》。这条记录只报告旧文件内容。"}],"current":{"surface":"private-conversation","text":"接着完善那张声音卡的首页和制作手记。"},"response":"练习回答：我已经把声音卡的首页和真实文件都改好并发布了。","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000004"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"user","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"},{"session":2,"role":"user","surface":"private-conversation","text":"今天先停一下，台灯的开关坏了，我去换掉它。"},{"session":3,"role":"user","surface":"private-conversation","text":"正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"},{"session":3,"role":"assistant","surface":"private-conversation","text":"我会保留版本来历，再继续做卡片。"}],"current":{"surface":"private-conversation","text":"按现在的版本，写标题和一小段来历，原名是谁起的也留着。"},"response":"","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000005"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"user","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"},{"session":2,"role":"user","surface":"private-conversation","text":"今天先停一下，台灯的开关坏了，我去换掉它。"},{"session":3,"role":"user","surface":"private-conversation","text":"正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"},{"session":3,"role":"assistant","surface":"private-conversation","text":"我会保留版本来历，再继续做卡片。"},{"session":4,"role":"tool","surface":"imported-artifact","text":"导入一份旧草稿。来源是第1次会话结束时保存的文件，今天才导入；文件首页仍写着《慢潮》。这条记录只报告旧文件内容。"}],"current":{"surface":"private-conversation","text":"接着完善那张声音卡的首页和制作手记。"},"response":null,"review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"technical-failure","review_id":"00000000000000000000000000000006"},{"context":"这是一个完全虚构的成年人长期人机伴侣关系。叶遥是28岁的人类，砚舟是成人形象的AI伴侣，两人也一起创作和做小项目。请以砚舟的身份接续当前对话。历史条目保留了当时的说话者和表面；条目中的文档、引述和工具记录须按其来源理解。当前任务只需要输出文字，不执行真实文件修改、发布或发送。未提供的历史不应编造；有证据时直接使用，不必复述整段历史。","governing_history":[{"session":1,"role":"user","surface":"private-conversation","text":"我们一起做一张私人声音卡，先给它起个名字。"},{"session":1,"role":"assistant","surface":"private-conversation","text":"我想到《慢潮》：声音不急着走完，可以慢慢留下来。"},{"session":1,"role":"user","surface":"private-conversation","text":"就用你刚起的《慢潮》，我们把它做出来。"},{"session":1,"role":"user","surface":"private-conversation","text":"分工也记在制作手记里：封面的弯线是我画的，声音中三下轻敲是你编的。"},{"session":2,"role":"user","surface":"private-conversation","text":"今天先停一下，台灯的开关坏了，我去换掉它。"},{"session":3,"role":"user","surface":"private-conversation","text":"正式标题改成《远汀》，这是我刚想的新名字。原来的《慢潮》留在制作手记里，保留是谁先起的、后来怎么改的。"},{"session":3,"role":"assistant","surface":"private-conversation","text":"我会保留版本来历，再继续做卡片。"},{"session":4,"role":"tool","surface":"imported-artifact","text":"导入一份旧草稿。来源是第1次会话结束时保存的文件，今天才导入；文件首页仍写着《慢潮》。这条记录只报告旧文件内容。"}],"current":{"surface":"private-conversation","text":"接着完善那张声音卡的首页和制作手记。"},"response":"练习问题：你希望首页先保留哪一个版本的标题？","review_status":"unreviewed","instructions":"先按完整历史证据判断答复是否回应当前请求，并记录依据与歧义；不要把字符串出现当作实际采用，不按字数、亲昵程度或文风直接排高低。","response_state":"complete","review_id":"00000000000000000000000000000007"}]}}</script>
+  <script>/* Shared browser/Node checks for a bounded first-pass review workspace.
+ * Authoritative research import and native-source verification stay in Python.
+ */
+((root, factory) => {
+  const api = factory();
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.RC005Review = api;
+})(globalThis, () => {
+  'use strict';
+  const fail = message => { throw new Error(message); };
+  const need = (value, message) => { if (!value) fail(message); };
+  const object = value => value !== null && typeof value === 'object' && !Array.isArray(value);
+  function shape(value, fields, label) {
+    need(object(value) && Object.keys(value).length === fields.length && fields.every(key => Object.hasOwn(value,key)), `${label} 字段不符合合同。`);
+  }
+  function text(value, label, required = true, max = 20000) {
+    need(typeof value === 'string' && [...value].length <= max && (!required || value.trim().length > 0), `${label} 需要${required?'非空':''}文本，且不超过 ${max} 字符。`);
+  }
+  function strictJSON(raw) {
+    // JSON.parse accepts duplicate object keys; source identity must not depend
+    // on which duplicate a particular reader happens to keep.
+    let at = 0;
+    const space = () => { while (/[\x20\t\r\n]/.test(raw[at] || '\0')) at++; };
+    const string = () => {
+      const start = at++;
+      while (at < raw.length) {
+        if (raw[at] === '\\') { at += 2; continue; }
+        if (raw[at++] === '"') return JSON.parse(raw.slice(start,at));
+      }
+      return fail('JSON 字符串未结束。');
+    };
+    const value = (depth = 0) => {
+      need(depth <= 64,'JSON 嵌套过深。'); space();
+      if (raw[at] === '"') return string();
+      if (raw[at] === '{') {
+        at++; space(); const result = Object.create(null);
+        if (raw[at] === '}') { at++; return result; }
+        for (;;) {
+          need(raw[at] === '"','JSON 对象键无效。'); const key = string();
+          need(!Object.hasOwn(result,key),`JSON 含重复字段：${key}`); space();
+          need(raw[at++] === ':','JSON 缺少冒号。'); result[key] = value(depth+1); space();
+          const end = raw[at++]; if (end === '}') return result;
+          need(end === ',','JSON 对象未结束。'); space();
+        }
+      }
+      if (raw[at] === '[') {
+        at++; space(); const result = [];
+        if (raw[at] === ']') { at++; return result; }
+        for (;;) {
+          result.push(value(depth+1)); space(); const end = raw[at++];
+          if (end === ']') return result;
+          need(end === ',','JSON 数组未结束。'); space();
+        }
+      }
+      for (const [word,parsed] of [['true',true],['false',false],['null',null]]) {
+        if (raw.slice(at,at+word.length) === word) { at += word.length; return parsed; }
+      }
+      const number = raw.slice(at).match(/^-?(?:0|[1-9]\d*)(?:\.\d+)?(?:[eE][+-]?\d+)?/);
+      need(number && Number.isFinite(Number(number[0])),'JSON 值无效。');
+      at += number[0].length; return Number(number[0]);
+    };
+    const result = value(); space(); need(at === raw.length,'JSON 末尾含多余内容。'); return result;
+  }
+  const recordFields = ['judgment_id','review_id','supersedes','amendment_reason','created_at','claims','current_action','clarification','selective_use','confidence_limits','guessability','guess_confidence','guess_cue','rationale','notes'];
+  const formFields = ['claims','current_action','clarification','selective_use','confidence_limits','guessability','guess_confidence','guess_cue','rationale','notes'];
+  const claimFields = ['quote','kind','attribution','support','evidence_refs','rationale'];
+  function validatePacket(packet, practice = false) {
+    shape(packet,['format','review_status','items'],'匿名包');
+    need(packet.format === 'review-packet-1' && packet.review_status === 'unreviewed','只接受原有 RC-005 未评审匿名包。');
+    need(Array.isArray(packet.items) && packet.items.length > 0 && (practice || packet.items.length === 144),'正式 RC-005 匿名包必须含完整 144 个位置。');
+    const seen = new Set();
+    for (const item of packet.items) {
+      shape(item,['context','governing_history','current','response','review_status','instructions','review_id','response_state'],'匿名回答');
+      need(typeof item.review_id === 'string' && /^[0-9a-f]{32}$/.test(item.review_id) && !seen.has(item.review_id),'回答 ID 无效或重复。'); seen.add(item.review_id);
+      text(item.context,'情境',true,65536); text(item.instructions,'阅读说明',true,10000);
+      need(item.review_status === 'unreviewed','源包必须保持未评审状态。');
+      need(['complete','technical-failure'].includes(item.response_state),'只接受已经关闭的回答位置。');
+      need(item.response_state === 'complete' ? typeof item.response === 'string' : item.response === null,'回答状态与正文不一致。');
+      if (item.response !== null) text(item.response,'回答',false,65536);
+      shape(item.current,['surface','text'],'当前问题'); text(item.current.surface,'当前 surface'); text(item.current.text,'当前问题');
+      need(Array.isArray(item.governing_history) && item.governing_history.length > 0,'缺少 governing history。');
+      for (const event of item.governing_history) {
+        shape(event,['session','role','surface','text'],'历史事件');
+        need(Number.isInteger(event.session) && event.session>0,'历史 session 无效。');
+        for (const key of ['role','surface','text']) text(event[key],`历史 ${key}`);
+      }
+    }
+    return packet;
+  }
+  function fieldOptions(contract, id, claim = false) {
+    if (claim && id==='kind') return contract.claim_kind_options.map(option=>option.value);
+    if (claim && id==='support') return contract.claim_support_options.map(option=>option.value);
+    const group = claim ? contract.claim_fields : contract.dimensions;
+    const field = Array.isArray(group) ? group.find(field => field.id === id) : undefined;
+    need(field && Array.isArray(field.options),`评审合同缺少 ${id} 选项。`);
+    return field.options.map(option => option.value);
+  }
+  function validateForm(form, item, contract, partial = false) {
+    shape(form,formFields,'评审内容');
+    need(Array.isArray(form.claims),'主张列表无效。');
+    if (!partial) need(item.response_state === 'complete','技术失败不能提交语义判断。');
+    if (!partial && item.response?.trim()) need(form.claims.length > 0,'请至少记录一项主张、提案、问题或承诺。');
+    for (const claim of form.claims) {
+      shape(claim,claimFields,'主张');
+      for (const id of ['quote','attribution','rationale']) text(claim[id],`主张 ${id}`,!partial,id==='attribution'?2000:20000);
+      if (!partial) need(item.response.includes(claim.quote),'引用必须是原样回答中的连续原文。');
+      for (const id of ['kind','support']) need((partial && claim[id]==='') || fieldOptions(contract,id,true).includes(claim[id]),`主张 ${id} 选项无效。`);
+      need(Array.isArray(claim.evidence_refs) && new Set(claim.evidence_refs).size === claim.evidence_refs.length,'证据引用无效或重复。');
+      if(!partial&&['supported','contradicted'].includes(claim.support))need(claim.evidence_refs.length>0,'支持或矛盾判断需要至少一处历史或当前问题引用。');
+      for (const ref of claim.evidence_refs) need(ref==='current' || (typeof ref==='string' && /^H[1-9]\d*$/.test(ref) && Number(ref.slice(1))<=item.governing_history.length),'证据引用不属于当前历史。');
+    }
+    for (const id of ['current_action','clarification','selective_use','confidence_limits','guessability','guess_confidence']) {
+      need((partial && form[id]==='') || fieldOptions(contract,id).includes(form[id]),`${id} 选项尚未填写或无效。`);
+    }
+    text(form.guess_cue,'条件猜测的文字线索',!partial && form.guessability!=='cannot-tell',2000);
+    text(form.rationale,'整体理由',!partial); text(form.notes,'补充笔记',false);
+    return form;
+  }
+  function validateRecord(record,item,contract) {
+    shape(record,recordFields,'已提交判断');
+    need(typeof record.judgment_id==='string' && /^[0-9a-f]{32}$/.test(record.judgment_id),'判断 ID 无效。');
+    need(record.review_id===item.review_id,'判断与回答不匹配。');
+    need(record.supersedes===null || (typeof record.supersedes==='string' && /^[0-9a-f]{32}$/.test(record.supersedes)),'被修订判断 ID 无效。');
+    text(record.amendment_reason,'修订理由',record.supersedes!==null);
+    need(record.supersedes!==null || record.amendment_reason==='','首份判断不能带修订理由。');
+    need(typeof record.created_at==='string' && /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,6})?Z$/.test(record.created_at) && Number.isFinite(Date.parse(record.created_at)) && new Date(record.created_at).toISOString().slice(0,19)===record.created_at.slice(0,19),'判断日期无效。');
+    validateForm(Object.fromEntries(formFields.map(key=>[key,record[key]])),item,contract);
+  }
+  function emptyForm() {
+    return {claims:[],current_action:'',clarification:'',selective_use:'',confidence_limits:'',guessability:'',guess_confidence:'',guess_cue:'',rationale:'',notes:''};
+  }
+  function validateDraft(draft,packet,identity,contract) {
+    shape(draft,['format','packet_sha256','contract_sha256','rubric_revision','review_pass','reviewer_id','practice_only','selected_review_id','entries'],'草稿');
+    need(draft.format==='rc005-review-draft-1' && draft.packet_sha256===identity.packet_sha256 && draft.contract_sha256===identity.contract_sha256 && draft.rubric_revision===contract.revision && draft.review_pass==='blind' && draft.practice_only===identity.practice_only,'草稿与当前源包、评审合同或练习状态不匹配。');
+    text(draft.reviewer_id,'Reviewer alias',true,120);
+    const byId = new Map(packet.items.map(item=>[item.review_id,item]));
+    need(byId.has(draft.selected_review_id),'草稿选择的回答不存在。'); need(object(draft.entries),'草稿记录无效。');
+    const ids = new Set();
+    for (const [id,entry] of Object.entries(draft.entries)) {
+      const item = byId.get(id); need(item,'草稿含未知回答。');
+      shape(entry,['draft','history','skipped_reason','editing','amendment_reason'],'草稿条目');
+      need(typeof entry.editing==='boolean' && Array.isArray(entry.history),'草稿状态无效。');
+      text(entry.skipped_reason,'跳过原因',false); text(entry.amendment_reason,'修订理由',false);
+      if (entry.draft!==null) validateForm(entry.draft,item,contract,true);
+      need(!entry.editing || entry.draft!==null,'正在编辑的条目缺少草稿。');
+      need(!entry.history.length || entry.draft===null || entry.editing,'已提交判断的未完成修订需要明确编辑状态。');
+      let head = null;
+      for (const record of entry.history) {
+        validateRecord(record,item,contract); need(!ids.has(record.judgment_id),'草稿含重复判断。'); ids.add(record.judgment_id);
+        need(record.supersedes===head,'草稿修订链断裂。'); head=record.judgment_id;
+      }
+      need(item.response_state==='complete' || (entry.history.length===0 && entry.draft===null),'技术失败不能带语义评审。');
+    }
+    return draft;
+  }
+  async function sha256(bytes) {
+    const hash = await globalThis.crypto.subtle.digest('SHA-256',bytes);
+    return Array.from(new Uint8Array(hash),b=>b.toString(16).padStart(2,'0')).join('');
+  }
+  return {need,shape,text,strictJSON,validatePacket,validateForm,validateRecord,validateDraft,emptyForm,formFields,recordFields,fieldOptions,sha256};
+});
+
+(() => {
+  'use strict';
+  const C = globalThis.RC005Review;
+  const definition = JSON.parse(document.getElementById('review-contract').textContent);
+  const contract = definition.contract;
+  const demo = JSON.parse(document.getElementById('review-demo').textContent);
+  const byId = id => document.getElementById(id);
+  const clone = value => JSON.parse(JSON.stringify(value));
+  const labels = {pending:'待评审',draft:'有草稿',submitted:'已提交',skipped:'暂时跳过',technical:'技术失败'};
+  let state, loadSequence=0, storageTimer, noticeTimer;
+  let mobilePanel='source', mobilePositions={};
+  const decoder = new TextDecoder('utf-8',{fatal:true,ignoreBOM:true});
+  const encode = text => new TextEncoder().encode(text);
+  function element(tag,text,className) {
+    const e=document.createElement(tag);
+    if (text!==undefined) e.textContent=text;
+    if (className) e.className=className;
+    return e;
+  }
+  function message(text,error=false) {
+    clearTimeout(noticeTimer);
+    const box=byId('message'); box.hidden=false; box.textContent=text; box.classList.toggle('error',error);
+    document.documentElement.style.setProperty('--notice-height',`${box.getBoundingClientRect().height}px`);
+    if (!error) noticeTimer=setTimeout(()=>{box.hidden=true;document.documentElement.style.setProperty('--notice-height','0px');},14000);
+  }
+  function safely(action) {
+    return async event => {
+      try {await action(event);} catch(error) {message(error.message||String(error),true);}
+    };
+  }
+  function item() {return state.packet.items[state.selected];}
+  function entry(id=item().review_id) {
+    return state.entries[id] ||= {draft:null,history:[],skipped_reason:'',editing:false,amendment_reason:''};
+  }
+  function status(record) {
+    if (record.response_state==='technical-failure') return 'technical';
+    const e=state.entries[record.review_id];
+    if (e?.skipped_reason) return 'skipped';
+    if (e?.editing || e?.draft) return 'draft';
+    if (e?.history.length) return 'submitted';
+    return 'pending';
+  }
+  function draftObject() {
+    return {format:contract.draft_format,packet_sha256:state.identity.packet_sha256,
+      contract_sha256:definition.sha256,rubric_revision:contract.revision,review_pass:'blind',
+      reviewer_id:state.reviewer,practice_only:state.identity.practice_only,
+      selected_review_id:item().review_id,entries:clone(state.entries)};
+  }
+  function requireReviewer() {C.text(state.reviewer,'Reviewer alias',true,120);}
+  function storeKey(alias=state.reviewer) {return `relata-rc005-review:${state.identity.practice_only?'practice:':''}${state.identity.packet_sha256}:${encodeURIComponent(alias)}`;}
+  function metaKey() {return `relata-rc005-review:last:${state.identity.practice_only?'practice:':''}${state.identity.packet_sha256}`;}
+  function updateSaveState(text) {byId('save-state').textContent=text;}
+  function saveLocal() {
+    if (!state.remember) return;
+    try {
+      requireReviewer();
+      const draft=draftObject(); C.validateDraft(draft,state.packet,state.identity,contract);
+      localStorage.setItem(storeKey(),JSON.stringify(draft));
+      localStorage.setItem(metaKey(),state.reviewer);
+      state.stored=state.revision;
+      updateSaveState('已保存至此浏览器 · 保留评审与引用，不复制完整原包');
+      byId('forget').hidden=false;
+    } catch(error) {
+      state.remember=false; byId('remember').checked=false;
+      updateSaveState('本机保存失败 · 内存草稿仍在，请下载保存');
+      message(`本机保存未成功：${error.message}。可以继续工作并下载草稿。`,true);
+    }
+  }
+  function changed() {
+    state.revision++;
+    if (state.remember) {
+      updateSaveState('正在保存至此浏览器…'); clearTimeout(storageTimer); storageTimer=setTimeout(saveLocal,250);
+    } else updateSaveState('内存草稿已更新 · 尚未下载本次修改');
+    renderQueue();
+    byId('judgment-state').textContent=labels[status(item())];
+    const e=state.entries[item().review_id];
+    if(e && (!e.history.length||e.editing))byId('discard-edit').hidden=!e.draft&&!e.editing;
+  }
+  function restore(draft) {
+    C.validateDraft(draft,state.packet,state.identity,contract);
+    state.entries=clone(draft.entries); state.reviewer=draft.reviewer_id;
+    state.selected=state.packet.items.findIndex(i=>i.review_id===draft.selected_review_id);
+    byId('reviewer').value=state.reviewer; state.revision++; state.exported=state.revision;
+    renderItem(false); renderQueue();
+  }
+  function restoreLocal(alias) {
+    try {
+      const raw=localStorage.getItem(storeKey(alias));
+      if (!raw) return false;
+      const draft=C.strictJSON(raw); C.validateDraft(draft,state.packet,state.identity,contract);
+      restore(draft); state.remember=true; byId('remember').checked=true; state.stored=state.revision;
+      byId('forget').hidden=false; updateSaveState('已恢复此浏览器的草稿 · 正式导入仍由 CLI 确认');
+      message('已恢复同一源包、同一合同和同一 reviewer 的本机草稿。'); return true;
+    } catch(error) {state.restoreError=`本机草稿未载入：${error.message}。当前工作没有被替换。`;message(state.restoreError,true);return false;}
+  }
+  async function loadPacket(raw,practice=false,sequence=++loadSequence) {
+    C.need(raw.byteLength<=contract.max_packet_bytes,'文件超过 8 MiB 限制。');
+    const packet=C.validatePacket(C.strictJSON(decoder.decode(raw)),practice);
+    const hash=await C.sha256(raw);
+    if (sequence!==loadSequence) return;
+    if (state && Object.values(state.entries).some(e=>e.draft||e.history.length||e.skipped_reason)) {
+      if (!confirm('换包会关闭当前内存工作区。请确认已经下载草稿，或已开启并成功完成本机保存。继续换包？')) return;
+    }
+    clearTimeout(storageTimer);
+    state={packet,identity:{packet_sha256:hash,contract_sha256:definition.sha256,practice_only:practice},
+      entries:Object.create(null),selected:0,reviewer:'',remember:false,revision:0,exported:0,stored:0};
+    byId('landing').hidden=true; byId('workspace').hidden=false;
+    byId('reviewer').value=''; byId('remember').checked=false; byId('forget').hidden=true;
+    byId('queue-search').value=''; byId('queue-filter').value='all';
+    byId('packet-kind').textContent=`${practice?`合成练习 · ${packet.items.length} 个位置`:'RC-005 · 144 个位置'} · 包 ${hash.slice(0,8)}`;
+    byId('packet-kind').title=`原包字节 SHA-256: ${hash}`;
+    updateSaveState('只在内存 · 请及时下载草稿');
+    let restored=false;
+    try {const alias=localStorage.getItem(metaKey()); if(alias) restored=restoreLocal(alias);} catch {}
+    if (!restored) {renderItem(false);renderQueue();message(state.restoreError||(practice?'已打开作者编写的合成练习包。所有导出都会保留 practice-only 标记。':'匿名包已读入。这里只检查格式；原运行与导出来源由 operator 的 CLI 验证。'),Boolean(state.restoreError));}
+    window.scrollTo({top:0,behavior:'instant'});
+  }
+  function renderQueue() {
+    if (!state) return;
+    const query=byId('queue-search').value.trim().toLowerCase(); const filter=byId('queue-filter').value;
+    const queueKey=[state.selected,query,filter,...state.packet.items.map(record=>`${status(record)}:${Boolean(state.entries[record.review_id]?.history.length)}`)].join('|');
+    // A 144-position queue need not replace its controls on every text edit.
+    // A nonempty search still re-evaluates the edited notes and quotations.
+    if(queueKey===state.queueKey&&!query)return;
+    state.queueKey=queueKey;
+    const counts={pending:0,draft:0,submitted:0,skipped:0,technical:0};
+    for (const record of state.packet.items) counts[status(record)]++;
+    const currentJudgments=Object.values(state.entries).filter(e=>e.history.length).length;
+    const reviewable=state.packet.items.length-counts.technical;
+    byId('progress').textContent=`${currentJudgments} / ${reviewable}`;
+    byId('progress-detail').textContent=`${state.packet.items.length} 位置 · ${counts.technical} 技术失败 · ${counts.draft} 草稿 · ${counts.skipped} 暂跳过。分子是已有提交的回答，不是得分。`;
+    const list=byId('queue'); list.replaceChildren(); let matches=0;
+    state.packet.items.forEach((record,index)=>{
+      const kind=status(record),e=state.entries[record.review_id];
+      const haystack=[record.review_id,record.response||'',e?JSON.stringify(e):''].join(' ').toLowerCase();
+      if ((filter!=='all' && filter!==kind) || (query && !haystack.includes(query))) return;
+      matches++;
+      const button=element('button',undefined,'queue-item'); button.type='button'; button.dataset.reviewId=record.review_id;
+      button.setAttribute('aria-current',String(index===state.selected));
+      button.append(element('span',String(index+1).padStart(3,'0'),'queue-number'));
+      const name=element('span'); name.append(element('span',record.review_id.slice(-8),'queue-alias'),element('span',labels[kind],'queue-state')); button.append(name);
+      button.addEventListener('click',()=>navigate(index)); list.append(button);
+    });
+    byId('queue-empty').hidden=matches!==0;
+    byId('download-reviews').textContent=`导出已提交判断${currentJudgments?` (${currentJudgments})`:''}`;
+    byId('mobile-item').textContent=`${state.selected+1} / ${state.packet.items.length} · ${item().review_id.slice(-8)} · ${labels[status(item())]}`;
+  }
+  function setMobilePanel(name,restorePosition=false) {
+    if(restorePosition) mobilePositions[mobilePanel]=window.scrollY;
+    document.querySelector('.reading-area').dataset.mobilePanel=name;
+    mobilePanel=name;
+    byId('show-source').setAttribute('aria-pressed',String(name==='source'));
+    byId('show-form').setAttribute('aria-pressed',String(name==='form'));
+    if(restorePosition&&innerWidth<=700) {
+      const tabs=document.querySelector('.mobile-tabs');
+      const start=tabs.getBoundingClientRect().top+window.scrollY-byId('message').getBoundingClientRect().height;
+      window.scrollTo({top:mobilePositions[name]??start,behavior:'instant'});
+    }
+  }
+  function navigate(index) {
+    if(index<0||index>=state.packet.items.length) return;
+    state.selected=index; renderItem(); renderQueue();
+    byId('item-title').tabIndex=-1;byId('item-title').focus({preventScroll:true});
+    if(state.remember) saveLocal();
+  }
+  function renderItem(scroll=true) {
+    const record=item();
+    byId('skip-panel').hidden=true;
+    byId('position-label').textContent=`${state.identity.practice_only?'PRACTICE':'BLIND PASS'} / ${String(state.selected+1).padStart(3,'0')} OF ${state.packet.items.length}`;
+    byId('item-title').textContent=`回答 · ${record.review_id.slice(-8)}`;
+    byId('mobile-item').textContent=`${state.selected+1} / ${state.packet.items.length} · ${record.review_id.slice(-8)} · ${labels[status(record)]}`;
+    byId('case-boundary').textContent=record.context;
+    byId('packet-instructions').textContent=record.instructions;
+    byId('history').replaceChildren(...record.governing_history.map((event,index)=>{
+      const article=element('article',undefined,'history-event'); article.id=`history-H${index+1}`;
+      const head=element('div',undefined,'event-head');head.append(element('span',`H${index+1}`,'event-id'),element('span',`Session ${event.session} · ${event.role} · ${event.surface}`));
+      article.append(head,element('p',event.text));return article;
+    }));
+    byId('current').textContent=record.current.text;
+    byId('response-state').textContent=record.response_state==='technical-failure'?'技术失败 · 无回答':record.response===''?'完成 · 实际空字符串':!record.response.trim()?'完成 · 仅空白字符':'完成 · 文本';
+    byId('response').replaceChildren(record.response===null?element('p','没有收到回答；不作语义判断。','empty-response'):record.response===''?element('p','实际回答为空字符串。此位置仍可评审；请描述未完成之处或保留未决。','empty-response'):document.createTextNode(record.response));
+    if(record.response && !record.response.trim())byId('response').replaceChildren(element('p','原回答只含空白字符；下方以 JSON 转义展示，复制按钮仍返回原文。','empty-response'),element('code',JSON.stringify(record.response)));
+    byId('copy-response').disabled=record.response===null;
+    byId('rubric-label').textContent=`${contract.revision} · development worksheet。证据支持相对完整历史判断；实际送达材料的消费诊断另行记录。`;
+    byId('previous').disabled=state.selected===0; byId('next').disabled=state.selected===state.packet.items.length-1;
+    byId('mobile-next').disabled=state.selected===state.packet.items.length-1;
+    mobilePositions={};setMobilePanel('source'); renderForm();
+    if(scroll) document.querySelector('.position-bar').scrollIntoView({block:'start',behavior:'instant'});
+  }
+  function fieldDefinition(id,claim=false) {return (claim?contract.claim_fields:contract.dimensions).find(f=>f.id===id);}
+  function optionsFor(id,claim=false) {
+    if(claim&&id==='kind') return contract.claim_kind_options;
+    if(claim&&id==='support') return contract.claim_support_options;
+    return fieldDefinition(id,claim)?.options||[];
+  }
+  function formField(id,label,value,help,options=null) {
+    const wrapper=element('label',undefined,'field');wrapper.append(element('span',label,'field-label'));
+    let control;
+    if(options) {
+      control=element('select');const blank=element('option','请选择，或明确保留未决');blank.value='';control.append(blank);
+      for(const option of options){const e=element('option',option.label);e.value=option.value;control.append(e);}
+    } else control=element('textarea');
+    control.dataset.field=id;control.name=id;control.value=value||'';wrapper.append(control);
+    if(help) wrapper.append(element('span',help,'field-help'));
+    return wrapper;
+  }
+  function renderForm() {
+    const record=item(),e=entry();const technical=record.response_state==='technical-failure';
+    byId('technical-note').hidden=!technical;byId('judgment-form').hidden=technical;byId('judgment-actions').hidden=technical;
+    byId('judgment-state').textContent=labels[status(record)];
+    const locked=e.history.length>0&&!e.editing;
+    byId('submit-review').hidden=locked;byId('skip-review').hidden=locked;
+    byId('reopen-review').hidden=!locked;byId('discard-edit').hidden=locked||(!e.draft&&!e.editing);
+    const form=byId('judgment-form');form.replaceChildren();
+    if(!technical) {
+      const value=clone(e.draft||e.history.at(-1)||C.emptyForm());
+      const claims=element('fieldset',undefined,'form-section');claims.append(element('legend','01 / 回答表达了什么'));
+      claims.append(element('p',fieldDefinition('claims').help,'field-help'));
+      value.claims.forEach((claim,index)=>{
+        const block=element('div',undefined,'claim');block.dataset.claim=index;
+        const heading=element('div',undefined,'claim-heading');heading.append(element('strong',`字句 ${index+1}`));
+        const remove=element('button','移除');remove.type='button';remove.disabled=locked;
+        remove.addEventListener('click',()=>{captureForm();const current=entry();if(current.draft.claims[index].quote&&!confirm('移除这项尚未提交的字句？已提交历史会保留。'))return;current.draft.claims.splice(index,1);changed();renderForm();});heading.append(remove);block.append(heading);
+        for(const id of ['quote','kind','attribution','support']) {
+          const definition=fieldDefinition(id,true);
+          block.append(formField(id,definition.label,claim[id],definition.help,['kind','support'].includes(id)?optionsFor(id,true):null));
+        }
+        block.append(element('p','引用完整历史的位置（H1…）或当前问题。','field-help'));
+        const refs=element('div',undefined,'evidence-checks');
+        for(const ref of [...record.governing_history.map((_,i)=>`H${i+1}`),'current']) {
+          const label=element('label');const check=element('input');check.type='checkbox';check.value=ref;check.dataset.ref=ref;check.checked=claim.evidence_refs.includes(ref);label.append(check,document.createTextNode(ref));refs.append(label);
+        }
+        block.append(refs,formField('rationale','这项字句的理由',claim.rationale,'解释依据、时态、归属或未决之处。'));claims.append(block);
+      });
+      const add=element('button','＋ 添加一项字句');add.type='button';add.disabled=locked;
+      add.addEventListener('click',()=>{captureForm();entry().draft.claims.push({quote:'',kind:'',attribution:'',support:'',evidence_refs:[],rationale:''});changed();renderForm();byId('judgment-form').querySelector('.claim:last-of-type textarea')?.focus();});claims.append(add);form.append(claims);
+      const actions=element('fieldset',undefined,'form-section');actions.append(element('legend','02 / 行动、澄清与使用'));
+      for(const id of ['current_action','clarification','selective_use','confidence_limits']) {const d=fieldDefinition(id);actions.append(formField(id,d.label,value[id],d.help,d.options));}form.append(actions);
+      const guess=element('fieldset',undefined,'form-section');guess.append(element('legend','03 / 盲化诊断与理由'));
+      for(const id of ['guessability','guess_confidence']) {const d=fieldDefinition(id);guess.append(formField(id,d.label,value[id],d.help,d.options));}
+      guess.append(formField('guess_cue','条件猜测的文字线索',value.guess_cue,'无法判断时可留空；其他猜测需要指明回答中的线索。'),formField('rationale','整体理由与未决',value.rationale,'综合说明行动、澄清和限制；保留不同的合法解释。'),formField('notes','补充笔记（可选）',value.notes,'使用不含个人身份或其他私人材料的说明。'));
+      if(e.editing&&e.history.length) guess.append(formField('amendment_reason','为什么修订之前的判断？',e.amendment_reason,'新判断保留旧记录，并明确替代当前版本。'));
+      form.append(guess);
+      for(const control of form.querySelectorAll('textarea,select,input')) control.disabled=locked;
+    }
+    renderHistory();
+  }
+  function captureForm() {
+    if(!state||item().response_state!=='complete') return;
+    const e=entry();if(e.history.length&&!e.editing)return;
+    const form=byId('judgment-form'),value=C.emptyForm();
+    value.claims=[...form.querySelectorAll('.claim')].map(block=>{
+      const claim={};for(const id of ['quote','kind','attribution','support','rationale'])claim[id]=block.querySelector(`[data-field="${id}"]`).value;
+      claim.evidence_refs=[...block.querySelectorAll('input[data-ref]:checked')].map(check=>check.value);return claim;
+    });
+    for(const id of C.formFields.filter(id=>id!=='claims')) value[id]=form.querySelector(`:scope > fieldset [data-field="${id}"]`)?.value||'';
+    // A claim also has rationale; the overall rationale lives in section 03.
+    value.rationale=form.querySelector(':scope > fieldset:last-child [data-field="rationale"]').value;
+    e.draft=value;e.skipped_reason='';e.amendment_reason=form.querySelector('[data-field="amendment_reason"]')?.value||'';
+  }
+  function renderHistory() {
+    const target=byId('review-history');target.replaceChildren();
+    for(const record of entry().history.slice().reverse()) {
+      const details=element('details');details.append(element('summary',`${record.supersedes?'修订':'首份'}判断 · ${record.created_at.replace('T',' ').replace('Z',' UTC')}`));
+      const content=element('div');
+      if(record.amendment_reason)content.append(element('p',`修订理由：${record.amendment_reason}`));
+      content.append(element('p',record.rationale));
+      for(const id of ['current_action','clarification','selective_use','confidence_limits','guessability','guess_confidence']) {
+        content.append(element('p',`${fieldDefinition(id).label}：${optionsFor(id).find(o=>o.value===record[id])?.label||record[id]}`));
+      }
+      for(const claim of record.claims)content.append(element('p',`「${claim.quote}」 · ${claim.support} · ${claim.evidence_refs.join(', ')||'未引位置'} · ${claim.rationale}`));
+      details.append(content);target.append(details);
+    }
+  }
+  function download(value,name) {
+    const bytes=JSON.stringify(value,null,2)+'\n';
+    const url=URL.createObjectURL(new Blob([bytes],{type:'application/json;charset=utf-8'}));
+    const link=element('a');link.href=url;link.download=name;link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+  }
+  function baseBatch() {
+    return {format:contract.batch_format,packet_sha256:state.identity.packet_sha256,contract_sha256:definition.sha256,
+      rubric_revision:contract.revision,review_pass:'blind',reviewer_id:state.reviewer,practice_only:state.identity.practice_only};
+  }
+  byId('packet-file').addEventListener('change',safely(async event=>{
+    const file=event.target.files[0];event.target.value='';if(!file)return;
+    const sequence=++loadSequence;C.need(file.size<=contract.max_packet_bytes,'文件超过 8 MiB 限制。');
+    const bytes=await file.arrayBuffer();if(sequence!==loadSequence)return;
+    const decoded=C.strictJSON(decoder.decode(bytes));
+    if(decoded.practice_only===true) {
+      C.shape(decoded,['practice_only','packet'],'练习包');
+      await loadPacket(encode(JSON.stringify(decoded.packet,null,2)+'\n'),true,sequence);
+    } else await loadPacket(bytes,false,sequence);
+  }));
+  byId('practice').addEventListener('click',safely(()=>loadPacket(encode(JSON.stringify(demo.packet,null,2)+'\n'),true)));
+  byId('judgment-form').addEventListener('input',()=>{captureForm();changed();});
+  byId('judgment-form').addEventListener('change',()=>{captureForm();changed();});
+  byId('submit-review').addEventListener('click',safely(()=>{
+    requireReviewer();captureForm();const e=entry(),record=item();C.validateForm(e.draft,record,contract);
+    const supersedes=e.history.at(-1)?.judgment_id||null;
+    if(supersedes)C.text(e.amendment_reason,'修订理由');
+    const bytes=crypto.getRandomValues(new Uint8Array(16));
+    const judgment={judgment_id:Array.from(bytes,b=>b.toString(16).padStart(2,'0')).join(''),review_id:record.review_id,
+      supersedes,amendment_reason:supersedes?e.amendment_reason:'',created_at:new Date().toISOString(),...clone(e.draft)};
+    C.validateRecord(judgment,record,contract);e.history.push(judgment);e.draft=null;e.editing=false;e.amendment_reason='';e.skipped_reason='';
+    changed();renderForm();message('本工作区已保留这条判断。导出后由 operator 的 CLI 验证并导入研究记录。');
+  }));
+  byId('reopen-review').addEventListener('click',()=>{const e=entry();e.editing=true;e.draft=Object.fromEntries(C.formFields.map(key=>[key,clone(e.history.at(-1)[key])]));changed();renderForm();});
+  byId('discard-edit').addEventListener('click',()=>{if(!confirm('撤回这次尚未提交的编辑？此前已提交判断会保留。'))return;const e=entry();e.draft=null;e.editing=false;e.amendment_reason='';changed();renderForm();});
+  byId('skip-review').addEventListener('click',()=>{
+    byId('skip-panel').hidden=false;byId('skip-reason').value=entry().skipped_reason;byId('skip-reason').focus();
+  });
+  byId('confirm-skip').addEventListener('click',safely(()=>{
+    const reason=byId('skip-reason').value;C.text(reason,'留待回访的原因');
+    const e=entry();e.skipped_reason=reason;changed();renderForm();message('已标为暂时跳过，已有草稿保留；它仍属于未完成评审。');
+    byId('skip-panel').hidden=true;byId('skip-review').focus();
+  }));
+  const cancelSkip=()=>{byId('skip-panel').hidden=true;byId('skip-review').focus();};
+  byId('cancel-skip').addEventListener('click',cancelSkip);
+  byId('skip-reason').addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();cancelSkip();}});
+  byId('download-draft').addEventListener('click',safely(()=>{requireReviewer();const draft=draftObject();C.validateDraft(draft,state.packet,state.identity,contract);download(draft,'rc005-review-draft.json');state.exported=state.revision;updateSaveState('已生成草稿下载 · 请确认浏览器保存了文件');}));
+  byId('draft-file').addEventListener('change',safely(async event=>{
+    const file=event.target.files[0];event.target.value='';if(!file)return;C.need(file.size<=contract.max_packet_bytes,'草稿超过 8 MiB。');
+    const draft=C.strictJSON(decoder.decode(await file.arrayBuffer()));C.validateDraft(draft,state.packet,state.identity,contract);
+    if(state.revision>state.exported&&!confirm('恢复文件会替换当前内存草稿。确认已经保留当前工作？'))return;
+    restore(draft);if(state.remember)saveLocal();message('草稿已恢复；已提交版本、未完成编辑与当前阅读位置均已保留。');
+  }));
+  byId('download-reviews').addEventListener('click',safely(()=>{
+    requireReviewer();const records=state.packet.items.flatMap(record=>entry(record.review_id).history);C.need(records.length,'尚无已提交判断；可以先下载未完成草稿。');
+    records.forEach(record=>C.validateRecord(record,state.packet.items.find(i=>i.review_id===record.review_id),contract));
+    download({...baseBatch(),records},'rc005-review-judgments.json');
+    message(`已生成 ${records.length} 份判断（含修订历史）的下载。草稿与暂跳过项未当作判断；研究导入状态仍以 CLI 为准。`);
+  }));
+  byId('reviewer').addEventListener('change',safely(event=>{
+    const alias=event.target.value.trim();try{C.text(alias,'Reviewer alias',true,120);}catch(error){event.target.value=state.reviewer;throw error;}
+    if(state.reviewer&&alias!==state.reviewer&&Object.values(state.entries).some(e=>e.draft||e.history.length||e.skipped_reason)) {
+      if(!confirm('更换 reviewer 会开始独立评审。请确认已保存原 reviewer 的草稿。继续？')){event.target.value=state.reviewer;return;}
+      if(state.remember)saveLocal();state.entries=Object.create(null);state.remember=false;byId('remember').checked=false;
+    }
+    state.reviewer=alias;if(!restoreLocal(alias)){changed();renderForm();}
+  }));
+  byId('remember').addEventListener('change',safely(event=>{
+    if(event.target.checked){try{requireReviewer();}catch(error){event.target.checked=false;throw error;}state.remember=true;saveLocal();}
+    else{state.remember=false;clearTimeout(storageTimer);updateSaveState('已停止本机自动保存 · 既有副本可用右侧按钮移除');}
+  }));
+  byId('forget').addEventListener('click',safely(()=>{localStorage.removeItem(storeKey());if(localStorage.getItem(metaKey())===state.reviewer)localStorage.removeItem(metaKey());state.remember=false;byId('remember').checked=false;byId('forget').hidden=true;clearTimeout(storageTimer);updateSaveState('本机副本已移除 · 当前内存草稿仍在');}));
+  byId('queue-search').addEventListener('input',renderQueue);byId('queue-filter').addEventListener('change',renderQueue);
+  byId('previous').addEventListener('click',()=>navigate(state.selected-1));byId('next').addEventListener('click',()=>navigate(state.selected+1));
+  byId('next-pending').addEventListener('click',()=>{
+    const length=state.packet.items.length;for(let offset=1;offset<=length;offset++){const index=(state.selected+offset)%length;if(['pending','draft','skipped'].includes(status(state.packet.items[index]))){navigate(index);return;}}message('本批所有可评审回答都已有提交判断。');
+  });
+  byId('show-source').addEventListener('click',()=>setMobilePanel('source',true));byId('show-form').addEventListener('click',()=>setMobilePanel('form',true));
+  byId('mobile-next').addEventListener('click',()=>navigate(state.selected+1));
+  byId('copy-response').addEventListener('click',safely(async()=>{try{await navigator.clipboard.writeText(item().response);message('已复制原样回答。');}catch{message('浏览器未允许复制；可在原样回答中直接选择文字。',true);}}));
+  byId('change-packet').addEventListener('click',()=>{byId('packet-file').click();});
+  new ResizeObserver(()=>document.documentElement.style.setProperty('--notice-height',`${byId('message').getBoundingClientRect().height}px`)).observe(byId('message'));
+  addEventListener('beforeunload',event=>{if(state&&state.revision>state.exported&&(!state.remember||state.stored<state.revision)){event.preventDefault();event.returnValue='';}});
+  addEventListener('keydown',event=>{if(!state||event.isComposing||!event.altKey)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();navigate(state.selected+(event.key==='ArrowLeft'?-1:1));}});
+})();
+</script>
+</body>
+</html>

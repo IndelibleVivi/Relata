@@ -56,6 +56,7 @@ Maintainer 于 2026-10-22 要求为 Relata + AMS 提出并实现下一研究方�
 | [更正传播](research/correction-propagation-study.md)／[多语言语义检索](research/semantic-retrieval-study.md) | 比较与设计研究 drafts | 基于来源的比较与 authored 开发表例；没有新系统运行、encoder 定案或 accepted evidence |
 | Continuity benefit / selective-use 材料 | 5 组作者化 development families／10 views；RC-006 八格设计 | 无 subject run、独立问题作者、held-out data 或人类校准；accepted-case 必要性 gate 不变 |
 | [Future-question 离线 review](research/future-question-memory/README.md) | 固定材料 input export、精确有理数 ideal-lookup 分析、prepare/verify/import/盲评/recompute tooling | 仅本地导入与完整性检查；没有 subject执行、导入研究结果、人类校准或accepted scoring contract |
+| [RC-005 首次盲评工作流](case-lab/reviews/workbench/README.md) | 离线浏览器评审台、可恢复草稿／修订、原运行绑定的追加导入／报告 CLI；七项作者练习 | 仅工程工作流与描述性判断记录；无独立人类 review、accepted rubric、新系统运行或公开结果 |
 | Evaluator calibration | plan 与 authored E0 fixtures | 无 reviewer data 或 validated boundary；评审包必须保留治理该回答的证据 |
 | Community contribution path | public-safe governance/templates | restricted contribution path 尚未实际使用 |
 | Provider 兼容性 smoke／[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) | 已接受的有限工程检查；operator-owned，repository 无执行入口或公共 replay command | 仅覆盖请求／返回解析、形式处理、usage／identity 可见性、向量维数、finite values 与批次顺序；运行记录保留在私有侧；无 memory-system 结果、语义主张或发布 |
@@ -75,7 +76,7 @@ Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不�
 
 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) 于 2026-10-23 接受，仅激活 [RC-005 → pinned Mem0 执行包](experiments/rc005-native-execution-packet.md)。固定 study CLI 覆盖 54 个 reader 预检、36 个强原文对照和 54 个 native 回答位置；源码实现与离线 plumbing 检查不证明真实可运行性或语义成功。选用既有 generation entitlement 与本地 Qwen3-Embedding-0.6B-Q8_0/1024；全包最多 300 chat／500 embedding client dispatch，包含失败及诊断，不充值、不走收费 fallback。Native state、attempts、回答和未评审盲包留在 ignored local artifacts。正式 benchmark promotion、其他 study、Tilia 产品实现、公开结果、hosting、外联与 license 保留各自边界。[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 仍是独立兼容性例外；配置匹配的接口证据可复用。
 
-- **自己的 benchmark：** 通过现有 [Case Lab](case-lab/README.zh-CN.md) 推进案例、controls 与评价方法。在各自既定范围内使用[离线演练](experiments/offline-rehearsal.md)和[candidate 输入审计](experiments/continuity-input-audit.md)，无需等待第三方交分数。这些工具既不执行 subject，也不授予独立兼容性 smoke 的 provider 调用权限，均不建立系统质量结论。
+- **自己的 benchmark：** 通过现有 [Case Lab](case-lab/README.zh-CN.md) 推进案例、controls 与评价方法。在各自既定范围内使用[离线演练](experiments/offline-rehearsal.md)和[candidate 输入审计](experiments/continuity-input-audit.md)，无需等待第三方交分数。离线演练执行明确标记的 scripted double，输入审计不执行 subject；两者不授予 provider 调用权限，也不建立系统质量结论。
 - **系统样本研究空间：** 从[十份源码研究 drafts](systems/source-studies/README.md) 与[架构图集](systems/architecture-atlas/README.md) 推进 [agent-memory inquiry](research/agent-memory-inquiry.md)。Review source fidelity，比较机制与竞争解释，将具体问题带入案例或设计研究。这项工作独立于 live evaluation 与 case promotion gate 推进。
 - **Incubator：** 用[自有记忆设计研究](research/own-memory-architecture.md)与[测试映射](research/memory-design-test-map.md)，以现有案例和更简单的 controls 检查候选机制，为独立 Tilia 研究向量检索与编码器选项。分开源码观察、设计假设和执行结果；已知案例是开发表例，不能冒充 held-out validation。保留的早期实验是证据，不是继续实现的指令。
 

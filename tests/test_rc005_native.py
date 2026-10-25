@@ -227,6 +227,24 @@ class RC005Tests(unittest.TestCase):
             self.assertEqual(initial,packet_path.read_bytes())
             self.assertEqual(mapping_bytes,map_path.read_bytes())
 
+    def test_review_snapshot_is_pure_and_matches_export(self):
+        with tempfile.TemporaryDirectory() as d:
+            out=self.review_sources(Path(d),failure=True)
+            before={p.relative_to(out):p.read_bytes() for p in out.rglob('*') if p.is_file()}
+            snapshots=study.review_snapshot(out)
+            after={p.relative_to(out):p.read_bytes() for p in out.rglob('*') if p.is_file()}
+            self.assertEqual(before,after)
+            self.assertEqual(len(snapshots),144)
+            self.assertEqual(sum(body['response'] is None for body in snapshots.values()),1)
+            self.assertEqual(sum(body['response']=='' for body in snapshots.values()),1)
+            study.Study.export_review(out)
+            packet=json.loads((out/'review-packet.json').read_text())
+            exported={item['review_id']:item for item in packet['items']}
+            mapping=json.loads((out/'review-map.private.json').read_text())
+            for item in mapping['items']:
+                self.assertEqual(item['body'],snapshots[item['cell_id']])
+                self.assertEqual(exported[item['review_id']],dict(item['body'],review_id=item['review_id']))
+
     def test_review_export_refuses_unclosed_or_conflicting_packet(self):
         for status in ('pending','started','uncertain','blocked','failed-or-uncertain'):
             with tempfile.TemporaryDirectory() as d:

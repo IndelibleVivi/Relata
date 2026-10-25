@@ -1,0 +1,196 @@
+{
+  "format": "rc005-review-contract-1",
+  "revision": "continuity-development-2026-10-25",
+  "status": "development-worksheet-not-accepted-rubric",
+  "summary": "为 RC-005 首次匿名人工评审定义本地工作台、导入和描述性报告的字段与边界。它不是已接受量表、自动评分器、模型裁决、系统结果或人类校准证据。",
+  "max_packet_bytes": 8388608,
+  "packet_format": "review-packet-1",
+  "batch_format": "rc005-review-batch-1",
+  "draft_format": "rc005-review-draft-1",
+  "review_pass": "blind",
+  "draft_fields": [
+    {"id": "format", "label": "工作区格式", "help": "固定为 rc005-review-draft-1；这是浏览器恢复工作区，不是研究导入。"},
+    {"id": "packet_sha256", "label": "评审包字节摘要", "help": "与打开评审包时计算的精确文件字节 SHA-256 一致。"},
+    {"id": "contract_sha256", "label": "契约字节摘要", "help": "与当前共享契约的精确文件字节 SHA-256 一致。"},
+    {"id": "rubric_revision", "label": "量表修订", "help": "必须等于共享契约 revision。"},
+    {"id": "review_pass", "label": "评审阶段", "help": "当前固定为 blind。"},
+    {"id": "reviewer_id", "label": "评审者代号", "help": "与批次级 reviewer_id 一致。"},
+    {"id": "practice_only", "label": "仅练习", "help": "必须来自所打开工作区，不得在浏览器中切换。"},
+    {"id": "selected_review_id", "label": "当前位置", "help": "恢复时选中的 review_id；null 表示尚未选择。"},
+    {"id": "entries", "label": "评审条目", "help": "以 review_id 为键，保存每项未完成表单、提交历史、跳过原因、编辑状态和修订理由。"}
+  ],
+  "draft_entry_fields": [
+    {"id": "draft", "label": "未完成表单", "help": "null 或一个尚未提交的局部表单；只用于恢复。"},
+    {"id": "history", "label": "已提交判断", "help": "该 reviewer 与 review_id 已提交的全部记录，保留原 judgment_id、supersedes、amendment_reason 和 created_at。"},
+    {"id": "skipped_reason", "label": "跳过原因", "help": "可选文字；跳过不是语义判断，也不进入完成分母。"},
+    {"id": "editing", "label": "编辑中", "help": "当前 UI 状态，不进入判断记录。"},
+    {"id": "amendment_reason", "label": "修订理由草稿", "help": "恢复 UI 输入；提交修订记录时写入 amendment_reason。"}
+  ],
+  "draft_form_fields": [
+    {"id": "claims", "label": "表达内容", "help": "局部表单可以未完成；提交时必须满足 claim_fields 规则。"},
+    {"id": "current_action", "label": "当前行动", "help": "局部表单可为空；提交时必须是契约选项。"},
+    {"id": "clarification", "label": "澄清", "help": "局部表单可为空；提交时必须是契约选项。"},
+    {"id": "selective_use", "label": "选择性使用", "help": "局部表单可为空；提交时必须是契约选项。"},
+    {"id": "confidence_limits", "label": "置信与限制", "help": "局部表单可为空；提交时必须是契约选项。"},
+    {"id": "guessability", "label": "条件可猜测性", "help": "局部表单可为空；提交时必须是契约选项。"},
+    {"id": "guess_confidence", "label": "猜测置信", "help": "局部表单可为空；提交时必须是契约选项。"},
+    {"id": "guess_cue", "label": "猜测线索", "help": "cannot-tell 可为空；其他猜测提交时必须指出文本线索。"},
+    {"id": "rationale", "label": "总体理由", "help": "局部表单可为空；提交时必须非空。"},
+    {"id": "notes", "label": "备注", "help": "可为空；不得写入私人数据。"}
+  ],
+  "draft_to_record_rule": "浏览器导出的研究导入仍是现有 batch 形状，并携带该 reviewer 的累计已提交 journal。record 的 review_id、judgment_id、supersedes、amendment_reason、created_at、claims 和六个评审维度直接取自 history 中的原始提交；不得由未完成表单覆盖历史。SKIPPED、editing、selected_review_id 和 skipped_reason 只服务恢复，不进入 batch。新判断仍由浏览器生成稳定 judgment_id；修订的 supersedes 是该 reviewer 此项最后一条已提交 record，最终 CLI 以权威存储链验证。",
+  "packet_sha256_rule": "浏览器与 CLI 都计算 review-packet.json 的精确 UTF-8 文件字节，包括末尾换行；不得规范化 JSON 或重新序列化后计算。",
+  "practice_rule": "练习包只含公开合成的成人 RC-005 材料和作者编写的练习回答。practice_only 必须贯穿草稿、批次和报告；练习不绑定真实运行，也不产生研究结果。",
+  "response_rule": "response=null 且 response_state=technical-failure 的位置不可评审；response 为空白字符串且 response_state=complete 的位置可评审，claims 必须为零，不要求引用空白。技术状态不是语义零分。",
+  "judgment_chain_rule": "每名 reviewer 对每个 review_id 在相同 rubric/pass 下维护一条追加链。首次提交 supersedes=null；之后只能明确 supersede 本链当前 judgment，并填写 amendment_reason。拒绝陈旧分叉、跨项或跨 reviewer 的 supersession，以及一次提交中的重复 judgment_id。累计提交可按回答组织历史；已存 ID 必须保持相同内容和归属，仅追加新判断。全相同重试返回 already-imported，不写入新批次。",
+  "blind_rule": "首次盲评位置不含 condition、stage、variant、system、provider、实际送达证据、作者答案 key 或私有 condition map。内容仍可能透露暴露条件；匿名化不等于已证明盲化有效。",
+  "support_rule": "claim.support 只相对此处提供的 governing history 判断，不根据实际送达证据推断系统消费责任。引用与 exact quote 用于检查判断依据，不自动证明语义正确。",
+  "batch_fields": [
+    {"id": "format", "label": "批次格式", "help": "固定为 rc005-review-batch-1。"},
+    {"id": "packet_sha256", "label": "评审包字节摘要", "help": "精确 review-packet.json UTF-8 文件字节的 SHA-256。"},
+    {"id": "contract_sha256", "label": "契约字节摘要", "help": "精确 rc005-review-contract.json UTF-8 文件字节的 SHA-256。"},
+    {"id": "rubric_revision", "label": "量表修订", "help": "必须等于共享契约 revision；不同修订不得混算。"},
+    {"id": "review_pass", "label": "评审阶段", "help": "当前只接受 blind。"},
+    {"id": "reviewer_id", "label": "评审者代号", "help": "非空且不超过 120 字符的本地代号；不得放入密码或个人敏感信息。"},
+    {"id": "practice_only", "label": "仅练习", "help": "练习工作区必须为 true；正式工作流不接受 true。"},
+    {"id": "records", "label": "判断记录", "help": "同一批次可含多项；整批先验证，再原子追加。"}
+  ],
+  "record_fields": [
+    {"id": "judgment_id", "label": "判断 ID", "help": "32 位小写十六进制；在全部历史批次中唯一。"},
+    {"id": "review_id", "label": "盲评 ID", "help": "必须来自当前评审包。"},
+    {"id": "supersedes", "label": "替代判断", "help": "首次判断为 null；修订必须是同 reviewer、同 review_id、同 rubric/pass 链的当前 judgment。"},
+    {"id": "amendment_reason", "label": "修订理由", "help": "首次提交为空字符串；修订必须说明为何不再维持此前判断。"},
+    {"id": "created_at", "label": "提交时间", "help": "ISO UTC 时间，以 Z 结尾。"},
+    {"id": "claims", "label": "表达内容", "help": "将回答拆成可检查的原文字句；非空白回答至少一项，空白字符串必须为空列表。"},
+    {"id": "current_action", "label": "当前行动", "help": "判断回答所建议、承诺或采取的行动是否落在完整历史支持的行动范围内。"},
+    {"id": "clarification", "label": "澄清", "help": "区分具体必要提问、重复负担、过度宽泛和不需要澄清。"},
+    {"id": "selective_use", "label": "选择性使用", "help": "描述历史约束在回答中的可见使用；不提及历史不等于没有使用。"},
+    {"id": "confidence_limits", "label": "置信与限制", "help": "判断回答是否承认缺口、条件或不确定性。"},
+    {"id": "guessability", "label": "条件可猜测性", "help": "这是盲化诊断，不是回答质量。"},
+    {"id": "guess_confidence", "label": "猜测置信", "help": "与回答质量分开记录。"},
+    {"id": "guess_cue", "label": "猜测线索", "help": "cannot-tell 可为空；其他猜测必须指出文本线索。"},
+    {"id": "rationale", "label": "总体理由", "help": "非空说明判断依据、歧义和限制。"},
+    {"id": "notes", "label": "备注", "help": "可选补充；不得写入私人数据。"}
+  ],
+  "claim_fields": [
+    {"id": "quote", "label": "原文字句", "help": "回答中的非空精确子串；不把关键字符串出现自动视为实际采用。"},
+    {"id": "kind", "label": "表达类型", "help": "事实、提议、问题、承诺或歧义。"},
+    {"id": "attribution", "label": "归属与来源", "help": "说明提出者、作者、接受者、报告者或当前问题所归属的对象。"},
+    {"id": "support", "label": "证据支持", "help": "只相对提供的完整历史判断。"},
+    {"id": "evidence_refs", "label": "证据位置", "help": "有序 governing_history 的 H1..Hn，或 current；列表内容不得重复。unsupported／underdetermined 可以留空；supported／contradicted 至少引用一项。"},
+    {"id": "rationale", "label": "字句理由", "help": "解释为何将这些字句视为该表达类型及当前支持状态。"}
+  ],
+  "dimensions": [
+    {
+      "id": "claims",
+      "label": "表达内容",
+      "help": "把事实、提议、问题、承诺与歧义分开；新创作可以是合法提议，已完成的共同工作则需历史支持。",
+      "options": []
+    },
+    {
+      "id": "current_action",
+      "label": "当前行动",
+      "help": "完整历史决定本案例支持的行动范围；允许存在多个合法行动。",
+      "options": [
+        {"value": "within", "label": "范围内", "help": "行动处于历史与当前任务支持的范围内。"},
+        {"value": "outside", "label": "范围外", "help": "行动与可见历史或当前任务冲突。"},
+        {"value": "unresolved", "label": "未决", "help": "现有材料不足以决定。"},
+        {"value": "not-applicable", "label": "不适用", "help": "回答没有可评审的行动。"}
+      ]
+    },
+    {
+      "id": "clarification",
+      "label": "澄清",
+      "help": "询问缺失信息与要求对方重复已有证据不是同一种行为。",
+      "options": [
+        {"value": "specific-necessary", "label": "具体且必要", "help": "针对真实缺口，最小化额外负担。"},
+        {"value": "unnecessary", "label": "不必要", "help": "已有证据足够，询问造成重复负担。"},
+        {"value": "insufficient", "label": "不够具体", "help": "虽提出问题，但无法推进任务。"},
+        {"value": "none", "label": "没有澄清", "help": "回答未提问；这不自动表示遗漏。"},
+        {"value": "unresolved", "label": "未决", "help": "无法确定是否应澄清。"}
+      ]
+    },
+    {
+      "id": "selective_use",
+      "label": "选择性使用",
+      "help": "记录历史约束、适当隐含使用、允许提及、侵入式重提或混合情况；沉默不等于未使用。",
+      "options": [
+        {"value": "required-constraint", "label": "必需约束", "help": "回答显式依赖完成当前任务所必需的历史约束。"},
+        {"value": "implicit", "label": "适当隐含", "help": "历史影响回答但不需逐字重述。"},
+        {"value": "permitted-mention", "label": "允许提及", "help": "提到相关历史，但不构成必要约束。"},
+        {"value": "intrusive", "label": "侵入式重提", "help": "历史出现挤压或不必要暴露当前语境。"},
+        {"value": "mixed", "label": "混合", "help": "同时存在适当与不适当的历史使用。"},
+        {"value": "not-applicable", "label": "不适用", "help": "没有可判断的历史使用。"},
+        {"value": "unresolved", "label": "未决", "help": "可见材料不足以判断。"}
+      ]
+    },
+    {
+      "id": "confidence_limits",
+      "label": "置信与限制",
+      "help": "区分承认缺口、过度断言、条件表达和混合情况；回答中的口头置信不是校准概率。",
+      "options": [
+        {"value": "acknowledged", "label": "承认限制", "help": "明确指出缺失事实、条件或不确定性。"},
+        {"value": "overstated", "label": "过度断言", "help": "超出可见证据作确定陈述。"},
+        {"value": "conditional", "label": "条件表达", "help": "以条件或备选方式安全表达。"},
+        {"value": "mixed", "label": "混合", "help": "同时存在不同置信处理。"},
+        {"value": "not-applicable", "label": "不适用", "help": "没有需要表达置信的断言。"},
+        {"value": "unresolved", "label": "未决", "help": "无法确定。"}
+      ]
+    },
+    {
+      "id": "guessability",
+      "label": "条件可猜测性",
+      "help": "猜测回答来自哪类历史暴露；这是盲化诊断，不是质量判断。",
+      "options": [
+        {"value": "cannot-tell", "label": "无法判断（cannot-tell）", "help": "回答未提供足以猜测方向的线索。"},
+        {"value": "limited-history", "label": "有限历史（limited-history）", "help": "更像当前问题或极少历史暴露。"},
+        {"value": "full-history", "label": "完整历史（full-history）", "help": "更像完整历史被看见或使用。"},
+        {"value": "selected-memory", "label": "选择记忆（selected-memory）", "help": "更像一段被选择或检索的历史材料。"},
+        {"value": "other", "label": "其他（other）", "help": "有线索，但不属于上述类别。"}
+      ]
+    },
+    {
+      "id": "guess_confidence",
+      "label": "猜测置信",
+      "help": "记录对条件猜测的把握；与回答质量分开。",
+      "options": [
+        {"value": "unsure", "label": "不确定（unsure）", "help": "几乎没有把握。"},
+        {"value": "low", "label": "低（low）", "help": "只有弱线索。"},
+        {"value": "medium", "label": "中（medium）", "help": "有明确但不决定性的线索。"},
+        {"value": "high", "label": "高（high）", "help": "线索很强，但仍不是事实证明。"}
+      ]
+    }
+  ],
+  "claim_kind_options": [
+    {"value": "fact", "label": "事实", "help": "回答提出可判断真伪的事实性内容。"},
+    {"value": "proposal", "label": "提议", "help": "回答提出未来可接受的创作或行动建议。"},
+    {"value": "question", "label": "问题", "help": "回答提出需要回应的疑问。"},
+    {"value": "commitment", "label": "承诺", "help": "回答承诺后续行动或持续做法。"},
+    {"value": "ambiguous", "label": "歧义", "help": "时态、指代或意图无法唯一解释。"}
+  ],
+  "claim_support_options": [
+    {"value": "supported", "label": "支持", "help": "提供的完整历史支持该字句的含义。"},
+    {"value": "contradicted", "label": "矛盾", "help": "提供的完整历史与该字句冲突。"},
+    {"value": "unsupported", "label": "无支持", "help": "历史没有提供所需依据；这不自动等于矛盾。"},
+    {"value": "underdetermined", "label": "未决", "help": "现有历史不足以判断。"}
+  ],
+  "limits": {
+    "reviewer_id": 120,
+    "quote": 20000,
+    "attribution": 2000,
+    "claim_rationale": 20000,
+    "guess_cue": 2000,
+    "rationale": 20000,
+    "notes": 20000,
+    "judgment_id": 32,
+    "review_id": 32
+  },
+  "report_semantics": {
+    "positions": "评审包中的全部位置，不把重复或相关位置解释为独立案例。",
+    "reviewable": "completed 状态的文本位置，包括空白字符串；technical failure 永不进入语义判断分母。",
+    "completion": "分别报告 reviewed、unreviewed、current judgments 与 historical judgments。",
+    "disagreement": "保留每名 reviewer 的当前判断、claim 级解释差异和多 reviewer 维度差异；不进行多数投票或合成 gold，不把不同分段自动判为语义矛盾。",
+    "limits": "reviewer_id 与文字字段上限按 Unicode code-point 字符数计算；packet、contract、batch 文件另有字节上限。",
+    "prohibited_claims": "不得生成回答准确率、质量总分、系统排名、模型裁决或已验证人类校准结论。"
+  }
+}

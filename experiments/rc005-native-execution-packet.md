@@ -120,6 +120,8 @@ ignored `experiments/artifacts/rc005-native/<run>/` 保存 plan/effective config
 
 只交付单个通用文件 `review-packet.json`：144 项随机打乱，各有随机 opaque `review_id`，不含 cell、condition、stage、variant ID、provider、作者 key 或具体错误文字。对应表另存 `review-map.private.json`，绑定 review ID、原 cell 与准确导出内容，不能随 packet 交给 reviewer；也不能交付整个 output root。重复导出复用同一随机顺序和 ID，核对当前来源与既有 packet 等价；内容变化、缺失对应表或已有冲突文件时拒绝覆盖。已有 ledger/source binding 继续保留，不再增加 hash 或通用 registry。没有 hard semantic scorer 或自动能力分。
 
+**首次盲评的离线回收：** [评审台与 operator guide](../case-lab/reviews/workbench/README.md) 将这个既有匿名包接到草稿恢复、逐字句／行动判断、明确修订和分歧报告。`tools/rc005_review.py prepare --run RUN --output REVIEW` 仅绑定已存在的关闭导出；`verify`、`import-review`、`report` 不读 runtime config，不创建 child、HTTP 或 ledger，也不改写原运行。核验所需原 run 与 private map 留在作者侧，浏览器只读取 `review-packet.json`。这是新增的离线评审实现，不改变具名执行预算、语义 unreviewed 状态、accepted rubric 或结果披露边界；P0 的独立后续包不由本格式自动接入。
+
 Private 报告逐项观察标题、提出者、分工、旧稿使用、任务完成、不必要追问、ingestion/retrieval/answer/maintenance/repair 成本与人工处置。Current-only 的合理澄清不自动算不必要追问。按 family 解释相关 repeats；judgment 比例不等于 response accuracy 或 independent human calibration。坏结果定位到可见配置／阶段，不能推翻整个架构类别。
 
 收口条件是每个回答位置完成或保留具体未执行原因，ledger 与原始证据能绑定，尚未评审明确标注。源码通过检查不等于已 live；真实运行不等于 accepted case／formal benchmark；本地保存不等于公开发布。独立图集／源码研究与 future-question work 不等待本包成功，也不自动纳入本包执行权限。

@@ -10,6 +10,10 @@
 
 Review expressed content, evidential support, action legitimacy and clarification separately. Governing history defines the case-bounded action region; delivered evidence determines what the reader could support. Preserve disagreement, condition guessability and technical states. Creative proposals and claims about completed shared work require different evidence judgments.
 
+## Implemented first-pass path
+
+The [offline review desk](workbench/README.md) and [versioned local field contract](rc005-review-contract.json) implement this worksheet's first blind pass: exact response quotations, history references, separate dimensions, saved drafts, explicit amendments and retained disagreement. Author-side import rechecks the existing native source. The seven-item authored practice path verifies tool use only. The diagnostic second pass, independent human calibration and case acceptance remain separate work; the finite-choice future-question format is not converted into this one.
+
 ## Material and stages
 
 First confirm packet/source/response identity using the existing export, without treating that identity as semantic validity. Use only original adult synthetic material. Calibrate reviewers on development examples before a frozen test set; record rubric changes and re-review affected judgments rather than silently replacing labels.

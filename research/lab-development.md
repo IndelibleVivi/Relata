@@ -4,11 +4,11 @@
 
 ## 中文摘要
 
-Relata 要成长为能够提出自己的问题、解释真实系统、产生可检查研究与设计认识的前沿记忆研究室。它自己的 benchmark research、system collection 与 incubator 互相支持，各有独立成果。成熟度来自一个问题能否沿来源、机制、实际观察和竞争解释转成有用认识，而不只来自工具数量或平台规模。本次建设把已有十系统研究接成五个问题导向的静态展品及离线 reader；研究与工程状态仍需分开，语义评审、有效案例、长期使用与更广系统比较仍是未完成工作。
+Relata 要成长为能够提出自己的问题、解释真实系统、产生可检查研究与设计认识的前沿记忆研究室。它自己的 benchmark research、system collection 与 incubator 互相支持，各有独立成果。成熟度来自一个问题能否沿来源、机制、实际观察和竞争解释转成有用认识，而不只来自工具数量或平台规模。当前建设把已有十系统研究接成五个问题导向的静态展品及离线 reader，也为具名 RC-005 补上可恢复的首次盲评、追加导入与分歧报告；研究与工程状态仍需分开，语义评审、有效案例、长期使用与更广系统比较仍是未完成工作。
 
 ## English summary
 
-Relata aims to become a memory research lab with its own questions, inspectable system studies and evidence-grounded design insight. Its benchmark research, system collection and incubator retain independent value. This development connects ten pinned source models into five question-led static exhibits with an offline reader and a generated GitHub-readable edition. Source synthesis, tooling, runtime observation, semantic review and accepted comparative claims remain distinct. The collection does not execute systems, publish private runs or select Tilia's architecture.
+Relata aims to become a memory research lab with its own questions, inspectable system studies and evidence-grounded design insight. Its benchmark research, system collection and incubator retain independent value. The collection connects ten pinned source models into five question-led static exhibits with an offline reader and a generated GitHub-readable edition. The fixed RC-005 study also has a resumable offline first-pass review desk with source-bound imports and descriptive disagreement reports. Source synthesis, tooling, runtime observation, semantic review and accepted comparative claims remain distinct. The collection does not execute systems, publish private runs or select Tilia's architecture.
 
 ## 为什么存在，哪些选择已经改变
 
@@ -35,11 +35,13 @@ Case author 和 reviewer 能判断一个任务为何需要历史、允许哪些�
 | 概念与研究 | 开放 research questions、竞争解释、来源方法和多份有界研究 | 形成了可读论证、有限输入性质与具体研究问题 | 定稿综合、反证、更多方法和使用情境；不能由文档数量推断认知增量 |
 | 系统集合 | 十份 pinned source studies、三十视图、三张 source-reviewed Cards、pressure map；新增五问题展品与同源 Markdown | 可离线从问题进入比较，追到模型节点及固定源码 | 独立人类 review、样本覆盖补充、获准且经选择的运行展品；当前没有公开比较成绩 |
 | Case Lab | RC-001 clinic-ready、其余 seeds、benefit controls、future-question 固定材料 | 输入、投影、有限交集与工程绑定可以重算 | accepted cases、独立语义评审、受控使用结果和 reviewer calibration |
-| 执行与评审工具 | RC-002 scripted 演练、fixed-study export/import/recompute、RC-005 named CLI、P0 离线审计准备 | 各工具有明确入口与离线检查；native 与 P0 权限限于具名包 | 语义结论须依实际观察和评审；公共工具不能据私人运行记录自行产生公开结果 |
+| 执行与评审工具 | RC-002 scripted 演练、fixed-study export/import/recompute、RC-005 named CLI／首次盲评台／累计导入与分歧报告、P0 离线审计准备 | 各工具有明确入口与离线检查；native 与 P0 权限限于具名包 | 语义结论须依实际观察和评审；公共工具不能据私人运行记录自行产生公开结果 |
 | Incubator | 竞争设计、机制/测试映射、修订、检索与学习问题 | 可提出具体取舍与可反驳假设；早期独立实验有自己的有限工程证据 | 独立 Tilia 的完整体验、架构选择与实现；当前研究不承担该产品身份 |
 | 社区参与 | contribution、consent、attribution、withdrawal 与 clinic 材料 | public-safe 的参与方式已描述 | 尚未实际走通的贡献与评审路径；敏感收集前的 restricted stewardship 决定仍开放 |
 
 这里的阶段仍是 **R0 Research Foundation，已具备可执行的具名研究工具与可用的静态 collection**。工程链的可运行性、真实调用是否发生、输出语义质量和 accepted result 是不同事实。没有出现在公开研究中的私有结果，既不能公开升格，也不能反向写成“从未执行”。
+
+后续开发把具名 RC-005 的匿名回答交接接到了[离线语义评审台](../case-lab/reviews/workbench/README.md)：读历史和原样回答、保留未完成草稿、明确修订旧判断、累计交回、原运行核验与分歧报告已形成一条工具路径。公开七项练习只检查操作与互通；它不生成独立人类评审或语义效果证据。原包与恢复状态、browser 提交与正式导入、技术失败与空回答保持各自含义。下一步可以使用这条路径推进有依据的 review，而不再为同一 handoff 补平行工具。
 
 ## 方向风险与值得继续发展的优势
 
