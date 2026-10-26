@@ -1,6 +1,6 @@
 # Relata · Memory Architecture Atlas
 
-**固定源码研究：** 2026-09-22；问题导向 reader 更新：2026-10-25 · **状态：** source-study drafts / static source synthesis；独立人类 review 待完成。
+**固定源码研究：** 2026-09-22；问题导向 reader 更新：2026-10-26 · **状态：** source-study drafts / static source synthesis；独立人类 review 待完成。
 
 ## 中文摘要
 
@@ -8,7 +8,7 @@
 
 ## English summary
 
-Thirty architecture views compare ten pinned public-source implementations. Five question-led static exhibits connect scenarios and task conditions to cross-system interpretations, exact source evidence, graph nodes, controls and research destinations. Each project retains its boundary, write-to-use and revision/control views. The offline reader preserves existing project links and provides node deep links with a return to the original question. A generated Markdown edition serves GitHub readers. It introduces no upstream execution, provider integration or performance claim.
+Thirty architecture views compare ten pinned public-source implementations. Five question-led static exhibits connect scenarios and task conditions to cross-system interpretations, exact source evidence, graph nodes, controls and research destinations. The learning exhibit also offers five authored time points with visible history, current tasks, candidate methods and optional author analysis; the linked study adds a second longitudinal worksheet. These are synthetic development materials, not system outputs. Each project retains its boundary, write-to-use and revision/control views. The offline reader preserves existing project links and provides node deep links with a return to the original question. A generated Markdown edition serves GitHub readers. It introduces no upstream execution, provider integration or performance claim.
 
 ## 打开与阅读
 
@@ -17,6 +17,8 @@ Thirty architecture views compare ten pinned public-source implementations. Five
 左侧按项目或机制搜索，上方切换三视图。点击导读或详细图的节点，或使用节点列表，查看职责、状态、相邻箭头与 evidence；相关连线会高亮。每条关系也在下方完整列出。`阅读` 使用可读字号，窄屏可横向滑动；`适宽` 与 `全图` 用于定位，`＋/−` 控制缩放。SVG 可独立下载和放大，节点链接打开其首条固定源码；完整多条证据在 reader 中展开。Mermaid 保留可编辑拓扑，自动排版可能不同。
 
 默认进入[研究问题目录](index.html#questions)，也可选择「系统图集」继续原有项目路径。五个展品分别研究未来用途变化、交付责任、更正传播、适时浮现、理解与做法的变化。搜索可以从问题、机制或系统名找入口；选择展品后切换任务条件，比较每个系统的源码观察、可能价值、边界与仍需观察的问题。条件展示的是编辑分析，不是模拟回答、运行条件或研究结果。
+
+[学习展品](index.html#exhibit/learning/understand)的五个时点展开同一访谈协作：形成方法、新材料、局部例外、反馈后使用与无关任务。左边是当时可见的完整经历，右边是当前任务和作者候选；可折叠经历、展开“作者分析与允许的做法”，再跳到源码比较。方向键／Home／End 切换条件，窄屏可横向滑动条件条；深链和图节点返回保留选中条件。搜索也包含这些作者材料。完整研究与第二条共同创作情境见[经验适应研究](../../research/experience-adaptation-study.md)。两条材料均未执行或独立校准。
 
 每项解释保留固定 commit、对象边界与 source note，可进入图中具体节点，再返回原来的展品和条件。`#mem0/flow` 等既有链接继续有效；`#mem0/flow/batch?exhibit=future-use&condition=origin` 可定位节点并保留问题来源。刷新和前进后退保留 URL 中的阅读状态；不使用账号、localStorage 或私有运行记录。判断修订只列真实维护记录，首版不编造历史。
 
@@ -50,7 +52,7 @@ Thirty architecture views compare ten pinned public-source implementations. Five
 
 ## 编辑与重建
 
-`models/*.json` 是图的语义真源：project boundary、节点、关系、区域、状态归属和 pinned evidence。`guide-layouts.cjs` 选择每图已有关系组成导读；`render-guide.cjs` 与 `render-svg.cjs` 负责布局和绘制。`exhibits.json` 拥有情境、条件、跨系统解释、controls、三职能去向和判断修订，只引用模型 ID，不复制 source URL 或 topology；`collection.cjs` 验证这些关联并生成完整 Markdown。`build.cjs` 负责统一验证与生成。`viewer.html`、`viewer.css`、`viewer.js` 是 reader 源码。`diagrams/<project>/{overview,flow,revision}.{svg,mmd}`、`exhibits.md` 与 `index.html` 都是 generated artifacts；修改源后重建，不手改生成物，也不在报告内维护另一份手绘 topology。
+`models/*.json` 是图的语义真源：project boundary、节点、关系、区域、状态归属和 pinned evidence。`guide-layouts.cjs` 选择每图已有关系组成导读；`render-guide.cjs` 与 `render-svg.cjs` 负责布局和绘制。`exhibits.json` 拥有情境、条件、跨系统解释、controls、三职能去向和判断修订，只引用模型 ID，不复制 source URL 或 topology；可选 `episodes` 唯一维护展品的合成经历，condition 的 `workedExample.visibleHistory` 只引用其中的 ID，另列当前任务、作者候选与解释；这些不是执行输入或答案导出。`collection.cjs` 验证这些关联并生成完整 Markdown，作者材料按字面文本转义。`build.cjs` 负责统一验证与生成。`viewer.html`、`viewer.css`、`viewer.js` 是 reader 源码。`diagrams/<project>/{overview,flow,revision}.{svg,mmd}`、`exhibits.md` 与 `index.html` 都是 generated artifacts；修改源后重建，不手改生成物，也不在报告内维护另一份手绘 topology。
 
 从 repo root 用 Node.js 运行，无额外 package 或网络依赖：
 

@@ -85,6 +85,10 @@ Relata 的 benchmark、系统样本研究空间与 incubator 都可以为写作�
 
 这些认识有三种去向。Benchmark 研究可以把同一历史下的当前安排、历史归属、新建议与无需历史的任务分别设计清楚；collection 可以解释事实层、图对象、文件式上下文和完整 agent 如何分配工作；incubator 可以比较哪些场合值得保留概括、重访事件或结合两者。它们各自仍需相应证据，不把这个切口扩成 Relata 的唯一问题或所有系统必须采用的架构。
 
+## 经验怎样形成可用方法
+
+[经验适应研究](experience-adaptation-study.md)把 learning 展品推进到完整论证：A-MEM 的旧向量选择与新 metadata 返回可以不同步；Hindsight 的只读 reflect 与持久 refresh 承担不同工作且已有具体保护；LangMem 生成、保存和实际采用 prompt 分属不同路径。这些机制把部分解释提前，也提前作出选择，是否有帮助取决于后来任务及维护成本。访谈整理和共同创作两条作者化时间线，分别保留适用、例外、局部修订、原能力与不干扰对照；不是三个系统的输出或学习成绩。
+
 ## 与 AMS 的连接
 
 [Agent Memory Study](https://github.com/IndelibleVivi/agent-memory-study) 已经包含原文阅读、源码检查和研究实验；两个项目不按“论文 / 代码”机械分工。围绕 Relata 自己的 benchmark、系统比较或设计问题，先取用 AMS 已有成果与反例，再识别具体研究缺口。Relata 可以把系统与案例中暴露的问题带回 AMS。两者各自保留研究职责与材料，也都可以为长篇综合写作蓄力。

@@ -100,6 +100,37 @@ h1, h2, h3, p { overflow-wrap: anywhere; }
 .condition-panel { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; padding: 15px 16px 17px; border-bottom: 1px solid var(--line); background: #f0f2ed; }
 .condition-panel p { font-size: 13px; margin: 3px 0 0; }
 .condition-label, .block-label { font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: #7d5a43; }
+.worked-example { grid-column: 1 / -1; min-width: 0; border-top: 1px solid #becbc4; padding-top: 22px; }
+.example-heading { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin-bottom: 20px; }
+.example-heading h3 { margin: 5px 0 0; font-size: 23px; line-height: 1.4; font-weight: 500; }
+.example-heading > p { font-size: 11px; color: #536c70; flex-shrink: 0; }
+.example-columns { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: start; }
+.example-history summary, .example-analysis summary { cursor: pointer; font-size: 14px; font-weight: 600; padding: 10px 0; }
+.example-history summary span { font-size: 11px; font-weight: 400; margin-left: 8px; color: var(--muted); }
+.example-history ol { list-style: none; padding: 0 0 0 15px; margin: 10px 0 0 4px; border-left: 1px solid #b7c8c2; }
+.example-history li { position: relative; padding: 0 0 24px 7px; }
+.example-history li::before { content: ''; position: absolute; left: -19px; top: 8px; width: 7px; height: 7px; border-radius: 50%; background: #627f78; box-shadow: 0 0 0 4px #f0f2ed; }
+.example-history li:last-child { padding-bottom: 4px; }
+.worked-example h4 { margin: 0 0 8px; font-size: 13px; color: #395b5f; }
+.worked-example p, .example-acceptable li, #example-acceptable li { font-size: 15px; line-height: 1.9; white-space: pre-line; }
+.example-history p { color: #445d62; }
+.example-present { min-width: 0; }
+.example-current { background: #fff; padding: 21px 23px; border-top: 3px solid #537c8c; }
+.example-current h4 { color: #416b7e; }
+.example-proposal { padding: 19px 23px; background: #e6edf0; border-bottom: 1px solid #c3d0d6; }
+.example-proposal h4 { color: #536783; }
+.example-analysis { padding: 4px 22px 14px; background: #fff; }
+.example-analysis summary { color: #435f82; line-height: 1.6; }
+.example-analysis h4 { margin-top: 20px; }
+#example-acceptable { padding-left: 20px; margin: 5px 0; }
+#example-acceptable li + li { margin-top: 9px; }
+.example-analysis summary:focus-visible, .example-history summary:focus-visible, .example-source-jump:focus-visible { outline-color: #567290; }
+.example-source-jump { display: inline-block; margin-top: 17px; font-size: 13px; color: #435f82; text-decoration: underline; text-underline-offset: 4px; }
+.example-study-link { display: block; margin-top: 10px; color: #536783; font-size: 12px; }
+.has-worked-example .condition-task-preview { display: none; }
+.has-worked-example .condition-tab { flex: 1; max-width: none; }
+.has-worked-example .condition-switcher { position: sticky; top: 0; z-index: 3; background: var(--paper); }
+.has-worked-example .condition-panel { gap: 18px 32px; }
 .comparison-section { margin-top: 34px; }
 .comparison-list { display: grid; gap: 0; border-top: 1px solid #c5d1c8; }
 .comparison-item { padding: 24px 0 27px; border-bottom: 1px solid var(--line); }
@@ -318,6 +349,21 @@ noscript { position: fixed; bottom: 0; padding: 15px; background: #fff1d9; width
   .source-row a { font-size: 10px; }
 }
 
+@media(max-width: 1100px) {
+  .example-columns { grid-template-columns: minmax(0, 1fr); gap: 25px; }
+  .example-heading { display: block; }
+  .example-heading > p { margin-top: 6px; }
+}
+
+@media(max-width: 650px) {
+  .has-worked-example .condition-tab { flex: 0 0 auto; min-width: 116px; padding: 12px; }
+  .worked-example { padding-top: 16px; }
+  .example-heading h3 { font-size: 21px; }
+  .example-current, .example-proposal { padding: 17px; }
+  .example-analysis { padding-inline: 17px; }
+  .worked-example p, #example-acceptable li { font-size: 15px; }
+}
+
 @media(max-width: 360px) {
   main { padding-inline: 12px; }
   .questions-heading h1, .exhibit-heading h1 { font-size: 28px; }
@@ -337,4 +383,6 @@ noscript { position: fixed; bottom: 0; padding: 15px; background: #fff1d9; width
   #diagram-stage svg { max-width: 100% !important; height: auto !important; }
   .evidence-section, .judgment-section, .controls-takeaways, .exhibit-resources { display: block; }
   footer { page-break-before: avoid; }
+  .has-worked-example .condition-switcher { position: static; }
+  .example-columns { display: block; }
 }

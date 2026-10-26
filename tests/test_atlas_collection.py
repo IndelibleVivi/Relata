@@ -10,6 +10,22 @@ ATLAS = ROOT / "systems" / "architecture-atlas"
 
 
 class CollectionTests(unittest.TestCase):
+    EXAMPLE_FIXTURE = """
+const exampleExhibit = collection.exhibits[0];
+exampleExhibit.episodes = [
+  {id:'earlier', title:'Earlier title', text:'PAST VISIBLE'},
+  {id:'later', title:'Later title', text:'LATER VISIBLE'},
+  {id:'not-selected', title:'Unselected title', text:'NEVER EXPOSED'}
+];
+const example = {
+  title:'Example title', visibleHistory:['earlier'], current:'Current task',
+  proposal:'Author proposal', analysis:'Author analysis',
+  acceptable:['First permitted action','Second permitted action'], pitfall:'Pitfall'
+};
+exampleExhibit.conditions[0].workedExample = example;
+exampleExhibit.conditions[1].workedExample = {...example, visibleHistory:['later']};
+"""
+
     def run_node(self, body):
         script = """
 const fs = require('node:fs');
@@ -99,6 +115,77 @@ assert.throws(() => validateCollection(changed, models, dir), /duplicate.*condit
 changed = structuredClone(collection);
 changed.exhibits[0].revisions[0].date = '2099-01-01';
 assert.throws(() => validateCollection(changed, models, dir), /dates out of order/);
+""")
+
+    def test_worked_example_exports_only_each_conditions_visible_history(self):
+        self.run_node(self.EXAMPLE_FIXTURE + """
+validateCollection(collection, models, dir);
+const markdown = renderExhibitsMarkdown(collection, models);
+const first = markdown.split('### 展开情境 · ')[1];
+const second = markdown.split('### 展开情境 · ')[2];
+assert.ok(first.includes('Earlier title') && first.includes('PAST VISIBLE'));
+assert.ok(!first.includes('LATER VISIBLE'));
+assert.ok(second.includes('Later title') && second.includes('LATER VISIBLE'));
+assert.ok(!second.includes('PAST VISIBLE'));
+assert.ok(!markdown.includes('NEVER EXPOSED'));
+for (const field of ['title','current','proposal','analysis','pitfall']) assert.ok(first.includes(example[field]));
+for (const action of example.acceptable) assert.ok(first.includes(action));
+assert.ok(first.includes('不是系统输出'));
+// Optional data must not become mandatory for existing exhibits.
+delete exampleExhibit.episodes;
+delete exampleExhibit.conditions[0].workedExample;
+delete exampleExhibit.conditions[1].workedExample;
+validateCollection(collection, models, dir);
+assert.ok(!renderExhibitsMarkdown(collection, models).includes('PAST VISIBLE'));
+""")
+
+    def test_rejects_malformed_present_examples_and_episode_references(self):
+        self.run_node(self.EXAMPLE_FIXTURE + """
+const original = structuredClone(collection);
+const changes = [
+  e => { e.episodes = null; },
+  e => { e.episodes = []; },
+  e => { e.episodes[0] = null; },
+  e => { e.episodes[0].id = 'bad/id'; },
+  e => { e.episodes[1].id = 'earlier'; },
+  e => { e.episodes[0].text = ''; },
+  e => { e.conditions[0].workedExample = null; },
+  e => { e.conditions[0].workedExample = []; },
+  e => { e.conditions[0].workedExample.visibleHistory = []; },
+  e => { e.conditions[0].workedExample.visibleHistory = ['earlier','earlier']; },
+  e => { e.conditions[0].workedExample.visibleHistory = ['other-exhibit']; },
+  e => { e.conditions[0].workedExample.visibleHistory = [null]; },
+  e => { delete e.episodes; },
+  e => { e.conditions[0].workedExample.acceptable = []; },
+  e => { e.conditions[0].workedExample.acceptable = ['']; },
+  e => { e.conditions[0].workedExample.acceptable = 'one'; }
+];
+for (const key of ['title','current','proposal','analysis','pitfall']) {
+  changes.push(e => { e.conditions[0].workedExample[key] = ''; });
+}
+for (const change of changes) {
+  const changed = structuredClone(original);
+  change(changed.exhibits[0]);
+  assert.throws(() => validateCollection(changed, models, dir), /Collection:/);
+}
+""")
+
+    def test_authored_example_text_cannot_inject_markdown_or_html(self):
+        self.run_node(self.EXAMPLE_FIXTURE + """
+const hostile = '<script>alert(1)</script>\\n![image](https://invalid.example/private)\\n# invented heading | [link](javascript:run)';
+exampleExhibit.episodes[0].title = hostile;
+exampleExhibit.episodes[0].text = hostile;
+for (const key of ['title','current','proposal','analysis','pitfall']) example[key] = hostile;
+example.acceptable = [hostile];
+validateCollection(collection, models, dir);
+const first = renderExhibitsMarkdown(collection, models).split('### 展开情境 · ')[1];
+for (const executable of ['<script>','![image]','# invented','[link]','https://invalid','javascript:run']) {
+  assert.ok(!first.includes(executable), executable);
+}
+assert.ok(first.includes('&#60;script&#62;'));
+assert.ok(first.includes('&#35; invented heading'));
+assert.ok(first.includes('&#33;&#91;image&#93;'));
+assert.ok(first.includes('\\n\\n'));
 """)
 
 

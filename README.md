@@ -27,6 +27,8 @@ The [lab vision and capability map](research/lab-development.md) explains the cu
 
 After cloning, open `systems/architecture-atlas/index.html` directly in a browser; no server, account or network is required. Conditions display static editorial analysis; graph links locate existing nodes and return to the question. GitHub's file viewer does not execute HTML, so use the generated Markdown and SVGs there. The exhibits simulate no answers and publish no private run results.
 
+The [experience-adaptation study](research/experience-adaptation-study.md) follows note organization, persistent synthesis and prompt adoption through two authored longitudinal scenarios. In the [learning exhibit](systems/architecture-atlas/index.html#exhibit/learning/understand), five reading points expose the visible history, current task and candidate method; open the author analysis, compare the mechanisms, and return from a source node to the same condition. These are development materials, not system outputs or measured learning.
+
 ## Memory ecology
 
 General agent memory and adult long-term intimacy are both research contexts. Intimacy and romance remain a founding focus; the existing Case Lab studies ordinary personal life, shared relational experiences, operational/project decisions and artifacts, and companion/system continuity as a longitudinal mixed-domain ecology. Ordinary events do not need invented romantic symbolism to count.

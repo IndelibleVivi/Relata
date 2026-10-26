@@ -27,6 +27,8 @@ Relata 将**自己的 benchmark 研究、系统样本研究空间，以及面向
 
 Clone 后直接在浏览器打开 `systems/architecture-atlas/index.html`；无需 server、账号或网络。条件切换展示静态编辑分析，点击节点可进入既有三视图再返回原问题。GitHub 文件页不执行 HTML，可读同源生成的 Markdown 与 SVG。展品没有模拟回答或发布私有运行结果。
 
+[经验适应研究](research/experience-adaptation-study.md)沿笔记组织、持久综合与指令采用展开两条作者化纵向情境。在[学习展品](systems/architecture-atlas/index.html#exhibit/learning/understand)中，五个阅读时点分别呈现当时可见的经历、当前任务与候选方法；可展开作者分析、比较机制，再从源码节点返回原条件。这是开发材料，不是系统输出或已测学习效果。
+
 ## 记忆生态
 
 通用 agent memory 与成人长期人机亲密关系都有独立研究地位。亲密与浪漫关系继续是 founding focus；现有 Case Lab 将普通生活、共同关系经历、项目决策与材料，以及跨模型和实例的 companion/system continuity 作为长期混合领域记忆生态研究。普通事件无需被加工成浪漫象征才有研究价值。

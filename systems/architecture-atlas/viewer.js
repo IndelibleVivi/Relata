@@ -71,7 +71,11 @@
       exhibit.question,
       exhibit.summary,
       exhibit.scenario,
-      ...exhibit.conditions.flatMap(condition => [condition.title, condition.task, condition.focus]),
+      ...(exhibit.episodes || []).flatMap(episode => [episode.title, episode.text]),
+      ...exhibit.conditions.flatMap(condition => [condition.title, condition.task, condition.focus,
+        ...(condition.workedExample ? [condition.workedExample.title, condition.workedExample.current,
+          condition.workedExample.proposal, condition.workedExample.analysis,
+          ...condition.workedExample.acceptable, condition.workedExample.pitfall] : [])]),
       ...exhibit.comparisons.flatMap(comparison => {
         const model = modelFor(comparison.project);
         return [
@@ -333,12 +337,58 @@
     byId('condition-task').textContent = condition.task;
     byId('condition-focus').textContent = condition.focus;
     byId('condition-panel').setAttribute('aria-labelledby', `condition-tab-${exhibit.conditions.findIndex(item => item.id === condition.id)}`);
+    renderWorkedExample(exhibit, condition);
     renderComparisons(exhibit, condition);
     document.title = `${exhibit.title} · Relata`;
     byId('page-kicker').textContent = 'COLLECTION / 研究问题与源码比较';
     projectList(byId('project-search').value);
     renderQuestionCatalogue(byId('project-search').value);
     if (focusIndex >= 0) switcher.children[focusIndex]?.focus({preventScroll:true});
+    // Reveal a restored or keyboard-selected condition without moving the page.
+    const activeTab = switcher.querySelector('[aria-selected="true"]');
+    if (activeTab) {
+      const tabBounds = activeTab.getBoundingClientRect();
+      const bounds = switcher.getBoundingClientRect();
+      if (tabBounds.left < bounds.left) switcher.scrollLeft -= bounds.left - tabBounds.left;
+      else if (tabBounds.right > bounds.right) switcher.scrollLeft += tabBounds.right - bounds.right;
+    }
+  }
+
+  function renderWorkedExample(exhibit, condition) {
+    const example = condition.workedExample;
+    byId('worked-example').hidden = !example;
+    byId('exhibit-view').classList.toggle('has-worked-example', Boolean(example));
+    const history = byId('example-history');
+    const acceptable = byId('example-acceptable');
+    history.replaceChildren();
+    acceptable.replaceChildren();
+    if (!example) return;
+    byId('example-title').textContent = example.title;
+    byId('example-history-count').textContent = `${example.visibleHistory.length} 段`;
+    for (const id of example.visibleHistory) {
+      const episode = exhibit.episodes.find(item => item.id === id);
+      const item = el('li');
+      item.append(el('h4', episode.title), paragraph(episode.text));
+      history.append(item);
+    }
+    byId('example-current').textContent = example.current;
+    byId('example-proposal').textContent = example.proposal;
+    byId('example-study-link').textContent = `${exhibit.links[0].label} ↗`;
+    byId('example-study-link').href = exhibit.links[0].path;
+    byId('example-analysis-text').textContent = example.analysis;
+    byId('example-pitfall').textContent = example.pitfall;
+    for (const action of example.acceptable) acceptable.append(el('li', action));
+    // Each time point opens with its evidence, before the optional author reading.
+    byId('example-analysis').open = false;
+    byId('worked-example').querySelector('.example-history').open = true;
+    const jump = byId('worked-example').querySelector('.example-source-jump');
+    jump.onclick = event => {
+      event.preventDefault();
+      const heading = byId('comparison-heading');
+      heading.tabIndex = -1;
+      heading.focus({preventScroll: true});
+      heading.scrollIntoView({block: 'start'});
+    };
   }
 
   function comparisonCard(comparison, exhibit, condition) {

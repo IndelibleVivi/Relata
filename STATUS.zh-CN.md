@@ -40,6 +40,7 @@ Maintainer 于 2026-10-22 要求为 Relata + AMS 提出并实现下一研究方�
 | 开源架构研究 | 10 份有界 drafts：Mem0、Letta、Graphiti、lmc-5、Tideline Memory、Aelios、Hindsight、OpenViking、LangMem、A-MEM | 固定源码观察；lmc-5 与 Graphiti 另有窄范围离线诊断；无独立人类 review、accepted System Card 或模型参与的比较结果 |
 | [架构图集](systems/architecture-atlas/README.md) | 10 份模型、30 幅 SVG/Mermaid 与离线交互 reader | 绑定源码的图示；没有新增上游运行或能力测量 |
 | [问题导向系统集合](systems/architecture-atlas/exhibits.md) | 五个静态展品覆盖十个既有固定模型；离线搜索、任务条件、图／节点深链与生成 Markdown 版本 | 仅为源码综合与阅读路径检查；没有新增上游运行、公开运行展品、人类 review 或排名 |
+| [经验适应研究](research/experience-adaptation-study.md) | 三条固定源码机制、两条作者化纵向 worksheet 与学习展品五个展开条件 | 有界源码综合与作者分析；没有 subject 执行、独立校准、accepted case 或已测迁移收益 |
 | 自有 memory 设计 / 案例—测试映射 | 为独立 Tilia 目标提供 proposed 架构、controls 与推翻条件 | 候选 B 不是已接受的 Tilia 架构；没有 accepted 普适 schema 或能力结果 |
 | [本地记忆装置](experiments/local-memory-apparatus.md) | 范围纠正后保留的非常早期实验；已有独立 private remote，源码未公开发布 | 110 项工程测试与 38 步／21 项断言的子进程 demo；只有明确合成输入与脚本消费，没有向量检索或语义效果结果 |
 | Claim boundaries | 双语 candidate study | CL0–CL6、lanes、cells、adapter classes 仍为提议；无 accepted result unit 或 publication policy |

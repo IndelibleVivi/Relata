@@ -23,6 +23,8 @@ Relata 是前沿记忆研究室，[ADR-0008](decisions/ADR-0008-three-core-resea
 
 具名 RC-005 关闭导出可沿[离线评审台](case-lab/reviews/workbench/README.md)走通匿名交接、草稿／修订恢复、累计判断导入、原运行核验与分歧报告。可先用内置作者练习包实际操作；不执行 subject，不建立语义校准。首次 blind pass 与 future-question 的有限选项判断继续使用各自的格式。
 
+[经验适应研究](research/experience-adaptation-study.md)给出一条具体阅读路径：沿方法形成、采用、例外与修订检查三种固定实现。两条合成 worksheet 仍是作者化开发材料。
+
 ## 拟议的首轮研究计划
 
 较广的[首轮研究计划](research/first-research-cycle.md)仍为 proposed。[ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) 于 2026-10-23 接受，仅激活 [RC-005 → pinned Mem0 执行包](experiments/rc005-native-execution-packet.md)。固定 study CLI 覆盖 54 个 reader 预检、36 个强原文对照和 54 个 native 回答位置；源码实现与离线 plumbing 检查不证明真实可运行性或语义成功。选用既有 generation entitlement 与本地 Qwen3-Embedding-0.6B-Q8_0/1024；全包最多 300 chat／500 embedding client dispatch，包含失败及诊断，不充值、不走收费 fallback。Native state、attempts、回答和未评审盲包留在 ignored local artifacts。正式 benchmark promotion、其他 study、Tilia 产品实现、公开结果、hosting、外联与 license 保留各自边界。[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 仍是独立兼容性例外；配置匹配的接口证据可复用。

@@ -16,6 +16,11 @@ function unique(items, label) {
 function dated(value, label) {
   requireThat(typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value)) && new Date(value).toISOString().slice(0, 10) === value, `${label} requires a calendar date`);
 }
+function literal(value) {
+  // Entity decoding does not re-parse Markdown delimiters or autolink URLs.
+  return value.replace(/[\x21-\x2f\x3a-\x40\x5b-\x60\x7b-\x7e]/g,
+    character => `&#${character.charCodeAt(0)};`).replace(/\r\n?/g, '\n').replace(/\n/g, '\n\n');
+}
 function validateCollection(collection, models, atlasRoot = __dirname) {
   text(collection.title, 'title');
   text(collection.boundary, 'boundary');
@@ -26,11 +31,34 @@ function validateCollection(collection, models, atlasRoot = __dirname) {
   for (const exhibit of collection.exhibits) {
     requireThat(/^[a-z][a-z0-9-]*$/.test(exhibit.id), 'invalid exhibit id');
     for (const key of ['title', 'question', 'summary', 'scenario']) text(exhibit[key], `${exhibit.id}/${key}`);
+    if (Object.hasOwn(exhibit, 'episodes')) {
+      requireThat(Array.isArray(exhibit.episodes) && exhibit.episodes.length > 0, `${exhibit.id}: episodes must be a nonempty array`);
+      for (const episode of exhibit.episodes) {
+        requireThat(episode && typeof episode === 'object' && !Array.isArray(episode), `${exhibit.id}: invalid episode`);
+        requireThat(typeof episode.id === 'string' && /^[a-z][a-z0-9-]*$/.test(episode.id), `${exhibit.id}: invalid episode id`);
+        text(episode.title, `${exhibit.id}/${episode.id}/title`);
+        text(episode.text, `${exhibit.id}/${episode.id}/text`);
+      }
+      unique(exhibit.episodes.map(episode => episode.id), `${exhibit.id} episode`);
+    }
     requireThat(Array.isArray(exhibit.conditions) && exhibit.conditions.length >= 2, `${exhibit.id}: multiple reading conditions required`);
     unique(exhibit.conditions.map(c => c.id), `${exhibit.id} condition`);
     for (const condition of exhibit.conditions) {
       requireThat(/^[a-z][a-z0-9-]*$/.test(condition.id), `${exhibit.id}: invalid condition id`);
       for (const key of ['title', 'task', 'focus']) text(condition[key], `${exhibit.id}/${condition.id}/${key}`);
+      if (Object.hasOwn(condition, 'workedExample')) {
+        const example = condition.workedExample;
+        const label = `${exhibit.id}/${condition.id}`;
+        requireThat(example && typeof example === 'object' && !Array.isArray(example), `${label}: invalid workedExample`);
+        for (const key of ['title', 'current', 'proposal', 'analysis', 'pitfall']) text(example[key], `${label}/${key}`);
+        requireThat(Array.isArray(example.visibleHistory) && example.visibleHistory.length > 0, `${label}: no visible history`);
+        unique(example.visibleHistory, `${label} history reference`);
+        for (const id of example.visibleHistory) {
+          requireThat(typeof id === 'string' && exhibit.episodes?.some(episode => episode.id === id), `${label}: unknown episode ${id}`);
+        }
+        requireThat(Array.isArray(example.acceptable) && example.acceptable.length > 0, `${label}: no acceptable alternatives`);
+        for (const action of example.acceptable) text(action, `${label}/acceptable action`);
+      }
     }
     requireThat(Array.isArray(exhibit.comparisons) && exhibit.comparisons.length >= 2, `${exhibit.id}: comparison needs different systems`);
     unique(exhibit.comparisons.map(c => c.project), `${exhibit.id} comparison system`);
@@ -98,6 +126,21 @@ function renderExhibitsMarkdown(collection, models) {
     lines.push(`<a id="${exhibit.id}"></a>`, '', `## ${exhibit.title}`, '', `**${exhibit.question}**`, '', exhibit.summary, '', '**合成情境**', '', exhibit.scenario, '', '### 改变当前任务，保留同一情境', '');
     for (const condition of exhibit.conditions) lines.push(`- **${condition.title}：** ${condition.task} ${condition.focus}`);
     lines.push('');
+    for (const condition of exhibit.conditions) {
+      const example = condition.workedExample;
+      if (!example) continue;
+      lines.push(`### 展开情境 · ${literal(condition.title)}`, '', `**${literal(example.title)}**`, '',
+        '原创合成作者材料；经历、反馈与候选均不是系统输出或执行结果。', '', '**当时可见的经历**', '');
+      for (const id of example.visibleHistory) {
+        const episode = exhibit.episodes.find(item => item.id === id);
+        lines.push(`**${literal(episode.title)}**`, '', literal(episode.text), '');
+      }
+      lines.push('**现在要做什么**', '', literal(example.current), '',
+        '**作者提出的方法／采用候选**', '', literal(example.proposal), '',
+        '**作者分析**', '', literal(example.analysis), '', '**允许的做法**', '');
+      for (const action of example.acceptable) lines.push(`- ${literal(action).replace(/\n/g, '\n  ')}`);
+      lines.push('', '**这个时点容易误判什么**', '', literal(example.pitfall), '');
+    }
     for (const comparison of exhibit.comparisons) {
       const model = models.find(m => m.id === comparison.project);
       const view = model.views.find(v => v.id === comparison.view);
