@@ -32,6 +32,7 @@ Atlas mount instances 各自拥有 navigation、DOM、事件和 source resolver�
 | 读旧研究，当前材料改变后仍能检查 | read-only compatibility registration；原 verifier 首次核验后冻结 | 缺少原依赖不能重造 native binding；历史 reader 不重写旧格式 |
 | 两种首评、诊断、新 rubric、同人修订与多人分歧 | 新 Clinic + frozen rounds；原 RC-005 Workbench 保留 | development contracts；无独立 reviewer 时无 calibration claim |
 | 可以推翻简单命题的三组仪器 | allowlisted measurement／applicability／opportunity | 作者合成环境和算法结果；19 条相关轨迹、122 个事件不是独立模型试验 |
+| 从观察和评审形成自己的解释 | Analysis workbench；精确材料引用、竞争解释、不可变修订与评审变化提示 | 私人作者分析；不自动判真、打分或接受；主张另写可披露正文 |
 | 主张、反例、来源修订、选定公开作品与恢复 | Library、public projection、四种 export profiles | 公开作品仅披露已选版本，不能验证 withheld dependencies |
 
 实现采用 Python stdlib、SQLite 与 plain ES modules，复用已有 Node renderer。提案中的 TypeScript monorepo、更多目录层级、通用 driver registry 没有成为当前必要条件；已有模块边界可以提供完整本地行为。原 RC-005 精确绑定和新探索性 partial study 保持不同入口。当前没有自动 schema migration 或实时多人协作，也没有新增 provider adapter；任何未来执行仍需要具名 envelope。

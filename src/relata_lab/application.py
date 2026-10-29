@@ -75,6 +75,9 @@ class Application:
         if name == 'legacy.read':
             from .compat import read_legacy
             return read_legacy(self.lab, payload['id'])
+        if name == 'analysis.context':
+            from .analysis import context
+            return context(self.lab, payload['run_id'])
         if name == 'catalog.install':
             return install_catalog(self.lab, command_id)
         if name == 'source.capture':

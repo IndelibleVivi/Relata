@@ -49,6 +49,67 @@ commands and cannot be revised. A new protocol or rubric requires a new round.
 The caller authors the body; marking a body public is an explicit disclosure
 choice, including any text or artifact bytes embedded in that body.
 
+### Authored analysis
+
+`analysis.context` is a read-only application action. It takes `run_id` and
+returns `run`, the run's exact pinned `study`, `coverage`, this run's
+`observations`, `rounds`, `reviews`, `dispositions` and current `analyses`.
+Rounds are trimmed to this run's observation IDs, and reviews and dispositions
+are filtered to this run's judgments. This supports rounds spanning several
+runs without exposing another run's material. `observation_text` maps each
+observation ID to its literal citable `input`, `governing_history`, `text` and
+canonical core-encoded `actions` fields. Provenance and arbitrary metadata are
+not citable. A top-level `review_snapshot` gives the current scoped heads and
+disposition IDs. Deterministic instrument analyses remain readable alongside
+authored analyses.
+
+`analysis.save` takes `run_id`, nonempty `title` and `text`, `alternatives`,
+a list of text `limits`, and at least one evidence item. Each evidence item is
+`{kind, id, relation, note, quote?}` where `kind` is `observation` or `review`,
+`relation` is `supports`, `challenges` or `context`, and `quote` optionally has
+`{field, text}`. Observation quotes must exactly occur in an allowed literal
+field (`input`, `governing_history`, `text` or canonical `actions`); review
+quotes must exactly occur in `judgment.rationale`. Empty observation responses
+can be selected without inventing a quote. Foreign-run records, duplicate
+selections, malformed relations and fabricated or empty quotes fail. Evidence
+notes may be empty text; titles and analysis text require non-whitespace
+content. Authored title limits are 1,024 UTF-8 bytes; analysis text,
+alternatives and claim text are limited to 65,536 bytes; an exact quote is
+limited to 16,384 bytes.
+
+A new authored object uses body format `relata-authored-analysis-1`, stores the
+exact `run_id`, `evidence_items`, `evidence: "authored interpretation"`,
+`acceptance: "unreviewed"` and a `review_snapshot` of scoped current reviewer
+heads plus disposition IDs. It is private, references the exact run and any
+rounds needed by cited reviews. Saving is interpretation, never semantic
+acceptance. Use `id` with `expected_revision` to freeze a new revision against
+the same run; history is immutable. A revision refreshes the review snapshot.
+The old body, including its snapshot, remains unchanged.
+
+On `analysis.context`, each authored analysis gains computed top-level
+`review_changed` and `review_change_count`; these are not stored in the body.
+The count is changed reviewer-head slots (a new reviewer or same-reviewer
+amendment changes one slot) plus symmetric disposition-ID changes. This signals
+that context is newer than the frozen analysis; it neither rewrites the
+analysis nor declares its interpretation wrong.
+
+`analysis.claim` takes an exact `{id, revision}` under `analysis`, plus
+separately authored nonempty `title`, `text`, text `limits`, and optional
+`visibility` (`private` by default; `public` is explicit). The exact revision
+must be an authored private analysis. The claim body contains only the supplied
+claim text/limits plus `evidence: "authored inference"` and
+`acceptance: "unreviewed"`; it never copies analysis prose, evidence or record
+IDs into the body. Its sole `derived-from` ref targets the exact analysis
+revision. Existing general `object.create` claim behavior remains available for
+other material. A public projection of such a claim withholds the private
+dependency as `{relation: "derived-from", withheld: true}`. This is not an
+export, publication or acceptance side effect.
+
+`analysis.save` and `analysis.claim` use the same `Lab.command` transaction and
+receipt path as other writes. Replaying an exact command ID returns its original
+stored result even if reviews later changed. Do not reuse that command ID with
+different material or a changed expected revision to attempt a refresh.
+
 `working.save` takes `name`, JSON `value` and optional `expected_version` (zero
 for a new draft). Drafts have mutable heads and are separate from evidence.
 `artifact.put` takes UTF-8 `text` and optional `media_type`. Complete artifact

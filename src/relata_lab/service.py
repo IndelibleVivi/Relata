@@ -61,7 +61,7 @@ def make_server(workspace, port=0):
             try:
                 if path == '/':
                     self.send((assets / 'index.html').read_text().replace('__SESSION_TOKEN__', token), media='text/html; charset=utf-8')
-                elif path in ('/studio.js', '/studio.css', '/clinic.js', '/clinic.html'):
+                elif path in ('/studio.js', '/analysis.js', '/studio.css', '/clinic.js', '/clinic.html'):
                     media = 'text/css' if path.endswith('.css') else 'text/html' if path.endswith('.html') else 'text/javascript'
                     self.send((assets / path[1:]).read_bytes(), media=media + '; charset=utf-8')
                 elif path == '/atlas.js':

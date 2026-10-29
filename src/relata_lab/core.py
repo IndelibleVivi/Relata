@@ -244,6 +244,9 @@ class Lab:
     def _dispatch(self, name, p):
         if name == 'artifact.put':
             return self._put(p)
+        if name in {'analysis.save', 'analysis.claim'}:
+            from . import analysis
+            return getattr(analysis, name.split('.', 1)[1])(self, p)
         if name in {'object.create','object.revise'}:
             require(p.get('kind') not in {'run','round'}, 'Use run.create or round.create for fixed material.')
             return self._object(p,name == 'object.revise')

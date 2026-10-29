@@ -35,6 +35,8 @@ python3 -B tools/relata_lab.py --workspace "$HOME/RelataWorkspace" serve
 
 [ADR-0011](decisions/ADR-0011-local-research-studio.zh-CN.md)接受本地实现范围。[来源比较文章](research/collection-delivery-comparison.md)与[有限仪器报告](research/finite-instrument-report.md)是实际研究作品，分别属于有界源码综合与确定性作者环境计算，没有新增模型或人类研究结果。
 
+分析工作台可并排检查原始观察与判断，保存支持和反证、竞争解释与不可变修订，再从固定分析版本写成主张。私人材料不随主张自动公开。
+
 ## 从一个具体问题开始
 
 [研究室愿景与能力版图](research/lab-development.md)解释当前阶段、方向风险与连续建设结构。要检查一个 memory 问题，打开[五问题离线 reader](systems/architecture-atlas/index.html#questions)，或直接阅读 [GitHub 版展品](systems/architecture-atlas/exhibits.md)：未来用途变化、检索后的交付、更正传播、适时浮现、经验如何改变理解与做法。它把十个固定源码模型接到具体情境、条件对照、节点证据与研究去向。

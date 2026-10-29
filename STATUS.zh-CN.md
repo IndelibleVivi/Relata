@@ -3,7 +3,9 @@
 
 # Relata 当前状态
 
-**2026-10-29 本地开发状态：** [ADR-0011](decisions/ADR-0011-local-research-studio.zh-CN.md) 接受本地 Research Studio 实现：canonical SQLite／artifacts、版本化双 Atlas、固定 run／review rounds、三个确定性仪器和四种分离导出。见[使用说明](docs/studio.md)、[来源文章](research/collection-delivery-comparison.md)和[计算报告](research/finite-instrument-report.md)。这是 source implementation 与本地工程／有限算法工作，不是正式 release、hosting、独立校准或新系统性能证据。
+**2026-10-30 本地开发状态：** [ADR-0011](decisions/ADR-0011-local-research-studio.zh-CN.md) 接受本地 Research Studio 实现：canonical SQLite／artifacts、版本化双 Atlas、固定 run／review rounds、三个确定性仪器和四种分离导出。见[使用说明](docs/studio.md)、[来源文章](research/collection-delivery-comparison.md)和[计算报告](research/finite-instrument-report.md)。这是 source implementation 与本地工程／有限算法工作，不是正式 release、hosting、独立校准或新系统性能证据。
+
+本地 Study 分析工作台已支持私人作者解释、精确观察／判断引用、不可变修订、评审变化提示与另写主张。这些是作者分析，不是自动语义评判或已接受结果。
 
 **P0 扩展（2026-10-23）：** 指定 RC-005 研究另含[固定 capture 的 reader 后续包](experiments/rc005-exposure-followup.md)：18 份原 immediate capture × 三种投影，最多新增 54 次 DSF reader dispatch，新增三臂统一 4096 completion 上限，不重新摄入／检索／embedding，共用原 300 chat／500 embedding 累计账本。原 144 位置和回答不改写。[Relata × AMS campaign](research/relata-ams-campaign.md)保留各自研究问题与证据；P1–P6 设计不激活其他 provider 或真人研究。
 

@@ -44,6 +44,14 @@ python3 -B tools/relata_lab.py --workspace "$HOME/RelataWorkspace" instrument op
 
 分别保存 7／80／35 个事件，属于 3／10／6 条相关轨迹。测量页可切换 legacy、full-native、format-only 原样 exposure；算法基线与机会回执可展开检查。每次 CLI 调用创建独立 run；需要恢复同一命令时使用下方 `command --key`。完整 planned positions 保留在分母中；shared checkpoints 不是独立样本。
 
+## 从观察写到自己的分析
+
+Study 的**分析**页允许为同一次 run 写多份作者分析。左侧写解释、竞争解释与适用范围，右侧检查原始观察和固定判断；搜索仅限当前 run。将材料标为支持、反证或背景／待解释，并说明关系。可以从实际响应、delivered input、governing history、结构化动作或判断理由摘取精确原文；空返回可以直接引用，不需要编造引文。
+
+分析草稿沿用 workspace 的自动保存与冲突检查。**冻结分析版本**才保存不可变 analysis，至少绑定一条材料；材料 ID、精确引文和运行范围由后端核验。已有版本可另存修订，历史版本只读。评审新增、同人修订或处置变化后，页面提示重新检查；不会自动改写分析，也不表示原结论已经错误。引用历史判断时仍显示它已有修订。完整计划分母可在下方展开；原有确定性结果保留在**仪器计算**视图，仍可直接写主张或导出研究迁移包。
+
+从一个固定分析版本**写主张**时，需要另填准备披露的正文、范围与限制，默认私人。私人分析和原始响应不会自动拷入主张正文。Library 中可回到主张引用的确切分析版本；新 analysis revision 不改变已有主张的引用。公开预览只显示匿名 withheld 依赖，不能凭此验证私人分析。迁移时导出当前 run 与 analyses，保留历次分析和所依赖的观察／判断；正文草稿仍只随 workspace backup 保存。
+
 ## 两种新协议与原 RC-005 评审
 
 在 Study 的评审视角选择 observations 并新建 round。`governing-history-1` 给 reviewer 该观察固定的 governing history；`delivered-input-2` 给实际 delivered input。两者各自记录 response act 与 optional finite mapping，不合成统一 accuracy。合同为 development-unvalidated；新 rubric 或新披露建立新 round／diagnostic pass，不改旧首评。

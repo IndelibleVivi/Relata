@@ -3,7 +3,9 @@
 
 # Relata Status
 
-**Local development state, 2026-10-29:** [ADR-0011](decisions/ADR-0011-local-research-studio.md) accepts local Research Studio implementation: canonical SQLite/artifacts, versioned dual Atlas, fixed run/review rounds, three deterministic instruments and four separate export profiles. See the [guide](docs/studio.md), [source article](research/collection-delivery-comparison.md) and [computation report](research/finite-instrument-report.md). This is source implementation and local engineering/finite algorithmic work, not a formal release, hosting, independent calibration or new system-performance evidence.
+**Local development state, 2026-10-30:** [ADR-0011](decisions/ADR-0011-local-research-studio.md) accepts local Research Studio implementation: canonical SQLite/artifacts, versioned dual Atlas, fixed run/review rounds, three deterministic instruments and four separate export profiles. See the [guide](docs/studio.md), [source article](research/collection-delivery-comparison.md) and [computation report](research/finite-instrument-report.md). This is source implementation and local engineering/finite algorithmic work, not a formal release, hosting, independent calibration or new system-performance evidence.
+
+The local Study analysis workbench now supports private authored interpretations with exact observation/review citations, immutable revisions, review-change notices and separately authored claims. These are author interpretations, not automatic semantic judgments or accepted results.
 
 **P0 extension (2026-10-23):** the named RC-005 study also includes the [fixed-capture reader follow-up](experiments/rc005-exposure-followup.md): 18 original immediate captures × three projections, at most 54 additional DSF reader dispatches, 4096 completion cap for all new arms, no new ingestion/search/embedding, and the same cumulative 300 chat / 500 embedding ledger. The original 144 positions and outputs remain unchanged. The [Relata × AMS campaign](research/relata-ams-campaign.md) retains separate research questions and evidence; P1–P6 designs do not activate other provider or human studies.
 

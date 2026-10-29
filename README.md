@@ -23,7 +23,7 @@ System studies can expose case questions; evaluation can challenge architectural
 
 ## Use the local Research Studio
 
-The local [Research Studio](docs/studio.md) joins a research desk, versioned Observatory, Study Laboratory and Library. Keep a question and competing explanations, compare two pinned Atlas snapshots, run three fixed offline instruments, review raw observations with independent protocols, and make a selected offline edition. SQLite and immutable artifacts live in a private workspace outside this checkout.
+The local [Research Studio](docs/studio.md) joins a research desk, versioned Observatory, Study Laboratory and Library. Keep a question and competing explanations, compare two pinned Atlas snapshots, run three fixed offline instruments, review raw observations with independent protocols, and make a selected offline edition. SQLite and immutable artifacts live in a private workspace outside this checkout. Author private analyses beside literal observations and judgments, retain supporting and challenging evidence, and turn a fixed analysis version into a separately authored claim.
 
 Requirements: Python 3.11+, Node.js 18+ and Git on a local machine. The implementation uses standard libraries and browser ES modules; no package install or account is required. macOS is exercised; other platforms are not yet verified.
 
