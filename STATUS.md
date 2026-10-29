@@ -3,13 +3,15 @@
 
 # Relata Status
 
+**Local development state, 2026-10-29:** [ADR-0011](decisions/ADR-0011-local-research-studio.md) accepts local Research Studio implementation: canonical SQLite/artifacts, versioned dual Atlas, fixed run/review rounds, three deterministic instruments and four separate export profiles. See the [guide](docs/studio.md), [source article](research/collection-delivery-comparison.md) and [computation report](research/finite-instrument-report.md). This is source implementation and local engineering/finite algorithmic work, not a formal release, hosting, independent calibration or new system-performance evidence.
+
 **P0 extension (2026-10-23):** the named RC-005 study also includes the [fixed-capture reader follow-up](experiments/rc005-exposure-followup.md): 18 original immediate captures × three projections, at most 54 additional DSF reader dispatches, 4096 completion cap for all new arms, no new ingestion/search/embedding, and the same cumulative 300 chat / 500 embedding ledger. The original 144 positions and outputs remain unchanged. The [Relata × AMS campaign](research/relata-ams-campaign.md) retains separate research questions and evidence; P1–P6 designs do not activate other provider or human studies.
 
 **Project:** Relata
 **Phase:** R0 — Research Foundation
 **Identity:** frontier memory research lab; general agent memory and adult long-term intimacy are research contexts
 **Core functions:** own benchmark research; system collection (museum / sample-room / lab name open); incubator for future independent memory systems
-**Implementation:** fixed RC-005 native-study CLI under accepted ADR-0009, repository checks, an offline synthetic execution rehearsal, fixed-study input/projection analysis and external response/review import, two isolated source-study diagnostics, and an accepted boundary for an operator-owned provider compatibility check with runtime records kept private; a separate early memory experiment is retained as a research artifact, not a Relata product; no accepted benchmark implementation
+**Implementation:** local Research Studio under ADR-0011; fixed RC-005 native-study CLI under accepted ADR-0009, repository checks, an offline synthetic execution rehearsal, fixed-study input/projection analysis and external response/review import, two isolated source-study diagnostics, and an accepted boundary for an operator-owned provider compatibility check with runtime records kept private; a separate early memory experiment is retained as a research artifact, not a Relata product; no accepted benchmark implementation
 **Remote/publication:** public source repository; no formal release
 **Case release:** none
 **Protocol version:** none

@@ -20,11 +20,12 @@ function readModels() {
 }
 function validate(model) {
   requireThat(/^[a-z][a-z0-9-]+$/.test(model.id), 'Invalid project id');
+  requireThat(/^https:\/\/github\.com\/[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+\/?$/.test(model.repository), `${model.id}: public GitHub repository required`);
   requireThat(/^[a-f0-9]{40}$/.test(model.commit), `${model.id}: exact commit required`);
   requireThat(model.views.length === 3 && ['overview', 'flow', 'revision'].every(id => model.views.some(v => v.id === id)), `${model.id}: three reader views required`);
   const sources = new Set(model.sources.map(s => s.id));
   requireThat(sources.size === model.sources.length, `${model.id}: duplicate source id`);
-  for (const s of model.sources) requireThat(/^https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[a-f0-9]{40}\/.+/.test(s.url), `${model.id}: unpinned source ${s.id}`);
+  for (const s of model.sources) requireThat(s.url.includes(`/blob/${model.commit}/`) && /^https:\/\/github\.com\/[^/]+\/[^/]+\/blob\/[a-f0-9]{40}\/.+/.test(s.url), `${model.id}: unpinned source ${s.id}`);
   function evidence(item, label) {
     requireThat(statuses.has(item.status), `${model.id}: missing evidence status ${label}`);
     requireThat(Array.isArray(item.evidence), `${model.id}: missing evidence list ${label}`);
@@ -82,12 +83,19 @@ function mermaid(model, view) {
   return lines.join('\n') + '\n';
 }
 function buildReader(models, assets, collection) {
-  const css = fs.readFileSync(path.join(root, 'viewer.css'), 'utf8');
-  const js = fs.readFileSync(path.join(root, 'viewer.js'), 'utf8');
-  const data = JSON.stringify({date:'2026-09-22', renderer:'relata-native-svg-1', models, assets, collection}).replaceAll('<', '\\u003c');
+  const js = buildComponent();
+  const guides = Object.fromEntries(models.flatMap(model => model.views.map(view => [`${model.id}--${view.id}`,mermaid(model,view)])));
+  const data = JSON.stringify({date:'2026-09-22', renderer:'relata-native-svg-1', models, assets, guides, collection}).replaceAll('<', '\\u003c');
   return fs.readFileSync(path.join(root, 'viewer.html'), 'utf8')
-    .replace('/* ATLAS_STYLES */', css).replace('/* ATLAS_LOGIC */', js)
+    .replace(/<!-- ATLAS_FRAME_START -->[\s\S]*?<!-- ATLAS_FRAME_END -->/, '<div id="atlas-root" data-atlas-standalone></div>')
+    .replace('/* ATLAS_STYLES */', 'body { margin: 0; }').replace('/* ATLAS_LOGIC */', js)
     .replace('<!-- ATLAS_DATA -->', `<script id="atlas-data" type="application/json">${data}</script>`);
+}
+function buildComponent() {
+  const html = fs.readFileSync(path.join(root, 'viewer.html'), 'utf8').split('<!-- ATLAS_FRAME_START -->')[1].split('<!-- ATLAS_FRAME_END -->')[0];
+  const css = fs.readFileSync(path.join(root, 'viewer.css'), 'utf8');
+  const frame = JSON.stringify({html, css}).replaceAll('<', '\\u003c');
+  return fs.readFileSync(path.join(root, 'viewer.js'), 'utf8').replace('/* ATLAS_FRAME */ null', frame);
 }
 async function main() {
   const models = readModels();
@@ -129,4 +137,5 @@ async function main() {
   else fs.writeFileSync(target, reader);
   console.log(`${models.length} projects / ${Object.keys(assets).length} diagrams / ${collection.exhibits.length} research exhibits; ${checkOnly ? 'all derived artifacts current' : 'offline reader built'}`);
 }
-main().catch(error => { console.error(error.message); process.exitCode = 1; });
+module.exports = {validate, readModels, mermaid, buildComponent};
+if (require.main === module) main().catch(error => { console.error(error.message); process.exitCode = 1; });

@@ -43,11 +43,22 @@ class FutureQuestionReviewTests(unittest.TestCase):
         })
 
     def response(self, family="A-AUTHORSHIP", question="later", world="A",
-                 status="completed", text="Synthetic response only.", failure=None):
+                 status="completed", text="Synthetic response only.", failure=None,
+                 attempt_id=None, previous_attempt=None, version=1):
         row = self.by_cell[(family, question, world)]
-        return {"input_id": row["input_id"], "status": status,
-                "response": text if status == "completed" else None,
-                "failure": failure if status == "technical_failure" else None}
+        record = {"input_id": row["input_id"], "status": status,
+                  "response": text if status == "completed" else None,
+                  "failure": failure if status == "technical_failure" else None}
+        if version == 2:
+            record.update(attempt_id=attempt_id, previous_attempt=previous_attempt)
+        return record
+
+    def response_batch_v2(self, response_rows, name="responses-v2.json"):
+        return self.write_batch(name, {
+            "format": review.RESPONSE_FORMAT_V2,
+            "provenance": "synthetic v2 plumbing fixture; not a subject run",
+            "records": response_rows,
+        })
 
     def export(self):
         out = self.root / "blind"
@@ -58,6 +69,33 @@ class FutureQuestionReviewTests(unittest.TestCase):
 
     def review_batch(self, rows, name="reviews.json"):
         return self.write_batch(name, {"format": review.REVIEW_FORMAT, "records": rows})
+
+    def test_v1_pending_can_continue_in_v2_and_mixed_completed_export(self):
+        pending = self.response(status="pending")
+        completed = self.response("B-CONDITIONAL-USE", world="A")
+        review.import_responses(self.packet, self.response_batch([pending, completed]))
+        original = (self.packet / "responses" / "000001.json").read_bytes()
+        old_export, old_key, _ = self.export()
+        answer = self.response(version=2, attempt_id="A-" + "8" * 32,
+                               previous_attempt="legacy-v1", text="")
+        review.import_responses(self.packet, self.response_batch_v2([answer]))
+        mixed = self.root / "mixed-v2"
+        review.export_review(self.packet, mixed)
+        key = review.read_json(mixed / "hidden" / "review-key.json")
+        self.assertEqual(key["format"], review.REVIEW_KEY_FORMAT_V2)
+        self.assertEqual({r["attempt_id"] for r in key["records"]},
+                         {"legacy-v1", "A-" + "8" * 32})
+        batch = self.write_batch("mixed-reviews.json", {
+            "format": review.REVIEW_FORMAT_V2,
+            "records": [{"alias": r["alias"], "reviewer_id": "synthetic",
+                         "response_act": "empty" if r["input_id"] == pending["input_id"] else "answer",
+                         "mapping": "unmapped", "decision": None,
+                         "reason": "Mixed-version plumbing only.",
+                         "evidence_refs": ["current"]} for r in key["records"]]})
+        review.import_reviews(self.packet, mixed, batch)
+        self.assertEqual(review.verify(self.packet)["responses"], 2)
+        self.assertEqual((self.packet / "responses" / "000001.json").read_bytes(), original)
+        self.assertEqual(review.read_json(old_export / "hidden" / "review-key.json"), old_key)
 
     def test_empty_packet_is_pending_not_a_zero_score(self):
         result = review.recompute(self.packet)
@@ -120,6 +158,17 @@ class FutureQuestionReviewTests(unittest.TestCase):
                 review.import_responses(
                     self.packet, self.response_batch([record], "bad-status.json"))
 
+        empty = self.response(status="completed", text="", failure=None,
+                              attempt_id="A-" + "1" * 32, version=2)
+        whitespace = self.response("B-CONDITIONAL-USE", world="A",
+                                   status="completed", text="  \n", failure=None,
+                                   attempt_id="A-" + "2" * 32, version=2)
+        review.import_responses(
+            self.packet, self.response_batch_v2([empty, whitespace]))
+        result = review.recompute(self.packet)["overall"]
+        self.assertEqual(result["completed"], 2)
+        self.assertEqual(result["attempts"], 2)
+
     def test_technical_and_semantic_failures_have_distinct_denominators(self):
         rows = [
             self.response("A-AUTHORSHIP", world="A"),
@@ -135,6 +184,95 @@ class FutureQuestionReviewTests(unittest.TestCase):
         self.assertEqual(a["answer_coverage"], "1/2")
         self.assertEqual(a["judgment_contract_mismatch_rate"], None)
         self.assertEqual(result["overall"]["pending"], 221)
+        self.assertEqual(result["overall"]["attempts"], 3)
+
+    def test_v2_pending_and_failure_can_gain_an_explicit_completed_attempt(self):
+        pending_id = "A-" + "1" * 32
+        completed_id = "A-" + "2" * 32
+        review.import_responses(self.packet, self.response_batch_v2([
+            self.response(status="pending", attempt_id=pending_id, version=2),
+        ], "pending-v2.json"))
+        review.import_responses(self.packet, self.response_batch_v2([
+            self.response(status="completed", attempt_id=completed_id,
+                          previous_attempt=pending_id, version=2),
+        ], "completed-v2.json"))
+        packet = review.inspect_packet(self.packet)
+        self.assertEqual([row["status"] for row in
+                          packet["attempt_histories"][self.response()["input_id"]]],
+                         ["pending", "completed"])
+        result = review.recompute(self.packet)["overall"]
+        self.assertEqual((result["completed"], result["attempts"],
+                          result["positions_with_multiple_attempts"],
+                          result["positions_with_completed_history"],
+                          result["total"]), (1, 2, 1, 1, 224))
+
+        failed = self.response("B-CONDITIONAL-USE", world="A",
+                               status="technical_failure", failure="offline failure",
+                               attempt_id="A-" + "3" * 32, version=2)
+        review.import_responses(self.packet, self.response_batch_v2(
+            [failed], "failure-v2.json"))
+        review.import_responses(self.packet, self.response_batch_v2([
+            self.response("B-CONDITIONAL-USE", world="A", status="completed",
+                          attempt_id="A-" + "4" * 32,
+                          previous_attempt=failed["attempt_id"], version=2),
+        ], "retry-v2.json"))
+        result = review.recompute(self.packet)["overall"]
+        self.assertEqual((result["attempts"],
+                          result["positions_with_completed_history"]), (4, 2))
+
+    def test_v2_completed_history_is_immutable_and_attempt_ids_are_unique(self):
+        first_id, second_id = "A-" + "5" * 32, "A-" + "6" * 32
+        first = self.response(attempt_id=first_id, version=2)
+        review.import_responses(self.packet, self.response_batch_v2(
+            [first], "first-v2.json"))
+        with self.assertRaisesRegex(ValueError, "cannot be silently replaced"):
+            review.import_responses(self.packet, self.response_batch_v2([
+                self.response(text="Different replacement", attempt_id=second_id,
+                              previous_attempt=first_id, version=2),
+            ], "replace-v2.json"))
+        with self.assertRaisesRegex(ValueError, "already used|predecessor"):
+            review.import_responses(self.packet, self.response_batch_v2([
+                self.response("B-CONDITIONAL-USE", world="A", attempt_id=first_id,
+                              version=2),
+            ], "reuse-v2.json"))
+        self.assertEqual(review.verify(self.packet)["attempts"], 1)
+
+    def test_v2_empty_exports_and_unmapped_review_skips_contract_decision(self):
+        empty = self.response(text="", attempt_id="A-" + "7" * 32, version=2)
+        review.import_responses(self.packet, self.response_batch_v2(
+            [empty], "empty-v2.json"))
+        out = self.root / "blind-v2"
+        review.export_review(self.packet, out)
+        key = review.read_json(out / "hidden" / "review-key.json")
+        item = review.read_json(
+            out / "items" / f"{key['records'][0]['alias']}.json")
+        self.assertEqual((key["format"], item["response"], item["response_state"]),
+                         (review.REVIEW_KEY_FORMAT_V2, "",
+                          "completed"))
+        self.assertEqual(set(item["mapping_options"]), set(review.MAPPING_OPTIONS))
+        base = {"alias": item["alias"], "reviewer_id": "reviewer-v2",
+                "response_act": "empty", "mapping": "ambiguous",
+                "decision": None, "reason": "The empty response has no finite map.",
+                "evidence_refs": ["current"]}
+        with self.assertRaisesRegex(ValueError, "must not carry a decision"):
+            review.import_reviews(self.packet, out, self.write_batch(
+                "bad-v2-review.json", {
+                    "format": review.REVIEW_FORMAT_V2,
+                    "records": [base | {"decision": "title-yuanting"}],
+                }))
+        imported = review.import_reviews(self.packet, out, self.write_batch(
+            "good-v2-review.json",
+            {"format": review.REVIEW_FORMAT_V2, "records": [base]}))
+        self.assertEqual(imported["records"], 1)
+        review.import_reviews(self.packet, out, self.write_batch(
+            "second-v2-review.json",
+            {"format": review.REVIEW_FORMAT_V2,
+             "records": [base | {"reviewer_id": "reviewer-v2-b"}]}))
+        summary = review.recompute(self.packet)["overall"]
+        self.assertEqual(summary["unmapped_judgments"], 2)
+        self.assertEqual(summary["multi_reviewer_disagreements"], 0)
+        self.assertEqual(summary["judgments"], {"correct": 0, "incorrect": 0,
+                                                "total": 0})
 
     def test_blind_export_hides_identity_and_requires_completed_response(self):
         review.import_responses(self.packet, self.response_batch([

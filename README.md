@@ -21,6 +21,20 @@ System studies can expose case questions; evaluation can challenge architectural
 
 [Agent Memory Study (AMS)](https://github.com/IndelibleVivi/agent-memory-study) contributes readings, source investigations and experiments that Relata can use with their original evidence limits. Both projects can support long-form synthesis while retaining their own questions and artifacts.
 
+## Use the local Research Studio
+
+The local [Research Studio](docs/studio.md) joins a research desk, versioned Observatory, Study Laboratory and Library. Keep a question and competing explanations, compare two pinned Atlas snapshots, run three fixed offline instruments, review raw observations with independent protocols, and make a selected offline edition. SQLite and immutable artifacts live in a private workspace outside this checkout.
+
+Requirements: Python 3.11+, Node.js 18+ and Git on a local machine. The implementation uses standard libraries and browser ES modules; no package install or account is required. macOS is exercised; other platforms are not yet verified.
+
+```bash
+python3 -B tools/relata_lab.py --workspace "$HOME/RelataWorkspace" serve
+```
+
+Open `http://127.0.0.1:8765`, then use **导入当前十系统馆藏** in Observatory. Read the [operator/recovery guide](docs/studio.md) and [storage contract](docs/lab-storage.md) before transferring research. The app does not contact providers or fetch source URLs. Clicking an upstream source link opens that external site; a deliberately saved text capture remains available offline. Local exports are not uploads. The existing static reader still opens without a server.
+
+[ADR-0011](decisions/ADR-0011-local-research-studio.md) accepts this local implementation scope. The [source comparison article](research/collection-delivery-comparison.md) and [finite-instrument report](research/finite-instrument-report.md) are actual research works: bounded source synthesis and deterministic authored computation, with no new model or human results.
+
 ## Start from a concrete question
 
 The [lab vision and capability map](research/lab-development.md) explains the current stage, directional risks and continuous development programme. Open the [five-question offline reader](systems/architecture-atlas/index.html#questions), or read the [GitHub exhibit edition](systems/architecture-atlas/exhibits.md): changing future uses, delivery after retrieval, correction propagation, timely resurfacing, and how experience changes understanding or practice. Ten pinned source models connect concrete scenarios, reading conditions, graph evidence and research destinations.
@@ -67,7 +81,7 @@ Three bounded research additions connect these functions: an unreviewed [RC-006 
 
 ## Why the platform is deferred
 
-No canonical ontology, system protocol, scoring contract, benchmark release, Leaderboard, Arena, SDK, service or hosted infrastructure is accepted. The [historical architecture draft](docs/vision/relata-target-architecture-draft-0.1.md) remains non-normative; the [assumption register](ASSUMPTION_REGISTER.md) preserves its disposition.
+No canonical ontology, system protocol, scoring contract, benchmark release, Leaderboard, Arena, SDK, service beyond the ADR-0011 local app transport, or hosted infrastructure is accepted. The [historical architecture draft](docs/vision/relata-target-architecture-draft-0.1.md) remains non-normative; the [assumption register](ASSUMPTION_REGISTER.md) preserves its disposition.
 
 [ADR-0005](decisions/ADR-0005-offline-pilot-tooling.md) authorizes replaceable offline pilot tooling without waiting for third-party scores. It does not authorize provider adapters, private data or public performance claims. The narrow provider compatibility smoke in ADR-0010 is separate from that tooling and does not authorize a memory-system run. Formal promotion gates still apply to accepted cross-system boundaries.
 

@@ -3,6 +3,8 @@
 
 # Relata Working Charter
 
+**本地研究工具例外：** [ADR-0011](decisions/ADR-0011-local-research-studio.zh-CN.md) 接受 loopback Research Studio、持久工作空间、版本化馆藏、固定离线仪器和多协议评审／导出。本地 app transport 属于此例外；跨系统 provider runner、hosting、新模型或人类 study、Tilia 实现仍不在范围内。
+
 **P0 扩展（2026-10-23）：** 指定 RC-005 研究另含[固定 capture 的 reader 后续包](experiments/rc005-exposure-followup.md)：18 份原 immediate capture × 三种投影，最多新增 54 次 DSF reader dispatch，新增三臂统一 4096 completion 上限，不重新摄入／检索／embedding，共用原 300 chat／500 embedding 累计账本。原 144 位置和回答不改写。[Relata × AMS campaign](research/relata-ams-campaign.md)保留各自研究问题与证据；P1–P6 设计不激活其他 provider 或真人研究。
 
 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) 于 2026-10-23 接受，仅激活 [RC-005 → pinned Mem0 执行包](experiments/rc005-native-execution-packet.md)。固定 study CLI 覆盖 54 个 reader 预检、36 个强原文对照和 54 个 native 回答位置；源码实现与离线 plumbing 检查不证明真实可运行性或语义成功。选用既有 generation entitlement 与本地 Qwen3-Embedding-0.6B-Q8_0/1024；全包最多 300 chat／500 embedding client dispatch，包含失败及诊断，不充值、不走收费 fallback。Native state、attempts、回答和未评审盲包留在 ignored local artifacts。正式 benchmark promotion、其他 study、Tilia 产品实现、公开结果、hosting、外联与 license 保留各自边界。[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 仍是独立兼容性例外；配置匹配的接口证据可复用。
@@ -130,7 +132,7 @@ Relata 当前不会：
 - 用 relational case 结果代替 general factual、temporal、operational、provenance 或 code-memory evidence；
 - 假设每项 relevant memory 都应进入 current context；
 - 把所有 projects、people、roles 与 surfaces 当成一个 undifferentiated relationship scope；
-- 构建跨系统 runner、API、SDK、service、Arena 或 hosted infrastructure，或从 Relata 的研究目标推导出 Tilia 实现任务。
+- 构建跨系统 runner、system-under-study API、SDK、ADR-0011 本地 app transport 以外的 service、Arena 或 hosted infrastructure，或从 Relata 的研究目标推导出 Tilia 实现任务。
 - 把 [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 的兼容性 smoke 扩张为通用 provider adapter、memory-system run、RC-005 native packet、corpus 执行，或超出已接受观察范围的兼容性主张。
 
 ## 5. R0 进展与 case-evaluation success

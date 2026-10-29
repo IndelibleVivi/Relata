@@ -1,4 +1,7 @@
-:root {
+:host {
+  display: block;
+  container-type: inline-size;
+  container-name: atlas;
   color-scheme: light;
   --ink: #263c43;
   --muted: #617579;
@@ -10,7 +13,7 @@
 }
 
 * { box-sizing: border-box; }
-body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--font); font-size: 15px; line-height: 1.65; }
+.atlas-frame { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--font); font-size: 15px; line-height: 1.65; }
 a { color: inherit; text-decoration: none; }
 a:hover { text-decoration: underline; text-underline-offset: 4px; }
 button, input, select { font: inherit; }
@@ -245,12 +248,12 @@ footer a { display: inline-block; margin-left: 12px; }
 noscript { position: fixed; bottom: 0; padding: 15px; background: #fff1d9; width: 100%; }
 #diagram-stage .related > path { stroke: #b45532; stroke-width: 2.4px; }
 
-@media(min-width: 1800px) {
+@container atlas (min-width: 1800px) {
   main { padding-left: 65px; padding-right: 65px; }
   #diagram-viewport { height: 760px; }
 }
 
-@media(max-width: 1000px) {
+@container atlas (max-width: 1000px) {
   .sidebar { width: 190px; padding: 26px 16px; }
   main { margin-left: 190px; padding: 0 24px 25px; }
   .exhibit-entry { column-gap: 20px; grid-template-columns: minmax(0, 1fr) 150px auto; }
@@ -266,7 +269,7 @@ noscript { position: fixed; bottom: 0; padding: 15px; background: #fff1d9; width
   .exports { gap: 8px; }
 }
 
-@media(max-width: 700px) {
+@container atlas (max-width: 700px) {
   .sidebar { position: relative; width: auto; padding: 20px 18px 14px; overflow: visible; }
   .brand { font-size: 30px; display: flex; align-items: center; justify-content: space-between; }
   .brand span { margin: 0; font-size: 9px; }
@@ -349,13 +352,13 @@ noscript { position: fixed; bottom: 0; padding: 15px; background: #fff1d9; width
   .source-row a { font-size: 10px; }
 }
 
-@media(max-width: 1100px) {
+@container atlas (max-width: 1100px) {
   .example-columns { grid-template-columns: minmax(0, 1fr); gap: 25px; }
   .example-heading { display: block; }
   .example-heading > p { margin-top: 6px; }
 }
 
-@media(max-width: 650px) {
+@container atlas (max-width: 650px) {
   .has-worked-example .condition-tab { flex: 0 0 auto; min-width: 116px; padding: 12px; }
   .worked-example { padding-top: 16px; }
   .example-heading h3 { font-size: 21px; }
@@ -364,7 +367,7 @@ noscript { position: fixed; bottom: 0; padding: 15px; background: #fff1d9; width
   .worked-example p, #example-acceptable li { font-size: 15px; }
 }
 
-@media(max-width: 360px) {
+@container atlas (max-width: 360px) {
   main { padding-inline: 12px; }
   .questions-heading h1, .exhibit-heading h1 { font-size: 28px; }
   .page-top { display: block; }
@@ -385,4 +388,73 @@ noscript { position: fixed; bottom: 0; padding: 15px; background: #fff1d9; width
   footer { page-break-before: avoid; }
   .has-worked-example .condition-switcher { position: static; }
   .example-columns { display: block; }
+}
+
+/* The same component frame is used in the offline document and Studio panes. */
+.atlas-frame { position: relative; display: grid; grid-template-columns: 230px minmax(0,1fr); align-items: start; }
+.sidebar { position: sticky; inset: auto; top: 0; width: 100%; height: 100vh; }
+main { margin-left: 0; min-width: 0; }
+.skip-link { position: absolute; }
+/* ATLAS_SVG_START */
+#diagram-stage text { font-family: Arial, "PingFang SC", "Microsoft YaHei", sans-serif; }
+#diagram-stage .route { fill:none; stroke:#899da3; stroke-width:1.3; stroke-linejoin:round; }
+#diagram-stage .edge:hover .route { stroke:#bb5b35; stroke-width:3; }
+#diagram-stage .node { cursor:pointer; }
+#diagram-stage .node:hover .node-main { stroke:#bb5b35; stroke-width:2; }
+#diagram-stage .selected .node-main { stroke:#bb5b35; stroke-width:3; }
+/* ATLAS_SVG_END */
+a[aria-disabled="true"] { cursor:default; opacity:.65; }
+@container atlas (max-width:1000px) { .atlas-frame { grid-template-columns:190px minmax(0,1fr); } .sidebar { width:100%; } main {margin-left:0;} }
+@container atlas (max-width:700px) { .atlas-frame { display:block; } .sidebar {position:relative; height:auto;} }
+@media print { .atlas-frame {display:block;} }
+
+
+/* Studio comparison panes foreground the diagram while keeping every research
+   route and evidence surface reachable. Standalone retains its own chrome. */
+.embedded.atlas-frame { display:block; }
+.embedded .sidebar { position:relative; height:auto; padding:7px 12px; display:flex; flex-direction:row; align-items:start; flex-wrap:wrap; gap:8px 18px; overflow:visible; }
+.embedded .brand, .embedded .sidebar-foot, .embedded .page-top, .embedded .project-heading .eyebrow, .embedded #project-breadcrumbs { display:none; }
+.embedded #mode-nav { display:flex; flex-shrink:0; margin:0; border:0; }
+.embedded #mode-nav a { padding:5px 12px; font-size:12px; }
+.embedded-directory { flex:1; min-width:140px; padding:5px 0; font-size:12px; }
+.embedded-directory > summary { cursor:pointer; text-align:right; }
+.embedded-directory[open] { flex-basis:100%; order:2; }
+.embedded-directory[open] > summary { text-align:left; }
+.embedded-directory .collection { margin-top:10px; }
+.embedded-directory .search-label { display:block; margin:8px 0 3px; }
+.embedded-directory #project-list { display:grid; max-height:240px; overflow:auto; margin-top:8px; grid-template-columns:repeat(auto-fit,minmax(145px,1fr)); }
+.embedded-directory .project-item { min-width:0; max-width:none; width:100%; padding:7px; }
+.embedded main { margin:0; padding:0 14px 20px; }
+.embedded .project-heading { display:block; padding:12px 0 6px; }
+.embedded .project-heading h1 { font-size:23px; line-height:1.25; margin:0; }
+.embedded-project-context { font-size:12px; color:var(--muted); margin-bottom:9px; }
+.embedded-project-context > summary { cursor:pointer; padding:2px 0; }
+.embedded-project-context > p { font-size:12px; margin:8px 0; }
+.embedded-project-context .boundary { margin:10px 0; }
+.embedded-project-context .identity { align-items:start; gap:7px; padding-bottom:9px; }
+.embedded #view-tabs { margin-top:0; }
+.embedded .view-tab { padding:9px 7px; font-size:12px; }
+.embedded .view-tab .tab-number { margin-right:4px; font-size:9px; }
+.embedded .diagram-section { padding-top:0; }
+.embedded .view-heading { display:flex; padding-top:8px; margin-bottom:6px; gap:12px; }
+.embedded .view-heading h2 { font-size:19px; margin:0 0 4px; }
+.embedded .view-heading p { font-size:12px; line-height:1.5; margin:0; }
+.embedded .exports { font-size:11px; margin:0; }
+.embedded .diagram-toolbar { padding:7px 9px; gap:5px; flex-direction:row; flex-wrap:wrap; align-items:center; }
+.embedded .diagram-toolbar > span { max-width:none; font-size:10px; }
+.embedded .zoom-controls { gap:4px; align-self:auto; }
+.embedded .zoom-controls button { min-width:25px; padding:4px 6px; font-size:11px; }
+.embedded #diagram-viewport { height:400px; }
+.embedded .return-context { margin:8px 0 0; padding:7px 9px; font-size:11px; }
+.embedded .exhibit-heading { padding-top:15px; }
+.embedded .exhibit-heading h1, .embedded .questions-heading h1 { font-size:26px; }
+.embedded .exhibit-actions { min-width:0; }
+.embedded .exhibit-summary { font-size:13px; }
+.embedded .exhibit-view > .exhibit-footer, .embedded .project-view > footer { display:none; }
+@container atlas (max-width:400px) {
+  .embedded main { padding-inline:10px; }
+  .embedded .view-tab { padding-inline:5px; font-size:11px; }
+  .embedded .view-tab .tab-number { display:none; }
+  .embedded .view-heading { display:block; }
+  .embedded .exports { margin-top:5px; }
 }

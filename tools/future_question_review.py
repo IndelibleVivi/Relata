@@ -27,8 +27,11 @@ except ImportError:
 
 MANIFEST_FORMAT = "relata-future-question-review-manifest-1"
 RESPONSE_FORMAT = "relata-future-question-responses-1"
+RESPONSE_FORMAT_V2 = "relata-future-question-responses-2"
 REVIEW_FORMAT = "relata-future-question-reviews-1"
+REVIEW_FORMAT_V2 = "relata-future-question-reviews-2"
 REVIEW_KEY_FORMAT = "relata-future-question-review-key-1"
+REVIEW_KEY_FORMAT_V2 = "relata-future-question-review-key-2"
 RESPONSE_STATUSES = ("completed", "pending", "technical_failure", "not-run")
 MANIFEST_FIELDS = {
     "format", "status", "history_sha256", "contract_sha256", "conditions",
@@ -40,6 +43,10 @@ RECORD_FIELDS = {
 }
 RESPONSE_BATCH_FIELDS = {"format", "provenance", "records"}
 RESPONSE_FIELDS = {"input_id", "status", "response", "failure"}
+RESPONSE_BATCH_FIELDS_V2 = {"format", "provenance", "records"}
+RESPONSE_FIELDS_V2 = {
+    "input_id", "attempt_id", "previous_attempt", "status", "response", "failure",
+}
 REVIEW_BATCH_FIELDS = {
     "format", "review_key_sha256", "records",
 }
@@ -48,11 +55,33 @@ REVIEW_FIELDS = {
 }
 REVIEW_IMPORT_FIELDS = {"format", "records"}
 REVIEW_INPUT_FIELDS = {"alias", "reviewer_id", "decision", "reason", "evidence_refs"}
+REVIEW_FIELDS_V2 = {
+    "alias", "input_id", "attempt_id", "reviewer_id", "response_act", "mapping",
+    "decision", "reason", "evidence_refs",
+}
+REVIEW_INPUT_FIELDS_V2 = {
+    "alias", "reviewer_id", "response_act", "mapping", "decision", "reason",
+    "evidence_refs",
+}
 REVIEW_ITEM_FIELDS = {"alias", "input_view", "response", "decision_options", "instructions"}
+REVIEW_ITEM_FIELDS_V2 = {
+    "alias", "input_view", "response", "response_state", "decision_options",
+    "response_act_options", "mapping_options", "instructions",
+}
 REVIEW_KEY_FIELDS = {"format", "packet_id", "history_sha256", "contract_sha256", "records"}
+REVIEW_KEY_FIELDS_V2 = REVIEW_KEY_FIELDS
 REVIEW_KEY_RECORD_FIELDS = {
     "alias", "input_id", "input_sha256", "response_sha256", "item_sha256",
 }
+REVIEW_KEY_RECORD_FIELDS_V2 = REVIEW_KEY_RECORD_FIELDS | {"attempt_id"}
+RESPONSE_ACT_OPTIONS = (
+    "answer", "clarification", "abstention", "refusal", "action", "empty",
+    "technical-failure", "other",
+)
+MAPPING_OPTIONS = (
+    "mapped", "unmapped", "ambiguous", "partial", "not-applicable",
+    "contract-insufficient",
+)
 LEGACY_REVIEW_INSTRUCTIONS = (
     "Judge whether the response completes the current information task using the "
     "shown input. Select one finite decision, cite evidence locators from this "
@@ -66,6 +95,14 @@ REVIEW_INSTRUCTIONS = (
     "Judge the response against the shown input and current task; select one listed "
     "decision, cite evidence locators, and explain why. Options span all questions "
     "and worlds in this family, not this item's correct answer region."
+)
+REVIEW_INSTRUCTIONS_V2 = (
+    "请根据此处提供的输入，判断回答怎样完成当前信息任务。先记录回答的 response act，"
+    "再说明它是否映射到一个 finite decision；unmapped、ambiguous 或 contract-insufficient "
+    "可以没有 decision。需要引用时，只引用本输入内的 evidence locators。"
+    " Judge the response against the shown input and current task. Record its response act "
+    "and mapping; mapping states other than mapped may omit a decision. Options span all "
+    "questions and worlds in the family, not this item's correct answer region."
 )
 
 def require(condition: bool, message: str) -> None:
@@ -179,7 +216,8 @@ def _stored_keys(folder: Path) -> dict[str, dict[str, Any]]:
         require(path.read_bytes() == canonical(read_json(path)),
                 "stored review key is not canonical")
         key = require_shape(read_json(path), REVIEW_KEY_FIELDS, "stored review key")
-        require(key["format"] == REVIEW_KEY_FORMAT, "invalid stored review key")
+        require(key["format"] in {REVIEW_KEY_FORMAT, REVIEW_KEY_FORMAT_V2},
+                "invalid stored review key")
         identifier = key["packet_id"]
         require(isinstance(identifier, str) and
                 re.fullmatch(r"P-[0-9a-f]{32}", identifier) and
@@ -191,16 +229,19 @@ def _stored_keys(folder: Path) -> dict[str, dict[str, Any]]:
 def _check_stored_key(key: dict[str, Any], manifest: dict[str, Any],
                       by_id: dict[str, dict[str, Any]],
                       responses: dict[str, dict[str, Any]],
-                      source: dict[str, Any]) -> dict[str, dict[str, str]]:
+                      source: dict[str, Any]) -> dict[str, dict[str, Any]]:
     """Rebind a stored blind key to the exact contract, inputs and responses."""
-    require(key["history_sha256"] == manifest["history_sha256"] and
+    require(key["format"] in {REVIEW_KEY_FORMAT, REVIEW_KEY_FORMAT_V2} and
+            key["history_sha256"] == manifest["history_sha256"] and
             key["contract_sha256"] == manifest["contract_sha256"],
             "stored review key contract revision mismatch")
+    version = 1 if key["format"] == REVIEW_KEY_FORMAT else 2
     seen_aliases: set[str] = set()
     seen_inputs: set[str] = set()
-    options_by_alias: dict[str, dict[str, str]] = {}
+    options_by_alias: dict[str, dict[str, Any]] = {}
     for record in key["records"]:
-        record = require_shape(record, REVIEW_KEY_RECORD_FIELDS,
+        record = require_shape(record, REVIEW_KEY_RECORD_FIELDS if version == 1 else
+                               REVIEW_KEY_RECORD_FIELDS_V2,
                                "stored review key record")
         alias, identifier = record["alias"], record["input_id"]
         require(isinstance(alias, str) and re.fullmatch(r"V-[0-9a-f]{32}", alias)
@@ -214,24 +255,47 @@ def _check_stored_key(key: dict[str, Any], manifest: dict[str, Any],
                 "stored review key does not bind a completed response")
         require(record["response_sha256"] == digest(canonical(response)),
                 "stored review key response digest mismatch")
+        if version == 2:
+            require(record["attempt_id"] == attempt_identity(response),
+                    "v2 review key does not bind its completed attempt")
         require(isinstance(record["item_sha256"], str) and
                 re.fullmatch(r"[0-9a-f]{64}", record["item_sha256"]),
                 "invalid stored review item digest")
         # Reconstruct the exact exported contract without requiring the external
         # reviewer folder to remain on disk. This also preserves old exports.
-        item = {
-            "alias": alias,
-            "input_view": _input_view(by_id[identifier], source),
-            "response": response["response"],
-            "decision_options": decision_options_for(by_id[identifier], manifest["contract"]),
-            "instructions": REVIEW_INSTRUCTIONS,
-        }
-        if digest(canonical(item)) != record["item_sha256"]:
-            item["decision_options"] = manifest["contract"]["decisions"]
-            item["instructions"] = LEGACY_REVIEW_INSTRUCTIONS
+        if version == 2:
+            item = {
+                "alias": alias,
+                "input_view": _input_view(by_id[identifier], source),
+                "response": response["response"],
+                "response_state": response["status"],
+                "decision_options": decision_options_for(
+                    by_id[identifier], manifest["contract"]),
+                "response_act_options": list(RESPONSE_ACT_OPTIONS),
+                "mapping_options": list(MAPPING_OPTIONS),
+                "instructions": REVIEW_INSTRUCTIONS_V2,
+            }
             require(digest(canonical(item)) == record["item_sha256"],
-                    "stored review item contract digest mismatch")
-        options_by_alias[alias] = item["decision_options"]
+                    "stored v2 review item contract digest mismatch")
+        else:
+            item = {
+                "alias": alias,
+                "input_view": _input_view(by_id[identifier], source),
+                "response": response["response"],
+                "decision_options": decision_options_for(
+                    by_id[identifier], manifest["contract"]),
+                "instructions": REVIEW_INSTRUCTIONS,
+            }
+            if digest(canonical(item)) != record["item_sha256"]:
+                item["decision_options"] = manifest["contract"]["decisions"]
+                item["instructions"] = LEGACY_REVIEW_INSTRUCTIONS
+                require(digest(canonical(item)) == record["item_sha256"],
+                        "stored review item contract digest mismatch")
+        options_by_alias[alias] = {
+            "attempt_id": response.get("attempt_id"),
+            "item": item,
+            "decision_options": item["decision_options"],
+        }
         seen_aliases.add(alias)
         seen_inputs.add(identifier)
     return options_by_alias
@@ -305,30 +369,91 @@ def _load_manifest(folder: Path, source: dict[str, Any], contracts: dict[str, An
             "input-only manifest identities differ")
     return manifest, by_id
 
-def _load_responses(folder: Path, by_id: dict[str, dict[str, Any]]
-                    ) -> dict[str, dict[str, Any]]:
-    responses: dict[str, dict[str, Any]] = {}
+def attempt_identity(record: dict[str, Any]) -> str:
+    """Name a v2 attempt or the sole original v1 record within its bound input.
+
+    This is a reading identity, never a rewrite of v1 bytes or response hashes.
+    The input ID in the surrounding chain/key disambiguates legacy-v1.
+    """
+    return record.get("attempt_id") or "legacy-v1"
+
+
+def _load_response_history(folder: Path, by_id: dict[str, dict[str, Any]]
+                           ) -> dict[str, list[dict[str, Any]]]:
+    """Return immutable attempts per input.
+
+    v1 remains one record per input and keeps its original meaning. v2 adds an
+    explicit per-input attempt chain, so a pending or failed position may later
+    gain a completed attempt without rewriting the earlier record.
+    """
+    histories: dict[str, list[dict[str, Any]]] = {}
+    seen_attempts: set[str] = set()
     for path in _batch_files(folder / "responses"):
-        batch = require_shape(read_json(path), RESPONSE_BATCH_FIELDS, "response batch")
-        require(batch["format"] == RESPONSE_FORMAT and
+        batch = read_json(path)
+        require(isinstance(batch, dict) and
+                batch.get("format") in {RESPONSE_FORMAT, RESPONSE_FORMAT_V2} and
                 isinstance(batch["provenance"], str) and batch["provenance"].strip(),
                 "invalid response batch provenance")
         require(isinstance(batch["records"], list) and batch["records"], "empty response batch")
-        for record in batch["records"]:
-            record = require_shape(record, RESPONSE_FIELDS, "response")
+        version = 1 if batch["format"] == RESPONSE_FORMAT else 2
+        require_shape(batch, RESPONSE_BATCH_FIELDS if version == 1 else
+                      RESPONSE_BATCH_FIELDS_V2, "response batch")
+        for raw in batch["records"]:
+            record = require_shape(
+                raw, RESPONSE_FIELDS if version == 1 else RESPONSE_FIELDS_V2, "response")
             identifier = record["input_id"]
-            require(identifier in by_id and identifier not in responses,
-                    "response ID is unknown or already used")
-            _check_response_record(record, "stored")
-            responses[identifier] = record
+            require(identifier in by_id, "response ID is unknown")
+            history = histories.setdefault(identifier, [])
+            if version == 1:
+                require(not history, "response ID is unknown or already used")
+                _check_response_record(record, "stored", version=1)
+                history.append(deepcopy(record))
+                continue
+
+            attempt_id = record["attempt_id"]
+            require(isinstance(attempt_id, str) and
+                    re.fullmatch(r"A-[0-9a-f]{32}", attempt_id) and
+                    attempt_id not in seen_attempts,
+                    "v2 attempt ID is invalid or already used")
+            _check_response_record(record, "stored v2", version=2)
+            previous = record["previous_attempt"]
+            if not history:
+                require(previous is None, "first attempt cannot have a predecessor")
+            else:
+                head = history[-1]
+                require(head.get("status") != "completed",
+                        "a completed response cannot be silently replaced")
+                require(previous == attempt_identity(head),
+                        "new attempt must name the current immutable predecessor")
+            history.append(deepcopy(record))
+            seen_attempts.add(attempt_id)
+    return histories
+
+
+def _view_attempts(histories: dict[str, list[dict[str, Any]]],
+                   by_id: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]]:
+    """Project one latest attempt per fixed position without changing case count."""
+    responses: dict[str, dict[str, Any]] = {}
+    for identifier in by_id:
+        history = histories.get(identifier, [])
+        if history:
+            responses[identifier] = deepcopy(history[-1])
+        else:
+            responses[identifier] = {
+                "input_id": identifier, "attempt_id": None,
+                "previous_attempt": None, "status": "pending",
+                "response": None, "failure": None,
+            }
     return responses
 
-def _check_response_record(record: dict[str, Any], label: str) -> None:
+def _check_response_record(record: dict[str, Any], label: str, *,
+                           version: int = 1) -> None:
     status, response, failure = record["status"], record["response"], record["failure"]
     require(status in RESPONSE_STATUSES, "invalid response status")
     if status == "completed":
-        require(isinstance(response, str) and response.strip() and failure is None,
-                f"{label} response needs response text and no failure")
+        require(isinstance(response, str) and failure is None and
+                (version == 2 or bool(response.strip())),
+                f"{label} completed response needs literal text and no failure")
     elif status == "technical_failure":
         require(response is None and isinstance(failure, str) and failure.strip(),
                 f"{label} technical failure needs a failure record and no response")
@@ -374,6 +499,47 @@ def _check_review_payload(review: dict[str, Any], identifier: str,
                 record, packet["source"])),
             f"{label} cites evidence outside the exact input view")
 
+
+def v2_attempt(packet: dict[str, Any], identifier: str,
+               attempt_id: str) -> dict[str, Any] | None:
+    history = packet["attempt_histories"].get(identifier, [])
+    return next((row for row in history
+                 if attempt_identity(row) == attempt_id and
+                 row["status"] == "completed"), None)
+
+
+def _check_v2_review_payload(review: dict[str, Any], identifier: str,
+                             attempt_id: str, packet: dict[str, Any],
+                             options: dict[str, str]) -> None:
+    require(v2_attempt(packet, identifier, attempt_id) is not None,
+            "v2 review does not bind a completed attempt")
+    reviewer = review["reviewer_id"]
+    require(isinstance(reviewer, str) and bool(reviewer.strip()) and
+            len(reviewer) <= 120, "invalid v2 reviewer ID")
+    require(review["response_act"] in RESPONSE_ACT_OPTIONS,
+            "v2 response_act is not allowed")
+    mapping = review["mapping"]
+    require(mapping in MAPPING_OPTIONS, "v2 mapping is not allowed")
+    if mapping == "mapped":
+        require(isinstance(review["decision"], str) and
+                review["decision"] in options,
+                "mapped v2 review requires an allowed decision")
+    else:
+        require(review["decision"] is None,
+                "non-mapped v2 review must not carry a decision")
+    reason = review["reason"]
+    require(isinstance(reason, str) and bool(reason.strip()),
+            "v2 reason is required")
+    refs = review["evidence_refs"]
+    require(isinstance(refs, list) and bool(refs) and
+            all(isinstance(ref, str) and ref.strip() for ref in refs) and
+            len(refs) == len(set(refs)),
+            "v2 evidence references are required and unique")
+    record = packet["by_id"][identifier]
+    require(set(refs) <= allowed_evidence_refs(_input_view(
+                record, packet["source"])),
+            "v2 review cites evidence outside the exact input view")
+
 def _load_reviews(folder: Path, by_id: dict[str, dict[str, Any]],
                   decisions: dict[str, str],
                   keys: dict[str, dict[str, Any]], packet: dict[str, Any]
@@ -382,26 +548,44 @@ def _load_reviews(folder: Path, by_id: dict[str, dict[str, Any]],
     seen: set[tuple[str, str]] = set()
     keys_by_hash = {digest(canonical(key)): key for key in keys.values()}
     for path in _batch_files(folder / "reviews"):
-        batch = require_shape(read_json(path), REVIEW_BATCH_FIELDS, "review batch")
-        require(batch["format"] == REVIEW_FORMAT and
+        batch = read_json(path)
+        require(isinstance(batch, dict) and
+                batch.get("format") in {REVIEW_FORMAT, REVIEW_FORMAT_V2} and
                 isinstance(batch["review_key_sha256"], str) and
                 re.fullmatch(r"[0-9a-f]{64}", batch["review_key_sha256"]),
                 "invalid review batch")
         key = keys_by_hash.get(batch["review_key_sha256"])
         require(key is not None, "review batch does not name a stored blind packet")
-        options_by_alias = _check_stored_key(
+        version = 1 if key["format"] == REVIEW_KEY_FORMAT else 2
+        require(batch["format"] ==
+                (REVIEW_FORMAT if version == 1 else REVIEW_FORMAT_V2),
+                "review batch format does not match its blind key")
+        require_shape(batch, REVIEW_BATCH_FIELDS, "review batch")
+        keyed_by_alias = _check_stored_key(
             key, packet["manifest"], by_id, packet["responses"], packet["source"])
         key_by_alias = {record["alias"]: record for record in key["records"]}
         require(isinstance(batch["records"], list) and batch["records"], "empty review batch")
         for record in batch["records"]:
-            record = require_shape(record, REVIEW_FIELDS, "stored review")
+            record = require_shape(record, REVIEW_FIELDS if version == 1 else
+                                   REVIEW_FIELDS_V2, "stored review")
             alias = record["alias"]
             require(alias in key_by_alias and
                     key_by_alias[alias]["input_id"] == record["input_id"],
                     "stored review alias does not bind its input")
-            _check_review_payload(record, record["input_id"], packet, "stored review")
-            require(record["decision"] in options_by_alias[alias],
-                    "stored review decision is not among the exported item options")
+            if version == 1:
+                _check_review_payload(record, record["input_id"], packet, "stored review")
+                require(record["decision"] in keyed_by_alias[alias]["decision_options"],
+                        "stored review decision is not among the exported item options")
+            else:
+                require(record["attempt_id"] == key_by_alias[alias]["attempt_id"],
+                        "v2 stored review attempt does not match its key")
+                _check_v2_review_payload(
+                    record, record["input_id"], record["attempt_id"], packet,
+                    keyed_by_alias[alias]["decision_options"])
+                if record["mapping"] == "mapped":
+                    require(record["decision"] in
+                            keyed_by_alias[alias]["decision_options"],
+                            "stored review decision is not among the exported item options")
             pair = (record["input_id"], record["reviewer_id"])
             require(pair not in seen, "reviewer already reviewed this input")
             seen.add(pair)
@@ -414,28 +598,28 @@ def inspect_packet(path: Path, source: dict[str, Any] | None = None,
         source, contracts = load_bundle()
     folder = checked_directory(path)
     manifest, by_id = _load_manifest(folder, source, contracts)
-    stored_responses = _load_responses(folder, by_id)
-    responses = deepcopy(stored_responses)
-    for identifier in set(by_id) - set(responses):
-        responses[identifier] = {
-            "input_id": identifier, "status": "pending",
-            "response": None, "failure": None,
-        }
+    attempt_histories = _load_response_history(folder, by_id)
+    responses = _view_attempts(attempt_histories, by_id)
     keys = _stored_keys(folder)
     packet = {"folder": folder, "source": source, "contracts": contracts,
               "manifest": manifest, "by_id": by_id,
               "responses": responses, "keys": keys,
-              "stored_response_ids": set(stored_responses)}
+              "attempt_histories": attempt_histories,
+              "stored_response_ids": set(attempt_histories)}
     packet["reviews"] = _load_reviews(
         folder, by_id, contracts["decisions"], keys, packet)
     return packet
 
 def verify(path: Path) -> dict[str, Any]:
     packet = inspect_packet(path)
+    attempts = sum(len(history) for history in packet["attempt_histories"].values())
     return {"status": "prepared-inputs-valid",
             "inputs": len(packet["by_id"]),
             "responses": sum(response["status"] != "pending"
                              for response in packet["responses"].values()),
+            "attempts": attempts,
+            "positions_with_multiple_attempts": sum(
+                len(history) > 1 for history in packet["attempt_histories"].values()),
             "review_keys": len(packet["keys"]),
             "reviews": len(packet["reviews"]),
             "execution": "not-run by this tool"}
@@ -448,26 +632,55 @@ def _next_batch(folder: Path, name: str) -> Path:
 
 def import_responses(path: Path, source_file: Path) -> dict[str, Any]:
     packet = inspect_packet(path)
-    body = require_shape(read_json(source_file), RESPONSE_BATCH_FIELDS, "response import")
-    require(body["format"] == RESPONSE_FORMAT, "unsupported response import format")
+    body = read_json(source_file)
+    require(isinstance(body, dict) and
+            body.get("format") in {RESPONSE_FORMAT, RESPONSE_FORMAT_V2},
+            "unsupported response import format")
+    version = 1 if body["format"] == RESPONSE_FORMAT else 2
+    require_shape(body, RESPONSE_BATCH_FIELDS if version == 1 else
+                  RESPONSE_BATCH_FIELDS_V2, "response import")
     require(isinstance(body["provenance"], str) and body["provenance"].strip(),
             "response import needs provenance")
     require(isinstance(body["records"], list) and body["records"], "empty response import")
-    imported_ids = set()
-    for record in body["records"]:
-        record = require_shape(record, RESPONSE_FIELDS, "imported response")
+    imported_ids: set[str] = set()
+    imported_attempts: set[str] = set()
+    for raw in body["records"]:
+        record = require_shape(
+            raw, RESPONSE_FIELDS if version == 1 else RESPONSE_FIELDS_V2, "imported response")
         identifier = record["input_id"]
-        require(identifier in packet["by_id"] and
-                identifier not in packet["stored_response_ids"],
-                "response ID is unknown or already used")
+        require(identifier in packet["by_id"], "response ID is unknown")
+        if version == 1:
+            require(identifier not in packet["stored_response_ids"],
+                    "response ID is unknown or already used")
+        else:
+            attempt_id = record["attempt_id"]
+            require(isinstance(attempt_id, str) and
+                    re.fullmatch(r"A-[0-9a-f]{32}", attempt_id) and
+                    attempt_id not in imported_attempts,
+                    "v2 attempt ID is invalid or duplicated in the import")
+            require(not any(existing.get("attempt_id") == attempt_id
+                            for history in packet["attempt_histories"].values()
+                            for existing in history),
+                    "v2 attempt ID is already used")
+            imported_attempts.add(attempt_id)
+            prior = packet["attempt_histories"].get(identifier, [])
+            if prior:
+                require(prior[-1]["status"] != "completed",
+                        "a completed response cannot be silently replaced")
+                require(record["previous_attempt"] == attempt_identity(prior[-1]),
+                        "new attempt must name the current immutable predecessor")
+            else:
+                require(record["previous_attempt"] is None,
+                        "first attempt cannot have a predecessor")
         require(identifier not in imported_ids, "response ID is duplicated in the import")
         imported_ids.add(identifier)
-        _check_response_record(record, "imported")
+        _check_response_record(record, "imported", version=version)
     dest = _next_batch(packet["folder"], "responses")
     require(not dest.exists(), "response batch would overwrite an existing record")
     write_new(dest, body)
     return {"status": "responses-imported", "batch": dest.name,
-            "records": len(body["records"]), "execution": "not-run by this tool"}
+            "records": len(body["records"]), "attempts_added": len(body["records"]),
+            "execution": "not-run by this tool"}
 
 def allowed_evidence_refs(view: dict[str, Any]) -> set[str]:
     refs = {"context", "current", "archive_pointer", "archive.status"}
@@ -485,6 +698,8 @@ def export_review(path: Path, output: Path) -> dict[str, Any]:
                        for record in packet["by_id"].values()}
     if len(condition_scope) != len(inputs.CONDITIONS):
         raise ValueError("review export requires the complete fixed condition matrix")
+    use_v2 = any(response.get("attempt_id") is not None
+                 for response in packet["responses"].values())
     folder = fresh_directory(output)
     items = folder / "items"
     hidden = folder / "hidden"
@@ -503,13 +718,21 @@ def export_review(path: Path, output: Path) -> dict[str, Any]:
             "decision_options": decision_options_for(record, packet["contracts"]),
             "instructions": REVIEW_INSTRUCTIONS,
         }
+        if use_v2:
+            item.update(response_state=response["status"],
+                        response_act_options=list(RESPONSE_ACT_OPTIONS),
+                        mapping_options=list(MAPPING_OPTIONS),
+                        instructions=REVIEW_INSTRUCTIONS_V2)
         blob = canonical(item)
         write_new(items / f"{alias}.json", item)
-        key_records.append({"alias": alias, "input_id": identifier,
-                            "input_sha256": record["input_sha256"],
-                            "response_sha256": digest(canonical(response)),
-                            "item_sha256": digest(blob)})
-    key = {"format": REVIEW_KEY_FORMAT,
+        key_record = {"alias": alias, "input_id": identifier,
+                      "input_sha256": record["input_sha256"],
+                      "response_sha256": digest(canonical(response)),
+                      "item_sha256": digest(blob)}
+        if use_v2:
+            key_record["attempt_id"] = attempt_identity(response)
+        key_records.append(key_record)
+    key = {"format": REVIEW_KEY_FORMAT_V2 if use_v2 else REVIEW_KEY_FORMAT,
            "packet_id": "P-" + secrets.token_hex(16),
            "history_sha256": packet["manifest"]["history_sha256"],
            "contract_sha256": packet["manifest"]["contract_sha256"],
@@ -539,21 +762,27 @@ def _load_review_packet(path: Path, packet: dict[str, Any]
             "invalid review packet directories")
     require({p.name for p in hidden_dir.iterdir()} == {"review-key.json"},
             "unexpected review key inventory")
-    key = require_shape(read_json(hidden_dir / "review-key.json"),
-                        REVIEW_KEY_FIELDS, "review key")
-    require(key["format"] == REVIEW_KEY_FORMAT and isinstance(key["records"], list) and
+    key = read_json(hidden_dir / "review-key.json")
+    require(isinstance(key, dict) and
+            key.get("format") in {REVIEW_KEY_FORMAT, REVIEW_KEY_FORMAT_V2},
+            "invalid review key")
+    version = 1 if key["format"] == REVIEW_KEY_FORMAT else 2
+    require_shape(key, REVIEW_KEY_FIELDS if version == 1 else REVIEW_KEY_FIELDS_V2,
+                  "review key")
+    require(isinstance(key["records"], list) and
             key["history_sha256"] == packet["manifest"]["history_sha256"] and
             key["contract_sha256"] == packet["manifest"]["contract_sha256"] and
             key["packet_id"] in packet["keys"],
             "invalid review key")
-    _check_stored_key(key, packet["manifest"], packet["by_id"],
-                      packet["responses"], packet["source"])
+    keyed = _check_stored_key(key, packet["manifest"], packet["by_id"],
+                              packet["responses"], packet["source"])
     require(key == packet["keys"][key["packet_id"]],
             "blind review key differs from its stored immutable copy")
     by_alias = {}
     expected_files = set()
     for record in key["records"]:
-        record = require_shape(record, REVIEW_KEY_RECORD_FIELDS, "review key record")
+        record = require_shape(record, REVIEW_KEY_RECORD_FIELDS if version == 1 else
+                               REVIEW_KEY_RECORD_FIELDS_V2, "review key record")
         alias = record["alias"]
         require(isinstance(alias, str) and re.fullmatch(r"V-[0-9a-f]{32}", alias)
                 and alias not in by_alias and record["input_id"] in packet["by_id"],
@@ -567,20 +796,16 @@ def _load_review_packet(path: Path, packet: dict[str, Any]
             decoded = json.loads(blob)
         except (UnicodeDecodeError, json.JSONDecodeError) as error:
             raise ValueError("invalid blind review item JSON") from error
-        item = require_shape(decoded, REVIEW_ITEM_FIELDS, "blind review item")
-        current_options = decision_options_for(
-            packet["by_id"][record["input_id"]], packet["contracts"])
-        current = (item["decision_options"] == current_options and
-                   item["instructions"] == REVIEW_INSTRUCTIONS)
-        # Exact old exports remain bound to their original bytes and vocabulary.
-        # They are retained for existing callers/reviews, not generated anew.
-        legacy = (item["decision_options"] == packet["contracts"]["decisions"] and
-                  item["instructions"] == LEGACY_REVIEW_INSTRUCTIONS)
-        require(item["alias"] == alias and (current or legacy),
-                "blind review item changed")
+        expected_item = keyed[alias]["item"]
+        item = require_shape(decoded, REVIEW_ITEM_FIELDS if version == 1 else
+                             REVIEW_ITEM_FIELDS_V2, "blind review item")
+        require(item == expected_item, "blind review item changed")
         response = packet["responses"].get(record["input_id"])
         require(response is not None and response["status"] == "completed" and
                 item["response"] == response["response"] and
+                (version == 1 or
+                 (item["response_state"] == response["status"] and
+                  record["attempt_id"] == attempt_identity(response))) and
                 record["input_sha256"] == packet["by_id"][record["input_id"]]["input_sha256"] and
                 record["response_sha256"] == digest(canonical(response)),
                 "blind review item is not bound to an imported response")
@@ -602,34 +827,67 @@ def _load_review_packet(path: Path, packet: dict[str, Any]
 def import_reviews(path: Path, review_packet: Path, source_file: Path) -> dict[str, Any]:
     packet = inspect_packet(path)
     key, by_alias = _load_review_packet(review_packet, packet)
-    body = require_shape(read_json(source_file), REVIEW_IMPORT_FIELDS, "review import")
-    require(body["format"] == REVIEW_FORMAT, "unsupported review import format")
+    body = read_json(source_file)
+    version = 1 if key["format"] == REVIEW_KEY_FORMAT else 2
+    require(isinstance(body, dict) and body.get("format") ==
+            (REVIEW_FORMAT if version == 1 else REVIEW_FORMAT_V2),
+            "unsupported review import format for its blind key")
+    require_shape(body, REVIEW_IMPORT_FIELDS, "review import")
     require(isinstance(body["records"], list) and body["records"], "empty review import")
     existing = {(record["input_id"], record["reviewer_id"]) for record in packet["reviews"]}
+    existing_attempt_pairs = {
+        (record["attempt_id"], record["reviewer_id"])
+        for record in packet["reviews"] if version == 2
+    }
     records, seen_reviews = [], set()
+    seen_attempt_pairs = set()
     for review in body["records"]:
-        review = require_shape(review, REVIEW_INPUT_FIELDS, "imported review")
+        review = require_shape(review, REVIEW_INPUT_FIELDS if version == 1 else
+                               REVIEW_INPUT_FIELDS_V2, "imported review")
         alias = review["alias"]
         require(alias in by_alias, "unknown blind review alias")
         identifier = by_alias[alias]["input_id"]
         reviewer = review["reviewer_id"]
         require(isinstance(reviewer, str) and reviewer.strip() and
                 len(reviewer) <= 120, "invalid reviewer ID")
-        pair = (identifier, reviewer)
-        require(pair not in existing and pair not in seen_reviews,
-                "reviewer already reviewed this input")
-        existing.add(pair)
-        seen_reviews.add(pair)
-        _check_review_payload(review, identifier, packet, "imported review")
-        require(review["decision"] in by_alias[alias]["item"]["decision_options"],
-                "review decision is not among the exported item options")
-        records.append({"alias": alias, "input_id": identifier,
-                        "reviewer_id": reviewer, "decision": review["decision"],
-                        "reason": review["reason"],
-                        "evidence_refs": review["evidence_refs"]})
+        if version == 1:
+            pair = (identifier, reviewer)
+            require(pair not in existing and pair not in seen_reviews,
+                    "reviewer already reviewed this input")
+            existing.add(pair)
+            seen_reviews.add(pair)
+            _check_review_payload(review, identifier, packet, "imported review")
+            require(review["decision"] in by_alias[alias]["item"]["decision_options"],
+                    "review decision is not among the exported item options")
+            records.append({"alias": alias, "input_id": identifier,
+                            "reviewer_id": reviewer, "decision": review["decision"],
+                            "reason": review["reason"],
+                            "evidence_refs": review["evidence_refs"]})
+        else:
+            attempt_id = by_alias[alias]["attempt_id"]
+            pair = (attempt_id, reviewer)
+            require(pair not in existing_attempt_pairs and
+                    pair not in seen_attempt_pairs,
+                    "reviewer already reviewed this attempt")
+            seen_attempt_pairs.add(pair)
+            _check_v2_review_payload(
+                review, identifier, attempt_id, packet,
+                by_alias[alias]["item"]["decision_options"])
+            if review["mapping"] == "mapped":
+                require(review["decision"] in
+                        by_alias[alias]["item"]["decision_options"],
+                        "review decision is not among the exported item options")
+            records.append({"alias": alias, "input_id": identifier,
+                            "attempt_id": attempt_id,
+                            "reviewer_id": reviewer,
+                            "response_act": review["response_act"],
+                            "mapping": review["mapping"],
+                            "decision": review["decision"],
+                            "reason": review["reason"],
+                            "evidence_refs": review["evidence_refs"]})
     dest = _next_batch(packet["folder"], "reviews")
     require(not dest.exists(), "review batch would overwrite an existing record")
-    write_new(dest, {"format": REVIEW_FORMAT,
+    write_new(dest, {"format": REVIEW_FORMAT if version == 1 else REVIEW_FORMAT_V2,
                      "review_key_sha256": digest(canonical(key)),
                      "records": records})
     return {"status": "reviews-imported", "batch": dest.name,
@@ -653,7 +911,7 @@ def counters(packet: dict[str, Any], family_id: str | None = None) -> dict[str, 
     review_pending = 0
     scorable = 0
     disagreements = 0
-    correct = incorrect = 0
+    correct = incorrect = unmapped = 0
     for record in records:
         response = packet["responses"].get(record["input_id"])
         status = "pending" if response is None else response["status"]
@@ -667,18 +925,36 @@ def counters(packet: dict[str, Any], family_id: str | None = None) -> dict[str, 
         scorable += 1
         judgments = []
         for review in reviews:
+            if review.get("mapping", "mapped") != "mapped":
+                unmapped += 1
+                continue
             judgment = review["decision"] in record["answer_region"]
             judgments.append(judgment)
             correct += int(judgment)
             incorrect += int(not judgment)
-        if len({review["decision"] for review in reviews}) > 1:
+        mapped_decisions = {review["decision"] for review in reviews
+                            if review.get("mapping", "mapped") == "mapped"}
+        if len(mapped_decisions) > 1:
             disagreements += 1
+    histories = packet["attempt_histories"]
+    record_ids = {record["input_id"] for record in records}
+    attempts = sum(len(histories.get(identifier, [])) for identifier in record_ids)
     completed = response_states["completed"]
     technical_failure = response_states["technical_failure"]
     attempted = completed + technical_failure
+    positions_with_multiple_attempts = 0
+    positions_with_completed_history = 0
+    for record in records:
+        history = histories.get(record["input_id"], [])
+        positions_with_multiple_attempts += int(len(history) > 1)
+        positions_with_completed_history += int(
+            any(row["status"] == "completed" for row in history))
     return {
         "total": len(records),
         "attempted": attempted,
+        "attempts": attempts,
+        "positions_with_multiple_attempts": positions_with_multiple_attempts,
+        "positions_with_completed_history": positions_with_completed_history,
         "completed": completed,
         "scorable": scorable,
         "reviewed_inputs": len(reviewed_ids),
@@ -692,6 +968,7 @@ def counters(packet: dict[str, Any], family_id: str | None = None) -> dict[str, 
         "judgment_contract_match_rate": ratio(correct, correct + incorrect),
         "judgments": {"correct": correct, "incorrect": incorrect,
                       "total": correct + incorrect},
+        "unmapped_judgments": unmapped,
         "judgment_contract_mismatch_rate": ratio(incorrect, correct + incorrect),
         "multi_reviewer_disagreements": disagreements,
     }
@@ -708,11 +985,13 @@ def recompute(path: Path) -> dict[str, Any]:
             "not a system score or validated semantic contract"
         ),
         "metric_definitions": {
-            "attempted": "completed + technical_failure; pending and not-run remain absent",
+            "attempted": "current positions completed or technically failed; pending and not-run remain absent",
+            "attempts": "all imported attempt records; not independent cases",
             "attempt_coverage": "attempted / total manifested cells",
             "answer_coverage": "completed / attempted; null when attempted is zero",
-            "judgment_contract_match_rate": "correct judgments / all review judgments on completed responses; not response accuracy",
-            "judgment_contract_mismatch_rate": "incorrect judgments / all review judgments on completed responses; not response error rate",
+            "judgment_contract_match_rate": "correct mapped judgments / all mapped judgments on completed responses; not response accuracy",
+            "judgment_contract_mismatch_rate": "incorrect mapped judgments / all mapped judgments on completed responses; not response error rate",
+            "unmapped_judgments": "non-mapped review diagnostics; not correctness failures",
             "disagreement": "completed inputs whose review decisions are not all identical",
             "scorable": "completed inputs with at least one imported review",
         },

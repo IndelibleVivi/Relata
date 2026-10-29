@@ -44,7 +44,7 @@
 - case acceptance 前通过 memory necessity 与 counterfactual controls；
 - evidence type 与 provenance 必须 explicit；
 - provider 访问只能由具名范围授权；[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 只允许有限兼容性 smoke；另行接受的 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) 仅激活 [RC-005 → Mem0 包](experiments/rc005-native-execution-packet.md)，源码与离线验证不等于真实运行或语义成功；
-- R0 不做跨系统 runner、API、SDK、service、Leaderboard、Arena 或 hosted infrastructure；独立 Tilia 目标不授权在 Relata 内实现。
+- R0 不做跨系统 runner、system-under-study API、SDK、ADR-0011 本地 app transport 以外的 service、Leaderboard、Arena 或 hosted infrastructure；独立 Tilia 目标不授权在 Relata 内实现。
 
 ## R0 scope corrections
 
@@ -59,3 +59,5 @@ Case ecology 参见 [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.
 
 
 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.zh-CN.md) 于 2026-10-23 接受，仅激活 [RC-005 → pinned Mem0 执行包](experiments/rc005-native-execution-packet.md)。固定 study CLI 覆盖 54 个 reader 预检、36 个强原文对照和 54 个 native 回答位置；源码实现与离线 plumbing 检查不证明真实可运行性或语义成功。选用既有 generation entitlement 与本地 Qwen3-Embedding-0.6B-Q8_0/1024；全包最多 300 chat／500 embedding client dispatch，包含失败及诊断，不充值、不走收费 fallback。Native state、attempts、回答和未评审盲包留在 ignored local artifacts。正式 benchmark promotion、其他 study、Tilia 产品实现、公开结果、hosting、外联与 license 保留各自边界。[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) 仍是独立兼容性例外；配置匹配的接口证据可复用。
+
+[ADR-0011](decisions/ADR-0011-local-research-studio.zh-CN.md) 接受本地研究工作空间、固定离线仪器、版本化阅读和分离评审／导出。这个实现决定不接受科学协议、系统质量或 Tilia 架构；原研究 assumptions 与 promotion gates 保留。

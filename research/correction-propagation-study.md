@@ -167,4 +167,4 @@ This draft is a secondary synthesis over Relata's existing pinned source studies
 - 设计/测试映射（X3/X7/X9、E-B 与 C0–C5）：[research/memory-design-test-map.md](memory-design-test-map.md)
 - 案例：[RC-001](../case-lab/cases/pilot-001-current-state-without-erasure.md) · [RC-005](../case-lab/cases/seed-005-shared-work-authorship.zh-CN.md)
 - 候选方法学边界：[research/claim-boundary-study.md](claim-boundary-study.md)
-- 候选执行边界（proposed，未接受）：[decisions/ADR-0009-exploratory-research-boundary.md](../decisions/ADR-0009-exploratory-research-boundary.md)
+- 已接受的具名执行边界（仅 RC-005 与规定 P0，不激活本文其他实验）：[decisions/ADR-0009-exploratory-research-boundary.md](../decisions/ADR-0009-exploratory-research-boundary.md)

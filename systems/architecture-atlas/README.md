@@ -66,3 +66,9 @@ python3 -B -m unittest discover -s tests -v
 CI 运行同一个 `--check`，核对模型和生成物一致性；它不验证源码语义或视觉质量。模型涉及的 view 变化后，需实际打开 SVG/reader，检查主路径、反馈/删除路径、文字和连线、缩放及 evidence interaction。模型采用三种阅读视角便于比较，不固定上游内部 ontology，也不是 system-under-study API。
 
 研究解释由[十项目比较](../source-studies/README.md)和[agent-memory inquiry](../../research/agent-memory-inquiry.md)承担。图集只画公开、固定版本的实现；未载入私人 memory、社区聊天或真实使用者数据。
+
+## Studio instances and fixed snapshots
+
+The same canonical renderer now exposes `window.RelataAtlas.mount(host, options)` for scoped readers. Each mount owns its DOM, events, navigation, selection and resize lifecycle; `dispose()` removes its listeners. `embedded: true` gives the local Studio a compact reader with an expandable directory, while the standalone default preserves its reading path. `getState()` / `setState()` preserve position without sharing a global hash between instances.
+
+`studio-payload.cjs --project <existing-id>` exports current model, controlled SVGs, guides and exhibits; `--model-file <file>` validates and renders a supplied model without adopting current exhibits when its meaning differs. The Studio freezes this payload as an immutable artifact. Imported SVG is sanitized before entering a reader; arbitrary source captures are literal text. The resolver labels supplied text as saved, upstream URLs as network-dependent and absent material as missing. See the [Studio guide](../../docs/studio.md) for version import, comparison bindings and export boundaries.

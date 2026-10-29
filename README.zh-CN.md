@@ -21,6 +21,20 @@ Relata 将**自己的 benchmark 研究、系统样本研究空间，以及面向
 
 [Agent Memory Study（AMS）](https://github.com/IndelibleVivi/agent-memory-study) 的阅读、源码调查与实验可以带着原有证据限制进入 Relata。两个项目都可以支持长篇综合写作，同时保留各自的问题与研究材料。
 
+## 使用本地 Research Studio
+
+本地 [Research Studio](docs/studio.md) 将研究桌、版本化 Observatory、Study Laboratory 和 Library 接在一起。留下问题与竞争解释，并排比较两个固定 Atlas snapshots，运行三组离线仪器，以独立协议评审原样观察，再生成选择性离线作品。SQLite 与不可变 artifacts 保存在 checkout 之外的私人 workspace。
+
+需要 Python 3.11+、Node.js 18+、Git 和本地浏览器。实现使用标准库与浏览器 ES modules，无需安装 package 或登录账号。已在 macOS 操作验证；其他平台尚未验证。
+
+```bash
+python3 -B tools/relata_lab.py --workspace "$HOME/RelataWorkspace" serve
+```
+
+打开 `http://127.0.0.1:8765`，在 Observatory 选择**导入当前十系统馆藏**。迁移研究前阅读[操作与恢复说明](docs/studio.md)和[存储合同](docs/lab-storage.md)。应用不联系 provider，也不自动抓取来源 URL；点击上游链接会打开外部网站，明确保存的原文 capture 可离线读取。本地导出不等于上传。原静态 reader 仍可无服务打开。
+
+[ADR-0011](decisions/ADR-0011-local-research-studio.zh-CN.md)接受本地实现范围。[来源比较文章](research/collection-delivery-comparison.md)与[有限仪器报告](research/finite-instrument-report.md)是实际研究作品，分别属于有界源码综合与确定性作者环境计算，没有新增模型或人类研究结果。
+
 ## 从一个具体问题开始
 
 [研究室愿景与能力版图](research/lab-development.md)解释当前阶段、方向风险与连续建设结构。要检查一个 memory 问题，打开[五问题离线 reader](systems/architecture-atlas/index.html#questions)，或直接阅读 [GitHub 版展品](systems/architecture-atlas/exhibits.md)：未来用途变化、检索后的交付、更正传播、适时浮现、经验如何改变理解与做法。它把十个固定源码模型接到具体情境、条件对照、节点证据与研究去向。
@@ -67,7 +81,7 @@ Relata 追问什么被保留、唤起、纳入上下文、使用、修正，或�
 
 ## 为什么暂时不建平台
 
-尚未接受 canonical ontology、system protocol、scoring contract、benchmark release、Leaderboard、Arena、SDK、service 或 hosted infrastructure。[历史架构草案](docs/vision/relata-target-architecture-draft-0.1.md) 继续是 non-normative；[assumption register](ASSUMPTION_REGISTER.zh-CN.md) 保留各项处置。
+尚未接受 canonical ontology、system protocol、scoring contract、benchmark release、Leaderboard、Arena、SDK、ADR-0011 本地 app transport 以外的 service 或 hosted infrastructure。[历史架构草案](docs/vision/relata-target-architecture-draft-0.1.md) 继续是 non-normative；[assumption register](ASSUMPTION_REGISTER.zh-CN.md) 保留各项处置。
 
 [ADR-0005](decisions/ADR-0005-offline-pilot-tooling.zh-CN.md) 允许可替换的离线试验工具，无需等待第三方交分数。它不授权 provider adapters、私人材料或公开表现结论。ADR-0010 的窄 provider 兼容性 smoke 与这套工具分开，也不授权 memory-system run。Accepted cross-system boundary 仍受正式 promotion gate 约束。
 

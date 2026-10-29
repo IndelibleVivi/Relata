@@ -44,7 +44,7 @@ This register reclassifies the 22 items presented as “locked” in Target Arch
 - memory necessity and counterfactual controls before case acceptance;
 - explicit evidence type and provenance;
 - provider access is granted only by its named scope; [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) permits only a finite compatibility smoke; separately accepted [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) activates only the [RC-005 → Mem0 packet](experiments/rc005-native-execution-packet.md), with source/offline checks distinct from live execution and semantic success;
-- no cross-system runner, API, SDK, service, Leaderboard, Arena, or hosted infrastructure during R0; the independent Tilia goal does not authorize implementation within Relata.
+- no cross-system runner, system-under-study API, SDK, service beyond ADR-0011 local app transport, Leaderboard, Arena, or hosted infrastructure during R0; the independent Tilia goal does not authorize implementation within Relata.
 
 ## R0 scope corrections
 
@@ -59,3 +59,5 @@ See [`ADR-0003`](decisions/ADR-0003-mixed-domain-memory-ecology.md) for the case
 
 
 [ADR-0009](decisions/ADR-0009-exploratory-research-boundary.md) is accepted on 2026-10-23, activating only the [RC-005 → pinned Mem0 execution packet](experiments/rc005-native-execution-packet.md). Its fixed-study CLI covers 54 reader preflight, 36 raw-source control and 54 native answer positions; source implementation and offline plumbing checks do not prove live runnability or semantic success. Existing generation entitlement and local Qwen3-Embedding-0.6B-Q8_0/1024 are the selected resources, with 300 chat / 500 embedding client dispatches including failures and diagnostics, no recharge or paid fallback. Native states, attempts, responses and unreviewed blind packets remain ignored local artifacts. Formal benchmark promotion, other study envelopes, Tilia product implementation, publication, hosting, outreach and licensing retain their separate boundaries. [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) remains the independent compatibility-only exception; matching protocol evidence may be reused.
+
+[ADR-0011](decisions/ADR-0011-local-research-studio.md) accepts local research workspaces, fixed offline instruments, versioned reading and separate review/export profiles. This implementation decision accepts no scientific protocol, system-quality claim or Tilia architecture; the research assumptions and promotion gates remain.

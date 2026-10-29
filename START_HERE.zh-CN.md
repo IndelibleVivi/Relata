@@ -3,6 +3,8 @@
 
 # Relata 从这里开始：Research Foundation 执行路径
 
+[开始一项可接续的本地研究](docs/studio.md)：启动 Research Studio，从研究桌的问题进入双 Atlas、Study、Clinic 和离线作品。原静态阅读路径与具名 native CLI 继续有效；新应用不自动执行 provider。
+
 Relata 是前沿记忆研究室，[ADR-0008](decisions/ADR-0008-three-core-research-functions.zh-CN.md) 确立三项核心职责。按研究问题选择入口；它们并行存在，不要求固定先后顺序。
 
 | 职责 | 阅读路径 |

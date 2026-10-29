@@ -1,10 +1,106 @@
 (() => {
   'use strict';
 
-  const atlas = JSON.parse(document.getElementById('atlas-data').textContent);
-  const byId = id => document.getElementById(id);
+  // Frame and stylesheet are bundled from authored viewer.html / viewer.css,
+  // never supplied by an imported snapshot.
+  const frame = /* ATLAS_FRAME */ null;
+  const mounted = new WeakMap();
+  function mount(host, options = {}) {
+  if (!host || !host.attachShadow) throw new TypeError('Atlas mount requires an HTMLElement');
+  mounted.get(host)?.dispose();
+  const root = host.shadowRoot || host.attachShadow({mode:'open'});
+  const document = host.ownerDocument;
+  const window = document.defaultView;
+  const atlas = structuredClone(options.data);
+  if (!atlas?.models?.length) throw new TypeError('Atlas requires at least one model');
+  if (!frame) throw new Error('Use buildComponent() to bundle the Atlas component');
+  const style = document.createElement('style'); style.textContent = frame.css;
+  const content = document.createElement('div'); content.className = 'atlas-frame';
+  content.innerHTML = frame.html;
+  root.replaceChildren(style, content);
+  const byId = id => root.getElementById(id);
+  if (options.embedded) {
+    content.classList.add('embedded');
+    // Embedded navigation retains the full catalogue/search without repeating
+    // the standalone masthead above every comparison pane.
+    const directory = document.createElement('details');
+    directory.className = 'embedded-directory';
+    const summary = document.createElement('summary');
+    summary.textContent = '目录与搜索';
+    directory.append(summary);
+    for (const selector of ['.collection','#search-label','#project-search','#project-list','#search-empty']) directory.append(content.querySelector(selector));
+    content.querySelector('.sidebar').append(directory);
+    const context = document.createElement('details');
+    context.className = 'embedded-project-context';
+    const heading = document.createElement('summary');
+    heading.textContent = '研究对象、版本与边界';
+    context.append(heading, byId('project-summary'), byId('boundary'), content.querySelector('.project-heading .identity'));
+    content.querySelector('.project-heading').after(context);
+  }
+  let disposed = false;
+  const abort = new AbortController();
+  const listen = (target, name, handler) => target.addEventListener(name, event => {if (!disposed) handler(event);}, {signal:abort.signal});
+  const objectUrls = new Set();
+  const downloadTimers = new Set();
+  function download(text, type, filename) {
+    const url = URL.createObjectURL(new Blob([text], {type}));
+    objectUrls.add(url);
+    const link = el('a'); link.href=url; link.download=filename; link.click();
+    const timer = window.setTimeout(() => {URL.revokeObjectURL(url); objectUrls.delete(url); downloadTimers.delete(timer);},1000);
+    downloadTimers.add(timer);
+  }
+  let localRoute = options.navigation?.getRoute?.() || options.route || '#questions';
+  const routeValue = () => localRoute;
+  const go = (route, replace = false, render = true) => {
+    if (disposed) return;
+    localRoute = route.startsWith('#') ? route : '#' + route;
+    options.navigation?.navigate?.(localRoute, {replace});
+    if (render) loadRoute();
+  };
+  const viewportWidth = () => host.clientWidth || window.innerWidth;
+  const requestAnimationFrame = callback => window.requestAnimationFrame(() => {if (!disposed) callback();});
+  const setTitle = text => { if (options.documentTitle) document.title = text; };
+  function sourceLink(link, model, source) {
+    const resolution = options.resolveSource?.({project:model.id, commit:model.commit, source:structuredClone(source)});
+    const result = typeof resolution === 'string' ? {url:resolution} : resolution;
+    const url = result ? result.url : source.url;
+    if (url && /^(https?:|blob:|#|\/)/.test(url)) link.href = url;
+    link.dataset.sourceStatus = result?.status || 'network';
+    link.title = result?.label || source.note || '';
+    if (result) {
+      const label = result.label || ({saved:'已保存',network:'需联网',missing:'缺失'}[result.status]);
+      if (label) link.append(document.createTextNode(` · ${label}`));
+    }
+    if (!url) link.setAttribute('aria-disabled','true');
+    listen(link, 'click', event => {
+      options.onSelect?.({project:model.id, commit:model.commit, view:selectedView?.id, node:selectedNode, source:structuredClone(source), resolution:result || {url:source.url,status:'network'}});
+      if (!url) event.preventDefault();
+    });
+  }
+  // SVG is parsed inertly and allowlisted before insertion. Imported JSON cannot
+  // supply scripts, foreignObject, event handlers, CSS or external SVG resources.
+  function safeSvg(markup) {
+    const parsed = new DOMParser().parseFromString(markup, 'image/svg+xml');
+    const svg = parsed.documentElement;
+    if (svg.localName !== 'svg' || parsed.querySelector('parsererror')) throw new Error('Invalid Atlas SVG');
+    const tags = new Set(['svg','g','path','rect','text','tspan','title','desc','defs','marker','polygon','polyline','line','circle','ellipse','a']);
+    for (const item of [svg,...svg.querySelectorAll('*')]) {
+      if (!tags.has(item.localName)) {item.remove(); continue;}
+      for (const attr of [...item.attributes]) {
+        if (/^on/i.test(attr.name) || ['href','xlink:href','style'].includes(attr.name) || /url\(/i.test(attr.value) && !/^url\(#[A-Za-z0-9_-]+\)$/.test(attr.value)) item.removeAttribute(attr.name);
+      }
+    }
+    const safe = document.importNode(svg, true);
+    const styles = document.createElementNS('http://www.w3.org/2000/svg','style');
+    // Only the component's authored diagram rules enter downloadable SVGs.
+    styles.textContent = frame.css.split('/* ATLAS_SVG_START */')[1].split('/* ATLAS_SVG_END */')[0].replaceAll('#diagram-stage ', '');
+    safe.prepend(styles);
+    return safe;
+  }
   const order = ['aelios','mem0','letta','graphiti','lmc-5','tideline-memory','hindsight','openviking','langmem','a-mem'];
   const models = [...atlas.models].sort((a,b) => order.indexOf(a.id) - order.indexOf(b.id));
+  const defaultSystem = models.find(model => model.id === 'mem0') || models[0];
+  for (const link of root.querySelectorAll('a[href="#mem0/overview"]')) link.href = `#${defaultSystem.id}/overview`;
   const collection = atlas.collection;
   const exhibits = Array.isArray(collection?.exhibits) ? collection.exhibits : [];
   const labels = {overview:'全景与边界',flow:'写入 → 使用',revision:'修订与控制'};
@@ -113,10 +209,9 @@
       const source = sourceFor(model, id);
       if (!source) continue;
       const link = el('a', id);
-      link.href = source.url;
+      sourceLink(link, model, source);
       link.target = '_blank';
       link.rel = 'noreferrer';
-      link.title = source.note;
       box.append(link);
     }
     return box;
@@ -142,17 +237,17 @@
   }
 
   function navigateProject(project, view, context = returnContext, node = '') {
-    location.hash = encodeRoute(`${project}/${view}`, {
+    go(encodeRoute(`${project}/${view}`, {
       node,
       exhibit: context?.exhibit,
       condition: context?.condition
-    });
+    }));
   }
 
   function navigateExhibit(exhibit, condition = exhibit?.conditions[0]?.id) {
     if (!exhibit) return;
     returnContext = undefined;
-    location.hash = `#exhibit/${encodeURIComponent(exhibit.id)}/${encodeURIComponent(condition)}`;
+    go(`#exhibit/${encodeURIComponent(exhibit.id)}/${encodeURIComponent(condition)}`);
   }
 
   function projectList(query = byId('project-search').value) {
@@ -161,7 +256,7 @@
     list.replaceChildren();
     if (mode !== 'project') {
       if (!collection) {
-        empty.textContent = '研究问题目录由 build 生成后在这里出现；当前仍可从“系统图集”阅读十个固定源码版本。';
+        empty.textContent = '研究问题目录由 build 生成后在这里出现；当前仍可从“系统图集”阅读固定源码版本。';
         empty.hidden = false;
         byId('project-count').textContent = '';
         byId('questions-search-context').textContent = '';
@@ -181,14 +276,14 @@
           el('small', systems.join(' · ')),
           el('span', `${systems.length} systems · ${exhibit.conditions.length} conditions`, 'exhibit-meta')
         );
-        button.addEventListener('click', () => navigateExhibit(exhibit));
+        listen(button, 'click', () => navigateExhibit(exhibit));
         list.append(button);
       }
       byId('project-count').textContent = String(exhibits.length).padStart(2,'0');
       byId('questions-search-context').textContent = q
         ? `当前搜索 “${byId('project-search').value.trim()}”：${matches.length} / ${exhibits.length} 个研究问题。`
-        : `${exhibits.length} 个研究问题，每项比较 3–4 个固定源码机制。`;
-      empty.textContent = '没有匹配的研究问题。搜索会检查问题、条件、源码观察、阅读结论、控制与三职能 takeaways；清除搜索可查看全部五项。';
+        : `${exhibits.length} 个研究问题，比较固定源码机制。`;
+      empty.textContent = '没有匹配的研究问题。搜索会检查问题、条件、源码观察、阅读结论、控制与三职能 takeaways；清除搜索可查看全部研究问题。';
       empty.hidden = matches.length !== 0;
       return;
     }
@@ -204,7 +299,7 @@
         el('strong', model.name),
         el('small', model.mechanisms.slice(0,2).join(' / '))
       );
-      button.addEventListener('click', () => navigateProject(model.id, selectedView?.id || 'overview'));
+      listen(button, 'click', () => navigateProject(model.id, selectedView?.id || 'overview'));
       list.append(button);
     }
     empty.textContent = '没有匹配系统。试试系统名、节点或机制中的词。';
@@ -232,7 +327,7 @@
       byId('github-reader-link').hidden = true;
     }
     renderQuestionCatalogue('');
-    document.title = collection ? `${collection.title} · Relata` : '研究问题目录 · Relata';
+    setTitle(collection ? `${collection.title} · Relata` : '研究问题目录 · Relata');
     byId('page-kicker').textContent = 'RESEARCH QUESTIONS / 从问题进入实现';
     projectList('');
     if (!collection) byId('questions-empty').hidden = false;
@@ -263,14 +358,14 @@
       article.append(systemRow);
       const link = el('a', '进入这个研究问题 →', 'entry-link');
       link.href = `#exhibit/${encodeURIComponent(exhibit.id)}/${encodeURIComponent(exhibit.conditions[0].id)}`;
-      link.addEventListener('click', event => { event.preventDefault(); navigateExhibit(exhibit); });
+      listen(link, 'click', event => { event.preventDefault(); navigateExhibit(exhibit); });
       article.append(link);
       target.append(article);
     }
     const q = query.trim();
     byId('questions-search-context').textContent = collection
       ? q ? `当前搜索 “${q}”：${matches.length} / ${exhibits.length} 个研究问题。`
-          : `${exhibits.length} 个研究问题，每项比较 3–4 个固定源码机制。`
+          : `${exhibits.length} 个研究问题，比较固定源码机制。`
       : '';
     byId('questions-empty').hidden = !collection || matches.length !== 0;
   }
@@ -287,6 +382,7 @@
     selectedExhibit = exhibit;
     selectedNode = '';
     selectedCondition = condition.id;
+    options.onSelect?.({project:models.length === 1 ? models[0].id : undefined, commit:models.length === 1 ? models[0].commit : undefined, exhibit:exhibit.id, condition:condition.id});
     returnContext = undefined;
     const index = exhibits.indexOf(exhibit);
     byId('exhibit-number').textContent = `EXHIBIT ${String(index+1).padStart(2,'0')} / ${String(exhibits.length).padStart(2,'0')} · STATIC SYNTHESIS`;
@@ -322,16 +418,17 @@
       button.onclick = () => {
         if (item.id === condition.id) return;
         restoreConditionFocus = true;
-        location.hash = `#exhibit/${encodeURIComponent(exhibit.id)}/${encodeURIComponent(item.id)}`;
+        go(`#exhibit/${encodeURIComponent(exhibit.id)}/${encodeURIComponent(item.id)}`);
       };
       button.onkeydown = event => {
+        if (event.isComposing || event.keyCode === 229) return;
         if (!['ArrowLeft','ArrowRight','Home','End'].includes(event.key)) return;
         event.preventDefault();
         const offset = event.key === 'ArrowLeft' ? -1 : event.key === 'ArrowRight' ? 1 : 0;
         const current = exhibit.conditions.findIndex(candidate => candidate.id === condition.id);
         const next = event.key === 'Home' ? 0 : event.key === 'End' ? exhibit.conditions.length-1 : (current + offset + exhibit.conditions.length) % exhibit.conditions.length;
         restoreConditionFocus = true;
-        location.hash = `#exhibit/${encodeURIComponent(exhibit.id)}/${encodeURIComponent(exhibit.conditions[next].id)}`;
+        go(`#exhibit/${encodeURIComponent(exhibit.id)}/${encodeURIComponent(exhibit.conditions[next].id)}`);
       };
     }
     byId('condition-task').textContent = condition.task;
@@ -339,7 +436,7 @@
     byId('condition-panel').setAttribute('aria-labelledby', `condition-tab-${exhibit.conditions.findIndex(item => item.id === condition.id)}`);
     renderWorkedExample(exhibit, condition);
     renderComparisons(exhibit, condition);
-    document.title = `${exhibit.title} · Relata`;
+    setTitle(`${exhibit.title} · Relata`);
     byId('page-kicker').textContent = 'COLLECTION / 研究问题与源码比较';
     projectList(byId('project-search').value);
     renderQuestionCatalogue(byId('project-search').value);
@@ -435,7 +532,7 @@
       if (!source) continue;
       const item = el('li');
       const link = el('a', `${id} · ${source.note}`);
-      link.href = source.url;
+      sourceLink(link, model, source);
       link.target = '_blank';
       link.rel = 'noreferrer';
       item.append(link);
@@ -449,7 +546,7 @@
       if (!node) continue;
       const link = el('a', node.label.replaceAll('\n',' · '), 'node-chip');
       link.href = encodeRoute(`${model.id}/${comparison.view}`, {node:id, exhibit:exhibit.id, condition:condition.id});
-      link.addEventListener('click', event => {
+      listen(link, 'click', event => {
         event.preventDefault();
         returnContext = {exhibit:exhibit.id, condition:condition.id};
         navigateProject(model.id, comparison.view, returnContext, id);
@@ -458,7 +555,7 @@
     }
     const diagram = el('a','在图中查看 →','entry-link');
     diagram.href = encodeRoute(`${model.id}/${comparison.view}`, {exhibit:exhibit.id, condition:condition.id});
-    diagram.addEventListener('click', event => {
+    listen(diagram, 'click', event => {
       event.preventDefault();
       returnContext = {exhibit:exhibit.id, condition:condition.id};
       navigateProject(model.id, comparison.view, returnContext);
@@ -513,7 +610,7 @@
   }
 
   function loadRoute() {
-    const raw = location.hash.replace(/^#/, '');
+    const raw = routeValue().replace(/^#/, '');
     const [path,query = ''] = raw.split('?');
     const segments = path.split('/').filter(Boolean);
     const params = new URLSearchParams(query);
@@ -550,7 +647,7 @@
   function enterReadingRoute(next) {
     // New questions and systems start at their heading; changing a condition
     // or a node preserves the current reading position and keyboard context.
-    if (readingRoute && readingRoute !== next) window.scrollTo({top:0,left:0,behavior:'instant'});
+    if (readingRoute && readingRoute !== next) (options.documentTitle ? window : content).scrollTo({top:0,left:0,behavior:'instant'});
     readingRoute = next;
   }
 
@@ -560,7 +657,7 @@
     byId('project-count').textContent = String(models.indexOf(selectedModel)+1).padStart(2,'0');
     byId('project-number').textContent = `STUDY ${String(models.indexOf(selectedModel)+1).padStart(2,'0')} / ${String(models.length).padStart(2,'0')} · SOURCE ARCHITECTURE`;
     byId('project-name').textContent = selectedModel.name;
-    document.title = `${selectedModel.name} · Relata Architecture Atlas`;
+    setTitle(`${selectedModel.name} · Relata Architecture Atlas`);
     byId('project-summary').textContent = selectedModel.summary;
     byId('boundary').textContent = selectedModel.boundary;
     byId('upstream-link').href = selectedModel.repository;
@@ -576,7 +673,7 @@
       button.id = `view-tab-${id}`;
       button.setAttribute('aria-current',String(id===selectedView.id));
       button.append(el('span',String(i+1).padStart(2,'0'),'tab-number'),document.createTextNode(label));
-      button.addEventListener('click',() => {
+      listen(button, 'click',() => {
         if (id === selectedView.id) return;
         navigateProject(selectedModel.id,id);
       });
@@ -584,7 +681,7 @@
     });
     tabs.setAttribute('aria-labelledby','view-tab-' + selectedView.id);
     const crumbs = byId('project-breadcrumbs');
-    const systems = el('a','系统图集'); systems.href = '#mem0/overview';
+    const systems = el('a','系统图集'); systems.href = `#${defaultSystem.id}/overview`;
     crumbs.replaceChildren(systems, el('span','/'), el('span',selectedModel.name));
     renderReturnContext();
     const projectRoute = `${selectedModel.id}/${selectedView.id}`;
@@ -598,12 +695,12 @@
 
   function renderView() {
     byId('view-title').textContent = selectedView.title;
-    byId('view-instruction').textContent = innerWidth <= 700 ? '左右滑动读图；点击节点查看证据' : '点击节点，沿源码查看它的职责';
+    byId('view-instruction').textContent = viewportWidth() <= 700 ? '左右滑动读图；点击节点查看证据' : '点击节点，沿源码查看它的职责';
     byId('view-question').textContent = selectedView.question;
     byId('reading-guide').textContent = selectedView.reading_guide;
     byId('export-source').href = `diagrams/${selectedModel.id}/${selectedView.id}.mmd`;
     const stage = byId('diagram-stage');
-    stage.innerHTML = atlas.assets[`${selectedModel.id}--${selectedView.id}`];
+    stage.replaceChildren(safeSvg(atlas.assets[`${selectedModel.id}--${selectedView.id}`]));
     const svg = stage.querySelector('svg');
     for (const link of svg.querySelectorAll('a')) link.setAttribute('tabindex','-1');
     const viewBox = svg.viewBox.baseVal; naturalWidth = viewBox.width; naturalHeight = viewBox.height;
@@ -615,8 +712,8 @@
       const groups = [...svg.querySelectorAll('g.node, g.guide-node')].filter(group => group.dataset.nodeReference === node.id || group.id.includes(`-flowchart-${node.id}-`));
       for (const group of groups) {
         group.dataset.node = node.id; group.setAttribute('tabindex','0'); group.setAttribute('role','button'); group.setAttribute('aria-label',`查看证据：${node.label.replaceAll('\n','，')}`);
-        group.addEventListener('click',event => {event.preventDefault();selectNode(node.id,true);});
-        group.addEventListener('keydown',event => {if (event.key === 'Enter' || event.key === ' ') {event.preventDefault();selectNode(node.id,true);}});
+        listen(group, 'click',event => {event.preventDefault();selectNode(node.id,true);});
+        listen(group, 'keydown',event => {if (!event.isComposing && event.keyCode !== 229 && (event.key === 'Enter' || event.key === ' ')) {event.preventDefault();selectNode(node.id,true);}});
       }
     }
     byId('detail-title').textContent = '从一个节点开始';
@@ -632,7 +729,7 @@
     byId('coverage').querySelector('ul').replaceChildren(...selectedView.omissions.map(text => el('li',text)));
     byId('source-list').replaceChildren(...selectedModel.sources.map(source => {
       const row = el('div',undefined,'source-row'); const link = el('a',`${source.id} · ${source.url.replace('https://github.com/','')}`);
-      link.href=source.url;link.target='_blank';link.rel='noreferrer';row.append(link,paragraph(source.note));return row;
+      sourceLink(link, selectedModel, source);link.target='_blank';link.rel='noreferrer';row.append(link,paragraph(source.note));return row;
     }));
     byId('edge-evidence').replaceChildren(...selectedView.edges.map(edge => {
       const row = el('div',undefined,'edge-row');
@@ -672,9 +769,8 @@
       exhibit:returnContext?.exhibit,
       condition:returnContext?.condition
     });
-    if (location.hash === nextHash) return;
-    if (push) history.pushState(history.state,'',nextHash);
-    else history.replaceState(history.state,'',nextHash);
+    if (routeValue() === nextHash) return;
+    go(nextHash, !push, false);
   }
 
   function selectNode(id, pushHash = true, moveFocus = true) {
@@ -702,6 +798,7 @@
     paintProjectNodeState();
     byId('view-instruction').textContent = `已选：${node.label.split('\n')[0]} · 证据见图下方`;
     updateNodeHash(id, pushHash);
+    options.onSelect?.({project:selectedModel.id, commit:selectedModel.commit, view:selectedView.id, node:id});
     if (moveFocus) {
       pendingNodeFocus = id;
       revealSelectedNode();
@@ -727,7 +824,7 @@
       byId('node-picker').value = '';
       byId('detail-title').textContent = '从一个节点开始';
       byId('detail-body').replaceChildren(el('p','选择图中的节点，查看职责、状态归属、相邻关系和固定版本的源代码。所有箭头的证据也可在下方展开。'));
-      byId('view-instruction').textContent = innerWidth <= 700 ? '左右滑动读图；点击节点查看证据' : '点击节点，沿源码查看它的职责';
+      byId('view-instruction').textContent = viewportWidth() <= 700 ? '左右滑动读图；点击节点查看证据' : '点击节点，沿源码查看它的职责';
       paintProjectNodeState();
     }
   }
@@ -756,19 +853,21 @@
 
   function fit(fitMode) {
     const viewport=byId('diagram-viewport');
-    const padding=innerWidth<=700?36:52;
+    const padding=viewportWidth()<=700?36:52;
     const width=(viewport.clientWidth-padding)/naturalWidth;
     zoom(fitMode==='all'?Math.min(width,(viewport.clientHeight-padding)/naturalHeight):fitMode==='reading'?Math.min(1,Math.max(.85,width)):Math.min(1,width));
   }
 
   async function copyCurrentLink() {
     const feedback = byId('copy-feedback');
-    const link = location.href;
+    const link = options.navigation?.getLink?.(routeValue()) || routeValue();
     try {
       if (!navigator.clipboard?.writeText) throw new Error('clipboard unavailable');
       await navigator.clipboard.writeText(link);
+      if (disposed) return;
       feedback.textContent = '当前阅读链接已复制。';
     } catch {
+      if (disposed) return;
       feedback.replaceChildren();
       const input = el('input');
       input.type = 'text'; input.value = link; input.readOnly = true; input.className = 'copy-fallback';
@@ -777,33 +876,96 @@
     }
   }
 
-  byId('project-search').addEventListener('input',() => {
+  listen(byId('project-search'), 'input',() => {
     if (mode === 'project') projectList();
     else searchQuestions();
   });
-  document.getElementsByClassName('skip-link')[0].addEventListener('click', event => {
+  listen(root.querySelector('.skip-link'), 'click', event => {
     event.preventDefault();
     byId('main-content').focus({preventScroll:true});
     byId('main-content').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth', block:'start'});
   });
-  byId('node-picker').addEventListener('change',event=>{
+  listen(byId('node-picker'), 'change',event=>{
     selectNode(event.target.value,true,false);
     revealSelectedNode();
   });
-  byId('zoom-in').addEventListener('click',()=>zoom(scale*1.25));
-  byId('zoom-out').addEventListener('click',()=>zoom(scale/1.25));
-  byId('fit-reading').addEventListener('click',()=>fit('reading'));
-  byId('fit-width').addEventListener('click',()=>fit('width'));
-  byId('fit-all').addEventListener('click',()=>fit('all'));
-  byId('copy-reading-link').addEventListener('click',copyCurrentLink);
-  byId('export-svg').addEventListener('click',()=>{
-    const svg=atlas.assets[`${selectedModel.id}--${selectedView.id}`];
-    const url=URL.createObjectURL(new Blob([svg],{type:'image/svg+xml;charset=utf-8'}));
-    const link=el('a');link.href=url;link.download=`${selectedModel.id}-${selectedView.id}.svg`;link.click();
-    setTimeout(()=>URL.revokeObjectURL(url),1000);
+  listen(byId('zoom-in'), 'click',()=>zoom(scale*1.25));
+  listen(byId('zoom-out'), 'click',()=>zoom(scale/1.25));
+  listen(byId('fit-reading'), 'click',()=>fit('reading'));
+  listen(byId('fit-width'), 'click',()=>fit('width'));
+  listen(byId('fit-all'), 'click',()=>fit('all'));
+  listen(byId('copy-reading-link'), 'click',copyCurrentLink);
+  listen(byId('export-svg'), 'click',()=>{
+    const svg = new XMLSerializer().serializeToString(safeSvg(atlas.assets[`${selectedModel.id}--${selectedView.id}`]));
+    download(svg, 'image/svg+xml;charset=utf-8', `${selectedModel.id}-${selectedView.id}.svg`);
   });
-  addEventListener('hashchange',loadRoute);
-  let resizeTimer;
-  addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(()=>{if(mode==='project')fit('reading');},120);});
+  listen(byId('export-source'), 'click', event => {
+    const source = atlas.guides?.[`${selectedModel.id}--${selectedView.id}`];
+    if (source) {event.preventDefault();download(source, 'text/plain;charset=utf-8', `${selectedModel.id}-${selectedView.id}.mmd`);}
+  });
+  // Fragment links stay inside their owning instance. Authored focus jumps have
+  // their own handlers and are left untouched once preventDefault was called.
+  listen(root, 'click', event => {
+    if (event.defaultPrevented) return;
+    const link = event.target.closest?.('a[href^="#"]');
+    if (!link || link.dataset.sourceStatus) return;
+    const route = link.getAttribute('href');
+    if (route === '#main-content' || route === '#comparison-heading') return;
+    event.preventDefault(); go(route);
+  });
+  const unsubscribe = options.navigation?.subscribe?.(route => {
+    if (disposed) return;
+    localRoute = route || options.navigation.getRoute(); loadRoute();
+  });
+  const observer = new ResizeObserver(() => {if (!disposed && mode === 'project') fit('reading');});
+  observer.observe(host);
+  function getState() {
+    return {route:localRoute, mode, project:selectedModel?.id, commit:selectedModel?.commit,
+      view:selectedView?.id, node:selectedNode, exhibit:selectedExhibit?.id,
+      condition:selectedCondition, scale, search:byId('project-search')?.value || ''};
+  }
+  const api = {
+    getState,
+    setState(state) {
+      if (disposed) return;
+      if (typeof state === 'string') go(state);
+      else {
+        if (state.route) go(state.route);
+        if (state.search !== undefined) {byId('project-search').value = state.search; if(mode === 'project') projectList(); else searchQuestions();}
+        if (state.scale !== undefined) zoom(state.scale);
+      }
+    },
+    dispose() {
+      if (disposed) return;
+      disposed = true; abort.abort(); observer.disconnect(); unsubscribe?.();
+      for (const item of root.querySelectorAll('*')) {item.onclick = null; item.onkeydown = null;}
+      for (const url of objectUrls) URL.revokeObjectURL(url); objectUrls.clear();
+      for (const timer of downloadTimers) window.clearTimeout(timer); downloadTimers.clear();
+      root.replaceChildren(); mounted.delete(host);
+    }
+  };
+  mounted.set(host, api);
   loadRoute();
+  return api;
+  }
+  function hashNavigation(win = window) {
+    return {
+      getRoute:() => win.location.hash || '#questions',
+      navigate:(route, {replace} = {}) => {
+        if (replace) win.history.replaceState(win.history.state,'',route);
+        else win.history.pushState(win.history.state,'',route);
+      },
+      subscribe:callback => {
+        const handler = () => callback(win.location.hash);
+        win.addEventListener('hashchange',handler); win.addEventListener('popstate',handler);
+        return () => {win.removeEventListener('hashchange',handler); win.removeEventListener('popstate',handler);};
+      },
+      getLink:route => win.location.href.split('#')[0] + route
+    };
+  }
+  window.RelataAtlas = Object.freeze({mount, hashNavigation});
+  const standalone = document.getElementById('atlas-data');
+  if (standalone && document.getElementById('atlas-root')) mount(document.getElementById('atlas-root'), {
+    data:JSON.parse(standalone.textContent), navigation:hashNavigation(), documentTitle:true
+  });
 })();

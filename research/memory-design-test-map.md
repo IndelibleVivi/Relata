@@ -115,7 +115,7 @@ This proposed map turns existing test questions, six Case Cards and ten pinned s
 
 ### X10 可检查性、可观测边界与归因 · proposed（横切）
 - **来源:** [claim-boundary lanes L1–L4、adapter classes A0–A5、§7 unknown 是 evidence state](../research/claim-boundary-study.zh-CN.md)、[EC-001](../research/evidence-cards/EC-001-agent-memory-leaderboard.md)、[RQ7](../RESEARCH_QUESTIONS.md)。
-- **现有案例覆盖:** 各 case 都要求 final artifact + 可用 intermediate；RC-004/RC-003 明确 adapter-created routing 需标 attribution risk。无 reviewed System Card / Architecture Pressure Map。
+- **现有案例覆盖:** 各 case 都要求 final artifact + 可用 intermediate；RC-004/RC-003 明确 adapter-created routing 需标 attribution risk。已有三张 source-reviewed System Cards 与十系统 Architecture Pressure Map；均为静态源码 review，非 runtime／accepted-for-census。
 - **架构责任（要求结果）:** 每条结果须声明 subject（complete agent / memory-support / native diagnostic / combined pipeline）、input view、condition、evaluator contract 与 preserved evidence。
 - **正例 / 反例·对照:** 正例 = 绑定的 scoped claim；反例 = 把 opaque stage 记成失败，或用 final success 反推 memory mechanism。
 - **需保存观测:** exact subject/config/adapter identity、case revision、input view、observed vs opaque stages。
@@ -131,7 +131,7 @@ This proposed map turns existing test questions, six Case Cards and ten pinned s
 | [RC-002-zh-CN](../case-lab/cases/seed-002-ordinary-life-location-continuity.zh-CN.md) | seed，unreviewed；MN gate 项多为自评、独立 reviewer 待补（§8/§19） | 打开 ordinary-life coverage；cross-session 位置 twin 设计；significance discipline | 未证明 cross-session retention（session 为作者化顺序）；中文 semantic matcher 未成 fixtures |
 | [RC-003-zh-CN](../case-lab/cases/seed-003-project-authority-handoff.zh-CN.md) | seed，unreviewed；无 external review（§19） | 打开 operational-project coverage；supersession twin + 邻近 scope 隔离 distractor | 无 run；handoff realism 未审；Twin B rationale 最小区间未定；merged/scoped fixtures 待补 |
 | [RC-004-zh-CN](../case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md) | seed，unreviewed；**scope-conditioned routing pair**，非 pure twin（§4/§8） | 打开 mixed-domain routing；public/private token 的 disjoint 断言；C0–C6 控制计划 | 非 history-only 因果；C0 prior shortcut 未实测；adapter-created routing 归因未决；frozen private-token set 仅 `{栖灯}` |
-| [RC-005-zh-CN / CT-AUTHORSHIP](../case-lab/cases/seed-005-shared-work-authorship.zh-CN.md) | seed；**18 unanswered input views**；input audit 已实现；MN gate 未通过（§5/§6） | 打开 shared-work provenance + title supersession；exact authored inputs；literal speaker-removal collision 记录 | 无 system/human 证据；三 checkpoint 同属**一个 family**，非独立世界；无 adapter；不得把 scripted output 当结果 |
+| [RC-005-zh-CN / CT-AUTHORSHIP](../case-lab/cases/seed-005-shared-work-authorship.zh-CN.md) | seed；**18 unanswered input views**；input audit 已实现；MN gate 未通过（§5/§6） | 打开 shared-work provenance + title supersession；exact authored inputs；literal speaker-removal collision 记录 | 公开语义结论与独立 human 证据未建立；三 checkpoint 同属**一个 family**，非独立世界；ADR-0009 已有固定 Mem0 native CLI 与原评审路径，真实运行证据保留独立；不得把 scripted output 当结果 |
 | [RC-006-zh-CN](../case-lab/cases/seed-006-companion-migration-continuity.zh-CN.md) | seed；authored-unvalidated；一个 family | 打开 companion-system 的历史承接与能力声明变化问题，区分 stale-profile 与 blanket-reset | 无真实迁移、工具可用性观察、human review 或 MN gate acceptance；不证明 D-005，不单独识别迁移与能力变化的因果作用 |
 | [D-006](../case-lab/distinction-atlas.zh-CN.md) | candidate；仅 [EC-002](../research/evidence-cards/EC-002-pm-bench-observation-and-scorer-binding.md) 支撑 state/observation/version/action 分离 | 一条 prospective 研究议程与失败类别（false wake、update、expiry） | **无 accepted microcase、无 community-grounded incident、无 architecture-neutral boundary**；不得虚构案例充当评测资产 |
 

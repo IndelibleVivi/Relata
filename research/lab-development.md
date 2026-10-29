@@ -10,6 +10,10 @@ Relata 要成长为能够提出自己的问题、解释真实系统、产生可�
 
 Relata aims to become a memory research lab with its own questions, inspectable system studies and evidence-grounded design insight. Its benchmark research, system collection and incubator retain independent value. The collection connects ten pinned source models into five question-led static exhibits with an offline reader and a generated GitHub-readable edition. The fixed RC-005 study also has a resumable offline first-pass review desk with source-bound imports and descriptive disagreement reports. Source synthesis, tooling, runtime observation, semantic review and accepted comparative claims remain distinct. The collection does not execute systems, publish private runs or select Tilia's architecture.
 
+## 2026-10-29 本地工作空间增量
+
+[Next Generation](next-generation.md)已将可接续问题、版本化双 Atlas、Study／Clinic、三组固定离线仪器和选择性作品接入同一 local workspace。[ADR-0011](../decisions/ADR-0011-local-research-studio.zh-CN.md)接受本地实现范围；原本“新增工具需明确阻塞”的判断现由这条完整研究工作流满足。下文早一轮 collection 状态仍说明当时的证据来源，当前可操作入口与六条研究线以 Next Generation 页维护。无新模型、人类或 native programme 激活。
+
 ## 为什么存在，哪些选择已经改变
 
 原始 [Draft 0.1](../docs/vision/relata-target-architecture-draft-0.1.md) 最有延续力的问题，是系统怎样保存和延续共同历史，并忠于来源、时间、变化与当前语境；它明确指出“检索成功”之后仍可能使用失败，也希望 builders 能沿可检查路径找到修复位置。具体的四 tracks、reference world、平台服务和评分栈是当时选定的方案，不能与这个问题本身混为一谈。

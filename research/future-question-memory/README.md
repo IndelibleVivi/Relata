@@ -219,7 +219,7 @@ python3 -B tools/future_question_review.py recompute \
   experiments/artifacts/future-question-review-01
 ```
 
-`responses.json` batch 形状为：
+`responses.json` v1 batch 形状为：
 
 ```json
 {"format": "relata-future-question-responses-1", "provenance": "...",
@@ -229,13 +229,19 @@ python3 -B tools/future_question_review.py recompute \
 
 `reviews.json` 使用 `relata-future-question-reviews-1`，形状为 `{"format": "...", "records": [{"alias": "V-...", "reviewer_id": "...", "decision": "...", "reason": "...", "evidence_refs": ["current"]}]}`。response input ID 只用于 hidden manifest 绑定；review 文件只接收 blind alias，不能携带 authoring input ID。
 
-状态只用 `completed`、`pending`、`technical_failure`、`not-run`；completed 必须有正文，technical failure 必须有 failure 且无正文，其余状态不得携带二者。每项 review 须含 hidden alias、`reviewer_id`、合同内 `decision`、非空 `reason` 与 exact input view 内可定位的 `evidence_refs`。alias 是 blind link；绝不能放进 provider input。
+新 response 使用 `relata-future-question-responses-2`，每条增加 opaque `attempt_id`（`A-` 加 32 位小写十六进制）和 `previous_attempt`；`pending` 或 `technical_failure` 后可通过新 attempt 追加 completed，但旧 batch 不改写。已有 completed 不能由后续 attempt 静默替换；多 attempt 不增加固定位置/case 分母。v1 batch 原样保留并继续按“一个 input 至多一条 record、completed 非空白”的旧语义读取。v2 的 `completed` 允许 `""` 或仅空白文本，同时保留 literal response；technical failure 仍有 failure 且无正文，pending/not-run 不携二者。
+
+已有 v1 pending／technical failure 也可追加 v2 attempt：`previous_attempt` 显式写 `"legacy-v1"`，指该 input 下唯一的原 v1 record；之后的重试仍必须写当前 v2 attempt ID。这个名称不修改原 bytes 或 hashes。混合 v1 completed 与 v2 completed 的 workspace 可共同导出 v2 key：旧响应在其 input 绑定内使用 `legacy-v1` 身份；纯 v1 workspace 继续导出原 v1，已有 keys 与 reviews 原样重放。
+
+新导出的 review key 为 `relata-future-question-review-key-2`，每项同时绑定 opaque alias、input ID、completed attempt ID 和 response digest；review batch 使用 `relata-future-question-reviews-2`，增加有限 `response_act` 与 `mapping`。只有 `mapping=mapped` 强制合同内 `decision`；`unmapped`、`ambiguous` 等必须没有 decision，并作为独立诊断计数，不进入 finite-contract correctness 分子。每项 review 仍须有非空 `reason` 与 exact input view 内可定位的 `evidence_refs`。alias 是 blind link；绝不能放进 provider input。v1 的 finite-decision review 与旧 key exact-byte 重放继续保留。
+
+本地 [独立 Clinic](../../docs/studio.md#两种新协议与原-rc-005-评审)可直接选择 v2 `items/*.json`（可多选，不选 hidden key），保存／恢复草稿，标记 response act、mapping 和实际引用区域，再下载 `relata-future-question-reviews-2` 交回原 `import-reviews`。此路径交回当前判断，不改变旧 CLI 同人判断不可覆盖的规则；新 Study rounds 仍通过 Studio 管理。
 
 `prepare`、`export-review` 都要求新目录，拒绝覆盖与 symlink 路径。response batch 在 `responses/` 下按 `000001.json`… append-only；review batch 在 `reviews/` 下 append-only，并在 `review-keys/` 保存 exact key 的 immutable copy。同一 input 的同一 reviewer 不能覆盖旧判断；不同 reviewer 可复用同一 blind alias，也保留不同 decision。旧 batch、blind packet、alias→input、completed response、input/response digest 或 contract 漂移都会使 `verify` 失败。review key 与 item 绑定 exact input digest、response digest、decision options 与 history/contract digest。
 
 新导出的盲评使用中英说明，`decision_options` 只列同一 family 在**全部问题、全部世界**中用到的选项；不是当前问题或当前世界的正确答案区域，不导出 family/world 标识或答案映射。导入须从该 item 实际提供的选项中选择，不能把其他 family 的颜色或地点标签用于归属判断。既有全局 24 选项、英文说明的旧 packet 保留 exact-byte 核验与导入，以便重放已有评审；不改写旧 item、key 或已导入判断。该兼容路径仅服务旧导出，默认不再生成，待旧 packet 不再需要导入/重放时才能退役。较清楚的评审输入不等于人类 calibration，判断比例的解释不变。
 
-`recompute` 按 family 报告 `attempted`、`completed`、`scorable`、`reviewed_inputs`、`reviewers`、`pending`、`technical_failure`、`not_run`、`review_pending`。attempt coverage 是 attempted / total；answer coverage 是 completed / attempted。`judgment_contract_match_rate` 与 `judgment_contract_mismatch_rate` 分别是 correct、incorrect judgments / 全部 review judgments；它们不是 response accuracy/error，也不会进行 majority vote。多个 reviewer 的每个合法 judgment 都保留。pending 与 technical failure 不进入语义 0，未审查的 completed response 仍是 `review_pending`。当前 tracked 材料**没有** imported responses 或 human reviews；空 packet 显示 224 pending 与 `null` 比率，任何测试 response 都是 synthetic plumbing，不是系统或人的数据。
+`recompute` 按 family 报告 `attempted`、`completed`、`scorable`、`reviewed_inputs`、`reviewers`、`pending`、`technical_failure`、`not_run`、`review_pending`，另报 `attempts`、`positions_with_multiple_attempts` 和 `positions_with_completed_history`。attempt coverage 是当前完成/技术失败 position / total；answer coverage 是 completed / attempted。attempt count 只描述历史材料量，不是独立 case 或额外统计单位。`judgment_contract_match_rate` 与 `judgment_contract_mismatch_rate` 分别是 correct、incorrect mapped judgments / 全部 mapped review judgments；`unmapped_judgments` 单列。它们不是 response accuracy/error，也不会进行 majority vote。多个 reviewer 的每个合法 judgment 都保留。pending、not-run 与 technical failure 不进入语义 0，未审查的 completed response 仍是 `review_pending`。当前 tracked 材料**没有** imported responses 或 human reviews；空 packet 显示 224 pending 与 `null` 比率，任何测试 response 都是 synthetic plumbing，不是系统或人的数据。
 
 ```sh
 python3 -B -m unittest discover -s tests -v

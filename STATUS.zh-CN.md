@@ -3,13 +3,15 @@
 
 # Relata 当前状态
 
+**2026-10-29 本地开发状态：** [ADR-0011](decisions/ADR-0011-local-research-studio.zh-CN.md) 接受本地 Research Studio 实现：canonical SQLite／artifacts、版本化双 Atlas、固定 run／review rounds、三个确定性仪器和四种分离导出。见[使用说明](docs/studio.md)、[来源文章](research/collection-delivery-comparison.md)和[计算报告](research/finite-instrument-report.md)。这是 source implementation 与本地工程／有限算法工作，不是正式 release、hosting、独立校准或新系统性能证据。
+
 **P0 扩展（2026-10-23）：** 指定 RC-005 研究另含[固定 capture 的 reader 后续包](experiments/rc005-exposure-followup.md)：18 份原 immediate capture × 三种投影，最多新增 54 次 DSF reader dispatch，新增三臂统一 4096 completion 上限，不重新摄入／检索／embedding，共用原 300 chat／500 embedding 累计账本。原 144 位置和回答不改写。[Relata × AMS campaign](research/relata-ams-campaign.md)保留各自研究问题与证据；P1–P6 设计不激活其他 provider 或真人研究。
 
 **Project：** Relata
 **Phase：** R0 — Research Foundation
 **Identity：** 前沿记忆研究室；通用 agent memory 与成人长期亲密关系都是研究情境
 **Core functions：** 自己的 benchmark 研究；系统样本研究空间（museum／样本间／研究室名称开放）；面向未来独立记忆装置的 incubator
-**Implementation：** repository checks、离线合成执行演练、固定研究的输入/投影分析与外部 response/review 导入、两份局部源码诊断，以及一项已接受、运行记录保留在私有侧的 operator-owned provider 兼容性检查边界；另保留独立的早期记忆工程实验作为研究材料，不作为 Relata 产品；没有 accepted benchmark implementation；另有 accepted ADR-0009 下的固定 RC-005 native-study CLI，真实运行证据独立保存。
+**Implementation：** 本地 Research Studio（ADR-0011）；repository checks、离线合成执行演练、固定研究的输入/投影分析与外部 response/review 导入、两份局部源码诊断，以及一项已接受、运行记录保留在私有侧的 operator-owned provider 兼容性检查边界；另保留独立的早期记忆工程实验作为研究材料，不作为 Relata 产品；没有 accepted benchmark implementation；另有 accepted ADR-0009 下的固定 RC-005 native-study CLI，真实运行证据独立保存。
 **Remote/publication：** public source repository；没有 formal release
 **Case release：** none
 **Protocol version：** none

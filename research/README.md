@@ -1,5 +1,7 @@
 # Relata Source and Evidence Workflow
 
+[Next Generation 本地研究室](next-generation.md)接入可接续研究、三组确定性仪器和独立作品。直接操作见 [Studio](../docs/studio.md)；阅读[来源比较文章](collection-delivery-comparison.md)与[有限仪器报告](finite-instrument-report.md)，保留 source synthesis 与算法结果的不同证据边界。
+
 本轮交叉研究入口：[Relata × AMS campaign](relata-ams-campaign.md)。P0 的[offline audit](../experiments/rc005-exposure-audit.md)解释实际暴露边界；[reader-only 后续包](../experiments/rc005-exposure-followup.md)在原累计账本内最多新增 54 次请求，原 144 位置保持不变。P1–P6 保留独立研究设计，未由此启动其他系统或人的研究。
 
 Relata research connects conceptual questions, architecture judgments, synthesis, decisions and cases. Under [ADR-0006](../decisions/ADR-0006-frontier-memory-research-lab.md), source research and critical articles are independent outputs; they need not first become benchmark cases. A source name, paper title, repository, or benchmark mentioned in Draft 0.1 carries no current evidentiary weight until the exact object is pinned and reviewed in an Evidence Card.

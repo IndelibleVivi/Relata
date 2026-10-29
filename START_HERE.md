@@ -3,6 +3,8 @@
 
 # Relata Research Foundation: Start Here
 
+[Start a durable local inquiry](docs/studio.md): launch Research Studio and move from a question through dual Atlas, Study, Clinic and an offline edition. Existing static readers and named native CLIs remain valid; the new app dispatches no providers.
+
 Relata is a frontier memory research lab with three core functions under [ADR-0008](decisions/ADR-0008-three-core-research-functions.md). Choose an entrypoint by the research question; these are parallel responsibilities, not a required sequence.
 
 | Function | Reading path |
