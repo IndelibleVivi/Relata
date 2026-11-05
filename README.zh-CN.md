@@ -45,6 +45,8 @@ Clone 后直接在浏览器打开 `systems/architecture-atlas/index.html`；无�
 
 [经验适应研究](research/experience-adaptation-study.md)沿笔记组织、持久综合与指令采用展开两条作者化纵向情境。在[学习展品](systems/architecture-atlas/index.html#exhibit/learning/understand)中，五个阅读时点分别呈现当时可见的经历、当前任务与候选方法；可展开作者分析、比较机制，再从源码节点返回原条件。这是开发材料，不是系统输出或已测学习效果。
 
+[持续授权研究](research/authorization-continuity/README.md)追问记忆怎样保留“谁接受了哪个方案”、完整权限范围，以及跨行动累积的限制。它包含 32 个给定状态的有限诊断和[另行撰写的 32 份自然语言历史](research/authorization-continuity/histories.md)，将 writer 输入与作者解释分开。固定离线检查只建立材料一致性，不是模型能力或 accepted case。运行 `python3 -B research/authorization-continuity/diagnose.py` 复算有限结果，运行 `python3 -B research/authorization-continuity/check_histories.py` 检查历史材料。
+
 ## 记忆生态
 
 通用 agent memory 与成人长期人机亲密关系都有独立研究地位。亲密与浪漫关系继续是 founding focus；现有 Case Lab 将普通生活、共同关系经历、项目决策与材料，以及跨模型和实例的 companion/system continuity 作为长期混合领域记忆生态研究。普通事件无需被加工成浪漫象征才有研究价值。

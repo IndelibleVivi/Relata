@@ -2,7 +2,7 @@
 
 **Status:** proposed research map；不是 accepted ontology、评分表、评测协议或 system 结果。
 **用途:** 连接现有研究与面向独立 Tilia 目标的[自有架构候选](own-memory-architecture.md)，允许竞争设计接受同样的检验；不由某个候选反向决定合格答案。更正后的 ADR-0007 不提供实现授权；保留的[本地工程记录](../experiments/local-memory-apparatus.md) 只记录非常早期实验中明确操作下的机制检查，不表示正式 Tilia、本文四组广义实验或现有 cases 已完成。Tilia 的向量语义检索要求仍待设计和实现。
-**来源版本:** Relata `4bd0603` 的公开研究材料构成初始映射；2026-10-03 补入 RC-006 seed、更正传播与语义检索研究的链接和覆盖状态，2026-10-05 补入更正并发工作表与 Hindsight 定点保护核查；不表示这些后续材料已存在于初始版本。本图没有运行 system under study。后续本地工程观察单独记录，不回填成来源研究的结果。
+**来源版本:** Relata `4bd0603` 的公开研究材料构成初始映射；2026-10-03 补入 RC-006 seed、更正传播与语义检索研究的链接和覆盖状态，2026-10-05 补入更正并发工作表与 Hindsight 定点保护核查；2026-11-05 补入持续授权的语义依赖、完整范围与前缀组合候选控制；不表示这些后续材料已存在于初始版本。本图没有运行 system under study。后续本地工程观察单独记录，不回填成来源研究的结果。
 **主要来源:** [STATUS.md](../STATUS.md)、[CHARTER.md](../CHARTER.md)、[ASSUMPTION_REGISTER.md](../ASSUMPTION_REGISTER.md)、[agent-memory-inquiry](../research/agent-memory-inquiry.md)、[distinction-atlas](../case-lab/distinction-atlas.zh-CN.md)、`case-lab/cases/` 六篇、[RC-001 E0 pack](../case-lab/reviews/RC-001-e0-calibration-pack.zh-CN.md)、[claim-boundary](../research/claim-boundary-study.zh-CN.md)、[source-studies README](../systems/source-studies/README.md) 与十报告。
 **标签:** 沿用 [research/README](README.md) 的证据分层；source-observed 在本文只描述固定源码所见，不表示 runtime-observed。本文所有**新维度、实验、自有设计推断均标 `proposed`**；未改动任何 source study、Case Card 或 Evidence Card 的接受级别。
 
@@ -63,6 +63,8 @@ This proposed map turns existing test questions, six Case Cards and ten pinned s
 - **案例 / 归因限制:** 若任务不需要区分两种 authority path，就不能用该任务证明来源能力；需改进案例的观察问题。
 - **检查类型:** 语义/人类评审为主（RC-005 明示未做 automatic semantic scorer）。
 
+**2026-11-05 候选研究补充：**[持续授权研究](authorization-continuity/README.md)进一步区分授权根与语义依赖：助手提出 P1、有权用户接受 P1 时，助手文本可提供被接受范围，但不自行赋权。加入“P1 已接受、同目标 P2 未接受”的版本指向控制，并保留明确 standing discretion 的正例；不能以排除所有助手来源或逐方案重新确认代替授权解释。有限诊断以已给定的 authority / status / reference 为输入，不证明自然语言识别或真实系统能力。
+
 ### X5 条件作用域与混合领域 routing / isolation · proposed
 - **来源:** [RC-003](../case-lab/cases/seed-003-project-authority-handoff.zh-CN.md)（Lantern vs Atlas 隔离）、[RC-004](../case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md)（scope-conditioned routing pair）、[D-003](../case-lab/distinction-atlas.zh-CN.md)、[CHARTER 3.15](../CHARTER.md)、[RQ11](../RESEARCH_QUESTIONS.md)。
 - **现有案例覆盖:** RC-004 textual probe byte-identical、target metadata 有意不同 → **不是 pure historical twin**；RC-003 用 merged/scoped 控制计划。C0 metadata-only prior shortcut **尚未实测**。
@@ -72,6 +74,8 @@ This proposed map turns existing test questions, six Case Cards and ten pinned s
 - **设计反例:** public 场景泄露只获准 private 使用的材料，或项目 A 的修订覆盖项目 B 仍有效的事实。
 - **案例 / 归因限制:** 若成功由 metadata-only prior 或 adapter 提前筛选解释，不能归功于被测内核的 routing；可描述 combined pipeline 的实际表现。
 - **检查类型:** 机械（token 存在/缺失、twin identity）+ 语义（是否泄漏 owner-specific 语言）。
+
+**2026-11-05 候选研究补充：**将三种问题分开：完整 grant 字段被拆散后重组出无联合见证的 tuple；每步有完整真授权但共享预算或来源前缀使组合无效；针对确切对象和流向的有效 bridge 使跨域组合正当成立。[持续授权的两个有限探针](authorization-continuity/README.md#8-已执行的有限诊断)分别给出 16 个元组中 14 个无依据重组、100 个独立单步合法组合中 55 个超额的构造性见证；它们不是系统失效率。沿同一委托链保留限制，独立授权允许各自提供完整见证；不将所有 grant 全局求交，也不将所有跨域行动一概禁止。
 
 ### X6 正确沉默（检索 ≠ 可用性 ≠ 回应适当性） · proposed
 - **来源:** [CHARTER 3.6](../CHARTER.md)、[D-003](../case-lab/distinction-atlas.zh-CN.md)、[RC-001 §8 must_not](../case-lab/cases/pilot-001-current-state-without-erasure.md)、[RC-004 公开/私密边界](../case-lab/cases/seed-004-private-greeting-public-template.zh-CN.md)、[RQ5](../RESEARCH_QUESTIONS.md)。

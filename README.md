@@ -43,6 +43,8 @@ After cloning, open `systems/architecture-atlas/index.html` directly in a browse
 
 The [experience-adaptation study](research/experience-adaptation-study.md) follows note organization, persistent synthesis and prompt adoption through two authored longitudinal scenarios. In the [learning exhibit](systems/architecture-atlas/index.html#exhibit/learning/understand), five reading points expose the visible history, current task and candidate method; open the author analysis, compare the mechanisms, and return from a source node to the same condition. These are development materials, not system outputs or measured learning.
 
+The [continuing-authorization study](research/authorization-continuity/README.md) asks how memory can preserve who accepted which proposal, complete permission scopes and constraints carried across actions. It combines 32 stipulated-state diagnostics with [32 separately authored natural-language histories](research/authorization-continuity/histories.md). The histories keep writer inputs separate from author interpretations; fixed offline checks establish material consistency, not model capability or accepted cases. Run `python3 -B research/authorization-continuity/diagnose.py` to reproduce the finite computation and `python3 -B research/authorization-continuity/check_histories.py` to check the history bundle.
+
 ## Memory ecology
 
 General agent memory and adult long-term intimacy are both research contexts. Intimacy and romance remain a founding focus; the existing Case Lab studies ordinary personal life, shared relational experiences, operational/project decisions and artifacts, and companion/system continuity as a longitudinal mixed-domain ecology. Ordinary events do not need invented romantic symbolism to count.

@@ -1,0 +1,1643 @@
+{
+  "artifact_kind": "hand_authored_synthetic_authorization_fixtures",
+  "research_date": "2026-11-05",
+  "timezone": "Asia/Singapore",
+  "evidence_boundary": "All authority, status, time, semantic bindings and expected decisions are stipulated. No natural-language history extraction or model evaluation is performed.",
+  "closed_world_note": "The no-grant negative is a complete finite fixture, not a rule that unseen real-world authority is known false.",
+  "cases": [
+    {
+      "id": "direct_current",
+      "family": "authorization-roots",
+      "expected": "allow",
+      "rationale": "A currently operative user grant covers the entire action tuple.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-direct",
+          "root": {
+            "id": "g-direct-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "standing_old",
+      "family": "continuing-authorization",
+      "expected": "allow",
+      "rationale": "A valid standing grant is not extinguished merely because it was issued in an earlier turn.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-standing",
+          "root": {
+            "id": "r-standing",
+            "authority_capable": true,
+            "current_turn": false
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "accepted_assistant",
+      "family": "semantic-dependency",
+      "expected": "allow",
+      "rationale": "The user acceptance supplies authority; the assistant proposal supplies the bounded semantic operand.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-accept",
+          "kind": "acceptance",
+          "goal": "prepare-project",
+          "root": {
+            "id": "g-accept-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "proposal_ref": {
+            "id": "plan",
+            "version": 1,
+            "digest": "3a45d2d3c8cc696108c1b3fe77d8a543817a614daddf04c4e2dde3d0b028ce79"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ],
+      "proposals": [
+        {
+          "id": "plan",
+          "version": 1,
+          "goal": "prepare-project",
+          "authority_capable": false,
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "id": "proposal_without_acceptance",
+      "family": "semantic-dependency",
+      "expected": "deny",
+      "rationale": "A proposal can specify a plan without authorizing it.",
+      "now": 5,
+      "grants": [],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ],
+      "proposals": [
+        {
+          "id": "plan",
+          "version": 1,
+          "goal": "prepare-project",
+          "authority_capable": false,
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "id": "non_authoritative_acceptance",
+      "family": "authorization-roots",
+      "expected": "deny",
+      "rationale": "An acceptance issued by a stipulated actor without the relevant authority creates no grant.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-accept",
+          "kind": "acceptance",
+          "goal": "prepare-project",
+          "root": {
+            "id": "colleague",
+            "authority_capable": false,
+            "current_turn": true
+          },
+          "proposal_ref": {
+            "id": "plan",
+            "version": 1,
+            "digest": "3a45d2d3c8cc696108c1b3fe77d8a543817a614daddf04c4e2dde3d0b028ce79"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ],
+      "proposals": [
+        {
+          "id": "plan",
+          "version": 1,
+          "goal": "prepare-project",
+          "authority_capable": false,
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "id": "missing_proposal",
+      "family": "semantic-dependency",
+      "expected": "unknown",
+      "rationale": "The authoritative acceptance has no recoverable proposal referent.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-accept",
+          "kind": "acceptance",
+          "goal": "prepare-project",
+          "root": {
+            "id": "g-accept-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "proposal_ref": {
+            "id": "plan",
+            "version": 1,
+            "digest": "3a45d2d3c8cc696108c1b3fe77d8a543817a614daddf04c4e2dde3d0b028ce79"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ],
+      "proposals": []
+    },
+    {
+      "id": "ambiguous_reference",
+      "family": "semantic-dependency",
+      "expected": "unknown",
+      "rationale": "The supplied acceptance reference is stipulated ambiguous; a shared goal does not resolve that ambiguity.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-accept",
+          "kind": "acceptance",
+          "goal": "prepare-project",
+          "root": {
+            "id": "g-accept-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "proposal_ref": {
+            "id": "plan",
+            "version": 1,
+            "digest": "3a45d2d3c8cc696108c1b3fe77d8a543817a614daddf04c4e2dde3d0b028ce79"
+          },
+          "binding_ambiguous": true
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ],
+      "proposals": [
+        {
+          "id": "plan",
+          "version": 1,
+          "goal": "prepare-project",
+          "authority_capable": false,
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "id": "bound_version_old_action",
+      "family": "version-binding",
+      "expected": "allow",
+      "rationale": "An acceptance of version 1 continues to cover its bounded action although a later unaccepted version exists.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-accept",
+          "kind": "acceptance",
+          "goal": "prepare-project",
+          "root": {
+            "id": "g-accept-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "proposal_ref": {
+            "id": "plan",
+            "version": 1,
+            "digest": "3a45d2d3c8cc696108c1b3fe77d8a543817a614daddf04c4e2dde3d0b028ce79"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ],
+      "proposals": [
+        {
+          "id": "plan",
+          "version": 1,
+          "goal": "prepare-project",
+          "authority_capable": false,
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": []
+        },
+        {
+          "id": "plan",
+          "version": 2,
+          "goal": "prepare-project",
+          "authority_capable": false,
+          "permissions": [
+            {
+              "verb": "publish",
+              "object": "project-note",
+              "purpose": "release",
+              "surface": "public-site"
+            }
+          ],
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "id": "bound_version_new_action",
+      "family": "version-binding",
+      "expected": "deny",
+      "rationale": "A later proposal sharing the goal is not thereby accepted.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-accept",
+          "kind": "acceptance",
+          "goal": "prepare-project",
+          "root": {
+            "id": "g-accept-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "proposal_ref": {
+            "id": "plan",
+            "version": 1,
+            "digest": "3a45d2d3c8cc696108c1b3fe77d8a543817a614daddf04c4e2dde3d0b028ce79"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "verb": "publish",
+          "object": "project-note",
+          "purpose": "release",
+          "surface": "public-site"
+        }
+      ],
+      "proposals": [
+        {
+          "id": "plan",
+          "version": 1,
+          "goal": "prepare-project",
+          "authority_capable": false,
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": []
+        },
+        {
+          "id": "plan",
+          "version": 2,
+          "goal": "prepare-project",
+          "authority_capable": false,
+          "permissions": [
+            {
+              "verb": "publish",
+              "object": "project-note",
+              "purpose": "release",
+              "surface": "public-site"
+            }
+          ],
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "id": "digest_mismatch",
+      "family": "version-binding",
+      "expected": "unknown",
+      "rationale": "The fixture content identity disagrees with the accepted reference; this fixture does not infer which content was intended.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-accept",
+          "kind": "acceptance",
+          "goal": "prepare-project",
+          "root": {
+            "id": "g-accept-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "proposal_ref": {
+            "id": "plan",
+            "version": 1,
+            "digest": "0000000000000000000000000000000000000000000000000000000000000000"
+          }
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ],
+      "proposals": [
+        {
+          "id": "plan",
+          "version": 1,
+          "goal": "prepare-project",
+          "authority_capable": false,
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": []
+        }
+      ]
+    },
+    {
+      "id": "revoked",
+      "family": "continuing-authorization",
+      "expected": "deny",
+      "rationale": "A previously genuine grant is currently revoked.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-revoked",
+          "root": {
+            "id": "g-revoked-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "status": "revoked"
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "expired",
+      "family": "continuing-authorization",
+      "expected": "deny",
+      "rationale": "The stipulated expiry precedes the fixture clock.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-expired",
+          "root": {
+            "id": "g-expired-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "valid_until": 4
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "at_expiry_boundary",
+      "family": "continuing-authorization",
+      "expected": "deny",
+      "rationale": "The validity interval is half open: now equal to valid_until is expired.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-boundary",
+          "root": {
+            "id": "g-boundary-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "valid_until": 5
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "not_yet_valid",
+      "family": "continuing-authorization",
+      "expected": "deny",
+      "rationale": "The stipulated grant has not yet entered its validity interval.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-future",
+          "root": {
+            "id": "g-future-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "valid_from": 6
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "valid_before_expiry",
+      "family": "continuing-authorization",
+      "expected": "allow",
+      "rationale": "The grant is active within its validity interval.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-valid",
+          "root": {
+            "id": "g-valid-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "valid_from": 2,
+          "valid_until": 6
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "attenuated_inside",
+      "family": "attenuation",
+      "expected": "allow",
+      "rationale": "A retained complete action tuple remains inside the descendant restriction.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-attenuated",
+          "root": {
+            "id": "g-attenuated-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            },
+            {
+              "verb": "publish",
+              "object": "project-note",
+              "purpose": "release",
+              "surface": "public-site"
+            }
+          ],
+          "restrictions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "attenuated_outside",
+      "family": "attenuation",
+      "expected": "deny",
+      "rationale": "A parent permission is absent from the current descendant restriction.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-attenuated",
+          "root": {
+            "id": "g-attenuated-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            },
+            {
+              "verb": "publish",
+              "object": "project-note",
+              "purpose": "release",
+              "surface": "public-site"
+            }
+          ],
+          "restrictions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "publish",
+          "object": "project-note",
+          "purpose": "release",
+          "surface": "public-site"
+        }
+      ]
+    },
+    {
+      "id": "scope_join_ghost",
+      "family": "tuple-preservation",
+      "expected": "deny",
+      "rationale": "All four values occur in true grants, but the recombined tuple has no authentic joint grant.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-private",
+          "root": {
+            "id": "g-private-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "read",
+              "object": "private-notes",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ]
+        },
+        {
+          "id": "g-public",
+          "root": {
+            "id": "g-public-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "publish",
+              "object": "public-report",
+              "purpose": "release",
+              "surface": "public-site"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "publish",
+          "object": "private-notes",
+          "purpose": "release",
+          "surface": "public-site"
+        }
+      ]
+    },
+    {
+      "id": "second_authentic_grant",
+      "family": "tuple-preservation",
+      "expected": "allow",
+      "rationale": "Either independent complete grant can witness an action; a global intersection would wrongly reject this second grant.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-private",
+          "root": {
+            "id": "g-private-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "read",
+              "object": "private-notes",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ]
+        },
+        {
+          "id": "g-public",
+          "root": {
+            "id": "g-public-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "publish",
+              "object": "public-report",
+              "purpose": "release",
+              "surface": "public-site"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "publish",
+          "object": "public-report",
+          "purpose": "release",
+          "surface": "public-site"
+        }
+      ]
+    },
+    {
+      "id": "trace_budget_valid10",
+      "family": "prefix-budget",
+      "expected": "allow",
+      "rationale": "Each exact grant permits its action from the initial state; the common pool constrains the composed trace.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-buy-a",
+          "root": {
+            "id": "g-buy-a-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "buy",
+              "object": "material-a",
+              "purpose": "project",
+              "surface": "vendor"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "budget",
+              "pool": "shared"
+            }
+          ]
+        },
+        {
+          "id": "g-buy-b",
+          "root": {
+            "id": "g-buy-b-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "buy",
+              "object": "material-b",
+              "purpose": "project",
+              "surface": "vendor"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "budget",
+              "pool": "shared"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "buy",
+          "object": "material-a",
+          "purpose": "project",
+          "surface": "vendor",
+          "cost": 4
+        },
+        {
+          "verb": "buy",
+          "object": "material-b",
+          "purpose": "project",
+          "surface": "vendor",
+          "cost": 6
+        }
+      ],
+      "budget_pools": {
+        "shared": 10
+      }
+    },
+    {
+      "id": "trace_budget_invalid12",
+      "family": "prefix-budget",
+      "expected": "deny",
+      "rationale": "Each exact grant permits its action from the initial state; the common pool constrains the composed trace.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-buy-a",
+          "root": {
+            "id": "g-buy-a-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "buy",
+              "object": "material-a",
+              "purpose": "project",
+              "surface": "vendor"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "budget",
+              "pool": "shared"
+            }
+          ]
+        },
+        {
+          "id": "g-buy-b",
+          "root": {
+            "id": "g-buy-b-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "buy",
+              "object": "material-b",
+              "purpose": "project",
+              "surface": "vendor"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "budget",
+              "pool": "shared"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "buy",
+          "object": "material-a",
+          "purpose": "project",
+          "surface": "vendor",
+          "cost": 6
+        },
+        {
+          "verb": "buy",
+          "object": "material-b",
+          "purpose": "project",
+          "surface": "vendor",
+          "cost": 6
+        }
+      ],
+      "budget_pools": {
+        "shared": 10
+      }
+    },
+    {
+      "id": "flow_standalone_public",
+      "family": "prefix-flow",
+      "expected": "allow",
+      "rationale": "The publication grant validly permits the exact action when its input is independently public.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-publish",
+          "root": {
+            "id": "g-publish-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "publish",
+              "object": "draft-v1",
+              "purpose": "project-release",
+              "surface": "public-site"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "input_labels",
+              "allowed": [
+                "public",
+                "team-cleared"
+              ]
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "publish",
+          "object": "draft-v1",
+          "purpose": "project-release",
+          "surface": "public-site",
+          "inputs": [
+            "draft-v1"
+          ]
+        }
+      ],
+      "artifacts": {
+        "draft-v1": {
+          "labels": [
+            "public"
+          ],
+          "parents": []
+        }
+      }
+    },
+    {
+      "id": "flow_composite_private",
+      "family": "prefix-flow",
+      "expected": "deny",
+      "rationale": "Both full action grants exist, but the derived private provenance makes the publication prefix impermissible.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-derive",
+          "root": {
+            "id": "g-derive-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "derive",
+              "object": "project-note",
+              "purpose": "team-planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "input_labels",
+              "allowed": [
+                "private"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "g-publish",
+          "root": {
+            "id": "g-publish-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "publish",
+              "object": "draft-v1",
+              "purpose": "project-release",
+              "surface": "public-site"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "input_labels",
+              "allowed": [
+                "public",
+                "team-cleared"
+              ]
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "derive",
+          "object": "project-note",
+          "purpose": "team-planning",
+          "surface": "private-workspace",
+          "inputs": [
+            "diary"
+          ],
+          "output": "draft-v1"
+        },
+        {
+          "verb": "publish",
+          "object": "draft-v1",
+          "purpose": "project-release",
+          "surface": "public-site",
+          "inputs": [
+            "draft-v1"
+          ]
+        }
+      ],
+      "artifacts": {
+        "diary": {
+          "labels": [
+            "private"
+          ],
+          "parents": []
+        }
+      }
+    },
+    {
+      "id": "flow_explicit_bridge",
+      "family": "prefix-flow",
+      "expected": "allow",
+      "rationale": "An explicit current grant authorizes this precise cross-boundary release; inherited labels are retained.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-derive",
+          "root": {
+            "id": "g-derive-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "derive",
+              "object": "project-note",
+              "purpose": "team-planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "input_labels",
+              "allowed": [
+                "private"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "g-publish",
+          "root": {
+            "id": "g-publish-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "publish",
+              "object": "draft-v1",
+              "purpose": "project-release",
+              "surface": "public-site"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "input_labels",
+              "allowed": [
+                "public",
+                "team-cleared"
+              ]
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "derive",
+          "object": "project-note",
+          "purpose": "team-planning",
+          "surface": "private-workspace",
+          "inputs": [
+            "diary"
+          ],
+          "output": "draft-v1"
+        },
+        {
+          "verb": "publish",
+          "object": "draft-v1",
+          "purpose": "project-release",
+          "surface": "public-site",
+          "inputs": [
+            "draft-v1"
+          ]
+        }
+      ],
+      "artifacts": {
+        "diary": {
+          "labels": [
+            "private"
+          ],
+          "parents": []
+        }
+      },
+      "bridges": [
+        {
+          "id": "b-approved",
+          "root": {
+            "id": "r-release-specific-draft",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "artifact_id": "draft-v1",
+          "labels": [
+            "private"
+          ],
+          "permission": {
+            "verb": "publish",
+            "object": "draft-v1",
+            "purpose": "project-release",
+            "surface": "public-site"
+          }
+        }
+      ]
+    },
+    {
+      "id": "flow_wrong_artifact_bridge",
+      "family": "prefix-flow",
+      "expected": "deny",
+      "rationale": "An exception for a different artifact cannot bridge this trace.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-derive",
+          "root": {
+            "id": "g-derive-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "derive",
+              "object": "project-note",
+              "purpose": "team-planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "input_labels",
+              "allowed": [
+                "private"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "g-publish",
+          "root": {
+            "id": "g-publish-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "publish",
+              "object": "draft-v1",
+              "purpose": "project-release",
+              "surface": "public-site"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "input_labels",
+              "allowed": [
+                "public",
+                "team-cleared"
+              ]
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "derive",
+          "object": "project-note",
+          "purpose": "team-planning",
+          "surface": "private-workspace",
+          "inputs": [
+            "diary"
+          ],
+          "output": "draft-v1"
+        },
+        {
+          "verb": "publish",
+          "object": "draft-v1",
+          "purpose": "project-release",
+          "surface": "public-site",
+          "inputs": [
+            "draft-v1"
+          ]
+        }
+      ],
+      "artifacts": {
+        "diary": {
+          "labels": [
+            "private"
+          ],
+          "parents": []
+        }
+      },
+      "bridges": [
+        {
+          "id": "b-approved",
+          "root": {
+            "id": "r-release-specific-draft",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "artifact_id": "draft-v2",
+          "labels": [
+            "private"
+          ],
+          "permission": {
+            "verb": "publish",
+            "object": "draft-v1",
+            "purpose": "project-release",
+            "surface": "public-site"
+          }
+        }
+      ]
+    },
+    {
+      "id": "oneshot_once",
+      "family": "prefix-use-limit",
+      "expected": "allow",
+      "rationale": "An operative one-use grant allows its first covered action.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-once",
+          "root": {
+            "id": "g-once-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "use_limit": 1
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "oneshot_repeat",
+      "family": "prefix-use-limit",
+      "expected": "deny",
+      "rationale": "The exact tuple remains unchanged, but the one-use grant is exhausted after the first action.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-once",
+          "root": {
+            "id": "g-once-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "use_limit": 1
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        },
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "unknown_root",
+      "family": "authorization-roots",
+      "expected": "unknown",
+      "rationale": "The supplied authority capability is unresolved, so the diagnostic does not infer it from fluent memory.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-unknown",
+          "root": {
+            "id": "unresolved",
+            "authority_capable": null,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "mixed_sources_true_grant",
+      "family": "semantic-dependency",
+      "expected": "allow",
+      "rationale": "A valid grant may refer to non-authoritative descriptive operands without turning those operands into authority roots.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-mixed",
+          "root": {
+            "id": "g-mixed-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "edit",
+              "object": "project-note",
+              "purpose": "planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "semantic_dependencies": [
+            {
+              "id": "colleague-spec",
+              "authority_capable": false
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "revoked_bridge_private_flow",
+      "family": "prefix-flow",
+      "expected": "deny",
+      "rationale": "A historical cross-boundary exception does not apply after its stipulated revocation.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-derive",
+          "root": {
+            "id": "g-derive-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "derive",
+              "object": "project-note",
+              "purpose": "team-planning",
+              "surface": "private-workspace"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "input_labels",
+              "allowed": [
+                "private"
+              ]
+            }
+          ]
+        },
+        {
+          "id": "g-publish",
+          "root": {
+            "id": "g-publish-root",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "permissions": [
+            {
+              "verb": "publish",
+              "object": "draft-v1",
+              "purpose": "project-release",
+              "surface": "public-site"
+            }
+          ],
+          "conditions": [
+            {
+              "kind": "input_labels",
+              "allowed": [
+                "public",
+                "team-cleared"
+              ]
+            }
+          ]
+        }
+      ],
+      "actions": [
+        {
+          "verb": "derive",
+          "object": "project-note",
+          "purpose": "team-planning",
+          "surface": "private-workspace",
+          "inputs": [
+            "diary"
+          ],
+          "output": "draft-v1"
+        },
+        {
+          "verb": "publish",
+          "object": "draft-v1",
+          "purpose": "project-release",
+          "surface": "public-site",
+          "inputs": [
+            "draft-v1"
+          ]
+        }
+      ],
+      "artifacts": {
+        "diary": {
+          "labels": [
+            "private"
+          ],
+          "parents": []
+        }
+      },
+      "bridges": [
+        {
+          "id": "b-approved",
+          "root": {
+            "id": "r-release-specific-draft",
+            "authority_capable": true,
+            "current_turn": true
+          },
+          "artifact_id": "draft-v1",
+          "labels": [
+            "private"
+          ],
+          "permission": {
+            "verb": "publish",
+            "object": "draft-v1",
+            "purpose": "project-release",
+            "surface": "public-site"
+          },
+          "status": "revoked"
+        }
+      ]
+    },
+    {
+      "id": "no_grant_closed_world",
+      "family": "authorization-roots",
+      "expected": "deny",
+      "rationale": "This complete synthetic fixture contains no grant; missing evidence in an open real history would need separate treatment.",
+      "now": 5,
+      "grants": [],
+      "actions": [
+        {
+          "verb": "edit",
+          "object": "project-note",
+          "purpose": "planning",
+          "surface": "private-workspace"
+        }
+      ]
+    },
+    {
+      "id": "goal_discretion_standing",
+      "family": "continuing-authorization",
+      "expected": "allow",
+      "rationale": "An explicit standing grant can authorize a bounded set of discretionary means without version-bound acceptance of every plan.",
+      "now": 5,
+      "grants": [
+        {
+          "id": "g-discretion",
+          "root": {
+            "id": "r-discretion",
+            "authority_capable": true,
+            "current_turn": false
+          },
+          "permissions": [
+            {
+              "verb": "draft",
+              "object": "project-note",
+              "purpose": "complete-project",
+              "surface": "private-workspace"
+            },
+            {
+              "verb": "revise",
+              "object": "project-note",
+              "purpose": "complete-project",
+              "surface": "private-workspace"
+            }
+          ],
+          "description": "A standing grant explicitly leaves these two means to agent discretion; no specific proposal acceptance is required."
+        }
+      ],
+      "actions": [
+        {
+          "verb": "draft",
+          "object": "project-note",
+          "purpose": "complete-project",
+          "surface": "private-workspace"
+        },
+        {
+          "verb": "revise",
+          "object": "project-note",
+          "purpose": "complete-project",
+          "surface": "private-workspace"
+        }
+      ]
+    }
+  ]
+}

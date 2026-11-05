@@ -1,0 +1,26 @@
+{
+  "artifact_kind": "synthetic_diagnostic_execution_receipt",
+  "executed_at_utc": "2026-11-04T20:30:45.919694+00:00",
+  "local_research_date": "2026-11-05",
+  "python": "3.12.14",
+  "base_commit": "5d103c2d9cca473a8726eafd36555d299d228946",
+  "command": "python3 -B research/authorization-continuity/diagnose.py --write",
+  "model_calls": 0,
+  "network_calls": 0,
+  "external_actions": 0,
+  "files": {
+    "diagnose.py": {
+      "sha256": "44215d6c9cd9d1fdbb09436c76dcd1f452b0e9183a49f38f2938aa20b06f8c87",
+      "bytes": 18714
+    },
+    "fixtures.json": {
+      "sha256": "d52f5efe363e541194b37d510e7fae2239c24d9567f81b7650bf3350bae0ba86",
+      "bytes": 42308
+    },
+    "results.json": {
+      "sha256": "dbfad2c17363b33f641d884938a3b1f527ff365e3d1e3db5a3bc358d9eff27a2",
+      "bytes": 118708
+    }
+  },
+  "all_invariants_passed": true
+}

@@ -22,6 +22,8 @@ The [own-memory architecture study](own-memory-architecture.md) and [case-to-tes
 
 ## Bounded research studies
 
+- [Continuing authorization: semantic dependencies and composition](authorization-continuity/README.md) separates authority roots from the content accepted, preserves complete grant relations, and tests prefix-dependent constraints with legitimate standing-grant and cross-boundary controls. It includes a pinned EAL source/code comparison, 32 stipulated cases and two executed finite probes, plus [32 new natural-language histories](authorization-continuity/histories.md) with separate author interpretations and input-only checks; these are candidate research and synthetic algorithmic evidence, not model results, accepted cases or a new execution envelope.
+
 - [Experience adaptation: organization, synthesis and later action](experience-adaptation-study.md) compares three pinned mechanisms and develops two original longitudinal worksheets. Five expanded learning-exhibit conditions expose visible histories, author candidates, admissible alternatives and pitfalls. This is source-based argument and authored material, not measured transfer, an accepted case or a new execution envelope.
 
 - [Continuity benefit and selective use](continuity-benefit-study.md) separates necessity from benefit and supplies five authored development families, unknown-freshness and invariance controls, and an E1–E7 integration map. It changes neither accepted-case gates nor execution authority.

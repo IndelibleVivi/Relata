@@ -72,6 +72,8 @@ Measure changed/preserved/boundary at tasks 1, 3 and 10 and fixed recovery point
 
 Primary outcomes: first correction and old-influence reappearance. Diagnostics: support versions, refresh delay, false invalidation, repair cost and unchanged neighbors. Native safeguards being sufficient, re-reading being cheaper, or benefits existing only with an oracle graph can defeat the proposed mechanism. Hindsight's single/batch and manual/auto freshness paths require the same pinned source and refresh phase before comparison.
 
+**Candidate research addendum (2026-11-05):** the [continuing-authorization study](authorization-continuity/README.md) distinguishes correction of a report about authority from an event that changes current authority. A historical grant may remain a true fact after its uses are consumed, its scope narrows, or a relevant revocation becomes effective. Trace the affected grant, semantic referent and condition separately; preserve unrelated valid grants. Its executed finite diagnostic starts from stipulated current grant states and does not implement history-to-event extraction or mid-trace revocation. The [next protocol](authorization-continuity/protocol.md) leaves those inferences as separate, unexecuted research.
+
 ### P3 — action under historical goals
 
 Operationalize goal understanding as observable action under historical constraints. Hold the current request and tool state fixed; vary accepted goal unchanged/changed × old means valid/invalid. Add unaccepted proposals, explicit rejection and quoted third-party plans; balance acceptance, source position, recency and length. Ordinary inputs contain readable evidence, not gold goal labels, `accepted=true` or answer-bearing filenames.
@@ -79,6 +81,8 @@ Operationalize goal understanding as observable action under historical constrai
 Compare raw retrieval, plan-centered summary, faithful source quotations and automatically inferred intent indexing. Test wrong-but-nonempty labels as well as no-match labels. Source/oracle intent labels are an extra-information bound. Include tasks requiring no history, legitimate ambiguity and current full-evidence controls.
 
 Primary outcomes: completed action and constraint violations. Distinguish sufficient delivery, evidence obtainable but not obtained, and legality against full governing history. Goal-restatement probes use a separate fork. Correct restatement with wrong action, evidence blocked by intent labels, or more questions with less task completion are counterexamples. No internal understanding-state claim follows.
+
+**Candidate controls (2026-11-05):** add a bounded assistant proposal P1 accepted by an authoritative user, followed by an unaccepted P2 with the same goal. The acceptance root and its semantic operand have different roles; latest-goal matching must not silently replace the accepted object, and excluding all assistant-origin dependencies must not erase valid acceptance. Pair this with an explicit standing grant that permits discretion over several means without per-plan approval. Record false permits, unresolved referents and blocked valid work separately. [The study](authorization-continuity/README.md) supplies finite witnesses and an [unexecuted representation protocol](authorization-continuity/protocol.md), not an accepted rubric or provider packet. Identity binding applies when acceptance targets bounded proposal content; it is not a universal hash/signature or repeated-confirmation requirement.
 
 ### P4 — benefit and timing
 
