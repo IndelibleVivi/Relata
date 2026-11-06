@@ -66,6 +66,8 @@ Cases and system work must distinguish deployment domain, memory content domain,
 
 ## Research and privacy boundaries
 
+- Accepted ADR-0012 records the 2026-11-07 fixed continuation-use commission. Its original adult-synthetic 12 development / 48 comparison histories, later probes and author criteria remain separate. `tools/continuation_study.py` owns the fixed CLI; `experiments/continuation_core.py` owns offline projections/retrieval/review validation; `experiments/continuation_api.py` owns the official OpenAI-only ledger/transport. `experiments/continuation_analysis.py` binds offline reports to exact sources, requests, literal answers and reviews; report uses only an existing private run directory, never runtime config or provider access. Runtime and model-assisted research judgments stay outside the checkout. Follow the packet in `research/continuation-use/README.md`, including current/search/summary/notes/full conditions, exact input binding, cumulative caps, explicit uncertainty recovery and whole-history denominators. Technical missingness and nonapplicability are not semantic failures; retain judge disagreement and original attempts. This activates no arbitrary corpus/provider runner, Tilia implementation, human study or result publication.
+
 - Public case material is synthetic and represents adults only.
 - Raw private conversations, identifying consent records, credentials, private system details, and restricted review notes do not belong in this repository.
 - A named source or claim in the vision draft is unverified until an Evidence Card pins and checks the exact object.

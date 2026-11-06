@@ -37,6 +37,8 @@ Open `http://127.0.0.1:8765`, then use **导入当前十系统馆藏** in Observ
 
 ## Start from a concrete question
 
+The fixed [continuation-use study](research/continuation-use/README.md), commissioned in [ADR-0012](decisions/ADR-0012-continuation-use-study.md), asks whether model-formed memory helps later tasks that were not shown during writing. It compares current-only, strong original-history search, rolling summary, working notes and a full-history reference with two official OpenAI reader configurations. Its synthetic source materials and fixed tooling are separate from private execution records and interpretations; no benchmark result or Tilia architecture is accepted by this commission.
+
 The [lab vision and capability map](research/lab-development.md) explains the current stage, directional risks and continuous development programme. Open the [five-question offline reader](systems/architecture-atlas/index.html#questions), or read the [GitHub exhibit edition](systems/architecture-atlas/exhibits.md): changing future uses, delivery after retrieval, correction propagation, timely resurfacing, and how experience changes understanding or practice. Ten pinned source models connect concrete scenarios, reading conditions, graph evidence and research destinations.
 
 After cloning, open `systems/architecture-atlas/index.html` directly in a browser; no server, account or network is required. Conditions display static editorial analysis; graph links locate existing nodes and return to the question. GitHub's file viewer does not execute HTML, so use the generated Markdown and SVGs there. The exhibits simulate no answers and publish no private run results.

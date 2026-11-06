@@ -15,6 +15,8 @@ Both use public adult synthetic material and local derived artifacts. They retai
 
 ## Authorized fixed-study research
 
+[ADR-0012](../decisions/ADR-0012-continuation-use-study.md) authorizes the fixed [continuation-use study](../research/continuation-use/README.md): 12 development / 48 comparison histories, genuine memory formation and Sol/Luna readers with current/search/summary/notes/full conditions. Its official-only transport, cumulative ledger and private reviews are independent of RC-005/P0. The study page owns commands, fixed sources and interpretation limits; runtime records and results stay outside the checkout.
+
 [ADR-0009](../decisions/ADR-0009-exploratory-research-boundary.md) is accepted on 2026-10-23, activating only the [RC-005 → pinned Mem0 execution packet](rc005-native-execution-packet.md). Its fixed-study CLI covers 54 reader preflight, 36 raw-source control and 54 native answer positions; source implementation and offline plumbing checks do not prove live runnability or semantic success. Existing generation entitlement and local Qwen3-Embedding-0.6B-Q8_0/1024 are the selected resources, with 300 chat / 500 embedding client dispatches including failures and diagnostics, no recharge or paid fallback. Native states, attempts, responses and unreviewed blind packets remain ignored local artifacts. Formal benchmark promotion, other study envelopes, Tilia product implementation, publication, hosting, outreach and licensing retain their separate boundaries. [ADR-0010](../decisions/ADR-0010-bounded-provider-compatibility-checks.md) remains the independent compatibility-only exception; matching protocol evidence may be reused.
 
 ## Retained early apparatus experiment

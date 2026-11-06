@@ -3,6 +3,8 @@
 
 # Relata Working Charter
 
+**具名研究例外，2026-11-07：** [ADR-0012](decisions/ADR-0012-continuation-use-study.zh-CN.md) 仅接受固定原创成人合成[经历后继续研究](research/continuation-use/README.md)：模型实际形成记忆、两种官方reader配置、独立embedding space、盲化AI辅助评审与累计envelope内的描述性私人分析。不由此产生通用runner、人类研究、Tilia实现或结果发表授权。
+
 **本地研究工具例外：** [ADR-0011](decisions/ADR-0011-local-research-studio.zh-CN.md) 接受 loopback Research Studio、持久工作空间、版本化馆藏、固定离线仪器和多协议评审／导出。本地 app transport 属于此例外；跨系统 provider runner、hosting、新模型或人类 study、Tilia 实现仍不在范围内。
 
 **P0 扩展（2026-10-23）：** 指定 RC-005 研究另含[固定 capture 的 reader 后续包](experiments/rc005-exposure-followup.md)：18 份原 immediate capture × 三种投影，最多新增 54 次 DSF reader dispatch，新增三臂统一 4096 completion 上限，不重新摄入／检索／embedding，共用原 300 chat／500 embedding 累计账本。原 144 位置和回答不改写。[Relata × AMS campaign](research/relata-ams-campaign.md)保留各自研究问题与证据；P1–P6 设计不激活其他 provider 或真人研究。

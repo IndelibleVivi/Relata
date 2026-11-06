@@ -39,6 +39,8 @@ python3 -B tools/relata_lab.py --workspace "$HOME/RelataWorkspace" serve
 
 ## 从一个具体问题开始
 
+[经历之后，怎样继续？](research/continuation-use/README.md) 是 [ADR-0012](decisions/ADR-0012-continuation-use-study.zh-CN.md) 新委托的固定研究：模型实际形成记忆，再面对写入时未见的后来任务。比较current-only、强原文检索、滚动摘要、工作笔记与full-history参照，使用两种官方OpenAI reader配置。合成source材料和固定工具与私有执行记录、解释分开；本委托不接受benchmark结果或Tilia架构。
+
 [研究室愿景与能力版图](research/lab-development.md)解释当前阶段、方向风险与连续建设结构。要检查一个 memory 问题，打开[五问题离线 reader](systems/architecture-atlas/index.html#questions)，或直接阅读 [GitHub 版展品](systems/architecture-atlas/exhibits.md)：未来用途变化、检索后的交付、更正传播、适时浮现、经验如何改变理解与做法。它把十个固定源码模型接到具体情境、条件对照、节点证据与研究去向。
 
 Clone 后直接在浏览器打开 `systems/architecture-atlas/index.html`；无需 server、账号或网络。条件切换展示静态编辑分析，点击节点可进入既有三视图再返回原问题。GitHub 文件页不执行 HTML，可读同源生成的 Markdown 与 SVG。展品没有模拟回答或发布私有运行结果。

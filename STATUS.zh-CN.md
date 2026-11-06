@@ -3,6 +3,8 @@
 
 # Relata 当前状态
 
+**有界研究执行中，2026-11-07：** [ADR-0012](decisions/ADR-0012-continuation-use-study.zh-CN.md) 记录维护者对固定[经历后继续研究](research/continuation-use/README.md)的委托。12 development / 48 comparison 成人合成历史、分离的后来任务与作者 criteria、官方API固定执行工具及离线描述性报告已实现。开发组采集与工程检查已完成，冻结 comparison 正在私有运行；尚无完成的正式比较结果、独立校准或公开结果发布。此 envelope 与 RC-005/P0 和 Tilia 实现仍分开。
+
 **2026-11-07 研究准备状态：**[持续授权研究](research/authorization-continuity/README.md)补入有来源的论证、已复算有限诊断，以及[32 份新自然语言历史](research/authorization-continuity/histories.md)、分离的作者解释和固定 input-only 检查。对应的[表示准备](research/authorization-continuity/representation-guide.md)已提供作者化 P/S/R、独立 O 状态和两种失真机制控制。Provider 执行、token-budget matching 与独立语义 review 仍未进行。这些是 candidate 研究材料，不新增 provider envelope 或 case promotion。
 
 **2026-10-30 本地开发状态：** [ADR-0011](decisions/ADR-0011-local-research-studio.zh-CN.md) 接受本地 Research Studio 实现：canonical SQLite／artifacts、版本化双 Atlas、固定 run／review rounds、三个确定性仪器和四种分离导出。见[使用说明](docs/studio.md)、[来源文章](research/collection-delivery-comparison.md)和[计算报告](research/finite-instrument-report.md)。这是 source implementation 与本地工程／有限算法工作，不是正式 release、hosting、独立校准或新系统性能证据。

@@ -3,6 +3,8 @@
 
 # Relata Working Charter
 
+**Named study exception, 2026-11-07:** [ADR-0012](decisions/ADR-0012-continuation-use-study.md) accepts only the fixed original adult-synthetic [continuation-use study](research/continuation-use/README.md): model-formed memory, two official reader configurations, a separate embedding space, blinded AI-assisted reviews and descriptive private analysis within its cumulative envelope. It creates no general runner, human study, Tilia implementation or result-publication authority.
+
 **Local research-tooling exception:** [ADR-0011](decisions/ADR-0011-local-research-studio.md) accepts a loopback Research Studio, durable workspaces, versioned collection, fixed offline instruments and separate review/export protocols. Local app transport is within this exception; cross-system provider runners, hosting, new model or human studies, and Tilia implementation remain outside it.
 
 **P0 extension (2026-10-23):** the named RC-005 study also includes the [fixed-capture reader follow-up](experiments/rc005-exposure-followup.md): 18 original immediate captures × three projections, at most 54 additional DSF reader dispatches, 4096 completion cap for all new arms, no new ingestion/search/embedding, and the same cumulative 300 chat / 500 embedding ledger. The original 144 positions and outputs remain unchanged. The [Relata × AMS campaign](research/relata-ams-campaign.md) retains separate research questions and evidence; P1–P6 designs do not activate other provider or human studies.
