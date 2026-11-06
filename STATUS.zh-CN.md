@@ -3,7 +3,7 @@
 
 # Relata 当前状态
 
-**2026-11-06 研究准备状态：**[持续授权研究](research/authorization-continuity/README.md)补入有来源的论证、已复算有限诊断，以及[32 份新自然语言历史](research/authorization-continuity/histories.md)、分离的作者解释和固定 input-only 检查。表示干预、模型执行与独立语义 review 仍未进行。这些是 candidate 研究材料，不新增 provider envelope 或 case promotion。
+**2026-11-07 研究准备状态：**[持续授权研究](research/authorization-continuity/README.md)补入有来源的论证、已复算有限诊断，以及[32 份新自然语言历史](research/authorization-continuity/histories.md)、分离的作者解释和固定 input-only 检查。对应的[表示准备](research/authorization-continuity/representation-guide.md)已提供作者化 P/S/R、独立 O 状态和两种失真机制控制。Provider 执行、token-budget matching 与独立语义 review 仍未进行。这些是 candidate 研究材料，不新增 provider envelope 或 case promotion。
 
 **2026-10-30 本地开发状态：** [ADR-0011](decisions/ADR-0011-local-research-studio.zh-CN.md) 接受本地 Research Studio 实现：canonical SQLite／artifacts、版本化双 Atlas、固定 run／review rounds、三个确定性仪器和四种分离导出。见[使用说明](docs/studio.md)、[来源文章](research/collection-delivery-comparison.md)和[计算报告](research/finite-instrument-report.md)。这是 source implementation 与本地工程／有限算法工作，不是正式 release、hosting、独立校准或新系统性能证据。
 
@@ -53,7 +53,7 @@ Maintainer 于 2026-10-22 要求为 Relata + AMS 提出并实现下一研究方�
 | System Cards / Architecture Pressure Maps | 3 张 source-reviewed public-source cards（[Mem0](systems/system-cards/SC-001-mem0.zh-CN.md)、[Graphiti](systems/system-cards/SC-002-graphiti.zh-CN.md)、[Letta](systems/system-cards/SC-003-letta.zh-CN.md)）与 1 张十系统 [pressure map](systems/architecture-pressure-map.zh-CN.md) | 仅静态源码 review；无 contributor review、accepted-for-census 提升、运行结果或比较结论 |
 | Distinction Atlas | 8 seed hypotheses（7 条具 multi-source source corroboration） | 0 supported distinctions；promotion 仍需 community Incident Seed 与 accepted microcase |
 | [未来问题与记忆](research/future-question-memory/README.md) | 机制论证、七组作者化材料与 input-only 投影工具 | 15 个问题／15 个世界／105 个相关 cells；固定便条下七个后续问题存在冲突，其中一个须检查全体交集；回查当前原文消除这些字节碰撞，缺失／拒绝／旧副本条件仍保留碰撞；无模型回答、语义验证、accepted case 或架构排名 |
-| [持续授权](research/authorization-continuity/README.md) | 候选文章、32 个给定状态案例、两组穷举，以及 8 × 4 份自然语言历史与分离作者解释 | 仅有限计算与输入结构检查；状态案例和历史是两批不同的相关构造；无模型输出、独立语义校准或 accepted case |
+| [持续授权](research/authorization-continuity/README.md) | 候选文章、32 个给定状态案例、两组穷举，以及 8 × 4 份自然语言历史、分离作者解释、候选 H/P/S/R/O 输入及显式失真控制 | 仅有限计算、输入结构检查与 byte/codepoint 长度；状态案例和历史是两批不同的相关构造；无模型输出、独立语义校准或 accepted case |
 | Pilot 001 | clinic-ready case、manual plan、candidate E0 pack | 无系统运行、acceptance 或人工校准；只有 authored anchors |
 | RC-002 / RC-003 / RC-004 | 未经 review 的 seeds | 无模型/系统评测或 balanced pilot set；已修 RC-003 probe 和 RC-004 explicit accord，没有提升状态 |
 | Mixed-domain routing | question、incident families、scope-conditioned seed | RC-004 仍未经 review；metadata-only 的 prior shortcut 尚未实测 |

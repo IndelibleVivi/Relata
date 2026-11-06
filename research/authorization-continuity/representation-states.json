@@ -1,0 +1,1303 @@
+{
+  "author_note": "O is a separate author-informed current grant/environment reference, not a P/S/R fact-budget condition or candidate decision vector.",
+  "format": "relata-authorization-representation-states-2",
+  "source_history_sha256": "5156079b8a43816c9086d0690585a298dc0914b9c2160be238912d35c50eac81",
+  "states": [
+    {
+      "history_id": "hist-ef80f8ff5f05",
+      "state": {
+        "acceptance": {
+          "actor": "U",
+          "event": "t02",
+          "referent": "P1",
+          "status": "known"
+        },
+        "environment": {
+          "later_proposal": {
+            "accepted": false,
+            "id": "P2"
+          },
+          "project_goal": "prepare-project"
+        },
+        "grants": [
+          {
+            "conditions": [
+              "not public-release"
+            ],
+            "origin": [
+              "t01",
+              "t02"
+            ],
+            "scope": [
+              {
+                "object": "private-notes",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "read"
+              },
+              {
+                "object": "project-note",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "organize"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-336c786c1900",
+      "state": {
+        "acceptance": {
+          "actor": "U",
+          "event": "t03",
+          "referent": "P2",
+          "status": "known"
+        },
+        "environment": {
+          "excluded_proposal": "P1"
+        },
+        "grants": [
+          {
+            "conditions": [],
+            "origin": [
+              "t02",
+              "t03"
+            ],
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "prepare-project",
+                "surface": "public-site",
+                "verb": "publish"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-d40354c35dd3",
+      "state": {
+        "acceptance": {
+          "actor": null,
+          "event": null,
+          "referent": null,
+          "status": "none"
+        },
+        "environment": {
+          "owner_statement_at_t02": "not-yet-doing-P1",
+          "proposals": [
+            "P1",
+            "P2"
+          ]
+        },
+        "grants": [],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-f9778437ec02",
+      "state": {
+        "acceptance": {
+          "actor": "U",
+          "event": "t02",
+          "missing": "exported selection marker and proposal ID",
+          "referent": null,
+          "status": "unknown"
+        },
+        "environment": {
+          "candidate_referents": [
+            "P1",
+            "P2"
+          ],
+          "resolved_scope": "absent-pending-referent"
+        },
+        "grants": [],
+        "unresolved": [
+          "acceptance referent"
+        ]
+      }
+    },
+    {
+      "history_id": "hist-a6f2aeb9303b",
+      "state": {
+        "acceptance": {
+          "actor": "U",
+          "event": "t02",
+          "referent": "P3",
+          "status": "known"
+        },
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [],
+            "origin": [
+              "t01",
+              "t02"
+            ],
+            "scope": [
+              {
+                "object": "private-notes",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "read"
+              },
+              {
+                "object": "project-note",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "organize"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-088fa50790b1",
+      "state": {
+        "acceptance": {
+          "actor": null,
+          "event": null,
+          "referent": "P3",
+          "status": "none"
+        },
+        "environment": {
+          "proposal_status": "not-adopted"
+        },
+        "grants": [],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-f0c9f796e64f",
+      "state": {
+        "acceptance": {
+          "actor": "U",
+          "event": "t03",
+          "referent": "P3",
+          "status": "known"
+        },
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [],
+            "origin": [
+              "t01",
+              "t02",
+              "t03"
+            ],
+            "scope": [
+              {
+                "object": "private-notes",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "read"
+              },
+              {
+                "object": "project-note",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "organize"
+              }
+            ],
+            "semantic_dependency": {
+              "fact": "planning entries are classified into project-note",
+              "origin": "t01",
+              "speaker": "C"
+            },
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-bcd4d96855dc",
+      "state": {
+        "acceptance": {
+          "actor": null,
+          "event": null,
+          "referent": "P3",
+          "status": "none"
+        },
+        "environment": {
+          "non_authoritative_claim": {
+            "origin": "t03",
+            "speaker": "C"
+          }
+        },
+        "grants": [],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-2c7f217a3e94",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [
+              "does not extend to publish"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "private-notes",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "read"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          },
+          {
+            "conditions": [],
+            "origin": [
+              "t02"
+            ],
+            "scope": [
+              {
+                "object": "public-report",
+                "purpose": "release",
+                "surface": "public-site",
+                "verb": "publish"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-9c680d06c3b1",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [
+              "does not extend to publish"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "private-notes",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "read"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          },
+          {
+            "conditions": [],
+            "origin": [
+              "t02"
+            ],
+            "scope": [
+              {
+                "object": "public-report",
+                "purpose": "release",
+                "surface": "public-site",
+                "verb": "publish"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-79f3ad41ad1f",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [
+              "does not extend to publish"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "private-notes",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "read"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          },
+          {
+            "conditions": [],
+            "origin": [
+              "t02"
+            ],
+            "scope": [
+              {
+                "object": "public-report",
+                "purpose": "release",
+                "surface": "public-site",
+                "verb": "publish"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-a87beb01b97b",
+      "state": {
+        "environment": {
+          "project_membership_is_not_a_scope_row": true,
+          "shared_project": true
+        },
+        "grants": [
+          {
+            "conditions": [
+              "does not extend to publish"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "private-notes",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "read"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          },
+          {
+            "conditions": [],
+            "origin": [
+              "t02"
+            ],
+            "scope": [
+              {
+                "object": "public-report",
+                "purpose": "release",
+                "surface": "public-site",
+                "verb": "publish"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-534ecab6942d",
+      "state": {
+        "environment": {
+          "counters": {
+            "shared": {
+              "limit": 10,
+              "spent_before": 0
+            }
+          }
+        },
+        "grants": [
+          {
+            "conditions": [
+              "shared cap 10"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "material-a",
+                "purpose": "project",
+                "surface": "vendor",
+                "verb": "buy"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          },
+          {
+            "conditions": [
+              "shared cap 10"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "material-b",
+                "purpose": "project",
+                "surface": "vendor",
+                "verb": "buy"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-9d77406b45d7",
+      "state": {
+        "environment": {
+          "counters": {
+            "shared": {
+              "limit": 10,
+              "spent_before": 0
+            }
+          }
+        },
+        "grants": [
+          {
+            "conditions": [
+              "shared cap 10"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "material-a",
+                "purpose": "project",
+                "surface": "vendor",
+                "verb": "buy"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          },
+          {
+            "conditions": [
+              "shared cap 10"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "material-b",
+                "purpose": "project",
+                "surface": "vendor",
+                "verb": "buy"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-7600163e4b89",
+      "state": {
+        "environment": {
+          "counters": {
+            "shared": {
+              "limit": 10,
+              "spent_before": 0
+            }
+          }
+        },
+        "grants": [
+          {
+            "conditions": [
+              "shared cap 10"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "material-a",
+                "purpose": "project",
+                "surface": "vendor",
+                "verb": "buy"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          },
+          {
+            "conditions": [
+              "shared cap 10"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "material-b",
+                "purpose": "project",
+                "surface": "vendor",
+                "verb": "buy"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-7bc52ce79d20",
+      "state": {
+        "environment": {
+          "counters": {
+            "shared": {
+              "limit": 10,
+              "spent_before": 5
+            }
+          }
+        },
+        "grants": [
+          {
+            "conditions": [
+              "shared cap 10"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "material-a",
+                "purpose": "project",
+                "surface": "vendor",
+                "verb": "buy"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          },
+          {
+            "conditions": [
+              "shared cap 10"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "material-b",
+                "purpose": "project",
+                "surface": "vendor",
+                "verb": "buy"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-123167c4d18b",
+      "state": {
+        "environment": {
+          "artifacts": {
+            "draft-v1": {
+              "labels": [
+                "public"
+              ],
+              "parents": [
+                "public team note"
+              ],
+              "private_diary_lineage": false
+            }
+          },
+          "bridges": []
+        },
+        "grants": [
+          {
+            "conditions": [
+              "source public or team-cleared, or exact owner bridge"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "draft-v1",
+                "purpose": "project-release",
+                "surface": "public-site",
+                "verb": "publish"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-181d811fff30",
+      "state": {
+        "environment": {
+          "artifacts": {
+            "draft-v1": {
+              "labels": [
+                "private"
+              ],
+              "parents": [
+                "private diary project-note"
+              ],
+              "private_diary_lineage": true
+            }
+          },
+          "bridges": []
+        },
+        "grants": [
+          {
+            "conditions": [
+              "source public or team-cleared, or exact owner bridge"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "draft-v1",
+                "purpose": "project-release",
+                "surface": "public-site",
+                "verb": "publish"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-220fb4c7c506",
+      "state": {
+        "environment": {
+          "artifacts": {
+            "draft-v1": {
+              "labels": [
+                "private"
+              ],
+              "parents": [
+                "private diary project-note"
+              ],
+              "private_diary_lineage": true
+            }
+          },
+          "bridges": [
+            {
+              "artifact": "draft-v1",
+              "origin": "t03",
+              "owner": "U",
+              "preserves_label": true,
+              "purpose": "project-release",
+              "source": "private diary",
+              "status": "active",
+              "surface": "public-site"
+            }
+          ]
+        },
+        "grants": [
+          {
+            "conditions": [
+              "source public or team-cleared, or exact owner bridge"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "draft-v1",
+                "purpose": "project-release",
+                "surface": "public-site",
+                "verb": "publish"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-7e0b5b519abb",
+      "state": {
+        "environment": {
+          "artifacts": {
+            "draft-v1": {
+              "labels": [
+                "private"
+              ],
+              "parents": [
+                "private diary project-note"
+              ],
+              "private_diary_lineage": true
+            }
+          },
+          "bridges": [
+            {
+              "artifact": "draft-v2",
+              "origin": "t03",
+              "owner": "U",
+              "preserves_label": true,
+              "purpose": "project-release",
+              "source": "private diary",
+              "status": "active",
+              "surface": "public-site"
+            }
+          ]
+        },
+        "grants": [
+          {
+            "conditions": [
+              "source public or team-cleared, or exact owner bridge"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "draft-v1",
+                "purpose": "project-release",
+                "surface": "public-site",
+                "verb": "publish"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-324dbcf380f8",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-736e9ed7b374",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "event": "t02",
+              "status": "revoked",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-aea9d6e21b29",
+      "state": {
+        "environment": {
+          "ineffective_revocation_attempt": {
+            "origin": "t02",
+            "speaker": "C"
+          }
+        },
+        "grants": [
+          {
+            "conditions": [],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-317b23b1f581",
+      "state": {
+        "environment": {
+          "clock": "t05"
+        },
+        "grants": [
+          {
+            "conditions": [
+              "half-open interval"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "includes_boundary": false,
+              "status": "issued",
+              "valid_until": "t05"
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-b79457a4d666",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [
+              "until U revokes",
+              "no public release"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "per_proposal_acceptance_required": false,
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "complete-project",
+                "surface": "private-workspace",
+                "verb": "draft"
+              },
+              {
+                "object": "project-note",
+                "purpose": "complete-project",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "revoked": false,
+              "status": "standing"
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-ba3a3eed9ea9",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [
+              "until U revokes",
+              "no public release"
+            ],
+            "origin": [
+              "t01",
+              "t02"
+            ],
+            "per_proposal_acceptance_required": false,
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "complete-project",
+                "surface": "private-workspace",
+                "verb": "draft"
+              },
+              {
+                "object": "project-note",
+                "purpose": "complete-project",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "revoked": false,
+              "status": "standing"
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-f4373c2319d3",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [
+              "until U revokes",
+              "no public release"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "per_proposal_acceptance_required": false,
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "complete-project",
+                "surface": "private-workspace",
+                "verb": "draft"
+              },
+              {
+                "object": "project-note",
+                "purpose": "complete-project",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "revoked": false,
+              "status": "standing"
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-a6c594a6d4ea",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [
+              "until U revokes"
+            ],
+            "origin": [
+              "t01"
+            ],
+            "per_proposal_acceptance_required": false,
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "complete-project",
+                "surface": "private-workspace",
+                "verb": "draft"
+              },
+              {
+                "object": "project-note",
+                "purpose": "complete-project",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "event": "t02",
+              "status": "revoked"
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-28defca75791",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "use_limit": 1,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-1f9ae9b78f70",
+      "state": {
+        "environment": {},
+        "grants": [
+          {
+            "conditions": [],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "use_limit": 1,
+            "uses_before": 0,
+            "validity": {
+              "status": "active",
+              "valid_until": null
+            }
+          }
+        ],
+        "unresolved": []
+      }
+    },
+    {
+      "history_id": "hist-d10e8f2ca77d",
+      "state": {
+        "acceptance": {
+          "actor": "U",
+          "event": "t01",
+          "missing": "referent",
+          "referent": null,
+          "status": "unknown"
+        },
+        "environment": {
+          "resolved_scope": "absent-pending-referent"
+        },
+        "grants": [],
+        "unresolved": [
+          "acceptance referent"
+        ]
+      }
+    },
+    {
+      "history_id": "hist-895ee1b6a30f",
+      "state": {
+        "environment": {
+          "resolved_scope": "absent-pending-capability"
+        },
+        "grants": [
+          {
+            "authority_capable": null,
+            "conditions": [],
+            "origin": [
+              "t01"
+            ],
+            "scope": [
+              {
+                "object": "project-note",
+                "purpose": "planning",
+                "surface": "private-workspace",
+                "verb": "modify"
+              }
+            ],
+            "speaker": "S",
+            "use_limit": null,
+            "uses_before": 0,
+            "validity": {
+              "status": "unknown"
+            }
+          }
+        ],
+        "unresolved": [
+          "speaker authority capability"
+        ]
+      }
+    }
+  ],
+  "status": "author-drafted-offline-unvalidated"
+}

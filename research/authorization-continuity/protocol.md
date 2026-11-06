@@ -1,6 +1,6 @@
 # 持续授权的形成、解释与组合：下一阶段辨别协议
 
-**状态：proposed protocol — 模型／表示干预未执行；自然语言历史已离线准备。**
+**状态：proposed protocol — 历史与表示材料已离线准备；模型干预实验未执行。**
 **日期：2026-11-05。** 此协议不提供 provider execution、正式人类研究、benchmark promotion 或公开数据发布的授权。有限状态诊断见 [主文 §8](README.md#8-已执行的有限诊断) 与 [receipt](receipt.json)。2026-11-06 已将本协议的 32 份自然语言历史和分离的作者解释落实为[离线研究材料](histories.md)；结构检查不是模型执行或语义校准。
 
 ## 1. 要区分的竞争解释
@@ -68,15 +68,33 @@
 
 | 条件 | 给 executor 的材料 | 目的 |
 | --- | --- | --- |
-| H | 原始完整历史和相同角色元数据 | full-history 上界参考；不是 token-budget 公平对照 |
+| H | 原始完整历史和相同角色元数据 | full-history 参考；不预设其表现是能力上界，也不是 token-budget 公平对照 |
 | P | 忠实自然语言摘要，保留同一事实集合 | 检查普通概括如何使用关系；不得故意删掉关键否定词来伪造优势 |
-| S | 相同摘要加 source IDs 与来源能力 | 隔离来源可见性；不额外提供 oracle 状态 |
-| R | 同一事实集合，明确区分接受事件 / 语义对象 / 完整 scope / 前缀条件 | 检验关系表达，不声称它是唯一 schema |
-| O | 人工给定的当前精确 grant state 与相关环境状态 | 识别 consumer 上界；它不是实际 memory writer 的输出 |
+| S | 与 P 相同的摘要，增加 source IDs 和已有来源能力的明确归属 | 显化来源连接；不新增 P 不可见的权限前提或 oracle 状态 |
+| R | 同一事实集合，明确区分接受事件 / 语义对象 / 完整 scope / 前缀条件 | 检验关系表达；不提前归约出候选许可或宣称唯一 schema |
+| O | 作者给定的当前 grant / 环境状态；源材料缺失的指代或能力仍保留为未定 | 隔离 consumer 的参考条件；不重复候选答案，不冒充实际 writer 输出或实证上界 |
 
 P / S / R 的比较先用相同可见事实与相近长度。若 R 天生需要更多 tokens，应记录准确 input bytes / tokens，并同时做预算匹配与信息匹配两个分析，不能将表示优势与额外信息预算混写。预算匹配可以压缩冗余说明，不能删除关键关系后再说“同等信息”。H 与 O 只作边界条件，不混入同一排名。
 
 另做两种有意失真的机制负对照：`flattened_marginals` 丢失 F3 的 row association；`goal_rebinding` 把 F1 接受重新指向最新同目标方案。这两项验证 instrument 对预期错误有敏感性，**不得当作自然摘要系统已经实际出现的错误率**。
+
+### 4.1 同事实比较的实际边界
+
+每个 history 的情景前提、背景、当前请求、候选动作、candidate mode 和停止规则在条件间保持相同。P 必须是可读的忠实摘要；S 在同一摘要上标明来源连接，不得借新增 capability 偷换可见事实。若采用公共角色／能力表，它从原 turns 的 metadata 导出并由 P / S / R 共同读取，不能把不同时间的能力声明无条件合并。
+
+R 可以明确记录“U 接受 P1，P1 的内容来自 A”，不能直接附上“a01 应允许”；可以列出预算上限、既有消耗与采购费用，不能以作者答案代替前缀推理。对 F1 缺失的界面选择、F8 缺失的 referent 或能力记录，表示必须保留缺口。已知没有授权和无法恢复授权范围仍是两种材料状态。
+
+作者侧覆盖记录应连接原始证据与各表示中的具体文字。匹配的 ID、存在的引文或通过结构检查，只能支持可追查性，不能证明语义等价；同事实性仍是需要复核的作者主张。O 则刻意提供作者归约后的状态，独立列报，不并入 P / S / R 的同事实比较。失真控制同样独立列报，只用于已明确适用的历史，并说明改变或丢失了什么。
+
+`goal_rebinding` 的直接 witness 是 F1 V1：确实接受 P1，后来才提出同目标 P2。无接受或 referent 缺失的变体若被直接补成 P2 已接受，会同时制造授权根或消除不确定性，不能算同一种纯指向替换。`flattened_marginals` 则必须真正移除完整范围行之间的关联；在原 tuple 旁边附上独立字段列表，仍保留了可恢复的联合见证。若实现还删除了原文中的相关否定或指向限定，须逐项说明，不能宣称只改排版。
+
+失真控制可能使一个谨慎的 consumer 合理地保留 `unknown`。相对于完整历史的假许可或合法工作损失仍可记录，但须同时注明它实际获得的信息；不能把作者预先造成的信息损失单独归因于 executor 推理失败。
+
+### 4.2 长度与预算
+
+在模型与 tokenizer 尚未选定时，准备工具记录每份 memory body 和完整投影输入的 UTF-8 bytes 与 Unicode codepoints，并逐 history 给出 P / S / R 的长度比例；公共包装不能掩盖 memory body 的差异。字符数不称为 tokens，采用同一上限不称为实际消耗相同。不得通过空白填充、截断或删除关键限制制造匹配。
+
+当前材料支持信息匹配的作者对照和可检查的长度差异。真正的 token-budget matching 需要在后续选定实际 tokenizer 与请求包装后另行完成；如果无法同时保留同等信息与所需预算，应报告该冲突，并分开信息匹配与预算匹配的结论，不预先宣布二者均已实现。
 
 ## 5. 因变量、记录与分析单位
 
@@ -94,6 +112,8 @@ P / S / R 的比较先用相同可见事实与相近长度。若 R 天生需要�
 一份 trace 至少保存：history ID、条件、完整可见输入字节哈希、模型或算法身份、候选动作、实际 dry-run 动作、步骤顺序、当时可见 grant interpretation、错误 / unknown 原因及技术状态。writer 原始输出保持不变，任何修复形成新版本；解析失败单列，不把人工修好后的内容当作原输出。
 
 分析以基础 history 家族成组。变体、多个 actions、同一 writer 的重复和同一素材在 AMS 中的复用都不是独立观测。小样本先报告逐家族 paired contrasts、原始分子 / 分母和反例，不给强总体推断。若后续估计区间，应按独立基础历史聚类，并明确其规模；多 seeds 不能把同一语义模板变成多个独立研究。
+
+导出输入不附家族、变体、条件名、作者判断或覆盖说明，可以减少直接标签提示；它不能保证盲测，因为文本结构本身可能暴露所处条件。当前历史与表示均为公开的开发材料，后续使用不自动成为 held-out 检验；报告必须保留这一暴露状态。
 
 ## 6. 预注册的失败条件
 
@@ -113,7 +133,9 @@ P / S / R 的比较先用相同可见事实与相近长度。若 R 天生需要�
 
 `check_histories.py` 只检查固定材料的结构、引用与输入／答案边界，并提供单份 writer 输入的只读查看。逐家族比较、具体命令和保留的解释限制见 [材料说明](histories.md)。机械通过不能证明指代解析正确、作者 oracle 合理或模型能够保留授权。
 
-本次完成原始历史 H 与作者侧解释准备。P / S / R 的实际表示材料、预算匹配、作为 executor 输入的 O、模型 writer/executor 输出以及人类复核仍未完成。后续需要按 §4 在同事实／相近预算条件下单独撰写并核验，不得由隐藏答案倒填 writer 输入或伪称为模型产生的记忆。
+2026-11-07 继续完成了 [P / S / R、独立 O 与失真控制的候选材料](representation-guide.md)。固定 CLI 可选择单份 executor 输入、检查来源绑定和结构，并报告记忆正文及完整输入的 byte/codepoint 长度。原始历史与作者判断保持原样；表示的同事实性是有证据对应的作者主张，尚无独立语义校准。
+
+Token 预算匹配、模型 writer/executor 输出以及人类复核仍未完成。后续须按 §4 核对实际 tokenizer、请求包装和预算，不得由隐藏答案倒填 P/S/R 输入或伪称为模型产生的记忆。
 
 ## 8. 需要后续决定的门槛
 
@@ -123,4 +145,4 @@ P / S / R 的比较先用相同可见事实与相近长度。若 R 天生需要�
 
 ## English summary
 
-This unexecuted protocol separates history-to-authorization interpretation, memory-to-action consumption, and end-to-end behavior. Eight synthetic history families with four variants each test acceptance referents, semantic dependencies, scope associations, shared budgets, information flow with legitimate bridges, lifecycle changes, standing discretion, and one-use/unknown cases. Representation interventions separate raw history, faithful prose, provenance labels, preserved relations, and oracle state. False permits, valid-work loss, unsupported certainty, binding, scope witnesses, prefix conditions, and cost are reported separately. Correlated variants are not independent observations. The raw histories and separate author-side interpretations are now prepared offline; representation interventions remain to be materialized, and provider execution, human studies, publication, and promotion remain unactivated.
+This unexecuted protocol separates history-to-authorization interpretation, memory-to-action consumption, and end-to-end behavior. Eight synthetic history families with four variants each test acceptance referents, semantic dependencies, scope associations, shared budgets, information flow with legitimate bridges, lifecycle changes, standing discretion, and one-use/unknown cases. Representation interventions separate raw history, faithful prose, provenance labels, preserved relations, and oracle state. False permits, valid-work loss, unsupported certainty, binding, scope witnesses, prefix conditions, and cost are reported separately. Correlated variants are not independent observations. The raw histories, separate author interpretations, P/S/R representations, O states and deliberate-distortion controls are prepared offline. Fixed checks validate input structure, source bindings and byte/codepoint sizes; semantic equivalence and token-budget matching remain unvalidated. Provider execution, human studies, formal publication and promotion remain unactivated.

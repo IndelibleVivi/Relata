@@ -96,7 +96,7 @@ V1 的 P1 已在 t01 存在，t02 才接受，避免倒置事件。V2 的 P2 在
 
 ## 准备状态与后续 packet 参数
 
-H 原始历史、turn 角色与 capability、当前请求、候选动作和独立作者解释/判断现已 materialized。P / S / R 表示干预、模型或人的运行、端到端 formation / consumption 分离尚未 materialized；这里没有 placeholder 或已经完成的实验。
+H 原始历史、turn 角色与 capability、当前请求、候选动作和独立作者解释/判断现已 materialized。后续的 [P / S / R 与独立 O 表示材料](representation-guide.md)及两种失真机制控制也已离线准备；token 预算匹配、模型或人的运行、端到端 formation / consumption 观察仍未完成。表示文件是作者材料，不是实验输出。
 
 若后续获准运行，维护者必须另行决定并记录以下参数；本页不请求权限，也不虚构预算：
 

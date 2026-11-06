@@ -2,7 +2,7 @@
 
 **研究日期：**2026-11-05（Asia/Singapore）
 **状态：**独立研究草稿；包含已执行的合成有限诊断。不是 accepted evidence case、system claim、benchmark promotion、provider result 或 Tilia 实现。
-**接续状态（2026-11-06）：**原有限诊断已在集成环境复算一致；新增的 [8 家族 × 4 变体自然语言历史](histories.md)与作者解释分文件保存。输入检查不抽取授权、不判断语义正确性，也不执行模型。P / S / R 表示干预和模型协议仍未执行。
+**接续状态（2026-11-06）：**原有限诊断已在集成环境复算一致；新增的 [8 家族 × 4 变体自然语言历史](histories.md)与作者解释分文件保存。输入检查不抽取授权、不判断语义正确性，也不执行模型。2026-11-07 继续准备了 [P / S / R、独立 O 及失真控制](representation-guide.md)；模型实验、token 预算匹配与独立语义复核仍未执行。
 **仓库基线：**`5d103c2d9cca473a8726eafd36555d299d228946`。
 **材料：**[来源与源码边界](sources.md) · [相邻研究与新颖性](nearby-research.md) · [未执行的辨别协议](protocol.md) · [自然语言历史材料](histories.md) · [fixtures](fixtures.json) · [结果](results.json) · [执行 receipt](receipt.json)。
 
@@ -242,7 +242,7 @@ Macaroons 为 delegated authority 提供带 caveat 的衰减机制。其价值�
 
 ## 11. 下一步真正值得花力气的检验
 
-优先推进一项交叉设计：固定相同当前目标与行动，改变历史中的接受指向、grant 状态、独立范围关系和输入来源；在相同信息条件下比较普通摘要、含 source IDs 的摘要与显式保留关系的材料。分别测 memory formation 与 executor consumption，不把最终成功代替证据使用。完整输入模板、对照、观察量和失败条件见 [protocol](protocol.md)。[自然语言历史与作者解释](histories.md)已准备；表示干预和模型研究目前**未执行**。
+优先推进一项交叉设计：固定相同当前目标与行动，改变历史中的接受指向、grant 状态、独立范围关系和输入来源；在相同信息条件下比较普通摘要、含 source IDs 的摘要与显式保留关系的材料。分别测 memory formation 与 executor consumption，不把最终成功代替证据使用。完整输入模板、对照、观察量和失败条件见 [protocol](protocol.md)。[自然语言历史与作者解释](histories.md)以及[作者化表示材料](representation-guide.md)已准备；固定工具只做输入投影、结构检查与 byte/codepoint 长度报告。表示条件的模型实验、token 预算匹配和独立语义复核目前**未执行**。
 
 四个可被推翻的问题值得保留：
 
