@@ -4,9 +4,10 @@ from pathlib import Path
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "experiments"))
-from continuation_analysis import comparisons, Evidence, review_payload, review_schema, decode_review
+from continuation_analysis import comparisons, Evidence, review_payload, review_schema, decode_review, write_report
 from continuation_api import StudyAPI, MODELS, output_text
 from continuation_core import reader_payload
 from test_continuation_core import bundle
@@ -88,6 +89,23 @@ class ContinuationAnalysisTest(unittest.TestCase):
         self.assertEqual(result["contrast_role"], "secondary_formulation")
         self.assertEqual((result["paired_histories"], result["planned_histories"]), (1, 2))
         self.assertEqual(result["mean_difference"], 0)
+
+    def test_report_resume_preserves_csv_bytes_and_rejects_changed_snapshot(self):
+        rows = [{**r, "review_state": "valid", "audit_state": "not_selected",
+                 "answer_quote": "第一行\n第二行"} for r in self.rows()]
+        answers = [{"history_id": hid, "answer_state": "completed", "review_state": "valid",
+                    "audit_state": "not_selected"} for hid in ("D01", "D03")]
+        with tempfile.TemporaryDirectory() as directory, patch(
+                "continuation_analysis.collect", return_value=(answers, rows, "fixture-evidence")):
+            receipt = write_report(None, directory, "development")
+            folder = Path(receipt["report"]).parent
+            before = {p.name: p.read_bytes() for p in folder.iterdir()}
+            self.assertIn(b"\r\n", before["criteria.csv"])
+            self.assertEqual(write_report(None, directory, "development"), receipt)
+            self.assertEqual({p.name: p.read_bytes() for p in folder.iterdir()}, before)
+            (folder / "criteria.csv").write_bytes(before["criteria.csv"] + b"changed")
+            with self.assertRaisesRegex(ValueError, "refusing to rewrite"):
+                write_report(None, directory, "development")
 
     def test_answer_receipt_rejects_rewritten_text_and_source_binding(self):
         roots = bundle()

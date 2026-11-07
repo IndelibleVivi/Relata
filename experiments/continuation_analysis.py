@@ -305,7 +305,7 @@ def write_report(values, run_dir, split):
     for name, content in outputs.items():
         path = directory / name
         if path.exists():
-            if path.read_text() != content:
+            if path.read_bytes() != content.encode("utf-8"):
                 raise ValueError("refusing to rewrite a report snapshot")
         else:
             path.write_text(content)

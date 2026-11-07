@@ -3,7 +3,7 @@
 
 # Relata 当前状态
 
-**有界研究执行中，2026-11-07：** [ADR-0012](decisions/ADR-0012-continuation-use-study.zh-CN.md) 记录维护者对固定[经历后继续研究](research/continuation-use/README.md)的委托。12 development / 48 comparison 成人合成历史、分离的后来任务与作者 criteria、官方API固定执行工具及离线描述性报告已实现。开发组采集与工程检查已完成，冻结 comparison 正在私有运行；尚无完成的正式比较结果、独立校准或公开结果发布。此 envelope 与 RC-005/P0 和 Tilia 实现仍分开。
+**有界研究已在私有工作区完成，2026-11-07：** [ADR-0012](decisions/ADR-0012-continuation-use-study.zh-CN.md) 记录维护者对固定[经历后继续研究](research/continuation-use/README.md)的委托。12 development / 48 comparison 成人合成历史、分离的后来任务与作者 criteria、官方API固定执行工具及离线描述性报告已实现。开发组和冻结 comparison 的采集、模型辅助评审、选定条件诊断及私有解释均已完成；技术缺口、无效评审和reviewer分歧明确保留在私有报告。没有接受benchmark结果、独立人类校准或公开结果发布。此 envelope 与 RC-005/P0 和 Tilia 实现仍分开。
 
 **2026-11-07 研究准备状态：**[持续授权研究](research/authorization-continuity/README.md)补入有来源的论证、已复算有限诊断，以及[32 份新自然语言历史](research/authorization-continuity/histories.md)、分离的作者解释和固定 input-only 检查。对应的[表示准备](research/authorization-continuity/representation-guide.md)已提供作者化 P/S/R、独立 O 状态和两种失真机制控制。Provider 执行、token-budget matching 与独立语义 review 仍未进行。这些是 candidate 研究材料，不新增 provider envelope 或 case promotion。
 
@@ -72,7 +72,7 @@ Maintainer 于 2026-10-22 要求为 Relata + AMS 提出并实现下一研究方�
 | Provider 兼容性 smoke／[ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.zh-CN.md) | 已接受的有限工程检查；operator-owned，repository 无执行入口或公共 replay command | 仅覆盖请求／返回解析、形式处理、usage／identity 可见性、向量维数、finite values 与批次顺序；运行记录保留在私有侧；无 memory-system 结果、语义主张或发布 |
 | [RC-005 → Mem0](experiments/rc005-native-execution-packet.md) / ADR-0009 | accepted 具名探索范围；固定 study 源码 CLI | 144 回答位置；离线 plumbing 已核验；真实运行与语义评审各自留证于私有侧；无 benchmark promotion 或结果发布 |
 
-Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不证明 memory method 有效。语义判断继续 pending，不生成综合分或能力分数。
+Template、合同修正、生成的 fixtures 与通过的 plumbing tests 都不证明 memory method 有效。私有的模型辅助判断不会因工具或执行状态而成为accepted evidence；不生成综合分或能力分数。
 
 ## 当前 research target
 

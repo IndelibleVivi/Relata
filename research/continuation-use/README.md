@@ -1,6 +1,6 @@
 # 经历之后，怎样继续？
 
-状态：2026-11-07，固定材料与研究工具已实现；开发组采集与工程检查完成，冻结 comparison 正在私有运行，尚无完成的正式比较结果。执行边界由 [ADR-0012](../../decisions/ADR-0012-continuation-use-study.md) 记录。
+状态：2026-11-07，固定材料与研究工具已实现；开发组与冻结 comparison 采集、模型辅助评审、选定条件诊断及私有解释已完成。技术缺口、无效评审和reviewer分歧保留，没有补写成成功；原始结果与解释不公开，不构成accepted benchmark结果或独立人类校准。执行边界由 [ADR-0012](../../decisions/ADR-0012-continuation-use-study.md) 记录。
 
 本研究为 Relata 的长期记忆写作与独立系统 incubation 提供具体经历、反例及有条件的机制判断。核心问题是：写入时未预告后续用途，过去是否还能帮助新窗口中的工作、理解与恰当取用？不预设摘要、笔记、更多回想或某一模型必然胜出。
 
@@ -76,7 +76,7 @@ python3 -B tools/continuation_study.py report --run-dir "$RELATA_RUN" --split te
 
 `--ids`仅能选择该split已有的history ID；它不改变全组报告的计划分母。`materials`、`material-check`、`material-review`和显式`material-replace`属于原始固定seed的作者准备工作，不接受任意输入；作者替换只处理冻结前没有可用正文的unknown草稿，不能替换被评分的reader答案。
 
-`report`不读取runtime config或凭据，不访问provider；它要求对应split的请求已落定，并核对来源binding、reader实际输入、literal response及review binding。输出是checkout外带内容标识的`report.json`、`report.md`与逐criterion的`criteria.csv`，原报告快照不改写。JSON保留每条history差值、各类分母和双judge分歧；自动统计不替代案例细读与机制判断。
+`report`不读取runtime config或凭据，不访问provider；它要求对应split的请求已落定，并核对来源binding、reader实际输入、literal response及review binding。输出是checkout外带内容标识的`report.json`、`report.md`与逐criterion的`criteria.csv`，重复执行逐字节核对并复用相同快照，不改写原文件。JSON保留每条history差值、各类分母和双judge分歧；自动统计不替代案例细读与机制判断。
 
 ### 中断与恢复
 

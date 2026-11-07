@@ -3,7 +3,7 @@
 
 # Relata Status
 
-**Bounded study in execution, 2026-11-07:** [ADR-0012](decisions/ADR-0012-continuation-use-study.md) records the maintainer's commission for the fixed [continuation-use study](research/continuation-use/README.md). The 12 development / 48 comparison adult-synthetic histories, separate later tasks and author criteria, official-only execution tooling and offline descriptive reporting are implemented. Development collection and engineering checks are complete; frozen comparison collection is running privately. No completed comparison result, independent calibration or public result release is claimed. This envelope remains separate from RC-005/P0 and Tilia implementation.
+**Bounded study completed privately, 2026-11-07:** [ADR-0012](decisions/ADR-0012-continuation-use-study.md) records the maintainer's commission for the fixed [continuation-use study](research/continuation-use/README.md). The 12 development / 48 comparison adult-synthetic histories, separate later tasks and author criteria, official-only execution tooling and offline descriptive reporting are implemented. Development and frozen comparison collection, model-assisted review, selected conditional diagnostics and private interpretation are complete. Technical gaps, invalid review and reviewer disagreement remain explicit in private reports. No accepted benchmark result, independent human calibration or public result release is claimed. This envelope remains separate from RC-005/P0 and Tilia implementation.
 
 **Research preparation, 2026-11-07:** the [continuing-authorization study](research/authorization-continuity/README.md) adds source-grounded argument, reproduced finite diagnostics and [32 new natural-language histories](research/authorization-continuity/histories.md) with separate author interpretations and fixed input-only checks. The [representation preparation](research/authorization-continuity/representation-guide.md) now supplies authored P/S/R conditions, separate O states and two deliberate-distortion mechanisms. Provider execution, token-budget matching and independent semantic review remain unperformed. These are candidate research materials, with no new provider envelope or case promotion.
 
@@ -72,7 +72,7 @@ The maintainer's 2026-10-22 commission to propose and implement the next Relata 
 | Provider compatibility smoke / [ADR-0010](decisions/ADR-0010-bounded-provider-compatibility-checks.md) | accepted finite engineering check; operator-owned, no repository executable entrypoint or public replay command | request/response parsing, form handling, usage/identity visibility, vector dimension, finite values and batch order only; runtime records private; no memory-system result, semantic claim or publication |
 | [RC-005 → Mem0](experiments/rc005-native-execution-packet.md) / ADR-0009 | accepted named exploratory envelope; fixed-study source CLI | 144 answer positions; offline plumbing verified; live observations and semantic review remain private and separately evidenced; no benchmark promotion or publication |
 
-Templates, corrected contracts, generated fixtures and passing plumbing tests are not evidence that a memory method works. Semantic judgments remain pending; no composite or capability score is generated.
+Templates, corrected contracts, generated fixtures and passing plumbing tests are not evidence that a memory method works. Private model-assisted judgments do not become accepted evidence through tooling or execution status; no composite or capability score is generated.
 
 ## Current research target
 
