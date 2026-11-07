@@ -110,6 +110,12 @@ class StudyAPI:
                 raise ValueError("changed frozen binding: " + name)
             db.execute("INSERT OR IGNORE INTO meta VALUES(?,?)", (key, encoded))
 
+    def bound(self, name):
+        """Read an existing immutable study binding without creating one."""
+        with self._db() as db:
+            row = db.execute("SELECT value FROM meta WHERE key=?", ("binding:" + name,)).fetchone()
+        return json.loads(row[0]) if row else None
+
     def acknowledge_transport_uncertainty(self, attempt_ids, reason):
         """Explicit coordinator review permits independent work, never reissues a request.
 

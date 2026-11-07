@@ -341,8 +341,54 @@ def form_memories(args, api):
     parallel(select(histories, args.ids), form, args.workers)
 
 
+def retrieval_ranking(api, history, probe, documents, query):
+    """Keep the first actual ranking, bound to the exact source/query/vectors.
+
+    Near-equal lexical sums can exchange rank after process restart even when
+    their roundoff is tiny. Re-ranking must not change a study's exposure.
+    """
+    from continuation_core import rank_episodes
+    name = "retrieval-v1:" + probe["id"]
+    identity = digest({"episodes": history["episodes"], "messages": probe["messages"],
+                       "documents": documents, "query": query})
+    existing = api.bound(name)
+    if existing is not None:
+        if existing["input_digest"] != identity:
+            raise ValueError("retrieval binding differs from its exact inputs")
+        return existing["ranking"]
+    fresh = rank_episodes(history, probe, documents, query)
+    legacy = []
+    for condition in CONDITIONS:
+        for model in MODELS:
+            path = api.run_dir / "answers" / probe["id"] / condition / (model + ".json")
+            if not path.exists():
+                continue
+            record = read_json(path)
+            key = f"reader/v1/{probe['id']}/{condition}/{model}"
+            attempts = api.operation_states(key)
+            if not attempts or (record["history_id"], record["probe_id"], record["condition"], record["requested_model"]) != (
+                    history["id"], probe["id"], condition, model):
+                raise ValueError("legacy ranking has no matching answer identity/receipt")
+            old = record["ranking"]
+            by_id = {r["episode_id"]: r for r in old}
+            if len(old) != len(fresh) or set(by_id) != {r["episode_id"] for r in fresh} or not all(
+                    math.isclose(by_id[r["episode_id"]][k], r[k], rel_tol=1e-12, abs_tol=1e-12)
+                    for r in fresh for k in ("dense", "lexical")):
+                raise ValueError("legacy ranking scores differ from exact source embeddings/query")
+            legacy.append((min(r["id"] for r in attempts), key, old))
+    if legacy:
+        first = min(legacy, key=lambda item: item[0])
+        if any([(r["episode_id"], r["rrf"]) for r in item[2]] != [(r["episode_id"], r["rrf"]) for r in first[2]] for item in legacy):
+            raise ValueError("legacy answers disagree on their original ranking; inspect before recovery")
+        ranking, origin = first[2], first[1]
+    else:
+        ranking, origin = fresh, "first-computation"
+    api.bind(name, {"input_digest": identity, "ranking": ranking, "origin": origin})
+    return ranking
+
+
 def read_tasks(args, api):
-    from continuation_core import episode_text, rank_episodes, reader_payload
+    from continuation_core import episode_text, reader_payload
     histories, probes, _ = freeze_sources(api, args.split)
     def read(history):
         tasks = [p for p in probes if p["history_id"] == history["id"]]
@@ -353,7 +399,7 @@ def read_tasks(args, api):
         docs = {e["id"]: v for e, v in zip(history["episodes"], vectors)}
         count, unavailable = 0, 0
         for p_index, probe in enumerate(tasks):
-            ranking = rank_episodes(history, probe, docs, vectors[len(history["episodes"]) + p_index])
+            ranking = retrieval_ranking(api, history, probe, docs, vectors[len(history["episodes"]) + p_index])
             payloads = {}
             for condition in CONDITIONS:
                 memory = ""

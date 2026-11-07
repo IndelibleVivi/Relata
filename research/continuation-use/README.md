@@ -84,6 +84,10 @@ ledger先记录dispatch，再发送；原始响应和派生artifact都保留。�
 
 遇到unknown transport，先核对进程、精确attempt和原始错误，等活动请求落定。只有操作者完成检查后，才可通过`StudyAPI.acknowledge_transport_uncertainty`记录具名attempt及理由，允许其他位置继续；原unknown、计费预留和停止记录都保留，原请求仍不可重发。若重启留下`started`，不能把它当作未发送，也不能直接修改SQLite状态后重跑；须先进行明确的恢复处置。已知HTTP失败仅有ADR规定的显式有限retry，格式修正是新具名版本，旧失败保留。
 
-reader技术失败占据其原计划位置，不补成另一次成功回答。若writer轨迹在某episode失败、输出未完成或超过memory上限，该轨迹及依赖它的reader位置标为不可用，不截断memory或补写成成功；其他条件可在明确恢复后继续。恢复核对以精确输入、曝光episode顺序与原答案为准；检索数值在容差`1e-12`内的浮点roundoff只复用首次ranking记录，不改写它。曝光顺序或正文不同仍拒绝恢复。HTTP调用的socket timeout为300秒；超时不证明服务端未执行。各进程的并发槽位为Sol最多8、Luna最多8、embedding最多1；CLI的workers另限1至8，因此单次collect至多8条history同时推进。多进程会叠加并发，累计dispatch与成本限制仍由同一SQLite事务约束。
+reader技术失败占据其原计划位置，不补成另一次成功回答。若writer轨迹在某episode失败、输出未完成或超过memory上限，该轨迹及依赖它的reader位置标为不可用，不截断memory或补写成成功；其他条件可在明确恢复后继续。恢复核对以精确输入、曝光episode顺序与原答案为准。
+
+每个probe的首次检索排名在ledger中绑定精确history、query与embedding vectors；同一probe的各条件及恢复均复用这份排名，不重新排序。对尚无独立排名binding的旧记录，工具核对原答案身份/回执以及dense、lexical原始分数（`1e-12`容差），确认该probe的旧记录拥有相同顺序与RRF，再绑定最早记录的排名。浮点细差可能被近似相等分数的名次交换放大，不能据此改写实际使用过的排名。输入变动、旧记录分歧或实际曝光/正文不符仍拒绝恢复；既有答案文件保持原样。
+
+HTTP调用的socket timeout为300秒；超时不证明服务端未执行。各进程的并发槽位为Sol最多8、Luna最多8、embedding最多1；CLI的workers另限1至8，因此单次collect至多8条history同时推进。多进程会叠加并发，累计dispatch与成本限制仍由同一SQLite事务约束。
 
 私有报告连接可细读案例、描述性比较、Mega Essay 问题与 Tilia 条件设计判断。来源研究可参见[经验怎样形成可用方法](../experience-adaptation-study.md)、[continuity benefit](../continuity-benefit-study.md)和[lab development](../lab-development.md)。

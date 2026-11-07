@@ -11,12 +11,36 @@ from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "tools"))
-from continuation_study import read_tasks, form_memories, save_once, save_answer, parallel
+from continuation_study import read_tasks, form_memories, save_once, save_answer, parallel, retrieval_ranking
 from continuation_api import StudyAPI
 from test_continuation_core import bundle
 
 
 class ContinuationResumeTest(unittest.TestCase):
+    def test_first_ranking_survives_roundoff_amplified_by_rank_fusion(self):
+        roots = bundle()
+        h, p = roots[0]["histories"][0], roots[1]["probes"][0]
+        original = [{"episode_id": f"E{i}", "dense": .5, "lexical": 3.6851783501931163,
+                     "rrf": 1/(60+i)+1/(67-i)} for i in range(1, 7)]
+        changed = json.loads(json.dumps(original))
+        changed[0].update(lexical=3.685178350193117, rrf=changed[0]["rrf"]+.00025)
+        docs = {e["id"]: [1., 0.] for e in h["episodes"]}
+        with tempfile.TemporaryDirectory() as directory:
+            api = StudyAPI(directory, "/unused", transport=lambda *_: (200, '{}'))
+            api.response("reader/v1/D01-P1/current/gpt-6.1-sol", "gpt-6.1-sol", {"instructions": "test", "input": "test"})
+            path = Path(directory)/"answers/D01-P1/current/gpt-6.1-sol.json"
+            save_once(path, {"history_id": "D01", "probe_id": "D01-P1", "condition": "current",
+                "requested_model": "gpt-6.1-sol", "ranking": original})
+            before = path.read_bytes()
+            with patch("continuation_core.rank_episodes", return_value=changed):
+                self.assertEqual(retrieval_ranking(api, h, p, docs, [1.,0.]), original)
+            with patch("continuation_core.rank_episodes", side_effect=AssertionError("must reuse first ranking")):
+                self.assertEqual(retrieval_ranking(api, h, p, docs, [1.,0.]), original)
+                with self.assertRaisesRegex(ValueError, "exact inputs"):
+                    retrieval_ranking(api, h, p, docs, [0.,1.])
+            self.assertEqual(path.read_bytes(), before)
+            self.assertEqual(api.status()["states"], {"succeeded": 1})
+
     def test_first_error_stops_unstarted_work_in_the_same_batch(self):
         called = []
         def fail(item):
